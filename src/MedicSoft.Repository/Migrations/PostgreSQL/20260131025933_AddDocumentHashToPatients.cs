@@ -79,7 +79,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'customdashboards' AND table_schema = 'public') THEN
                         CREATE TABLE ""CustomDashboards"" (
                             ""Id"" uuid NOT NULL,
                             ""Name"" character varying(200) NOT NULL,
@@ -105,7 +105,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
                         CREATE TABLE ""DashboardWidgets"" (
                             ""Id"" uuid NOT NULL,
                             ""DashboardId"" uuid NOT NULL,
@@ -321,12 +321,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the Workflows table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'Workflows'
+                        WHERE LOWER(table_name) = 'workflows'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'Workflows' 
-                            AND column_name = 'UpdatedAt'
+                            WHERE LOWER(table_name) = 'workflows' 
+                            AND LOWER(column_name) = 'updatedat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""Workflows"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
@@ -334,8 +334,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'Workflows' 
-                            AND column_name = 'CreatedAt'
+                            WHERE LOWER(table_name) = 'workflows' 
+                            AND LOWER(column_name) = 'createdat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""Workflows"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
@@ -351,12 +351,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the WorkflowExecutions table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'WorkflowExecutions'
+                        WHERE LOWER(table_name) = 'workflowexecutions'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowExecutions' 
-                            AND column_name = 'StartedAt'
+                            WHERE LOWER(table_name) = 'workflowexecutions' 
+                            AND LOWER(column_name) = 'startedat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone;
@@ -364,8 +364,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowExecutions' 
-                            AND column_name = 'CompletedAt'
+                            WHERE LOWER(table_name) = 'workflowexecutions' 
+                            AND LOWER(column_name) = 'completedat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""WorkflowExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
@@ -381,12 +381,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the WorkflowActions table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'WorkflowActions'
+                        WHERE LOWER(table_name) = 'workflowactions'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActions' 
-                            AND column_name = 'UpdatedAt'
+                            WHERE LOWER(table_name) = 'workflowactions' 
+                            AND LOWER(column_name) = 'updatedat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
@@ -394,8 +394,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActions' 
-                            AND column_name = 'CreatedAt'
+                            WHERE LOWER(table_name) = 'workflowactions' 
+                            AND LOWER(column_name) = 'createdat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""WorkflowActions"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
@@ -411,12 +411,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the WorkflowActionExecutions table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'WorkflowActionExecutions'
+                        WHERE LOWER(table_name) = 'workflowactionexecutions'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActionExecutions' 
-                            AND column_name = 'StartedAt'
+                            WHERE LOWER(table_name) = 'workflowactionexecutions' 
+                            AND LOWER(column_name) = 'startedat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""StartedAt"" TYPE timestamp with time zone;
@@ -424,8 +424,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActionExecutions' 
-                            AND column_name = 'CompletedAt'
+                            WHERE LOWER(table_name) = 'workflowactionexecutions' 
+                            AND LOWER(column_name) = 'completedat'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
                             ALTER TABLE ""WorkflowActionExecutions"" ALTER COLUMN ""CompletedAt"" TYPE timestamp with time zone;
@@ -439,8 +439,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WidgetTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'widgettemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -454,8 +454,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WidgetTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'widgettemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -469,8 +469,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -484,8 +484,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'LastSuccessAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'lastsuccessat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -499,8 +499,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'LastFailureAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'lastfailureat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -514,7 +514,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
                         AND column_name = 'LastDeliveryAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -529,8 +529,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -544,8 +544,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -559,7 +559,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
                         AND column_name = 'NextRetryAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -574,7 +574,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
                         AND column_name = 'FailedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -589,7 +589,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
                         AND column_name = 'DeliveredAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -604,8 +604,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -619,8 +619,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -634,8 +634,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -649,7 +649,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
                         AND column_name = 'CompletedTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -664,7 +664,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
                         AND column_name = 'CheckInTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -679,7 +679,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
                         AND column_name = 'CalledTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -694,8 +694,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -709,8 +709,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -724,8 +724,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'users' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -739,7 +739,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' 
+                        WHERE LOWER(table_name) = 'users' 
                         AND column_name = 'LastLoginAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -754,8 +754,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'users' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -781,8 +781,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -796,7 +796,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
                         AND column_name = 'LinkedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -811,7 +811,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
                         AND column_name = 'InactivatedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -826,8 +826,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -841,8 +841,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'user_sessions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -856,8 +856,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
-                        AND column_name = 'StartedAt'
+                        WHERE LOWER(table_name) = 'user_sessions' 
+                        AND LOWER(column_name) = 'startedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -871,7 +871,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
+                        WHERE LOWER(table_name) = 'user_sessions' 
                         AND column_name = 'LastActivityAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -886,7 +886,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
+                        WHERE LOWER(table_name) = 'user_sessions' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -901,8 +901,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'user_sessions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -916,7 +916,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorBackupCodes' 
+                        WHERE LOWER(table_name) = 'twofactorbackupcodes' 
                         AND column_name = 'UsedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -931,8 +931,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorAuth' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'twofactorauth' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -946,7 +946,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorAuth' 
+                        WHERE LOWER(table_name) = 'twofactorauth' 
                         AND column_name = 'EnabledAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -961,8 +961,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorAuth' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'twofactorauth' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -976,8 +976,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TussProcedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tussprocedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -991,7 +991,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TussProcedures' 
+                        WHERE LOWER(table_name) = 'tussprocedures' 
                         AND column_name = 'LastUpdated'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1006,8 +1006,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TussProcedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tussprocedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1021,8 +1021,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1036,7 +1036,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
                         AND column_name = 'DataResposta'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1051,7 +1051,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
                         AND column_name = 'DataEnvio'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1066,8 +1066,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1081,8 +1081,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissOperadoraConfigs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissoperadoraconfigs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1096,8 +1096,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissOperadoraConfigs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissoperadoraconfigs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1111,8 +1111,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuides' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissguides' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1126,7 +1126,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuides' 
+                        WHERE LOWER(table_name) = 'tissguides' 
                         AND column_name = 'ServiceDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1141,8 +1141,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuides' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissguides' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1156,8 +1156,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuideProcedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissguideprocedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1171,8 +1171,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuideProcedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissguideprocedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1186,8 +1186,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissglosas' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1201,7 +1201,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
+                        WHERE LOWER(table_name) = 'tissglosas' 
                         AND column_name = 'DataIdentificacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1216,7 +1216,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
+                        WHERE LOWER(table_name) = 'tissglosas' 
                         AND column_name = 'DataGlosa'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1231,8 +1231,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissglosas' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1246,8 +1246,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissbatches' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1261,7 +1261,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
+                        WHERE LOWER(table_name) = 'tissbatches' 
                         AND column_name = 'SubmittedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1276,7 +1276,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
+                        WHERE LOWER(table_name) = 'tissbatches' 
                         AND column_name = 'ProcessedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1291,7 +1291,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
+                        WHERE LOWER(table_name) = 'tissbatches' 
                         AND column_name = 'CreatedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1306,8 +1306,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissbatches' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1321,8 +1321,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tickets' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tickets' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1336,7 +1336,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tickets' 
+                        WHERE LOWER(table_name) = 'tickets' 
                         AND column_name = 'LastStatusChangeAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1351,8 +1351,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tickets' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tickets' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1366,8 +1366,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketHistory' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tickethistory' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1381,8 +1381,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketHistory' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tickethistory' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1396,7 +1396,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketHistory' 
+                        WHERE LOWER(table_name) = 'tickethistory' 
                         AND column_name = 'ChangedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1411,8 +1411,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketComments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'ticketcomments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1426,8 +1426,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketComments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'ticketcomments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1441,7 +1441,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketAttachments' 
+                        WHERE LOWER(table_name) = 'ticketattachments' 
                         AND column_name = 'UploadedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1456,8 +1456,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketAttachments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'ticketattachments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1471,8 +1471,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketAttachments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'ticketattachments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1486,8 +1486,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TherapeuticPlans' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'therapeuticplans' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1501,7 +1501,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TherapeuticPlans' 
+                        WHERE LOWER(table_name) = 'therapeuticplans' 
                         AND column_name = 'ReturnDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1516,8 +1516,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TherapeuticPlans' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'therapeuticplans' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1531,8 +1531,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tags' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tags' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1546,8 +1546,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tags' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tags' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1561,12 +1561,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1580,12 +1580,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
-                        AND column_name = 'ReadAt'
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND LOWER(column_name) = 'readat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1599,12 +1599,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1618,8 +1618,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Surveys' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveys' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1633,8 +1633,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Surveys' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveys' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1648,8 +1648,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1663,8 +1663,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'StartedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'startedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1678,8 +1678,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1693,8 +1693,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'CompletedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'completedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1708,8 +1708,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1723,8 +1723,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1738,8 +1738,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestionResponses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestionresponses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1753,8 +1753,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestionResponses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestionresponses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1768,7 +1768,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestionResponses' 
+                        WHERE LOWER(table_name) = 'surveyquestionresponses' 
                         AND column_name = 'AnsweredAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -1783,8 +1783,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Suppliers' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'suppliers' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1798,8 +1798,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Suppliers' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'suppliers' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1813,8 +1813,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionPlans' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'subscriptionplans' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1828,8 +1828,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionPlans' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'subscriptionplans' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1843,7 +1843,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionCredits' 
+                        WHERE LOWER(table_name) = 'subscriptioncredits' 
                         AND column_name = 'GrantedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1858,8 +1858,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'soaprecords' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1873,7 +1873,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
+                        WHERE LOWER(table_name) = 'soaprecords' 
                         AND column_name = 'RecordDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1888,8 +1888,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'soaprecords' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1903,7 +1903,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
+                        WHERE LOWER(table_name) = 'soaprecords' 
                         AND column_name = 'CompletionDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1918,8 +1918,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcTransmissions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sngpctransmissions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1933,8 +1933,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcTransmissions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sngpctransmissions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1948,7 +1948,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcTransmissions' 
+                        WHERE LOWER(table_name) = 'sngpctransmissions' 
                         AND column_name = 'AttemptedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1963,8 +1963,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sngpcreports' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -1978,7 +1978,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'TransmittedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -1993,7 +1993,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'ReportPeriodStart'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2008,7 +2008,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'ReportPeriodEnd'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2023,7 +2023,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'LastAttemptAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2038,7 +2038,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'GeneratedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2053,8 +2053,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sngpcreports' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2068,8 +2068,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2083,7 +2083,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
                         AND column_name = 'ResolvedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2098,8 +2098,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2113,7 +2113,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
                         AND column_name = 'AcknowledgedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2128,8 +2128,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SentimentAnalyses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sentimentanalyses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2143,8 +2143,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SentimentAnalyses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sentimentanalyses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2158,7 +2158,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SentimentAnalyses' 
+                        WHERE LOWER(table_name) = 'sentimentanalyses' 
                         AND column_name = 'AnalyzedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -2173,8 +2173,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'senhasfila' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2188,7 +2188,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraSaida'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2203,7 +2203,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraEntrada'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2218,7 +2218,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraChamada'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2233,7 +2233,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraAtendimento'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2248,8 +2248,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'senhasfila' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2263,8 +2263,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'scheduledreports' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2278,7 +2278,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
+                        WHERE LOWER(table_name) = 'scheduledreports' 
                         AND column_name = 'NextRunAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2293,7 +2293,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
+                        WHERE LOWER(table_name) = 'scheduledreports' 
                         AND column_name = 'LastRunAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2308,8 +2308,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'scheduledreports' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2323,8 +2323,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SalesFunnelMetrics' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'salesfunnelmetrics' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2338,8 +2338,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SalesFunnelMetrics' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'salesfunnelmetrics' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2353,8 +2353,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReportTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'reporttemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2368,8 +2368,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReportTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'reporttemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2383,8 +2383,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReceivablePayments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'receivablepayments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2398,7 +2398,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReceivablePayments' 
+                        WHERE LOWER(table_name) = 'receivablepayments' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2413,8 +2413,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReceivablePayments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'receivablepayments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2428,8 +2428,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProfilePermissions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'profilepermissions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2443,8 +2443,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProfilePermissions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'profilepermissions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2458,8 +2458,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Procedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'procedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2473,8 +2473,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Procedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'procedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2488,8 +2488,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProcedureMaterials' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'procedurematerials' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2503,8 +2503,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProcedureMaterials' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'procedurematerials' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2518,8 +2518,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'prescriptiontemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2533,8 +2533,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'prescriptiontemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2548,8 +2548,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionSequenceControls' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionsequencecontrols' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2563,7 +2563,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        WHERE LOWER(table_name) = 'prescriptionsequencecontrols' 
                         AND column_name = 'LastGeneratedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2578,8 +2578,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionSequenceControls' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionsequencecontrols' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2593,8 +2593,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionItems' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionitems' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2608,8 +2608,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionItems' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionitems' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2623,8 +2623,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PlanoContas' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'planocontas' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2638,8 +2638,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PlanoContas' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'planocontas' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2653,8 +2653,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'payments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2668,7 +2668,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
+                        WHERE LOWER(table_name) = 'payments' 
                         AND column_name = 'ProcessedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2683,7 +2683,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
+                        WHERE LOWER(table_name) = 'payments' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2698,8 +2698,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'payments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2713,7 +2713,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
+                        WHERE LOWER(table_name) = 'payments' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2728,8 +2728,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PayablePayments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'payablepayments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2743,7 +2743,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PayablePayments' 
+                        WHERE LOWER(table_name) = 'payablepayments' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2758,8 +2758,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PayablePayments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'payablepayments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2773,8 +2773,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientTouchpoints' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patienttouchpoints' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2788,7 +2788,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientTouchpoints' 
+                        WHERE LOWER(table_name) = 'patienttouchpoints' 
                         AND column_name = 'Timestamp'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -2803,8 +2803,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientTouchpoints' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patienttouchpoints' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2818,8 +2818,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Patients' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patients' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2843,7 +2843,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Patients' 
+                        WHERE LOWER(table_name) = 'patients' 
                         AND column_name = 'DateOfBirth'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2858,8 +2858,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Patients' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patients' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2880,8 +2880,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientJourneys' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patientjourneys' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2895,8 +2895,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientJourneys' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patientjourneys' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2910,7 +2910,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
                         AND column_name = 'ValidUntil'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2925,7 +2925,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
                         AND column_name = 'ValidFrom'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2940,8 +2940,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2955,8 +2955,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2970,8 +2970,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientClinicLinks' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patientcliniclinks' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -2985,7 +2985,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientClinicLinks' 
+                        WHERE LOWER(table_name) = 'patientcliniclinks' 
                         AND column_name = 'LinkedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3000,8 +3000,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientClinicLinks' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patientcliniclinks' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3015,7 +3015,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
                         AND column_name = 'VerifiedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3030,7 +3030,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
                         AND column_name = 'UsedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3045,8 +3045,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3060,7 +3060,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3075,8 +3075,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3090,8 +3090,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'owners' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3105,7 +3105,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' 
+                        WHERE LOWER(table_name) = 'owners' 
                         AND column_name = 'LastLoginAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3120,8 +3120,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'owners' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3135,8 +3135,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3150,7 +3150,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
                         AND column_name = 'LinkedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3165,7 +3165,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
                         AND column_name = 'InactivatedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3180,8 +3180,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3195,8 +3195,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'owner_sessions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3210,7 +3210,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
+                        WHERE LOWER(table_name) = 'owner_sessions' 
                         AND column_name = 'LastActivityAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3225,7 +3225,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
+                        WHERE LOWER(table_name) = 'owner_sessions' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3240,8 +3240,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'owner_sessions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3255,8 +3255,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'notifications' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3270,7 +3270,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
+                        WHERE LOWER(table_name) = 'notifications' 
                         AND column_name = 'SentAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3285,8 +3285,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
-                        AND column_name = 'ReadAt'
+                        WHERE LOWER(table_name) = 'notifications' 
+                        AND LOWER(column_name) = 'readat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3300,7 +3300,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
+                        WHERE LOWER(table_name) = 'notifications' 
                         AND column_name = 'DeliveredAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3315,8 +3315,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'notifications' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3330,8 +3330,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRules' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'notificationrules' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3345,8 +3345,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRules' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'notificationrules' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3360,8 +3360,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'notificationroutines' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3375,7 +3375,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
+                        WHERE LOWER(table_name) = 'notificationroutines' 
                         AND column_name = 'NextExecutionAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3390,7 +3390,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
+                        WHERE LOWER(table_name) = 'notificationroutines' 
                         AND column_name = 'LastExecutedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3405,8 +3405,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'notificationroutines' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3420,8 +3420,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MonthlyControlledBalances' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'monthlycontrolledbalances' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3435,8 +3435,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MonthlyControlledBalances' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'monthlycontrolledbalances' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3450,7 +3450,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MonthlyControlledBalances' 
+                        WHERE LOWER(table_name) = 'monthlycontrolledbalances' 
                         AND column_name = 'ClosedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3465,8 +3465,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3480,8 +3480,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3495,8 +3495,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurationHistories' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurationhistories' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3510,8 +3510,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurationHistories' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurationhistories' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3525,7 +3525,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        WHERE LOWER(table_name) = 'moduleconfigurationhistories' 
                         AND column_name = 'ChangedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3540,8 +3540,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Medications' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medications' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3555,8 +3555,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Medications' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medications' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3570,8 +3570,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordVersions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordversions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3585,8 +3585,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordVersions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordversions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3600,7 +3600,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordVersions' 
+                        WHERE LOWER(table_name) = 'medicalrecordversions' 
                         AND column_name = 'ChangedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3615,8 +3615,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordtemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3630,8 +3630,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordtemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3645,8 +3645,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordSignatures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordsignatures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3660,7 +3660,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordSignatures' 
+                        WHERE LOWER(table_name) = 'medicalrecordsignatures' 
                         AND column_name = 'SignedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3675,8 +3675,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordSignatures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordsignatures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3690,8 +3690,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecords' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3705,7 +3705,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ReopenedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3720,8 +3720,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecords' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3735,7 +3735,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ConsultationStartTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3750,7 +3750,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ConsultationEndTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3765,7 +3765,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ClosedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3780,8 +3780,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordAccessLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordaccesslogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3795,8 +3795,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordAccessLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordaccesslogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3810,7 +3810,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        WHERE LOWER(table_name) = 'medicalrecordaccesslogs' 
                         AND column_name = 'AccessedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3825,8 +3825,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Materials' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'materials' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3840,8 +3840,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Materials' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'materials' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3855,8 +3855,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MarketingAutomations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'marketingautomations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3870,7 +3870,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MarketingAutomations' 
+                        WHERE LOWER(table_name) = 'marketingautomations' 
                         AND column_name = 'LastExecutedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -3885,8 +3885,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MarketingAutomations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'marketingautomations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3900,8 +3900,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LoginAttempts' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'loginattempts' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3915,8 +3915,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LoginAttempts' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'loginattempts' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3930,7 +3930,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LoginAttempts' 
+                        WHERE LOWER(table_name) = 'loginattempts' 
                         AND column_name = 'AttemptTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3945,8 +3945,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LancamentosContabeis' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'lancamentoscontabeis' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3960,7 +3960,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LancamentosContabeis' 
+                        WHERE LOWER(table_name) = 'lancamentoscontabeis' 
                         AND column_name = 'DataLancamento'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -3975,8 +3975,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LancamentosContabeis' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'lancamentoscontabeis' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -3990,8 +3990,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'journeystages' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4005,7 +4005,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
+                        WHERE LOWER(table_name) = 'journeystages' 
                         AND column_name = 'ExitedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -4020,7 +4020,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
+                        WHERE LOWER(table_name) = 'journeystages' 
                         AND column_name = 'EnteredAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -4035,8 +4035,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'journeystages' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4050,8 +4050,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'invoices' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4065,7 +4065,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'SentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4080,7 +4080,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'PaidDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4095,7 +4095,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4110,7 +4110,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4125,8 +4125,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'invoices' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4140,7 +4140,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4155,8 +4155,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InvoiceConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'invoiceconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4170,8 +4170,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InvoiceConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'invoiceconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4185,7 +4185,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InvoiceConfigurations' 
+                        WHERE LOWER(table_name) = 'invoiceconfigurations' 
                         AND column_name = 'CertificateExpirationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4200,8 +4200,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InformedConsents' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'informedconsents' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4215,8 +4215,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InformedConsents' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'informedconsents' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4230,7 +4230,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InformedConsents' 
+                        WHERE LOWER(table_name) = 'informedconsents' 
                         AND column_name = 'AcceptedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4245,8 +4245,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ImpostosNotas' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'impostosnotas' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4260,7 +4260,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ImpostosNotas' 
+                        WHERE LOWER(table_name) = 'impostosnotas' 
                         AND column_name = 'DataCalculo'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4275,8 +4275,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ImpostosNotas' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'impostosnotas' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4290,7 +4290,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
                         AND column_name = 'ValidUntil'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4305,7 +4305,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
                         AND column_name = 'ValidFrom'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4320,8 +4320,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4335,8 +4335,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4350,8 +4350,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsuranceOperators' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceoperators' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4365,8 +4365,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsuranceOperators' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceoperators' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4380,8 +4380,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'financialclosures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4395,7 +4395,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
+                        WHERE LOWER(table_name) = 'financialclosures' 
                         AND column_name = 'SettlementDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4410,8 +4410,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'financialclosures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4425,7 +4425,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
+                        WHERE LOWER(table_name) = 'financialclosures' 
                         AND column_name = 'ClosureDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4440,8 +4440,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosureItems' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'financialclosureitems' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4455,8 +4455,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosureItems' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'financialclosureitems' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4470,8 +4470,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FilasEspera' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'filasespera' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4485,8 +4485,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FilasEspera' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'filasespera' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4500,8 +4500,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'expenses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4515,7 +4515,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
+                        WHERE LOWER(table_name) = 'expenses' 
                         AND column_name = 'PaidDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4530,7 +4530,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
+                        WHERE LOWER(table_name) = 'expenses' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4545,8 +4545,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'expenses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4560,8 +4560,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'examrequests' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4575,7 +4575,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
+                        WHERE LOWER(table_name) = 'examrequests' 
                         AND column_name = 'ScheduledDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4590,7 +4590,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
+                        WHERE LOWER(table_name) = 'examrequests' 
                         AND column_name = 'RequestedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4605,8 +4605,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'examrequests' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4620,7 +4620,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
+                        WHERE LOWER(table_name) = 'examrequests' 
                         AND column_name = 'CompletedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4635,8 +4635,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamCatalogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'examcatalogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4650,8 +4650,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamCatalogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'examcatalogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4665,8 +4665,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'EmailTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'emailtemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4680,8 +4680,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'EmailTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'emailtemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4695,8 +4695,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4710,7 +4710,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4725,8 +4725,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4740,7 +4740,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4755,7 +4755,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
                         AND column_name = 'AuthorizationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4770,8 +4770,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dres' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4785,7 +4785,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
+                        WHERE LOWER(table_name) = 'dres' 
                         AND column_name = 'PeriodoInicio'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4800,7 +4800,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
+                        WHERE LOWER(table_name) = 'dres' 
                         AND column_name = 'PeriodoFim'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4815,7 +4815,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
+                        WHERE LOWER(table_name) = 'dres' 
                         AND column_name = 'DataGeracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4830,8 +4830,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dres' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4845,8 +4845,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4860,7 +4860,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'SignedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4875,7 +4875,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'ReportedToSNGPCAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4890,7 +4890,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'IssuedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4905,7 +4905,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4920,8 +4920,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4935,8 +4935,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4950,7 +4950,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
                         AND column_name = 'ManufactureDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4965,7 +4965,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
                         AND column_name = 'ExpiryDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -4980,8 +4980,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -4995,8 +4995,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DiagnosticHypotheses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'diagnostichypotheses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5010,7 +5010,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DiagnosticHypotheses' 
+                        WHERE LOWER(table_name) = 'diagnostichypotheses' 
                         AND column_name = 'DiagnosedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5025,8 +5025,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DiagnosticHypotheses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'diagnostichypotheses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5040,8 +5040,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5055,7 +5055,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
                         AND column_name = 'RevokedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5070,8 +5070,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5085,7 +5085,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
                         AND column_name = 'ConsentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5100,8 +5100,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5115,7 +5115,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'RequestDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5130,7 +5130,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'ProcessedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5145,7 +5145,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'LegalApprovalDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5160,8 +5160,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5175,7 +5175,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'CompletedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5190,8 +5190,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5205,7 +5205,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
                         AND column_name = 'RevokedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5220,7 +5220,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
                         AND column_name = 'ExpirationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5235,8 +5235,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5250,7 +5250,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
                         AND column_name = 'ConsentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5265,8 +5265,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataAccessLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dataaccesslogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5280,7 +5280,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataAccessLogs' 
+                        WHERE LOWER(table_name) = 'dataaccesslogs' 
                         AND column_name = 'Timestamp'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5295,8 +5295,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataAccessLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dataaccesslogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5308,11 +5308,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
-                            AND column_name = 'UpdatedAt'
+                            WHERE LOWER(table_name) = 'dashboardwidgets' 
+                            AND LOWER(column_name) = 'updatedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
@@ -5325,11 +5325,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
-                            AND column_name = 'CreatedAt'
+                            WHERE LOWER(table_name) = 'dashboardwidgets' 
+                            AND LOWER(column_name) = 'createdat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
                         ) THEN
@@ -5344,8 +5344,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CustomDashboards' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'customdashboards' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5359,8 +5359,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CustomDashboards' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'customdashboards' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5374,8 +5374,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5389,7 +5389,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
                         AND column_name = 'RegisteredAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5404,7 +5404,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
                         AND column_name = 'DocumentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5419,7 +5419,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
                         AND column_name = 'Date'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5434,8 +5434,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5449,8 +5449,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormProfiles' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'consultationformprofiles' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5464,8 +5464,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormProfiles' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'consultationformprofiles' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5479,8 +5479,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'consultationformconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5494,8 +5494,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'consultationformconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5509,8 +5509,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5524,7 +5524,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
                         AND column_name = 'UltimaAtualizacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5539,7 +5539,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
                         AND column_name = 'DataConsolidacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5554,7 +5554,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
                         AND column_name = 'Data'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5569,8 +5569,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5584,7 +5584,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
                         AND column_name = 'VigenciaInicio'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5599,7 +5599,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
                         AND column_name = 'VigenciaFim'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5614,8 +5614,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5629,8 +5629,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5644,8 +5644,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'complaints' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5659,7 +5659,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'ResolvedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -5674,7 +5674,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'ReceivedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -5689,7 +5689,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'FirstResponseAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -5704,8 +5704,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'complaints' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5719,7 +5719,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'ClosedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -5734,8 +5734,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ComplaintInteractions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'complaintinteractions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5749,7 +5749,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ComplaintInteractions' 
+                        WHERE LOWER(table_name) = 'complaintinteractions' 
                         AND column_name = 'InteractionDate'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -5764,8 +5764,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ComplaintInteractions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'complaintinteractions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5779,8 +5779,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Companies' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'companies' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5794,8 +5794,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Companies' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'companies' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5809,8 +5809,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicTags' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinictags' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5824,8 +5824,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicTags' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinictags' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5839,7 +5839,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicTags' 
+                        WHERE LOWER(table_name) = 'clinictags' 
                         AND column_name = 'AssignedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5854,8 +5854,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -5869,7 +5869,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'TrialEndDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5884,7 +5884,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'StartDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5899,7 +5899,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'PlanChangeDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5914,7 +5914,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'NextPaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5929,7 +5929,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'ManualOverrideSetAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5944,7 +5944,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'LastPaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5959,7 +5959,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'FrozenStartDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5974,7 +5974,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'FrozenEndDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -5989,7 +5989,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'EndDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6004,8 +6004,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6019,7 +6019,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6034,8 +6034,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinics' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6049,8 +6049,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinics' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6064,8 +6064,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicCustomizations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'cliniccustomizations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6079,8 +6079,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicCustomizations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'cliniccustomizations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6094,8 +6094,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicalExaminations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinicalexaminations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6109,8 +6109,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicalExaminations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinicalexaminations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6124,8 +6124,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ChurnPredictions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'churnpredictions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6139,7 +6139,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ChurnPredictions' 
+                        WHERE LOWER(table_name) = 'churnpredictions' 
                         AND column_name = 'PredictedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
@@ -6154,8 +6154,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ChurnPredictions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'churnpredictions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6169,8 +6169,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6184,7 +6184,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
                         AND column_name = 'DataExpiracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6199,7 +6199,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
                         AND column_name = 'DataEmissao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6214,7 +6214,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
                         AND column_name = 'DataCadastro'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6229,8 +6229,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6244,8 +6244,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CashFlowEntries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'cashflowentries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6259,7 +6259,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CashFlowEntries' 
+                        WHERE LOWER(table_name) = 'cashflowentries' 
                         AND column_name = 'TransactionDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6274,8 +6274,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CashFlowEntries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'cashflowentries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6289,8 +6289,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6304,7 +6304,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
                         AND column_name = 'DataReferencia'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6319,7 +6319,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
                         AND column_name = 'DataGeracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6334,8 +6334,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6349,8 +6349,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AutomationActions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'automationactions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6364,8 +6364,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AutomationActions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'automationactions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6379,8 +6379,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6394,7 +6394,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
                         AND column_name = 'RequestDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6409,7 +6409,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
                         AND column_name = 'ExpirationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6424,8 +6424,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6439,7 +6439,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
                         AND column_name = 'AuthorizationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6454,8 +6454,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuditLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'auditlogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6469,7 +6469,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuditLogs' 
+                        WHERE LOWER(table_name) = 'auditlogs' 
                         AND column_name = 'Timestamp'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6484,8 +6484,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuditLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'auditlogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6499,8 +6499,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6514,7 +6514,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
                         AND column_name = 'DataUltimaValidacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6529,7 +6529,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
                         AND column_name = 'DataTimestamp'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6544,7 +6544,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
                         AND column_name = 'DataHoraAssinatura'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6559,8 +6559,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6574,8 +6574,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6589,7 +6589,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
                         AND column_name = 'DataPagamento'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6604,7 +6604,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
                         AND column_name = 'DataApuracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6619,8 +6619,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6634,8 +6634,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6649,7 +6649,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'ScheduledDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6664,7 +6664,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'PaidAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6679,8 +6679,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6694,7 +6694,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'CheckOutTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6709,7 +6709,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'CheckInTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6724,8 +6724,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AppointmentProcedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'appointmentprocedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6739,7 +6739,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AppointmentProcedures' 
+                        WHERE LOWER(table_name) = 'appointmentprocedures' 
                         AND column_name = 'PerformedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6754,8 +6754,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AppointmentProcedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'appointmentprocedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6769,8 +6769,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'anamnesistemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6784,8 +6784,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'anamnesistemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6799,8 +6799,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisResponses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'anamnesisresponses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6814,7 +6814,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisResponses' 
+                        WHERE LOWER(table_name) = 'anamnesisresponses' 
                         AND column_name = 'ResponseDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6829,8 +6829,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisResponses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'anamnesisresponses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6844,8 +6844,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6859,7 +6859,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
                         AND column_name = 'SettlementDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6874,7 +6874,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6889,7 +6889,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6904,8 +6904,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6919,8 +6919,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accountspayable' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6934,7 +6934,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
+                        WHERE LOWER(table_name) = 'accountspayable' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6949,7 +6949,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
+                        WHERE LOWER(table_name) = 'accountspayable' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6964,7 +6964,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
+                        WHERE LOWER(table_name) = 'accountspayable' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -6979,8 +6979,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accountspayable' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -6994,8 +6994,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accountlockouts' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -7009,7 +7009,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
+                        WHERE LOWER(table_name) = 'accountlockouts' 
                         AND column_name = 'UnlocksAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -7024,7 +7024,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
+                        WHERE LOWER(table_name) = 'accountlockouts' 
                         AND column_name = 'UnlockedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -7039,7 +7039,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
+                        WHERE LOWER(table_name) = 'accountlockouts' 
                         AND column_name = 'LockedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -7054,8 +7054,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accountlockouts' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -7069,8 +7069,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccessProfiles' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accessprofiles' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -7084,8 +7084,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccessProfiles' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accessprofiles' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
                     ) THEN
@@ -7346,13 +7346,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the Workflows table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'Workflows'
+                        WHERE LOWER(table_name) = 'workflows'
                         AND table_schema = 'public'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'Workflows' 
-                            AND column_name = 'UpdatedAt'
+                            WHERE LOWER(table_name) = 'workflows' 
+                            AND LOWER(column_name) = 'updatedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7361,8 +7361,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'Workflows' 
-                            AND column_name = 'CreatedAt'
+                            WHERE LOWER(table_name) = 'workflows' 
+                            AND LOWER(column_name) = 'createdat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7378,13 +7378,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the WorkflowExecutions table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'WorkflowExecutions'
+                        WHERE LOWER(table_name) = 'workflowexecutions'
                         AND table_schema = 'public'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowExecutions' 
-                            AND column_name = 'StartedAt'
+                            WHERE LOWER(table_name) = 'workflowexecutions' 
+                            AND LOWER(column_name) = 'startedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7393,8 +7393,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowExecutions' 
-                            AND column_name = 'CompletedAt'
+                            WHERE LOWER(table_name) = 'workflowexecutions' 
+                            AND LOWER(column_name) = 'completedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7410,13 +7410,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the WorkflowActions table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'WorkflowActions'
+                        WHERE LOWER(table_name) = 'workflowactions'
                         AND table_schema = 'public'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActions' 
-                            AND column_name = 'UpdatedAt'
+                            WHERE LOWER(table_name) = 'workflowactions' 
+                            AND LOWER(column_name) = 'updatedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7425,8 +7425,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActions' 
-                            AND column_name = 'CreatedAt'
+                            WHERE LOWER(table_name) = 'workflowactions' 
+                            AND LOWER(column_name) = 'createdat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7442,13 +7442,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     -- Only proceed if the WorkflowActionExecutions table exists
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'WorkflowActionExecutions'
+                        WHERE LOWER(table_name) = 'workflowactionexecutions'
                         AND table_schema = 'public'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActionExecutions' 
-                            AND column_name = 'StartedAt'
+                            WHERE LOWER(table_name) = 'workflowactionexecutions' 
+                            AND LOWER(column_name) = 'startedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7457,8 +7457,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'WorkflowActionExecutions' 
-                            AND column_name = 'CompletedAt'
+                            WHERE LOWER(table_name) = 'workflowactionexecutions' 
+                            AND LOWER(column_name) = 'completedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -7473,8 +7473,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WidgetTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'widgettemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7488,8 +7488,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WidgetTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'widgettemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7503,8 +7503,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7518,8 +7518,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'LastSuccessAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'lastsuccessat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7533,8 +7533,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'LastFailureAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'lastfailureat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7548,7 +7548,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
                         AND column_name = 'LastDeliveryAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -7563,8 +7563,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookSubscriptions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'webhooksubscriptions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7578,8 +7578,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7593,7 +7593,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
                         AND column_name = 'NextRetryAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -7608,7 +7608,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
                         AND column_name = 'FailedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -7623,7 +7623,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
                         AND column_name = 'DeliveredAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -7638,8 +7638,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WebhookDeliveries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'webhookdeliveries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7653,8 +7653,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7668,8 +7668,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7683,7 +7683,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
                         AND column_name = 'CompletedTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7698,7 +7698,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
                         AND column_name = 'CheckInTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7713,7 +7713,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueEntries' 
+                        WHERE LOWER(table_name) = 'waitingqueueentries' 
                         AND column_name = 'CalledTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7728,8 +7728,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7743,8 +7743,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'WaitingQueueConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'waitingqueueconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7758,8 +7758,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'users' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7773,7 +7773,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' 
+                        WHERE LOWER(table_name) = 'users' 
                         AND column_name = 'LastLoginAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7788,8 +7788,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Users' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'users' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7803,8 +7803,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7818,7 +7818,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
                         AND column_name = 'LinkedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7833,7 +7833,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
                         AND column_name = 'InactivatedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7848,8 +7848,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'UserClinicLinks' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'usercliniclinks' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7863,8 +7863,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'user_sessions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7878,8 +7878,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
-                        AND column_name = 'StartedAt'
+                        WHERE LOWER(table_name) = 'user_sessions' 
+                        AND LOWER(column_name) = 'startedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7893,7 +7893,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
+                        WHERE LOWER(table_name) = 'user_sessions' 
                         AND column_name = 'LastActivityAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7908,7 +7908,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
+                        WHERE LOWER(table_name) = 'user_sessions' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7923,8 +7923,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'user_sessions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'user_sessions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7938,7 +7938,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorBackupCodes' 
+                        WHERE LOWER(table_name) = 'twofactorbackupcodes' 
                         AND column_name = 'UsedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7953,8 +7953,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorAuth' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'twofactorauth' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7968,7 +7968,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorAuth' 
+                        WHERE LOWER(table_name) = 'twofactorauth' 
                         AND column_name = 'EnabledAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -7983,8 +7983,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TwoFactorAuth' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'twofactorauth' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -7998,8 +7998,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TussProcedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tussprocedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8013,7 +8013,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TussProcedures' 
+                        WHERE LOWER(table_name) = 'tussprocedures' 
                         AND column_name = 'LastUpdated'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8028,8 +8028,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TussProcedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tussprocedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8043,8 +8043,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8058,7 +8058,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
                         AND column_name = 'DataResposta'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8073,7 +8073,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
                         AND column_name = 'DataEnvio'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8088,8 +8088,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissRecursosGlosa' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissrecursosglosa' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8103,8 +8103,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissOperadoraConfigs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissoperadoraconfigs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8118,8 +8118,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissOperadoraConfigs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissoperadoraconfigs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8133,8 +8133,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuides' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissguides' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8148,7 +8148,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuides' 
+                        WHERE LOWER(table_name) = 'tissguides' 
                         AND column_name = 'ServiceDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8163,8 +8163,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuides' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissguides' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8178,8 +8178,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuideProcedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissguideprocedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8193,8 +8193,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGuideProcedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissguideprocedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8208,8 +8208,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissglosas' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8223,7 +8223,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
+                        WHERE LOWER(table_name) = 'tissglosas' 
                         AND column_name = 'DataIdentificacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8238,7 +8238,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
+                        WHERE LOWER(table_name) = 'tissglosas' 
                         AND column_name = 'DataGlosa'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8253,8 +8253,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissGlosas' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissglosas' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8268,8 +8268,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tissbatches' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8283,7 +8283,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
+                        WHERE LOWER(table_name) = 'tissbatches' 
                         AND column_name = 'SubmittedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8298,7 +8298,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
+                        WHERE LOWER(table_name) = 'tissbatches' 
                         AND column_name = 'ProcessedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8313,7 +8313,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
+                        WHERE LOWER(table_name) = 'tissbatches' 
                         AND column_name = 'CreatedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8328,8 +8328,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TissBatches' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tissbatches' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8343,8 +8343,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tickets' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tickets' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8358,7 +8358,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tickets' 
+                        WHERE LOWER(table_name) = 'tickets' 
                         AND column_name = 'LastStatusChangeAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8373,8 +8373,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tickets' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tickets' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8388,8 +8388,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketHistory' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tickethistory' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8403,8 +8403,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketHistory' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tickethistory' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8418,7 +8418,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketHistory' 
+                        WHERE LOWER(table_name) = 'tickethistory' 
                         AND column_name = 'ChangedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8433,8 +8433,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketComments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'ticketcomments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8448,8 +8448,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketComments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'ticketcomments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8463,7 +8463,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketAttachments' 
+                        WHERE LOWER(table_name) = 'ticketattachments' 
                         AND column_name = 'UploadedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8478,8 +8478,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketAttachments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'ticketattachments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8493,8 +8493,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TicketAttachments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'ticketattachments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8508,8 +8508,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TherapeuticPlans' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'therapeuticplans' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8523,7 +8523,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TherapeuticPlans' 
+                        WHERE LOWER(table_name) = 'therapeuticplans' 
                         AND column_name = 'ReturnDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8538,8 +8538,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'TherapeuticPlans' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'therapeuticplans' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8553,8 +8553,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tags' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'tags' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8568,8 +8568,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Tags' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'tags' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8583,12 +8583,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8602,12 +8602,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
-                        AND column_name = 'ReadAt'
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND LOWER(column_name) = 'readat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8621,12 +8621,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE LOWER(table_name) = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'systemnotifications' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8640,8 +8640,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Surveys' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveys' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8655,8 +8655,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Surveys' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveys' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8670,8 +8670,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8685,8 +8685,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'StartedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'startedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8700,8 +8700,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8715,8 +8715,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyResponses' 
-                        AND column_name = 'CompletedAt'
+                        WHERE LOWER(table_name) = 'surveyresponses' 
+                        AND LOWER(column_name) = 'completedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8737,8 +8737,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8752,8 +8752,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8774,8 +8774,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestionResponses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestionresponses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8789,8 +8789,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestionResponses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'surveyquestionresponses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8804,7 +8804,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SurveyQuestionResponses' 
+                        WHERE LOWER(table_name) = 'surveyquestionresponses' 
                         AND column_name = 'AnsweredAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -8826,8 +8826,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Suppliers' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'suppliers' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8841,8 +8841,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Suppliers' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'suppliers' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8856,8 +8856,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionPlans' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'subscriptionplans' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8871,8 +8871,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionPlans' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'subscriptionplans' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8886,7 +8886,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionCredits' 
+                        WHERE LOWER(table_name) = 'subscriptioncredits' 
                         AND column_name = 'GrantedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8901,8 +8901,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'soaprecords' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8916,7 +8916,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
+                        WHERE LOWER(table_name) = 'soaprecords' 
                         AND column_name = 'RecordDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8931,8 +8931,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'soaprecords' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8946,7 +8946,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SoapRecords' 
+                        WHERE LOWER(table_name) = 'soaprecords' 
                         AND column_name = 'CompletionDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -8961,8 +8961,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcTransmissions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sngpctransmissions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8976,8 +8976,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcTransmissions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sngpctransmissions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -8991,7 +8991,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcTransmissions' 
+                        WHERE LOWER(table_name) = 'sngpctransmissions' 
                         AND column_name = 'AttemptedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9006,8 +9006,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sngpcreports' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9021,7 +9021,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'TransmittedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9036,7 +9036,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'ReportPeriodStart'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9051,7 +9051,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'ReportPeriodEnd'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9066,7 +9066,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'LastAttemptAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9081,7 +9081,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
+                        WHERE LOWER(table_name) = 'sngpcreports' 
                         AND column_name = 'GeneratedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9096,8 +9096,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SNGPCReports' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sngpcreports' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9111,8 +9111,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9126,7 +9126,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
                         AND column_name = 'ResolvedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9141,8 +9141,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9156,7 +9156,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SngpcAlerts' 
+                        WHERE LOWER(table_name) = 'sngpcalerts' 
                         AND column_name = 'AcknowledgedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9171,8 +9171,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SentimentAnalyses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'sentimentanalyses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9186,8 +9186,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SentimentAnalyses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'sentimentanalyses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9201,7 +9201,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SentimentAnalyses' 
+                        WHERE LOWER(table_name) = 'sentimentanalyses' 
                         AND column_name = 'AnalyzedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -9216,8 +9216,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'senhasfila' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9231,7 +9231,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraSaida'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9246,7 +9246,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraEntrada'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9261,7 +9261,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraChamada'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9276,7 +9276,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
+                        WHERE LOWER(table_name) = 'senhasfila' 
                         AND column_name = 'DataHoraAtendimento'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9291,8 +9291,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SenhasFila' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'senhasfila' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9306,8 +9306,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'scheduledreports' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9321,7 +9321,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
+                        WHERE LOWER(table_name) = 'scheduledreports' 
                         AND column_name = 'NextRunAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9336,7 +9336,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
+                        WHERE LOWER(table_name) = 'scheduledreports' 
                         AND column_name = 'LastRunAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9351,8 +9351,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ScheduledReports' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'scheduledreports' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9366,8 +9366,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SalesFunnelMetrics' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'salesfunnelmetrics' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9381,8 +9381,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SalesFunnelMetrics' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'salesfunnelmetrics' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9396,8 +9396,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReportTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'reporttemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9411,8 +9411,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReportTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'reporttemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9426,8 +9426,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReceivablePayments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'receivablepayments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9441,7 +9441,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReceivablePayments' 
+                        WHERE LOWER(table_name) = 'receivablepayments' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9456,8 +9456,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ReceivablePayments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'receivablepayments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9471,8 +9471,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProfilePermissions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'profilepermissions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9486,8 +9486,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProfilePermissions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'profilepermissions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9501,8 +9501,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Procedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'procedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9516,8 +9516,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Procedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'procedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9531,8 +9531,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProcedureMaterials' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'procedurematerials' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9546,8 +9546,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ProcedureMaterials' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'procedurematerials' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9561,8 +9561,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'prescriptiontemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9576,8 +9576,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'prescriptiontemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9591,8 +9591,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionSequenceControls' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionsequencecontrols' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9606,7 +9606,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionSequenceControls' 
+                        WHERE LOWER(table_name) = 'prescriptionsequencecontrols' 
                         AND column_name = 'LastGeneratedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9621,8 +9621,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionSequenceControls' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionsequencecontrols' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9636,8 +9636,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionItems' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionitems' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9651,8 +9651,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PrescriptionItems' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'prescriptionitems' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9666,8 +9666,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PlanoContas' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'planocontas' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9681,8 +9681,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PlanoContas' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'planocontas' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9696,8 +9696,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'payments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9711,7 +9711,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
+                        WHERE LOWER(table_name) = 'payments' 
                         AND column_name = 'ProcessedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9726,7 +9726,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
+                        WHERE LOWER(table_name) = 'payments' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9741,8 +9741,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'payments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9756,7 +9756,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Payments' 
+                        WHERE LOWER(table_name) = 'payments' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9771,8 +9771,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PayablePayments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'payablepayments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9786,7 +9786,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PayablePayments' 
+                        WHERE LOWER(table_name) = 'payablepayments' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9801,8 +9801,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PayablePayments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'payablepayments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9816,8 +9816,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientTouchpoints' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patienttouchpoints' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9831,7 +9831,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientTouchpoints' 
+                        WHERE LOWER(table_name) = 'patienttouchpoints' 
                         AND column_name = 'Timestamp'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -9846,8 +9846,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientTouchpoints' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patienttouchpoints' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9868,8 +9868,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Patients' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patients' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9893,7 +9893,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Patients' 
+                        WHERE LOWER(table_name) = 'patients' 
                         AND column_name = 'DateOfBirth'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9908,8 +9908,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Patients' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patients' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9923,8 +9923,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientJourneys' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patientjourneys' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9938,8 +9938,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientJourneys' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patientjourneys' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9953,7 +9953,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
                         AND column_name = 'ValidUntil'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9968,7 +9968,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
                         AND column_name = 'ValidFrom'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -9983,8 +9983,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -9998,8 +9998,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientHealthInsurances' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patienthealthinsurances' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10013,8 +10013,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientClinicLinks' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'patientcliniclinks' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10028,7 +10028,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientClinicLinks' 
+                        WHERE LOWER(table_name) = 'patientcliniclinks' 
                         AND column_name = 'LinkedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10043,8 +10043,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PatientClinicLinks' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'patientcliniclinks' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10058,7 +10058,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
                         AND column_name = 'VerifiedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10073,7 +10073,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
                         AND column_name = 'UsedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10088,8 +10088,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10103,7 +10103,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10118,8 +10118,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'PasswordResetTokens' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'passwordresettokens' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10133,8 +10133,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'owners' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10148,7 +10148,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' 
+                        WHERE LOWER(table_name) = 'owners' 
                         AND column_name = 'LastLoginAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10163,8 +10163,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Owners' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'owners' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10178,8 +10178,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10193,7 +10193,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
                         AND column_name = 'LinkedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10208,7 +10208,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
                         AND column_name = 'InactivatedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10223,8 +10223,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'OwnerClinicLinks' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'ownercliniclinks' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10238,8 +10238,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'owner_sessions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10253,7 +10253,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
+                        WHERE LOWER(table_name) = 'owner_sessions' 
                         AND column_name = 'LastActivityAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10268,7 +10268,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
+                        WHERE LOWER(table_name) = 'owner_sessions' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10283,8 +10283,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'owner_sessions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'owner_sessions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10298,8 +10298,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'notifications' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10313,7 +10313,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
+                        WHERE LOWER(table_name) = 'notifications' 
                         AND column_name = 'SentAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10328,8 +10328,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
-                        AND column_name = 'ReadAt'
+                        WHERE LOWER(table_name) = 'notifications' 
+                        AND LOWER(column_name) = 'readat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10343,7 +10343,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
+                        WHERE LOWER(table_name) = 'notifications' 
                         AND column_name = 'DeliveredAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10358,8 +10358,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Notifications' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'notifications' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10373,8 +10373,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRules' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'notificationrules' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10388,8 +10388,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRules' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'notificationrules' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10403,8 +10403,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'notificationroutines' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10418,7 +10418,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
+                        WHERE LOWER(table_name) = 'notificationroutines' 
                         AND column_name = 'NextExecutionAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10433,7 +10433,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
+                        WHERE LOWER(table_name) = 'notificationroutines' 
                         AND column_name = 'LastExecutedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10448,8 +10448,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'NotificationRoutines' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'notificationroutines' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10463,8 +10463,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MonthlyControlledBalances' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'monthlycontrolledbalances' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10478,8 +10478,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MonthlyControlledBalances' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'monthlycontrolledbalances' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10493,7 +10493,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MonthlyControlledBalances' 
+                        WHERE LOWER(table_name) = 'monthlycontrolledbalances' 
                         AND column_name = 'ClosedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10508,8 +10508,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10523,8 +10523,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10538,8 +10538,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurationHistories' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurationhistories' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10553,8 +10553,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurationHistories' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'moduleconfigurationhistories' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10568,7 +10568,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ModuleConfigurationHistories' 
+                        WHERE LOWER(table_name) = 'moduleconfigurationhistories' 
                         AND column_name = 'ChangedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10583,8 +10583,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Medications' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medications' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10598,8 +10598,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Medications' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medications' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10613,8 +10613,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordVersions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordversions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10628,8 +10628,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordVersions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordversions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10643,7 +10643,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordVersions' 
+                        WHERE LOWER(table_name) = 'medicalrecordversions' 
                         AND column_name = 'ChangedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10658,8 +10658,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordtemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10673,8 +10673,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordtemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10688,8 +10688,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordSignatures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordsignatures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10703,7 +10703,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordSignatures' 
+                        WHERE LOWER(table_name) = 'medicalrecordsignatures' 
                         AND column_name = 'SignedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10718,8 +10718,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordSignatures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordsignatures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10733,8 +10733,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecords' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10748,7 +10748,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ReopenedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10763,8 +10763,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecords' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10778,7 +10778,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ConsultationStartTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10793,7 +10793,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ConsultationEndTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10808,7 +10808,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecords' 
+                        WHERE LOWER(table_name) = 'medicalrecords' 
                         AND column_name = 'ClosedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10823,8 +10823,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordAccessLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordaccesslogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10838,8 +10838,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordAccessLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'medicalrecordaccesslogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10853,7 +10853,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MedicalRecordAccessLogs' 
+                        WHERE LOWER(table_name) = 'medicalrecordaccesslogs' 
                         AND column_name = 'AccessedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10868,8 +10868,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Materials' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'materials' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10883,8 +10883,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Materials' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'materials' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10898,8 +10898,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MarketingAutomations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'marketingautomations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10913,7 +10913,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MarketingAutomations' 
+                        WHERE LOWER(table_name) = 'marketingautomations' 
                         AND column_name = 'LastExecutedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -10928,8 +10928,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'MarketingAutomations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'marketingautomations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10943,8 +10943,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LoginAttempts' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'loginattempts' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10958,8 +10958,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LoginAttempts' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'loginattempts' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -10973,7 +10973,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LoginAttempts' 
+                        WHERE LOWER(table_name) = 'loginattempts' 
                         AND column_name = 'AttemptTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -10988,8 +10988,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LancamentosContabeis' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'lancamentoscontabeis' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11003,7 +11003,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LancamentosContabeis' 
+                        WHERE LOWER(table_name) = 'lancamentoscontabeis' 
                         AND column_name = 'DataLancamento'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11018,8 +11018,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'LancamentosContabeis' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'lancamentoscontabeis' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11033,8 +11033,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'journeystages' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11048,7 +11048,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
+                        WHERE LOWER(table_name) = 'journeystages' 
                         AND column_name = 'ExitedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -11063,7 +11063,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
+                        WHERE LOWER(table_name) = 'journeystages' 
                         AND column_name = 'EnteredAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -11078,8 +11078,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'JourneyStages' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'journeystages' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11100,8 +11100,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'invoices' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11115,7 +11115,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'SentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11130,7 +11130,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'PaidDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11145,7 +11145,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11160,7 +11160,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11175,8 +11175,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'invoices' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11190,7 +11190,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Invoices' 
+                        WHERE LOWER(table_name) = 'invoices' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11205,8 +11205,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InvoiceConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'invoiceconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11220,8 +11220,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InvoiceConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'invoiceconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11235,7 +11235,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InvoiceConfigurations' 
+                        WHERE LOWER(table_name) = 'invoiceconfigurations' 
                         AND column_name = 'CertificateExpirationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11250,8 +11250,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InformedConsents' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'informedconsents' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11265,8 +11265,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InformedConsents' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'informedconsents' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11280,7 +11280,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'InformedConsents' 
+                        WHERE LOWER(table_name) = 'informedconsents' 
                         AND column_name = 'AcceptedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11295,8 +11295,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ImpostosNotas' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'impostosnotas' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11310,7 +11310,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ImpostosNotas' 
+                        WHERE LOWER(table_name) = 'impostosnotas' 
                         AND column_name = 'DataCalculo'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11325,8 +11325,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ImpostosNotas' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'impostosnotas' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11340,7 +11340,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
                         AND column_name = 'ValidUntil'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11355,7 +11355,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
                         AND column_name = 'ValidFrom'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11370,8 +11370,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11385,8 +11385,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsurancePlans' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceplans' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11400,8 +11400,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsuranceOperators' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceoperators' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11415,8 +11415,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'HealthInsuranceOperators' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'healthinsuranceoperators' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11430,8 +11430,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'financialclosures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11445,7 +11445,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
+                        WHERE LOWER(table_name) = 'financialclosures' 
                         AND column_name = 'SettlementDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11460,8 +11460,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'financialclosures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11475,7 +11475,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosures' 
+                        WHERE LOWER(table_name) = 'financialclosures' 
                         AND column_name = 'ClosureDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11490,8 +11490,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosureItems' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'financialclosureitems' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11505,8 +11505,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FinancialClosureItems' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'financialclosureitems' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11520,8 +11520,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FilasEspera' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'filasespera' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11535,8 +11535,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'FilasEspera' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'filasespera' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11550,8 +11550,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'expenses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11565,7 +11565,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
+                        WHERE LOWER(table_name) = 'expenses' 
                         AND column_name = 'PaidDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11580,7 +11580,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
+                        WHERE LOWER(table_name) = 'expenses' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11595,8 +11595,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Expenses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'expenses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11610,8 +11610,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'examrequests' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11625,7 +11625,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
+                        WHERE LOWER(table_name) = 'examrequests' 
                         AND column_name = 'ScheduledDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11640,7 +11640,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
+                        WHERE LOWER(table_name) = 'examrequests' 
                         AND column_name = 'RequestedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11655,8 +11655,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'examrequests' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11670,7 +11670,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamRequests' 
+                        WHERE LOWER(table_name) = 'examrequests' 
                         AND column_name = 'CompletedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11685,8 +11685,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamCatalogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'examcatalogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11700,8 +11700,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ExamCatalogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'examcatalogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11715,8 +11715,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'EmailTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'emailtemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11730,8 +11730,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'EmailTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'emailtemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11745,8 +11745,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11760,7 +11760,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11775,8 +11775,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11790,7 +11790,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11805,7 +11805,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ElectronicInvoices' 
+                        WHERE LOWER(table_name) = 'electronicinvoices' 
                         AND column_name = 'AuthorizationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11820,8 +11820,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dres' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11835,7 +11835,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
+                        WHERE LOWER(table_name) = 'dres' 
                         AND column_name = 'PeriodoInicio'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11850,7 +11850,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
+                        WHERE LOWER(table_name) = 'dres' 
                         AND column_name = 'PeriodoFim'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11865,7 +11865,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
+                        WHERE LOWER(table_name) = 'dres' 
                         AND column_name = 'DataGeracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11880,8 +11880,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DREs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dres' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11895,8 +11895,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11910,7 +11910,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'SignedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11925,7 +11925,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'ReportedToSNGPCAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11940,7 +11940,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'IssuedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11955,7 +11955,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
                         AND column_name = 'ExpiresAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -11970,8 +11970,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -11985,8 +11985,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12000,7 +12000,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
                         AND column_name = 'ManufactureDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12015,7 +12015,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
                         AND column_name = 'ExpiryDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12030,8 +12030,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DigitalPrescriptionItems' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'digitalprescriptionitems' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12045,8 +12045,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DiagnosticHypotheses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'diagnostichypotheses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12060,7 +12060,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DiagnosticHypotheses' 
+                        WHERE LOWER(table_name) = 'diagnostichypotheses' 
                         AND column_name = 'DiagnosedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12075,8 +12075,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DiagnosticHypotheses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'diagnostichypotheses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12090,8 +12090,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12105,7 +12105,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
                         AND column_name = 'RevokedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12120,8 +12120,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12135,7 +12135,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataProcessingConsents' 
+                        WHERE LOWER(table_name) = 'dataprocessingconsents' 
                         AND column_name = 'ConsentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12150,8 +12150,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12165,7 +12165,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'RequestDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12180,7 +12180,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'ProcessedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12195,7 +12195,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'LegalApprovalDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12210,8 +12210,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12225,7 +12225,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataDeletionRequests' 
+                        WHERE LOWER(table_name) = 'datadeletionrequests' 
                         AND column_name = 'CompletedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12240,8 +12240,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12255,7 +12255,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
                         AND column_name = 'RevokedDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12270,7 +12270,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
                         AND column_name = 'ExpirationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12285,8 +12285,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12300,7 +12300,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataConsentLogs' 
+                        WHERE LOWER(table_name) = 'dataconsentlogs' 
                         AND column_name = 'ConsentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12315,8 +12315,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataAccessLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'dataaccesslogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12330,7 +12330,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataAccessLogs' 
+                        WHERE LOWER(table_name) = 'dataaccesslogs' 
                         AND column_name = 'Timestamp'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12345,8 +12345,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DataAccessLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'dataaccesslogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12358,11 +12358,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
-                            AND column_name = 'UpdatedAt'
+                            WHERE LOWER(table_name) = 'dashboardwidgets' 
+                            AND LOWER(column_name) = 'updatedat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -12375,11 +12375,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql($@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
-                            AND column_name = 'CreatedAt'
+                            WHERE LOWER(table_name) = 'dashboardwidgets' 
+                            AND LOWER(column_name) = 'createdat'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
                         ) THEN
@@ -12394,8 +12394,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CustomDashboards' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'customdashboards' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12409,8 +12409,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CustomDashboards' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'customdashboards' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12424,8 +12424,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12439,7 +12439,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
                         AND column_name = 'RegisteredAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12454,7 +12454,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
                         AND column_name = 'DocumentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12469,7 +12469,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
                         AND column_name = 'Date'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12484,8 +12484,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ControlledMedicationRegistries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'controlledmedicationregistries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12499,8 +12499,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormProfiles' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'consultationformprofiles' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12514,8 +12514,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormProfiles' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'consultationformprofiles' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12529,8 +12529,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormConfigurations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'consultationformconfigurations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12544,8 +12544,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultationFormConfigurations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'consultationformconfigurations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12559,8 +12559,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12574,7 +12574,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
                         AND column_name = 'UltimaAtualizacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12589,7 +12589,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
                         AND column_name = 'DataConsolidacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12604,7 +12604,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
                         AND column_name = 'Data'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12619,8 +12619,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConsultasDiarias' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'consultasdiarias' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12634,7 +12634,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
                         AND column_name = 'VigenciaInicio'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12649,7 +12649,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
                         AND column_name = 'VigenciaFim'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12664,8 +12664,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12679,8 +12679,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ConfiguracoesFiscais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'configuracoesfiscais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12694,8 +12694,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'complaints' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12709,7 +12709,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'ResolvedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -12724,7 +12724,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'ReceivedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -12739,7 +12739,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'FirstResponseAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -12754,8 +12754,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'complaints' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12769,7 +12769,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Complaints' 
+                        WHERE LOWER(table_name) = 'complaints' 
                         AND column_name = 'ClosedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -12784,8 +12784,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ComplaintInteractions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'complaintinteractions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12799,7 +12799,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ComplaintInteractions' 
+                        WHERE LOWER(table_name) = 'complaintinteractions' 
                         AND column_name = 'InteractionDate'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -12814,8 +12814,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ComplaintInteractions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'complaintinteractions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12836,8 +12836,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Companies' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'companies' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12851,8 +12851,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Companies' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'companies' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12866,8 +12866,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicTags' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinictags' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12881,8 +12881,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicTags' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinictags' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12896,7 +12896,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicTags' 
+                        WHERE LOWER(table_name) = 'clinictags' 
                         AND column_name = 'AssignedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12911,8 +12911,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -12926,7 +12926,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'TrialEndDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12941,7 +12941,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'StartDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12956,7 +12956,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'PlanChangeDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12971,7 +12971,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'NextPaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -12986,7 +12986,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'ManualOverrideSetAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13001,7 +13001,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'LastPaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13016,7 +13016,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'FrozenStartDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13031,7 +13031,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'FrozenEndDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13046,7 +13046,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'EndDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13061,8 +13061,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13076,7 +13076,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicSubscriptions' 
+                        WHERE LOWER(table_name) = 'clinicsubscriptions' 
                         AND column_name = 'CancellationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13091,8 +13091,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinics' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13106,8 +13106,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Clinics' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinics' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13121,8 +13121,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicCustomizations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'cliniccustomizations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13136,8 +13136,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicCustomizations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'cliniccustomizations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13151,8 +13151,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicalExaminations' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'clinicalexaminations' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13166,8 +13166,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ClinicalExaminations' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'clinicalexaminations' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13181,8 +13181,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ChurnPredictions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'churnpredictions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13196,7 +13196,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ChurnPredictions' 
+                        WHERE LOWER(table_name) = 'churnpredictions' 
                         AND column_name = 'PredictedAt'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
@@ -13211,8 +13211,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ChurnPredictions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'churnpredictions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13226,8 +13226,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13241,7 +13241,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
                         AND column_name = 'DataExpiracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13256,7 +13256,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
                         AND column_name = 'DataEmissao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13271,7 +13271,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
                         AND column_name = 'DataCadastro'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13286,8 +13286,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CertificadosDigitais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'certificadosdigitais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13301,8 +13301,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CashFlowEntries' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'cashflowentries' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13316,7 +13316,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CashFlowEntries' 
+                        WHERE LOWER(table_name) = 'cashflowentries' 
                         AND column_name = 'TransactionDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13331,8 +13331,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'CashFlowEntries' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'cashflowentries' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13346,8 +13346,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13361,7 +13361,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
                         AND column_name = 'DataReferencia'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13376,7 +13376,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
                         AND column_name = 'DataGeracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13391,8 +13391,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'BalancosPatrimoniais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'balancospatrimoniais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13406,8 +13406,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AutomationActions' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'automationactions' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13421,8 +13421,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AutomationActions' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'automationactions' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'crm'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13443,8 +13443,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13458,7 +13458,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
                         AND column_name = 'RequestDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13473,7 +13473,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
                         AND column_name = 'ExpirationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13488,8 +13488,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13503,7 +13503,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuthorizationRequests' 
+                        WHERE LOWER(table_name) = 'authorizationrequests' 
                         AND column_name = 'AuthorizationDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13518,8 +13518,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuditLogs' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'auditlogs' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13533,7 +13533,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuditLogs' 
+                        WHERE LOWER(table_name) = 'auditlogs' 
                         AND column_name = 'Timestamp'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13548,8 +13548,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AuditLogs' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'auditlogs' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13563,8 +13563,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13578,7 +13578,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
                         AND column_name = 'DataUltimaValidacao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13593,7 +13593,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
                         AND column_name = 'DataTimestamp'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13608,7 +13608,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
                         AND column_name = 'DataHoraAssinatura'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13623,8 +13623,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AssinaturasDigitais' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'assinaturasdigitais' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13638,8 +13638,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13653,7 +13653,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
                         AND column_name = 'DataPagamento'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13668,7 +13668,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
                         AND column_name = 'DataApuracao'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13683,8 +13683,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'ApuracoesImpostos' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'apuracoesimpostos' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13698,8 +13698,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13713,7 +13713,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'ScheduledDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13728,7 +13728,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'PaidAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13743,8 +13743,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'appointments' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13758,7 +13758,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'CheckOutTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13773,7 +13773,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'Appointments' 
+                        WHERE LOWER(table_name) = 'appointments' 
                         AND column_name = 'CheckInTime'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13788,8 +13788,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AppointmentProcedures' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'appointmentprocedures' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13803,7 +13803,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AppointmentProcedures' 
+                        WHERE LOWER(table_name) = 'appointmentprocedures' 
                         AND column_name = 'PerformedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13818,8 +13818,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AppointmentProcedures' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'appointmentprocedures' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13833,8 +13833,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisTemplates' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'anamnesistemplates' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13848,8 +13848,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisTemplates' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'anamnesistemplates' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13863,8 +13863,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisResponses' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'anamnesisresponses' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13878,7 +13878,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisResponses' 
+                        WHERE LOWER(table_name) = 'anamnesisresponses' 
                         AND column_name = 'ResponseDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13893,8 +13893,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AnamnesisResponses' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'anamnesisresponses' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13908,8 +13908,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13923,7 +13923,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
                         AND column_name = 'SettlementDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13938,7 +13938,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13953,7 +13953,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -13968,8 +13968,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsReceivable' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accountsreceivable' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13983,8 +13983,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accountspayable' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -13998,7 +13998,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
+                        WHERE LOWER(table_name) = 'accountspayable' 
                         AND column_name = 'PaymentDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -14013,7 +14013,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
+                        WHERE LOWER(table_name) = 'accountspayable' 
                         AND column_name = 'IssueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -14028,7 +14028,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
+                        WHERE LOWER(table_name) = 'accountspayable' 
                         AND column_name = 'DueDate'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -14043,8 +14043,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountsPayable' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accountspayable' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -14058,8 +14058,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accountlockouts' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -14073,7 +14073,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
+                        WHERE LOWER(table_name) = 'accountlockouts' 
                         AND column_name = 'UnlocksAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -14088,7 +14088,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
+                        WHERE LOWER(table_name) = 'accountlockouts' 
                         AND column_name = 'UnlockedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -14103,7 +14103,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
+                        WHERE LOWER(table_name) = 'accountlockouts' 
                         AND column_name = 'LockedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -14118,8 +14118,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccountLockouts' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accountlockouts' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -14133,8 +14133,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccessProfiles' 
-                        AND column_name = 'UpdatedAt'
+                        WHERE LOWER(table_name) = 'accessprofiles' 
+                        AND LOWER(column_name) = 'updatedat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
@@ -14148,8 +14148,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'AccessProfiles' 
-                        AND column_name = 'CreatedAt'
+                        WHERE LOWER(table_name) = 'accessprofiles' 
+                        AND LOWER(column_name) = 'createdat'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
                     ) THEN
