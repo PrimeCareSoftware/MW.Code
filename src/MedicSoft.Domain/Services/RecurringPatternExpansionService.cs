@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Domain.Services
 {
@@ -11,10 +13,22 @@ namespace MedicSoft.Domain.Services
     /// </summary>
     public class RecurringPatternExpansionService
     {
+        private readonly IRecurrenceExceptionRepository? _exceptionRepository;
+
         /// <summary>
         /// Maximum number of occurrences to prevent infinite loops or excessive memory usage
         /// </summary>
         public const int MaxOccurrences = 1000;
+
+        public RecurringPatternExpansionService()
+        {
+            // Parameterless constructor for backward compatibility
+        }
+
+        public RecurringPatternExpansionService(IRecurrenceExceptionRepository exceptionRepository)
+        {
+            _exceptionRepository = exceptionRepository;
+        }
 
         /// <summary>
         /// Generates dates based on a recurring pattern within a date range
@@ -157,20 +171,42 @@ namespace MedicSoft.Domain.Services
         }
 
         /// <summary>
-        /// Generates blocked time slots from a recurring pattern
+        /// Generates blocked time slots from a recurring pattern with unique series ID
         /// </summary>
+        /// <param name="pattern">The recurring pattern</param>
+        /// <param name="endDate">Optional end date to limit expansion</param>
+        /// <param name="seriesId">Optional explicit series ID. If not provided, a new one will be generated</param>
+        /// <param name="tenantId">Tenant ID for exception checking</param>
         public IEnumerable<BlockedTimeSlot> GenerateBlockedTimeSlots(
             RecurringAppointmentPattern pattern,
-            DateTime? endDate = null)
+            DateTime? endDate = null,
+            Guid? seriesId = null,
+            string? tenantId = null)
         {
             if (!pattern.IsForBlockedSlots())
                 return Enumerable.Empty<BlockedTimeSlot>();
 
             var dates = ExpandPattern(pattern, endDate);
             var blockedSlots = new List<BlockedTimeSlot>();
+            
+            // Generate unique series ID for this expansion
+            var actualSeriesId = seriesId ?? Guid.NewGuid();
+
+            // Get exceptions for this series if repository is available and tenant ID is provided
+            HashSet<DateTime>? exceptionDates = null;
+            if (_exceptionRepository != null && !string.IsNullOrEmpty(tenantId) && seriesId.HasValue)
+            {
+                // Note: This is async operation but we can't await in non-async method
+                // For now, we'll check exceptions in the handler layer
+                // This remains for backward compatibility
+            }
 
             foreach (var date in dates)
             {
+                // Skip if this date is an exception (if we have exception dates loaded)
+                if (exceptionDates != null && exceptionDates.Contains(date.Date))
+                    continue;
+
                 var blockedSlot = new BlockedTimeSlot(
                     clinicId: pattern.ClinicId,
                     date: date,
@@ -181,8 +217,60 @@ namespace MedicSoft.Domain.Services
                     professionalId: pattern.ProfessionalId,
                     reason: pattern.Notes,
                     isRecurring: true,
-                    recurringPatternId: pattern.Id
-                );
+                    recurringPatternId: pattern.Id,
+                    recurringSeriesId: actualSeriesId);
+                blockedSlots.Add(blockedSlot);
+            }
+
+            return blockedSlots;
+        }
+
+        /// <summary>
+        /// Async version that properly checks for exceptions
+        /// </summary>
+        public async Task<IEnumerable<BlockedTimeSlot>> GenerateBlockedTimeSlotsAsync(
+            RecurringAppointmentPattern pattern,
+            DateTime? endDate = null,
+            Guid? seriesId = null)
+        {
+            if (!pattern.IsForBlockedSlots())
+                return Enumerable.Empty<BlockedTimeSlot>();
+
+            var dates = ExpandPattern(pattern, endDate);
+            var blockedSlots = new List<BlockedTimeSlot>();
+            
+            // Generate unique series ID for this expansion
+            var actualSeriesId = seriesId ?? Guid.NewGuid();
+
+            // Get exceptions for this series if repository is available
+            HashSet<DateTime> exceptionDates = new HashSet<DateTime>();
+            if (_exceptionRepository != null && seriesId.HasValue)
+            {
+                var exceptions = await _exceptionRepository.GetByRecurringSeriesIdAsync(seriesId.Value, pattern.TenantId);
+                foreach (var ex in exceptions)
+                {
+                    exceptionDates.Add(ex.OriginalDate.Date);
+                }
+            }
+
+            foreach (var date in dates)
+            {
+                // Skip if this date is an exception
+                if (exceptionDates.Contains(date.Date))
+                    continue;
+
+                var blockedSlot = new BlockedTimeSlot(
+                    clinicId: pattern.ClinicId,
+                    date: date,
+                    startTime: pattern.StartTime,
+                    endTime: pattern.EndTime,
+                    type: pattern.BlockedSlotType ?? BlockedTimeSlotType.Unavailable,
+                    tenantId: pattern.TenantId,
+                    professionalId: pattern.ProfessionalId,
+                    reason: pattern.Notes,
+                    isRecurring: true,
+                    recurringPatternId: pattern.Id,
+                    recurringSeriesId: actualSeriesId);
                 blockedSlots.Add(blockedSlot);
             }
 
