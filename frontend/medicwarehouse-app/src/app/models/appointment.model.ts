@@ -148,11 +148,32 @@ export interface BlockedTimeSlot {
   reason?: string;
   isRecurring: boolean;
   recurringPatternId?: string;
+  recurringSeriesId?: string;  // 🆕 NEW: Unique identifier for this specific series
+  isException?: boolean;        // 🆕 NEW: Flag indicating this is an exception
   createdAt: string;
   updatedAt?: string;
   clinicName?: string;
   professionalName?: string;
 }
+
+// Recurrence Delete Scope - Inspired by Google Calendar, Outlook, and RFC 5545
+export enum RecurringDeleteScope {
+  ThisOccurrence = 1,      // Apenas esta ocorrência
+  ThisAndFuture = 2,       // Esta e futuras ocorrências
+  AllInSeries = 3          // Toda a série
+}
+
+export const RecurringDeleteScopeLabels: { [key: number]: string } = {
+  [RecurringDeleteScope.ThisOccurrence]: 'Apenas esta ocorrência',
+  [RecurringDeleteScope.ThisAndFuture]: 'Esta e futuras ocorrências',
+  [RecurringDeleteScope.AllInSeries]: 'Toda a série'
+};
+
+export const RecurringDeleteScopeDescriptions: { [key: number]: string } = {
+  [RecurringDeleteScope.ThisOccurrence]: 'Remove apenas este bloqueio específico. Outras ocorrências da série permanecerão intactas.',
+  [RecurringDeleteScope.ThisAndFuture]: 'Remove este bloqueio e todas as ocorrências futuras. Bloqueios passados serão mantidos.',
+  [RecurringDeleteScope.AllInSeries]: 'Remove todos os bloqueios desta série recorrente (passados, presentes e futuros).'
+};
 
 export interface CreateBlockedTimeSlot {
   clinicId: string;

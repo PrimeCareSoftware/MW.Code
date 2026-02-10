@@ -5,7 +5,8 @@ import { tap, shareReplay } from 'rxjs/operators';
 import { 
   Appointment, CreateAppointment, UpdateAppointment, DailyAgenda, WeekAgenda, AvailableSlot, Professional,
   BlockedTimeSlot, CreateBlockedTimeSlot, UpdateBlockedTimeSlot, 
-  RecurringAppointmentPattern, CreateRecurringBlockedSlots
+  RecurringAppointmentPattern, CreateRecurringBlockedSlots,
+  RecurringDeleteScope
 } from '../models/appointment.model';
 import { environment } from '../../environments/environment';
 
@@ -170,8 +171,17 @@ export class AppointmentService {
       );
   }
 
-  deleteBlockedTimeSlot(id: string, deleteSeries: boolean = false): Observable<void> {
-    const params = new HttpParams().set('deleteSeries', deleteSeries.toString());
+  deleteBlockedTimeSlot(
+    id: string, 
+    scope: RecurringDeleteScope = RecurringDeleteScope.ThisOccurrence,
+    reason?: string
+  ): Observable<void> {
+    let params = new HttpParams().set('scope', scope.toString());
+    
+    if (reason) {
+      params = params.set('reason', reason);
+    }
+    
     return this.http.delete<void>(`${this.blockedSlotsApiUrl}/${id}`, { params })
       .pipe(
         tap(() => this.invalidateCache())
