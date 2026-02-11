@@ -855,11 +855,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND column_name = 'UpdatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -873,11 +873,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND column_name = 'ReadAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -891,11 +891,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND column_name = 'CreatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -1062,7 +1062,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SubscriptionCredits') THEN
+                              AND table_name = 'subscriptioncredits') THEN
                         ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp with time zone;
                     END IF;
                 END $$;
@@ -1942,7 +1942,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'NotificationRules') THEN
+                              AND table_name = 'notificationrules') THEN
                         ALTER TABLE ""NotificationRules"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
                         ALTER TABLE ""NotificationRules"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
                     END IF;
@@ -3281,10 +3281,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
+                            WHERE table_name = 'dashboardwidgets' 
                             AND column_name = 'UpdatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
@@ -3298,10 +3298,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
+                            WHERE table_name = 'dashboardwidgets' 
                             AND column_name = 'CreatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
@@ -3316,10 +3316,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'customdashboards' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'CustomDashboards' 
+                            WHERE table_name = 'customdashboards' 
                             AND column_name = 'UpdatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
@@ -3333,10 +3333,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'customdashboards' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'CustomDashboards' 
+                            WHERE table_name = 'customdashboards' 
                             AND column_name = 'CreatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
@@ -5640,11 +5640,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND column_name = 'UpdatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -5658,11 +5658,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND column_name = 'ReadAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -5676,11 +5676,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SystemNotifications' 
+                        WHERE table_name = 'systemnotifications' 
                         AND column_name = 'CreatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -5847,7 +5847,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'SubscriptionCredits') THEN
+                              AND table_name = 'subscriptioncredits') THEN
                         ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp without time zone;
                     END IF;
                 END $$;
@@ -6727,7 +6727,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (SELECT FROM information_schema.tables 
                               WHERE table_schema = 'public' 
-                              AND table_name = 'NotificationRules') THEN
+                              AND table_name = 'notificationrules') THEN
                         ALTER TABLE ""NotificationRules"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
                         ALTER TABLE ""NotificationRules"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone;
                     END IF;
@@ -8066,10 +8066,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
+                            WHERE table_name = 'dashboardwidgets' 
                             AND column_name = 'UpdatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
@@ -8083,10 +8083,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'dashboardwidgets' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'DashboardWidgets' 
+                            WHERE table_name = 'dashboardwidgets' 
                             AND column_name = 'CreatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
@@ -8101,10 +8101,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'customdashboards' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'CustomDashboards' 
+                            WHERE table_name = 'customdashboards' 
                             AND column_name = 'UpdatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
@@ -8118,10 +8118,10 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'CustomDashboards' AND table_schema = 'public') THEN
+                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'customdashboards' AND table_schema = 'public') THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'CustomDashboards' 
+                            WHERE table_name = 'customdashboards' 
                             AND column_name = 'CreatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'

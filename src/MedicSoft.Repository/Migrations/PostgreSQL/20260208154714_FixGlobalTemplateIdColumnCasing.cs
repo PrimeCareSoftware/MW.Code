@@ -23,13 +23,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'DocumentTemplates'
+                        WHERE table_name = 'documenttemplates'
                         AND column_name = 'globaltemplateid'
                         AND table_schema = current_schema()
                     ) AND NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'DocumentTemplates'
+                        WHERE table_name = 'documenttemplates'
                         AND column_name = 'GlobalTemplateId'
                         AND table_schema = current_schema()
                     ) THEN
@@ -38,7 +38,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             SELECT 1 
                             FROM information_schema.table_constraints tc
                             JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
-                            WHERE tc.table_name = 'DocumentTemplates'
+                            WHERE tc.table_name = 'documenttemplates'
                             AND ccu.column_name = 'globaltemplateid'
                             AND tc.constraint_type = 'FOREIGN KEY'
                             AND tc.table_schema = current_schema()
@@ -46,7 +46,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             EXECUTE 'ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT IF EXISTS ' || 
                                 (SELECT constraint_name FROM information_schema.table_constraints tc
                                  JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
-                                 WHERE tc.table_name = 'DocumentTemplates'
+                                 WHERE tc.table_name = 'documenttemplates'
                                  AND ccu.column_name = 'globaltemplateid'
                                  AND tc.constraint_type = 'FOREIGN KEY'
                                  AND tc.table_schema = current_schema()
@@ -60,7 +60,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         IF EXISTS (
                             SELECT 1 
                             FROM information_schema.tables 
-                            WHERE table_name = 'GlobalDocumentTemplates'
+                            WHERE table_name = 'globaldocumenttemplates'
                             AND table_schema = current_schema()
                         ) THEN
                             ALTER TABLE ""DocumentTemplates"" 
@@ -1190,11 +1190,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SubscriptionCredits' 
+                        WHERE table_name = 'subscriptioncredits' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionCredits' 
+                        WHERE table_name = 'subscriptioncredits' 
                         AND column_name = 'GrantedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp without time zone'
@@ -2078,12 +2078,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'NotificationRules'
+                        WHERE table_name = 'notificationrules'
                         AND table_schema = 'public'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'NotificationRules' 
+                            WHERE table_name = 'notificationrules' 
                             AND column_name = 'UpdatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
@@ -2093,7 +2093,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'NotificationRules' 
+                            WHERE table_name = 'notificationrules' 
                             AND column_name = 'CreatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp without time zone'
@@ -3482,11 +3482,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND column_name = 'UpdatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -3500,11 +3500,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND column_name = 'CreatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -4784,13 +4784,13 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     IF EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'DocumentTemplates'
+                        WHERE table_name = 'documenttemplates'
                         AND column_name = 'GlobalTemplateId'
                         AND table_schema = current_schema()
                     ) AND NOT EXISTS (
                         SELECT 1 
                         FROM information_schema.columns 
-                        WHERE table_name = 'DocumentTemplates'
+                        WHERE table_name = 'documenttemplates'
                         AND column_name = 'globaltemplateid'
                         AND table_schema = current_schema()
                     ) THEN
@@ -4799,7 +4799,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             SELECT 1 
                             FROM information_schema.table_constraints tc
                             JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
-                            WHERE tc.table_name = 'DocumentTemplates'
+                            WHERE tc.table_name = 'documenttemplates'
                             AND ccu.column_name = 'GlobalTemplateId'
                             AND tc.constraint_type = 'FOREIGN KEY'
                             AND tc.table_schema = current_schema()
@@ -4807,7 +4807,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                             EXECUTE 'ALTER TABLE ""DocumentTemplates"" DROP CONSTRAINT IF EXISTS ' || 
                                 (SELECT constraint_name FROM information_schema.table_constraints tc
                                  JOIN information_schema.constraint_column_usage ccu ON tc.constraint_name = ccu.constraint_name
-                                 WHERE tc.table_name = 'DocumentTemplates'
+                                 WHERE tc.table_name = 'documenttemplates'
                                  AND ccu.column_name = 'GlobalTemplateId'
                                  AND tc.constraint_type = 'FOREIGN KEY'
                                  AND tc.table_schema = current_schema()
@@ -4821,7 +4821,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         IF EXISTS (
                             SELECT 1 
                             FROM information_schema.tables 
-                            WHERE table_name = 'GlobalDocumentTemplates'
+                            WHERE table_name = 'globaldocumenttemplates'
                             AND table_schema = current_schema()
                         ) THEN
                             ALTER TABLE ""DocumentTemplates"" 
@@ -5951,11 +5951,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'SubscriptionCredits' 
+                        WHERE table_name = 'subscriptioncredits' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'SubscriptionCredits' 
+                        WHERE table_name = 'subscriptioncredits' 
                         AND column_name = 'GrantedAt'
                         AND table_schema = 'public'
                         AND data_type = 'timestamp with time zone'
@@ -6839,12 +6839,12 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'NotificationRules'
+                        WHERE table_name = 'notificationrules'
                         AND table_schema = 'public'
                     ) THEN
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'NotificationRules' 
+                            WHERE table_name = 'notificationrules' 
                             AND column_name = 'UpdatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
@@ -6854,7 +6854,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         
                         IF EXISTS (
                             SELECT 1 FROM information_schema.columns 
-                            WHERE table_name = 'NotificationRules' 
+                            WHERE table_name = 'notificationrules' 
                             AND column_name = 'CreatedAt'
                             AND table_schema = 'public'
                             AND data_type = 'timestamp with time zone'
@@ -8243,11 +8243,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND column_name = 'UpdatedAt'
                         AND table_schema = 'public'
                     ) THEN
@@ -8261,11 +8261,11 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 BEGIN
                     IF EXISTS (
                         SELECT 1 FROM information_schema.tables 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND table_schema = 'public'
                     ) AND EXISTS (
                         SELECT 1 FROM information_schema.columns 
-                        WHERE table_name = 'DashboardWidgets' 
+                        WHERE table_name = 'dashboardwidgets' 
                         AND column_name = 'CreatedAt'
                         AND table_schema = 'public'
                     ) THEN
