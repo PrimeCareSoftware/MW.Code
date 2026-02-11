@@ -38,24 +38,27 @@ Replaced the direct `migrationBuilder.AlterColumn` statements with `migrationBui
 
 ### Pattern Used
 ```csharp
-// Only alter DashboardWidgets if the table exists
+// Only alter DashboardWidgets if the table and columns exist
 migrationBuilder.Sql(@"
     DO $$
     BEGIN
-        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'DashboardWidgets' AND table_schema = 'public') THEN
-            IF EXISTS (
-                SELECT 1 FROM information_schema.columns 
-                WHERE table_name = 'DashboardWidgets' 
-                AND column_name = 'UpdatedAt'
-                AND table_schema = 'public'
-                AND data_type = 'timestamp without time zone'
-            ) THEN
-                ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
-            END IF;
+        IF EXISTS (
+            SELECT 1 FROM information_schema.tables 
+            WHERE table_name = 'DashboardWidgets' 
+            AND table_schema = 'public'
+        ) AND EXISTS (
+            SELECT 1 FROM information_schema.columns 
+            WHERE table_name = 'DashboardWidgets' 
+            AND column_name = 'UpdatedAt'
+            AND table_schema = 'public'
+        ) THEN
+            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
         END IF;
     END $$;
 ");
 ```
+
+**Note**: The data type check was intentionally omitted from the column existence check. This allows the ALTER TABLE statement to handle type compatibility naturally, making the migration more robust and avoiding issues with type precision or other modifiers that might cause exact string matches to fail.
 
 ## Migration Safety
 This fix ensures:
