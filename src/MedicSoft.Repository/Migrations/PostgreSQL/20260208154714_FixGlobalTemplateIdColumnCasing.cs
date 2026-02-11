@@ -3476,22 +3476,42 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp without time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp with time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone",
-                oldNullable: true);
+            // Only alter DashboardWidgets if the table and columns exist
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -8217,22 +8237,42 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp without time zone",
-                nullable: true,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone",
-                oldNullable: true);
+            // Only alter DashboardWidgets if the table and columns exist (rollback)
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'UpdatedAt'
+                        AND table_schema = 'public'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedAt",
-                table: "DashboardWidgets",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'DashboardWidgets' 
+                        AND column_name = 'CreatedAt'
+                        AND table_schema = 'public'
+                    ) THEN
+                        ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
