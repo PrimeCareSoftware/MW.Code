@@ -1185,7 +1185,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldNullable: true);
 
             // Use conditional SQL to alter SubscriptionCredits columns since table may not exist in all databases
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -5909,7 +5909,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldNullable: true);
 
             // Use conditional SQL to alter SubscriptionCredits columns since table may not exist in all databases
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql(@"
                 DO $$
                 BEGIN
                     IF EXISTS (
