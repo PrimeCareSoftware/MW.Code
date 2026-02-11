@@ -74,78 +74,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 CREATE INDEX IF NOT EXISTS ""IX_NotificationRules_IsEnabled"" ON ""NotificationRules"" (""IsEnabled"");
             ");
 
-            // CustomDashboards table - Using proper EF Core migration methods
-            // Check if table exists before creating to handle both fresh and existing databases
-            migrationBuilder.Sql(@"
-                DO $$
-                BEGIN
-                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'customdashboards' AND table_schema = 'public') THEN
-                        CREATE TABLE ""CustomDashboards"" (
-                            ""Id"" uuid NOT NULL,
-                            ""Name"" character varying(200) NOT NULL,
-                            ""Description"" character varying(1000) NOT NULL,
-                            ""Layout"" TEXT NOT NULL,
-                            ""IsDefault"" boolean NOT NULL DEFAULT false,
-                            ""IsPublic"" boolean NOT NULL DEFAULT false,
-                            ""CreatedBy"" character varying(450) NOT NULL,
-                            ""CreatedAt"" timestamp with time zone NOT NULL,
-                            ""UpdatedAt"" timestamp with time zone,
-                            ""TenantId"" text NOT NULL DEFAULT '',
-                            CONSTRAINT ""PK_CustomDashboards"" PRIMARY KEY (""Id"")
-                        );
-                        
-                        CREATE INDEX ""IX_CustomDashboards_CreatedBy"" ON ""CustomDashboards"" (""CreatedBy"");
-                        CREATE INDEX ""IX_CustomDashboards_IsDefault"" ON ""CustomDashboards"" (""IsDefault"");
-                        CREATE INDEX ""IX_CustomDashboards_TenantId"" ON ""CustomDashboards"" (""TenantId"");
-                    END IF;
-                END $$;
-            ");
-
-            // DashboardWidgets table - Create without FK first
-            migrationBuilder.Sql(@"
-                DO $$
-                BEGIN
-                    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
-                        CREATE TABLE ""DashboardWidgets"" (
-                            ""Id"" uuid NOT NULL,
-                            ""DashboardId"" uuid NOT NULL,
-                            ""Type"" character varying(50) NOT NULL,
-                            ""Title"" character varying(200) NOT NULL,
-                            ""Query"" TEXT NOT NULL,
-                            ""Config"" TEXT NOT NULL,
-                            ""GridX"" integer NOT NULL DEFAULT 0,
-                            ""GridY"" integer NOT NULL DEFAULT 0,
-                            ""GridWidth"" integer NOT NULL DEFAULT 4,
-                            ""GridHeight"" integer NOT NULL DEFAULT 3,
-                            ""RefreshInterval"" integer NOT NULL DEFAULT 0,
-                            ""CreatedAt"" timestamp with time zone NOT NULL,
-                            ""UpdatedAt"" timestamp with time zone,
-                            ""TenantId"" text NOT NULL DEFAULT '',
-                            CONSTRAINT ""PK_DashboardWidgets"" PRIMARY KEY (""Id"")
-                        );
-                        
-                        CREATE INDEX ""IX_DashboardWidgets_DashboardId"" ON ""DashboardWidgets"" (""DashboardId"");
-                        CREATE INDEX ""IX_DashboardWidgets_Type"" ON ""DashboardWidgets"" (""Type"");
-                    END IF;
-                END $$;
-            ");
-            
-            // Add FK constraint separately after both tables exist
-            migrationBuilder.Sql(@"
-                DO $$
-                BEGIN
-                    IF NOT EXISTS (
-                        SELECT 1 FROM pg_constraint 
-                        WHERE conname = 'FK_DashboardWidgets_CustomDashboards_DashboardId'
-                    ) THEN
-                        ALTER TABLE ""DashboardWidgets"" 
-                        ADD CONSTRAINT ""FK_DashboardWidgets_CustomDashboards_DashboardId"" 
-                        FOREIGN KEY (""DashboardId"") 
-                        REFERENCES ""CustomDashboards"" (""Id"") ON DELETE CASCADE;
-                    END IF;
-                END $$;
-            ");
-
             // Drop foreign keys only if they exist
             migrationBuilder.Sql(@"
                 DO $$
@@ -5303,73 +5231,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
                     END IF;
                 END $$;
-            ");
+);
 
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
-                        IF EXISTS (
-                            SELECT 1 FROM information_schema.columns 
-                            WHERE LOWER(table_name) = 'dashboardwidgets' 
-                            AND LOWER(column_name) = 'updatedat'
-                            AND table_schema = 'public'
-                            AND data_type = 'timestamp without time zone'
-                        ) THEN
-                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
-                        END IF;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
-                        IF EXISTS (
-                            SELECT 1 FROM information_schema.columns 
-                            WHERE LOWER(table_name) = 'dashboardwidgets' 
-                            AND LOWER(column_name) = 'createdat'
-                            AND table_schema = 'public'
-                            AND data_type = 'timestamp without time zone'
-                        ) THEN
-                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
-                        END IF;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE LOWER(table_name) = 'customdashboards' 
-                        AND LOWER(column_name) = 'updatedat'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp without time zone'
-                    ) THEN
-                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE LOWER(table_name) = 'customdashboards' 
-                        AND LOWER(column_name) = 'createdat'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp without time zone'
-                    ) THEN
-                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" TYPE timestamp with time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql($@
                 DO $$
                 BEGIN
                     IF EXISTS (
@@ -12353,73 +12217,9 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                         ALTER TABLE ""DataAccessLogs"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
                     END IF;
                 END $$;
-            ");
+);
 
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
-                        IF EXISTS (
-                            SELECT 1 FROM information_schema.columns 
-                            WHERE LOWER(table_name) = 'dashboardwidgets' 
-                            AND LOWER(column_name) = 'updatedat'
-                            AND table_schema = 'public'
-                            AND data_type = 'timestamp with time zone'
-                        ) THEN
-                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
-                        END IF;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (SELECT 1 FROM information_schema.tables WHERE LOWER(table_name) = 'dashboardwidgets' AND table_schema = 'public') THEN
-                        IF EXISTS (
-                            SELECT 1 FROM information_schema.columns 
-                            WHERE LOWER(table_name) = 'dashboardwidgets' 
-                            AND LOWER(column_name) = 'createdat'
-                            AND table_schema = 'public'
-                            AND data_type = 'timestamp with time zone'
-                        ) THEN
-                            ALTER TABLE ""DashboardWidgets"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
-                        END IF;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE LOWER(table_name) = 'customdashboards' 
-                        AND LOWER(column_name) = 'updatedat'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp with time zone'
-                    ) THEN
-                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""UpdatedAt"" TYPE timestamp without time zone;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
-                DO $$
-                BEGIN
-                    IF EXISTS (
-                        SELECT 1 FROM information_schema.columns 
-                        WHERE LOWER(table_name) = 'customdashboards' 
-                        AND LOWER(column_name) = 'createdat'
-                        AND table_schema = 'public'
-                        AND data_type = 'timestamp with time zone'
-                    ) THEN
-                        ALTER TABLE ""CustomDashboards"" ALTER COLUMN ""CreatedAt"" TYPE timestamp without time zone, ALTER COLUMN ""CreatedAt"" SET NOT NULL;
-                    END IF;
-                END $$;
-            ");
-
-            migrationBuilder.Sql($@"
+            migrationBuilder.Sql($@
                 DO $$
                 BEGIN
                     IF EXISTS (
