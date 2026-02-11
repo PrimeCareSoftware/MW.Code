@@ -6,6 +6,41 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedicSoft.Repository.Migrations.PostgreSQL
 {
     /// <inheritdoc />
+    /// <summary>
+    /// ⚠️ WARNING: Tables created with IF NOT EXISTS
+    /// 
+    /// This migration creates the following tables using CREATE TABLE IF NOT EXISTS:
+    /// - CustomDashboards
+    /// - DashboardWidgets
+    /// - WidgetTemplates
+    /// - ReportTemplates
+    /// 
+    /// Any future migrations that ALTER these tables MUST check for table/column existence first.
+    /// 
+    /// Example of correct pattern for future migrations:
+    /// <code>
+    /// migrationBuilder.Sql(@"
+    ///     DO $$
+    ///     BEGIN
+    ///         IF EXISTS (
+    ///             SELECT 1 FROM information_schema.tables 
+    ///             WHERE table_name = 'DashboardWidgets' 
+    ///             AND table_schema = 'public'
+    ///         ) AND EXISTS (
+    ///             SELECT 1 FROM information_schema.columns 
+    ///             WHERE table_name = 'DashboardWidgets' 
+    ///             AND column_name = 'UpdatedAt'
+    ///             AND table_schema = 'public'
+    ///         ) THEN
+    ///             ALTER TABLE ""DashboardWidgets"" 
+    ///             ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+    ///         END IF;
+    ///     END $$;
+    /// ");
+    /// </code>
+    /// 
+    /// See MIGRATION_BEST_PRACTICES.md for complete documentation.
+    /// </summary>
     public partial class AddAnalyticsDashboardTables : Migration
     {
         /// <inheritdoc />

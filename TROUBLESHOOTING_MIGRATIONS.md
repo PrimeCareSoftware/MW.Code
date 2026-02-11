@@ -2,7 +2,86 @@
 
 Este guia fornece soluções detalhadas para problemas comuns relacionados a migrações do Entity Framework Core no Omni Care Software.
 
-## 📋 Índice
+---
+
+## 🌍 English Section - Critical Migration Issue
+
+### ⚠️ "Relation Does Not Exist" Error (42P01)
+
+**For comprehensive English documentation on this critical issue, see:**
+- **[MIGRATION_BEST_PRACTICES.md](./MIGRATION_BEST_PRACTICES.md)** - Complete defensive migration pattern guide
+- **[src/MedicSoft.Repository/Migrations/README.md](./src/MedicSoft.Repository/Migrations/README.md)** - Quick reference for migrations
+
+#### Critical Error Pattern
+
+```
+Npgsql.PostgresException (0x80004005): 42P01: relation "DashboardWidgets" does not exist
+ALTER TABLE "DashboardWidgets" ALTER COLUMN "UpdatedAt" TYPE timestamp with time zone;
+```
+
+#### Root Cause
+
+This error occurs when migrations attempt to ALTER tables that were created with `CREATE TABLE IF NOT EXISTS`. If the table creation was skipped (because the table already existed), future ALTER operations will fail.
+
+#### Tables Requiring Special Attention
+
+The following tables were created with conditional creation and **require defensive checks** in all future ALTER operations:
+
+**Analytics Tables** (from `20260203150000_AddAnalyticsDashboardTables`):
+- ✅ `CustomDashboards`
+- ✅ `DashboardWidgets`
+- ✅ `WidgetTemplates`
+- ✅ `ReportTemplates`
+
+**System Tables**:
+- ✅ `SystemNotifications`
+- ✅ `NotificationRules`
+- ✅ `SubscriptionCredits`
+
+**Tables with Conditional Columns**:
+- ⚠️ `Appointments` - Payment columns
+- ⚠️ `Clinics` - `DefaultPaymentReceiverType`
+- ⚠️ `Users` - MFA grace period columns
+
+#### Quick Fix Pattern
+
+When altering these tables, always use defensive checks:
+
+```csharp
+// ❌ WRONG - Will fail if table doesn't exist
+migrationBuilder.AlterColumn<DateTime>(
+    name: "UpdatedAt",
+    table: "DashboardWidgets",
+    type: "timestamp with time zone");
+
+// ✅ CORRECT - Checks existence first
+migrationBuilder.Sql(@"
+    DO $$
+    BEGIN
+        IF EXISTS (
+            SELECT 1 FROM information_schema.tables 
+            WHERE table_name = 'DashboardWidgets' 
+            AND table_schema = 'public'
+        ) AND EXISTS (
+            SELECT 1 FROM information_schema.columns 
+            WHERE table_name = 'DashboardWidgets' 
+            AND column_name = 'UpdatedAt'
+            AND table_schema = 'public'
+        ) THEN
+            ALTER TABLE ""DashboardWidgets"" 
+            ALTER COLUMN ""UpdatedAt"" TYPE timestamp with time zone;
+        END IF;
+    END $$;
+");
+```
+
+#### Complete Documentation
+
+For complete patterns, examples, and best practices, see [MIGRATION_BEST_PRACTICES.md](./MIGRATION_BEST_PRACTICES.md).
+
+---
+
+## 📋 Índice (Portuguese Section / Seção em Português)
 
 - [Erros Comuns](#erros-comuns)
   - [Tabela Não Existe (42P01)](#tabela-não-existe-42p01)
