@@ -2,8 +2,8 @@
 <main id="main-content">
   <router-outlet />
 </main>
-<!-- Chat and ticket FABs removed as per issue requirements -->
-<!-- @if (isAuthenticated) {
+<!-- Chat and ticket FABs should be visible in the system (medicwarehouse-app) -->
+@if (isAuthenticated) {
   <app-chat-fab></app-chat-fab>
   <app-ticket-fab></app-ticket-fab>
-} -->
+}
