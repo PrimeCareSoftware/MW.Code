@@ -14,14 +14,14 @@ namespace MedicSoft.Application.Services.Reports
     {
         private readonly MedicSoftDbContext _context;
         private readonly ILogger<ReportService> _logger;
-        private readonly IReportExportService _exportService;
-        private readonly IEmailService _emailService;
+        private readonly IReportExportService? _exportService;
+        private readonly IEmailService? _emailService;
 
         public ReportService(
             MedicSoftDbContext context, 
             ILogger<ReportService> logger,
-            IReportExportService exportService = null,
-            IEmailService emailService = null)
+            IReportExportService? exportService = null,
+            IEmailService? emailService = null)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -202,6 +202,7 @@ namespace MedicSoft.Application.Services.Reports
                 byte[] outputData;
                 string contentType;
                 string extension;
+                var exportData = NormalizeExportData(data);
 
                 switch (dto.OutputFormat?.ToLowerInvariant())
                 {
@@ -213,7 +214,7 @@ namespace MedicSoft.Application.Services.Reports
                         outputData = await _exportService.ExportToPdfAsync(
                             template.Name,
                             template.Description,
-                            data
+                            exportData
                         );
                         contentType = "application/pdf";
                         extension = "pdf";
@@ -227,7 +228,7 @@ namespace MedicSoft.Application.Services.Reports
                         }
                         outputData = await _exportService.ExportToExcelAsync(
                             template.Name,
-                            data
+                            exportData
                         );
                         contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         extension = "xlsx";
@@ -450,7 +451,7 @@ namespace MedicSoft.Application.Services.Reports
                 scheduledReport.LastRunAt = DateTime.UtcNow;
                 scheduledReport.NextRunAt = CalculateNextRunTime(scheduledReport.CronExpression);
                 scheduledReport.LastRunStatus = "success";
-                scheduledReport.LastRunError = null;
+                scheduledReport.LastRunError = string.Empty;
 
                 await _context.SaveChangesAsync();
 
@@ -502,9 +503,9 @@ namespace MedicSoft.Application.Services.Reports
             return value;
         }
 
-        private async Task<List<Dictionary<string, object>>> ExecuteReportQuery(string query)
+        private async Task<List<Dictionary<string, object?>>> ExecuteReportQuery(string query)
         {
-            var result = new List<Dictionary<string, object>>();
+            var result = new List<Dictionary<string, object?>>();
 
             try
             {
@@ -518,7 +519,7 @@ namespace MedicSoft.Application.Services.Reports
                 
                 while (await reader.ReadAsync())
                 {
-                    var row = new Dictionary<string, object>();
+                    var row = new Dictionary<string, object?>();
                     
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
@@ -543,7 +544,7 @@ namespace MedicSoft.Application.Services.Reports
             return result;
         }
 
-        private byte[] ExportToCsv(List<Dictionary<string, object>> data)
+        private byte[] ExportToCsv(List<Dictionary<string, object?>> data)
         {
             if (data == null || !data.Any())
             {
@@ -590,6 +591,13 @@ namespace MedicSoft.Application.Services.Reports
             return value;
         }
 
+        private static List<Dictionary<string, object>> NormalizeExportData(List<Dictionary<string, object?>> data)
+        {
+            return data.Select(row =>
+                    row.ToDictionary(kvp => kvp.Key, kvp => kvp.Value ?? string.Empty))
+                .ToList();
+        }
+
         private ReportTemplateDto MapTemplateToDto(ReportTemplate template)
         {
             return new ReportTemplateDto
@@ -614,7 +622,7 @@ namespace MedicSoft.Application.Services.Reports
             {
                 Id = scheduledReport.Id,
                 ReportTemplateId = scheduledReport.ReportTemplateId,
-                ReportTemplateName = scheduledReport.ReportTemplate?.Name,
+                ReportTemplateName = scheduledReport.ReportTemplate?.Name ?? string.Empty,
                 Name = scheduledReport.Name,
                 Description = scheduledReport.Description,
                 CronExpression = scheduledReport.CronExpression,

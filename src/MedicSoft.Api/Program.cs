@@ -754,6 +754,48 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Apply EF Core migrations automatically when enabled (recommended for development)
+var applyMigrations = app.Configuration.GetValue<bool>("Database:ApplyMigrations");
+if (applyMigrations)
+{
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
+        dbContext.Database.Migrate();
+
+        // Defensive repair: ensure recurrence columns exist (some environments have partial migrations)
+        var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+        if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+            dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"EffectiveEndDate\" timestamp with time zone NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"ParentPatternId\" uuid NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"IsActive\" boolean NOT NULL DEFAULT true;");
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"RecurringAppointmentPatterns\" ALTER COLUMN \"IsActive\" SET DEFAULT true;");
+            dbContext.Database.ExecuteSqlRaw(
+                "UPDATE \"RecurringAppointmentPatterns\" SET \"IsActive\" = true WHERE \"IsActive\" IS NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"RecurringSeriesId\" uuid NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"OriginalOccurrenceDate\" timestamp with time zone NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"IsException\" boolean NOT NULL DEFAULT false;");
+        }
+
+        Log.Information("Database migrations applied successfully");
+    }
+    catch (Exception ex)
+    {
+        Log.Fatal(ex, "Failed to apply database migrations");
+        throw;
+    }
+}
+
 // Configure the HTTP request pipeline
 // Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
 // Swagger is placed early in the pipeline to bypass authentication/authorization
