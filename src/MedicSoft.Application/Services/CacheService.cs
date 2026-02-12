@@ -28,9 +28,20 @@ namespace MedicSoft.Application.Services
 
                 return JsonSerializer.Deserialize<T>(data);
             }
+            catch (JsonException ex)
+            {
+                // Handle corrupted or incompatible cached data
+                // This can happen when entity schemas change between deployments
+                _logger.LogWarning(ex, "Failed to deserialize cache key {Key}. Removing corrupted cache entry. This may occur after schema changes.", key);
+                
+                // Remove the corrupted cache entry to prevent repeated errors
+                await RemoveAsync(key);
+                
+                return default;
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting cache key: {Key}", key);
+                _logger.LogError(ex, "Unexpected error getting cache key: {Key}", key);
                 return default;
             }
         }
