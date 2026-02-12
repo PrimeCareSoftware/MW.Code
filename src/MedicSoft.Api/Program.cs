@@ -763,7 +763,15 @@ var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabl
 
 if (enableSwagger)
 {
-    app.UseSwagger();
+    app.UseSwagger(c =>
+    {
+        // Enable caching to improve Swagger loading performance
+        // Swagger JSON will be cached for 24 hours to avoid regeneration on every request
+        c.PreSerializeFilters.Add((swagger, httpReq) =>
+        {
+            httpReq.HttpContext.Response.Headers.Append("Cache-Control", "public, max-age=86400"); // 24 hours
+        });
+    });
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Omni Care Software API v1");
@@ -787,6 +795,10 @@ app.UseGlobalExceptionHandler();
 
 // Add Response Compression (before other middleware to compress responses)
 app.UseResponseCompression();
+
+// Add Response Caching (after compression, before other middleware)
+// This improves performance by caching responses including Swagger JSON
+app.UseResponseCaching();
 
 // Add request logging middleware (logs all requests with timing)
 if (builder.Configuration.GetValue<bool>("Monitoring:EnableRequestLogging", true))
