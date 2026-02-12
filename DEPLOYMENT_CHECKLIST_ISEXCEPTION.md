@@ -105,6 +105,11 @@ Use this option if you prefer to apply migrations during a maintenance window or
 
 ### 1. Verify Column Exists
 
+**Using verification script (easiest):**
+```bash
+./verify-isexception-column.sh "Host=YOUR_HOST;Database=YOUR_DB;Username=YOUR_USER;Password=YOUR_PASSWORD"
+```
+
 **Using psql:**
 ```bash
 psql -U postgres -d YOUR_DATABASE -c "SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_name = 'BlockedTimeSlots' AND column_name = 'IsException';"

@@ -4,6 +4,8 @@ Este guia explica como aplicar e gerenciar migrações do Entity Framework Core 
 
 > **💡 Tendo problemas com migrações?** Consulte o [Guia de Troubleshooting](TROUBLESHOOTING_MIGRATIONS.md) para soluções detalhadas de problemas comuns.
 
+> **🚀 Fazendo deploy em produção?** Consulte o [Checklist de Deployment - IsException Column](DEPLOYMENT_CHECKLIST_ISEXCEPTION.md) para garantir que todas as migrações críticas sejam aplicadas corretamente.
+
 ## ⚡ Início Rápido
 
 ### Aplicar Todas as Migrações (Recomendado)
