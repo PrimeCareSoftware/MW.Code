@@ -46,6 +46,11 @@ public abstract class BaseController : ControllerBase
     /// <returns>True if parsing succeeded, false otherwise</returns>
     protected bool TryParseDateParameter(string dateString, out DateTime parsedDate)
     {
+        parsedDate = default;
+        
+        if (string.IsNullOrWhiteSpace(dateString))
+            return false;
+            
         return DateTime.TryParseExact(
             dateString, 
             "yyyy-MM-dd", 
