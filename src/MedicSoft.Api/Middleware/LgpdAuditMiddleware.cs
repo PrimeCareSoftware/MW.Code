@@ -22,6 +22,14 @@ namespace MedicSoft.Api.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<LgpdAuditMiddleware> _logger;
+        
+        // Constants for fallback user identifiers
+        private const string UnauthenticatedUserId = "UNAUTHENTICATED";
+        private const string UnauthenticatedUserName = "Unauthenticated User";
+        private const string UnauthenticatedUserEmail = "unauthenticated@system";
+        private const string AuthenticatedNoIdUserId = "AUTHENTICATED_NO_ID";
+        private const string AuthenticatedNoIdUserName = "Authenticated User";
+        private const string AuthenticatedNoIdUserEmail = "authenticated@system";
 
         // Sensitive endpoints that require audit logging
         private static readonly string[] SensitiveEndpoints = new[]
@@ -195,26 +203,26 @@ namespace MedicSoft.Api.Middleware
                 var purpose = DetermineLgpdPurpose(action);
                 var severity = DetermineSeverity(action, result);
 
-                // Get user context after authentication has been performed
+                // Get user context after authentication has been performed.
                 var userId = GetUserIdFromContext(context);
                 var userName = GetUserNameFromContext(context);
                 var userEmail = GetUserEmailFromContext(context);
 
                 // Only log if we have valid user context
-                if (string.IsNullOrEmpty(userId) || userId == "UNAUTHENTICATED")
+                if (string.IsNullOrEmpty(userId) || userId == UnauthenticatedUserId)
                 {
                     // Check if user is actually authenticated but claims are missing
                     if (context.User?.Identity?.IsAuthenticated == true)
                     {
                         _logger.LogWarning("Authenticated user with missing claims at endpoint: {Path}", requestDetails.Path);
-                        userId = "AUTHENTICATED_NO_ID";
-                        userName = "Authenticated User";
-                        userEmail = "authenticated@system";
+                        userId = AuthenticatedNoIdUserId;
+                        userName = AuthenticatedNoIdUserName;
+                        userEmail = AuthenticatedNoIdUserEmail;
                     }
                     else
                     {
-                        // Only log warning for unauthenticated access if result is UNAUTHORIZED
-                        // This prevents false warnings for endpoints that properly reject unauthenticated requests
+                        // Only log warning for unauthenticated access if result is UNAUTHORIZED.
+                        // This prevents false warnings for endpoints that properly reject unauthenticated requests.
                         if (result == OperationResult.UNAUTHORIZED)
                         {
                             _logger.LogDebug("Unauthenticated access blocked at endpoint: {Path}", requestDetails.Path);
@@ -222,9 +230,9 @@ namespace MedicSoft.Api.Middleware
                         
                         // Still log unauthenticated attempts for security monitoring
                         var unauthDto = new CreateAuditLogDto(
-                            UserId: "UNAUTHENTICATED",
-                            UserName: "Unauthenticated User",
-                            UserEmail: "unauthenticated@system",
+                            UserId: UnauthenticatedUserId,
+                            UserName: UnauthenticatedUserName,
+                            UserEmail: UnauthenticatedUserEmail,
                             Action: action,
                             ActionDescription: $"Unauthenticated {action} attempt on {entityType}",
                             EntityType: entityType,
@@ -286,7 +294,7 @@ namespace MedicSoft.Api.Middleware
                             ?? context.User?.FindFirst("userId")?.Value
                             ?? context.User?.FindFirst("id")?.Value;
 
-            return userIdClaim ?? "UNAUTHENTICATED";
+            return userIdClaim ?? UnauthenticatedUserId;
         }
 
         private string GetUserNameFromContext(HttpContext context)

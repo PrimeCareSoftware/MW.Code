@@ -34,7 +34,7 @@ namespace MedicSoft.Application.Handlers.Queries.Appointments
             {
                 var clinic = await _clinicRepository.GetByIdAsync(request.ClinicId, request.TenantId);
                 if (clinic == null)
-                    throw new InvalidOperationException("Clinic not found");
+                    throw new InvalidOperationException($"Clinic not found with ID: {request.ClinicId}");
                 
                 // Return only string (easy to serialize/deserialize)
                 return clinic.Name;
