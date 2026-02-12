@@ -56,7 +56,7 @@ namespace MedicSoft.Test.Application.JsonConverters
         }
 
         [Fact]
-        public void Write_StripTimeAndTimezoneInformation()
+        public void Write_StripsTimeAndTimezoneInformation()
         {
             // Arrange - date with specific time component
             var date = new DateTime(2025, 2, 17, 14, 30, 45, DateTimeKind.Utc);
