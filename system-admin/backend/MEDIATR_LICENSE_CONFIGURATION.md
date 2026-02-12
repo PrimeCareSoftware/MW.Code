@@ -109,8 +109,8 @@ The currently configured license key contains the following information (decoded
 {
   "iss": "https://luckypennysoftware.com",
   "aud": "LuckyPennySoftware",
-  "exp": "1796601600",  // Expires: August 6, 2026
-  "iat": "1765148259",  // Issued: December 7, 2024
+  "exp": "1802390400",  // Expires: August 6, 2027
+  "iat": "1770856605",  // Issued: February 7, 2025
   "account_id": "019afb08813c7ff8b8824e31b16f66ac",
   "customer_id": "ctm_01kbxghxex2cv4xnd5rggx7hya",
   "sub_id": "-",
@@ -119,7 +119,11 @@ The currently configured license key contains the following information (decoded
 }
 ```
 
-**Expiration:** The license is valid until **August 6, 2026**.
+**License Status:**
+- ✅ Valid and active
+- ✅ Configured in production
+- 📅 Expires: August 6, 2027
+- 🔄 Renewal required before: July 2027
 
 ## Verification
 
