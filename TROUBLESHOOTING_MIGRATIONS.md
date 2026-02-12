@@ -81,6 +81,128 @@ For complete patterns, examples, and best practices, see [MIGRATION_BEST_PRACTIC
 
 ---
 
+### ⚠️ Missing Column Error: `column b.IsException does not exist` (42703)
+
+#### Error Pattern
+
+```
+Npgsql.PostgresException (0x80004005): 42703: column b.IsException does not exist
+POSITION: 68
+
+Microsoft.EntityFrameworkCore.Query
+   at MedicSoft.Repository.Repositories.BlockedTimeSlotRepository.GetByDateRangeAsync(DateTime startDate, DateTime endDate, Guid clinicId, String tenantId)
+   at MedicSoft.Application.Handlers.Queries.Appointments.GetBlockedTimeSlotsRangeQueryHandler.Handle(GetBlockedTimeSlotsRangeQuery request, CancellationToken cancellationToken)
+   at MedicSoft.Api.Controllers.BlockedTimeSlotsController.GetByDateRange(DateTime startDate, DateTime endDate, Guid clinicId)
+```
+
+#### Affected Endpoints
+
+- `GET /api/appointments?clinicId={id}&date={date}` - 500 Error
+- `GET /api/blocked-time-slots/range?startDate={start}&endDate={end}&clinicId={id}` - 500 Error
+
+#### Root Cause
+
+**Error Code:** `42703` (PostgreSQL "column does not exist")
+
+**Affected Table:** `BlockedTimeSlots`
+
+**Affected Column:** `IsException`
+
+The `IsException` column was introduced in migration `20260210140000_AddRecurrenceSeriesAndExceptions` but may not have been applied to all database instances due to:
+1. Migration not run on the target database
+2. Partial migration failure
+3. Database restored from an old backup
+4. Environment-specific deployment issues
+
+#### Quick Fix
+
+**Option 1: Run Migrations (Recommended)**
+```bash
+cd src/MedicSoft.Api
+dotnet ef database update
+```
+
+**Option 2: Manual SQL Fix (If migration fails)**
+```sql
+-- Check if column exists
+SELECT column_name 
+FROM information_schema.columns 
+WHERE table_name = 'BlockedTimeSlots' 
+  AND column_name = 'IsException';
+
+-- If not exists, add it manually
+ALTER TABLE "BlockedTimeSlots" 
+ADD COLUMN "IsException" boolean NOT NULL DEFAULT false;
+```
+
+#### Defensive Fix Migration
+
+A defensive fix migration **`20260212001705_AddMissingIsExceptionColumn`** was created to ensure the column exists. This migration:
+- ✅ Uses `IF NOT EXISTS` checks to prevent errors
+- ✅ Can safely run on databases that already have the column
+- ✅ Provides clear logging about what actions were taken
+- ✅ Is idempotent (can be run multiple times safely)
+
+To apply the defensive fix:
+```bash
+cd src/MedicSoft.Api
+dotnet ef database update 20260212001705_AddMissingIsExceptionColumn
+```
+
+#### Verification
+
+After fixing, verify the column exists:
+
+**Using psql:**
+```bash
+psql -U postgres -d primecare -c "\d BlockedTimeSlots" | grep IsException
+```
+
+**Using SQL:**
+```sql
+SELECT column_name, data_type, is_nullable, column_default
+FROM information_schema.columns 
+WHERE table_name = 'BlockedTimeSlots' 
+  AND column_name = 'IsException';
+```
+
+Expected output:
+```
+ column_name | data_type | is_nullable | column_default 
+-------------+-----------+-------------+----------------
+ IsException | boolean   | NO          | false
+```
+
+#### Prevention
+
+**Always verify migrations are applied before deploying:**
+```bash
+# Check for pending migrations
+cd src/MedicSoft.Api
+dotnet ef migrations list
+
+# Apply all pending migrations
+dotnet ef database update
+```
+
+**Add to CI/CD pipeline:**
+```yaml
+- name: Apply Database Migrations
+  run: |
+    cd src/MedicSoft.Api
+    dotnet ef database update
+```
+
+#### Related Files
+
+- **Entity:** `src/MedicSoft.Domain/Entities/BlockedTimeSlot.cs` (line 23)
+- **Configuration:** `src/MedicSoft.Repository/Configurations/BlockedTimeSlotConfiguration.cs` (lines 46-48)
+- **Original Migration:** `src/MedicSoft.Repository/Migrations/PostgreSQL/20260210140000_AddRecurrenceSeriesAndExceptions.cs`
+- **Fix Migration:** `src/MedicSoft.Repository/Migrations/PostgreSQL/20260212001705_AddMissingIsExceptionColumn.cs`
+- **Repository:** `src/MedicSoft.Repository/Repositories/BlockedTimeSlotRepository.cs`
+
+---
+
 ## 📋 Índice (Portuguese Section / Seção em Português)
 
 - [Erros Comuns](#erros-comuns)

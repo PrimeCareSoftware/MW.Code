@@ -6,6 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedicSoft.Repository.Migrations.PostgreSQL
 {
     /// <inheritdoc />
+    /// <remarks>
+    /// ⚠️ IMPORTANT NOTE: If you encounter errors about missing IsException column (42703: column b.IsException does not exist),
+    /// this indicates that this migration may not have been properly applied to your database.
+    /// 
+    /// A defensive fix migration (20260212001705_AddMissingIsExceptionColumn) was created to ensure
+    /// the IsException column exists in all database instances. The fix migration uses SQL with
+    /// IF NOT EXISTS checks to safely add the column without errors if it already exists.
+    /// 
+    /// To resolve the issue:
+    /// 1. Run: dotnet ef database update
+    /// 2. Or manually execute: ALTER TABLE "BlockedTimeSlots" ADD COLUMN "IsException" boolean NOT NULL DEFAULT false;
+    /// 
+    /// See: TROUBLESHOOTING_MIGRATIONS.md for more information
+    /// Related Fix: 20260212001705_AddMissingIsExceptionColumn
+    /// </remarks>
     public partial class AddRecurrenceSeriesAndExceptions : Migration
     {
         /// <inheritdoc />
