@@ -1,4 +1,6 @@
 using MedicSoft.Domain.Enums;
+using System.Text.Json.Serialization;
+using MedicSoft.Application.JsonConverters;
 
 namespace MedicSoft.Application.DTOs
 {
@@ -7,6 +9,7 @@ namespace MedicSoft.Application.DTOs
         public Guid Id { get; set; }
         public Guid ClinicId { get; set; }
         public Guid? ProfessionalId { get; set; }
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
@@ -26,6 +29,7 @@ namespace MedicSoft.Application.DTOs
     {
         public Guid ClinicId { get; set; }
         public Guid? ProfessionalId { get; set; }
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime Date { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }

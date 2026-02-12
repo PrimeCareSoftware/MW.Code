@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using MedicSoft.Application.JsonConverters;
 
 namespace MedicSoft.Application.DTOs
 {
@@ -78,6 +80,7 @@ namespace MedicSoft.Application.DTOs
         public Guid? ProfessionalId { get; set; }
         
         [Required(ErrorMessage = "Data agendada é obrigatória")]
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime ScheduledDate { get; set; }
         
         [Required(ErrorMessage = "Horário agendado é obrigatório")]
@@ -103,6 +106,7 @@ namespace MedicSoft.Application.DTOs
         public Guid? ProfessionalId { get; set; }
 
         [Required(ErrorMessage = "Data agendada é obrigatória")]
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime ScheduledDate { get; set; }
         
         [Required(ErrorMessage = "Horário agendado é obrigatório")]
@@ -125,6 +129,7 @@ namespace MedicSoft.Application.DTOs
 
     public class DailyAgendaDto
     {
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime Date { get; set; }
         public Guid ClinicId { get; set; }
         public string ClinicName { get; set; } = string.Empty;
@@ -134,6 +139,7 @@ namespace MedicSoft.Application.DTOs
 
     public class AvailableSlotDto
     {
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime Date { get; set; }
         public TimeSpan Time { get; set; }
         public int DurationMinutes { get; set; }
@@ -142,7 +148,9 @@ namespace MedicSoft.Application.DTOs
 
     public class WeekAgendaDto
     {
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime StartDate { get; set; }
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime EndDate { get; set; }
         public Guid ClinicId { get; set; }
         public string ClinicName { get; set; } = string.Empty;
