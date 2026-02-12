@@ -120,7 +120,7 @@ namespace MedicSoft.Api.Middleware
                 var firstSegment = segments[0].ToLowerInvariant();
                 
                 // Exclude common API paths
-                var excludedPaths = new[] { "api", "swagger", "health", "assets" };
+                var excludedPaths = new[] { "api", "swagger", "health", "assets", "hubs" };
                 if (!excludedPaths.Contains(firstSegment))
                 {
                     return firstSegment;

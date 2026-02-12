@@ -299,7 +299,12 @@ namespace MedicSoft.Api.Hubs
             var httpContext = Context.GetHttpContext();
             if (httpContext != null)
             {
-                var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "sub" || c.Type == "userId")?.Value;
+                var userIdClaim = httpContext.User.Claims.FirstOrDefault(c =>
+                    c.Type == "sub" ||
+                    c.Type == "userId" ||
+                    c.Type == "nameid" ||
+                    c.Type == System.Security.Claims.ClaimTypes.NameIdentifier
+                )?.Value;
                 if (!string.IsNullOrEmpty(userIdClaim) && Guid.TryParse(userIdClaim, out var userId))
                 {
                     return userId;
@@ -313,7 +318,26 @@ namespace MedicSoft.Api.Hubs
             var httpContext = Context.GetHttpContext();
             if (httpContext != null)
             {
-                return httpContext.User.Claims.FirstOrDefault(c => c.Type == "tenantId")?.Value ?? string.Empty;
+                var tenantClaim = httpContext.User.Claims.FirstOrDefault(c =>
+                    c.Type == "tenant_id" ||
+                    c.Type == "tenantId"
+                )?.Value;
+
+                if (!string.IsNullOrEmpty(tenantClaim))
+                {
+                    return tenantClaim;
+                }
+
+                var headerTenantId = httpContext.Request.Headers["X-Tenant-Id"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(headerTenantId))
+                {
+                    return headerTenantId;
+                }
+
+                if (httpContext.Items.TryGetValue("TenantId", out var tenantIdObj) && tenantIdObj is string contextTenantId)
+                {
+                    return contextTenantId;
+                }
             }
             return string.Empty;
         }
