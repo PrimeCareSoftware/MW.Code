@@ -21,7 +21,6 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
     /// 2. The migration can safely run on databases that already have the column
     /// 3. Backward compatibility is maintained
     /// 
-    /// Related Issue: https://github.com/PrimeCareSoftware/MW.Code
     /// Related Migration: 20260210140000_AddRecurrenceSeriesAndExceptions.cs
     /// </summary>
     public partial class AddMissingIsExceptionColumn : Migration

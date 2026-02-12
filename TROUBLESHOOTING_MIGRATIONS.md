@@ -146,8 +146,10 @@ A defensive fix migration **`20260212001705_AddMissingIsExceptionColumn`** was c
 To apply the defensive fix:
 ```bash
 cd src/MedicSoft.Api
-dotnet ef database update 20260212001705_AddMissingIsExceptionColumn
+dotnet ef database update
 ```
+
+This will apply all pending migrations, including the defensive fix.
 
 #### Verification
 
