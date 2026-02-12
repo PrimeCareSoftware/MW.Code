@@ -83,5 +83,22 @@ namespace MedicSoft.Api.Controllers
         {
             return BadRequest(new { message = "Os dados fornecidos são inválidos. Por favor, verifique e tente novamente." });
         }
+
+        /// <summary>
+        /// Parses a date string in yyyy-MM-dd format to DateTime, ensuring consistent UTC interpretation
+        /// to avoid timezone-related date shifts (d-1 or d+1 errors).
+        /// </summary>
+        /// <param name="dateString">Date string in yyyy-MM-dd format</param>
+        /// <param name="parsedDate">The parsed DateTime value in UTC</param>
+        /// <returns>True if parsing succeeded, false otherwise</returns>
+        protected bool TryParseDateParameter(string dateString, out DateTime parsedDate)
+        {
+            return DateTime.TryParseExact(
+                dateString, 
+                "yyyy-MM-dd", 
+                System.Globalization.CultureInfo.InvariantCulture, 
+                System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
+                out parsedDate);
+        }
     }
 }

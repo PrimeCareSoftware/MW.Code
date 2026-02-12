@@ -60,10 +60,7 @@ namespace MedicSoft.Api.Controllers
             [FromQuery] Guid? professionalId = null)
         {
             // Parse date string explicitly to avoid timezone issues
-            if (!DateTime.TryParseExact(date, "yyyy-MM-dd", 
-                System.Globalization.CultureInfo.InvariantCulture, 
-                System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
-                out var parsedDate))
+            if (!TryParseDateParameter(date, out var parsedDate))
             {
                 return BadRequest("Data inválida. Use o formato yyyy-MM-dd");
             }
@@ -84,18 +81,12 @@ namespace MedicSoft.Api.Controllers
             [FromQuery] Guid clinicId)
         {
             // Parse date strings explicitly to avoid timezone issues
-            if (!DateTime.TryParseExact(startDate, "yyyy-MM-dd", 
-                System.Globalization.CultureInfo.InvariantCulture, 
-                System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
-                out var parsedStartDate))
+            if (!TryParseDateParameter(startDate, out var parsedStartDate))
             {
                 return BadRequest("Data inicial inválida. Use o formato yyyy-MM-dd");
             }
 
-            if (!DateTime.TryParseExact(endDate, "yyyy-MM-dd", 
-                System.Globalization.CultureInfo.InvariantCulture, 
-                System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
-                out var parsedEndDate))
+            if (!TryParseDateParameter(endDate, out var parsedEndDate))
             {
                 return BadRequest("Data final inválida. Use o formato yyyy-MM-dd");
             }
