@@ -27,17 +27,40 @@ namespace MedicSoft.Application.Services
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("TenantId is required", nameof(tenantId));
 
-            var presence = await _context.UserPresences
-                .FirstOrDefaultAsync(up => up.UserId == userId && up.TenantId == tenantId);
-
-            if (presence == null)
+            try
             {
-                presence = new UserPresence(userId, tenantId);
-                _context.UserPresences.Add(presence);
-            }
+                var userExists = await _context.Users
+                    .AnyAsync(u => u.Id == userId && u.TenantId == tenantId);
 
-            presence.SetOnline(connectionId);
-            await _context.SaveChangesAsync();
+                if (!userExists)
+                {
+                    _logger.LogWarning("Skipping presence update: user {UserId} not found in tenant {TenantId}", userId, tenantId);
+                    return;
+                }
+
+                var presence = await _context.UserPresences
+                    .FirstOrDefaultAsync(up => up.UserId == userId && up.TenantId == tenantId);
+
+                if (presence == null)
+                {
+                    presence = new UserPresence(userId, tenantId);
+                    _context.UserPresences.Add(presence);
+                }
+
+                presence.SetOnline(connectionId);
+                await _context.SaveChangesAsync();
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException dbEx) when (dbEx.InnerException?.Message?.Contains("FK_UserPresences_Users_UserId") == true)
+            {
+                _logger.LogWarning(dbEx, "Foreign key constraint violation when setting user {UserId} online in tenant {TenantId}. User may have been deleted.", userId, tenantId);
+                // Silently ignore - user was likely deleted between check and save
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error setting user {UserId} online in tenant {TenantId}", userId, tenantId);
+                throw;
+            }
 
             _logger.LogInformation("User {UserId} is now online with connection {ConnectionId} in tenant {TenantId}", 
                 userId, connectionId, tenantId);
@@ -48,15 +71,23 @@ namespace MedicSoft.Application.Services
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("TenantId is required", nameof(tenantId));
 
-            var presence = await _context.UserPresences
-                .FirstOrDefaultAsync(up => up.UserId == userId && up.TenantId == tenantId);
-
-            if (presence != null)
+            try
             {
-                presence.SetOffline();
-                await _context.SaveChangesAsync();
+                var presence = await _context.UserPresences
+                    .FirstOrDefaultAsync(up => up.UserId == userId && up.TenantId == tenantId);
 
-                _logger.LogInformation("User {UserId} is now offline in tenant {TenantId}", userId, tenantId);
+                if (presence != null)
+                {
+                    presence.SetOffline();
+                    await _context.SaveChangesAsync();
+
+                    _logger.LogInformation("User {UserId} is now offline in tenant {TenantId}", userId, tenantId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error setting user {UserId} offline in tenant {TenantId}", userId, tenantId);
+                // Don't throw - offline status update is not critical
             }
         }
 
@@ -64,6 +95,15 @@ namespace MedicSoft.Application.Services
         {
             if (string.IsNullOrWhiteSpace(tenantId))
                 throw new ArgumentException("TenantId is required", nameof(tenantId));
+
+            var userExists = await _context.Users
+                .AnyAsync(u => u.Id == userId && u.TenantId == tenantId);
+
+            if (!userExists)
+            {
+                _logger.LogWarning("Skipping status update: user {UserId} not found in tenant {TenantId}", userId, tenantId);
+                return;
+            }
 
             var presence = await _context.UserPresences
                 .FirstOrDefaultAsync(up => up.UserId == userId && up.TenantId == tenantId);

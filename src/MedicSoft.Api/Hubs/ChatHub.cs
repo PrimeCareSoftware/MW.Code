@@ -41,8 +41,15 @@ namespace MedicSoft.Api.Hubs
                     return;
                 }
 
-                // Set user online
-                await _presenceService.SetUserOnlineAsync(userId, Context.ConnectionId, tenantId);
+                // Set user online - continue even if this fails
+                try
+                {
+                    await _presenceService.SetUserOnlineAsync(userId, Context.ConnectionId, tenantId);
+                }
+                catch (Exception presenceEx)
+                {
+                    _logger.LogWarning(presenceEx, "Failed to set user presence for {UserId} in tenant {TenantId}. Connection will continue without presence tracking.", userId, tenantId);
+                }
 
                 // Add to tenant group
                 await Groups.AddToGroupAsync(Context.ConnectionId, $"tenant_{tenantId}");
@@ -76,8 +83,15 @@ namespace MedicSoft.Api.Hubs
 
                 if (userId != Guid.Empty && !string.IsNullOrEmpty(tenantId))
                 {
-                    // Set user offline
-                    await _presenceService.SetUserOfflineAsync(userId, tenantId);
+                    // Set user offline - continue even if this fails
+                    try
+                    {
+                        await _presenceService.SetUserOfflineAsync(userId, tenantId);
+                    }
+                    catch (Exception presenceEx)
+                    {
+                        _logger.LogWarning(presenceEx, "Failed to set user offline for {UserId} in tenant {TenantId}", userId, tenantId);
+                    }
 
                     // Notify all users in tenant about presence change
                     await Clients.Group($"tenant_{tenantId}").SendAsync("UserPresenceChanged", new
