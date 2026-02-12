@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs;
@@ -20,6 +22,14 @@ namespace MedicSoft.Api.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<LgpdAuditMiddleware> _logger;
+        
+        // Constants for fallback user identifiers
+        private const string UnauthenticatedUserId = "UNAUTHENTICATED";
+        private const string UnauthenticatedUserName = "Unauthenticated User";
+        private const string UnauthenticatedUserEmail = "unauthenticated@system";
+        private const string AuthenticatedNoIdUserId = "AUTHENTICATED_NO_ID";
+        private const string AuthenticatedNoIdUserName = "Authenticated User";
+        private const string AuthenticatedNoIdUserEmail = "authenticated@system";
 
         // Sensitive endpoints that require audit logging
         private static readonly string[] SensitiveEndpoints = new[]
@@ -47,10 +57,21 @@ namespace MedicSoft.Api.Middleware
         {
             var path = context.Request.Path.Value?.ToLowerInvariant() ?? "";
             var method = context.Request.Method;
+            
+            // Skip OPTIONS requests (CORS preflight)
+            if (method == "OPTIONS")
+            {
+                await _next(context);
+                return;
+            }
 
             // Check if this is a sensitive endpoint that requires audit logging
             if (IsSensitiveEndpoint(path))
             {
+                // Check if endpoint requires authentication
+                var endpoint = context.GetEndpoint();
+                var requiresAuth = endpoint?.Metadata.GetMetadata<IAuthorizeData>() != null;
+
                 // Capture request details before processing
                 var requestDetails = await CaptureRequestDetailsAsync(context);
 
@@ -63,10 +84,10 @@ namespace MedicSoft.Api.Middleware
                     using var responseBody = new MemoryStream();
                     context.Response.Body = responseBody;
 
-                    // Process the request
+                    // Process the request (execute authentication and authorization middleware)
                     await _next(context);
 
-                    // Log the audit after successful request
+                    // Log the audit after request is processed and user is authenticated
                     if (context.Response.StatusCode < 400)
                     {
                         await LogAuditAsync(
@@ -159,10 +180,8 @@ namespace MedicSoft.Api.Middleware
                 Method = context.Request.Method,
                 QueryString = context.Request.QueryString.Value ?? "",
                 IpAddress = context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-                UserAgent = context.Request.Headers["User-Agent"].ToString(),
-                UserId = GetUserIdFromContext(context),
-                UserName = GetUserNameFromContext(context),
-                UserEmail = GetUserEmailFromContext(context)
+                UserAgent = context.Request.Headers["User-Agent"].ToString()
+                // Note: UserId, UserName, and UserEmail will be populated after authentication
             };
 
             return Task.FromResult(details);
@@ -184,40 +203,61 @@ namespace MedicSoft.Api.Middleware
                 var purpose = DetermineLgpdPurpose(action);
                 var severity = DetermineSeverity(action, result);
 
+                // Get user context after authentication has been performed.
+                var userId = GetUserIdFromContext(context);
+                var userName = GetUserNameFromContext(context);
+                var userEmail = GetUserEmailFromContext(context);
+
                 // Only log if we have valid user context
-                if (string.IsNullOrEmpty(requestDetails.UserId) || requestDetails.UserId == "UNAUTHENTICATED")
+                if (string.IsNullOrEmpty(userId) || userId == UnauthenticatedUserId)
                 {
-                    _logger.LogWarning("Unauthenticated access attempt to sensitive endpoint: {Path}", requestDetails.Path);
-                    
-                    // Still log unauthenticated attempts for security monitoring
-                    var unauthDto = new CreateAuditLogDto(
-                        UserId: "UNAUTHENTICATED",
-                        UserName: "Unauthenticated User",
-                        UserEmail: "unauthenticated@system",
-                        Action: action,
-                        ActionDescription: $"Unauthenticated {action} attempt on {entityType}",
-                        EntityType: entityType,
-                        EntityId: entityId ?? "unknown",
-                        EntityDisplayName: null,
-                        IpAddress: requestDetails.IpAddress,
-                        UserAgent: requestDetails.UserAgent,
-                        RequestPath: requestDetails.Path,
-                        HttpMethod: requestDetails.Method,
-                        Result: OperationResult.UNAUTHORIZED,
-                        DataCategory: dataCategory,
-                        Purpose: purpose,
-                        Severity: AuditSeverity.WARNING,
-                        TenantId: tenantId
-                    );
-                    
-                    await auditService.LogAsync(unauthDto);
-                    return;
+                    // Check if user is actually authenticated but claims are missing
+                    if (context.User?.Identity?.IsAuthenticated == true)
+                    {
+                        _logger.LogWarning("Authenticated user with missing claims at endpoint: {Path}", requestDetails.Path);
+                        userId = AuthenticatedNoIdUserId;
+                        userName = AuthenticatedNoIdUserName;
+                        userEmail = AuthenticatedNoIdUserEmail;
+                    }
+                    else
+                    {
+                        // Only log warning for unauthenticated access if result is UNAUTHORIZED.
+                        // This prevents false warnings for endpoints that properly reject unauthenticated requests.
+                        if (result == OperationResult.UNAUTHORIZED)
+                        {
+                            _logger.LogDebug("Unauthenticated access blocked at endpoint: {Path}", requestDetails.Path);
+                        }
+                        
+                        // Still log unauthenticated attempts for security monitoring
+                        var unauthDto = new CreateAuditLogDto(
+                            UserId: UnauthenticatedUserId,
+                            UserName: UnauthenticatedUserName,
+                            UserEmail: UnauthenticatedUserEmail,
+                            Action: action,
+                            ActionDescription: $"Unauthenticated {action} attempt on {entityType}",
+                            EntityType: entityType,
+                            EntityId: entityId ?? "unknown",
+                            EntityDisplayName: null,
+                            IpAddress: requestDetails.IpAddress,
+                            UserAgent: requestDetails.UserAgent,
+                            RequestPath: requestDetails.Path,
+                            HttpMethod: requestDetails.Method,
+                            Result: OperationResult.UNAUTHORIZED,
+                            DataCategory: dataCategory,
+                            Purpose: purpose,
+                            Severity: AuditSeverity.WARNING,
+                            TenantId: tenantId
+                        );
+                        
+                        await auditService.LogAsync(unauthDto);
+                        return;
+                    }
                 }
 
                 var dto = new CreateAuditLogDto(
-                    UserId: requestDetails.UserId,
-                    UserName: requestDetails.UserName,
-                    UserEmail: requestDetails.UserEmail,
+                    UserId: userId,
+                    UserName: userName,
+                    UserEmail: userEmail,
                     Action: action,
                     ActionDescription: $"{action} on {entityType}",
                     EntityType: entityType,
@@ -238,7 +278,7 @@ namespace MedicSoft.Api.Middleware
 
                 _logger.LogInformation(
                     "LGPD Audit logged: {Action} on {EntityType} by user {UserId} - Result: {Result}",
-                    action, entityType, requestDetails.UserId, result
+                    action, entityType, userId, result
                 );
             }
             catch (Exception ex)
@@ -254,7 +294,7 @@ namespace MedicSoft.Api.Middleware
                             ?? context.User?.FindFirst("userId")?.Value
                             ?? context.User?.FindFirst("id")?.Value;
 
-            return userIdClaim ?? "UNAUTHENTICATED";
+            return userIdClaim ?? UnauthenticatedUserId;
         }
 
         private string GetUserNameFromContext(HttpContext context)
@@ -375,9 +415,6 @@ namespace MedicSoft.Api.Middleware
             public string QueryString { get; set; } = "";
             public string IpAddress { get; set; } = "";
             public string UserAgent { get; set; } = "";
-            public string UserId { get; set; } = "";
-            public string UserName { get; set; } = "";
-            public string UserEmail { get; set; } = "";
         }
     }
 }

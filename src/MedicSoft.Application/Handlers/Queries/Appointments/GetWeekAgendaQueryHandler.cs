@@ -28,17 +28,17 @@ namespace MedicSoft.Application.Handlers.Queries.Appointments
 
         public async Task<WeekAgendaDto> Handle(GetWeekAgendaQuery request, CancellationToken cancellationToken)
         {
-            // Cache clinic data (rarely changes)
-            var cacheKey = $"clinic:{request.ClinicId}";
-            var clinic = await _cacheService.GetOrCreateAsync(cacheKey, async () =>
+            // Cache only clinic name (string) instead of full entity to avoid deserialization issues
+            var cacheKey = $"clinic:name:{request.ClinicId}";
+            var clinicName = await _cacheService.GetOrCreateAsync(cacheKey, async () =>
             {
-                return await _clinicRepository.GetByIdAsync(request.ClinicId, request.TenantId);
+                var clinic = await _clinicRepository.GetByIdAsync(request.ClinicId, request.TenantId);
+                if (clinic == null)
+                    throw new InvalidOperationException($"Clinic not found with ID: {request.ClinicId}");
+                
+                // Return only string (easy to serialize/deserialize)
+                return clinic.Name;
             }, TimeSpan.FromHours(1));
-
-            if (clinic == null)
-            {
-                throw new InvalidOperationException("Clinic not found");
-            }
 
             // Use optimized repository method to get appointments for the entire week in one query
             var appointments = await _appointmentRepository.GetWeekAgendaWithIncludesAsync(
@@ -53,7 +53,7 @@ namespace MedicSoft.Application.Handlers.Queries.Appointments
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
                 ClinicId = request.ClinicId,
-                ClinicName = clinic.Name,
+                ClinicName = clinicName,
                 Appointments = _mapper.Map<List<AppointmentDto>>(appointments)
             };
         }
