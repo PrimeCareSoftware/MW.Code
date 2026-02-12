@@ -151,6 +151,8 @@ dotnet ef database update
 
 This will apply all pending migrations, including the defensive fix.
 
+> **📋 Complete Deployment Guide:** For detailed deployment instructions, verification steps, and environment-specific guidance, see [DEPLOYMENT_CHECKLIST_ISEXCEPTION.md](./DEPLOYMENT_CHECKLIST_ISEXCEPTION.md)
+
 #### Verification
 
 After fixing, verify the column exists:
