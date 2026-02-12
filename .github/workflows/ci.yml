@@ -173,10 +173,73 @@ jobs:
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
           -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
 
+  migration-check:
+    name: Migration Verification
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Install EF Core tools
+      run: dotnet tool install --global dotnet-ef
+      
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Verify critical migrations exist
+      run: |
+        echo "Checking for critical IsException column migrations..."
+        
+        # Check if the original migration exists
+        if [ -f "src/MedicSoft.Repository/Migrations/PostgreSQL/20260210140000_AddRecurrenceSeriesAndExceptions.cs" ]; then
+          echo "✓ Original migration (20260210140000_AddRecurrenceSeriesAndExceptions) found"
+        else
+          echo "✗ ERROR: Original migration (20260210140000_AddRecurrenceSeriesAndExceptions) NOT FOUND"
+          exit 1
+        fi
+        
+        # Check if the defensive migration exists
+        if [ -f "src/MedicSoft.Repository/Migrations/PostgreSQL/20260212001705_AddMissingIsExceptionColumn.cs" ]; then
+          echo "✓ Defensive migration (20260212001705_AddMissingIsExceptionColumn) found"
+        else
+          echo "✗ ERROR: Defensive migration (20260212001705_AddMissingIsExceptionColumn) NOT FOUND"
+          exit 1
+        fi
+        
+        # Verify the IsException property exists in BlockedTimeSlot entity
+        if grep -q "public bool IsException" src/MedicSoft.Domain/Entities/BlockedTimeSlot.cs; then
+          echo "✓ IsException property found in BlockedTimeSlot entity"
+        else
+          echo "✗ ERROR: IsException property NOT FOUND in BlockedTimeSlot entity"
+          exit 1
+        fi
+        
+        # Verify the configuration includes IsException
+        if grep -q "IsException" src/MedicSoft.Repository/Configurations/BlockedTimeSlotConfiguration.cs; then
+          echo "✓ IsException configuration found in BlockedTimeSlotConfiguration"
+        else
+          echo "✗ ERROR: IsException configuration NOT FOUND in BlockedTimeSlotConfiguration"
+          exit 1
+        fi
+        
+        echo ""
+        echo "✅ All critical migration checks passed!"
+        echo ""
+        echo "📋 Reminder for deployment:"
+        echo "- Ensure migrations are applied before deploying"
+        echo "- Application will auto-apply migrations on startup"
+        echo "- See DEPLOYMENT_CHECKLIST_ISEXCEPTION.md for details"
+
   build-check:
     name: Build Verification
     runs-on: ubuntu-latest
-    needs: [backend-tests, frontend-tests]
+    needs: [backend-tests, frontend-tests, migration-check]
     
     steps:
     - name: Checkout code
