@@ -95,11 +95,20 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpGet]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
-        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] DateTime date, [FromQuery] Guid clinicId, [FromQuery] Guid? professionalId = null)
+        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgenda([FromQuery] string date, [FromQuery] Guid clinicId, [FromQuery] Guid? professionalId = null)
         {
             try
             {
-                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId(), professionalId);
+                // Parse date string explicitly to avoid timezone issues
+                if (!DateTime.TryParseExact(date, "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
+                    out var parsedDate))
+                {
+                    return BadRequest("Data inválida. Use o formato yyyy-MM-dd");
+                }
+
+                var agenda = await _appointmentService.GetDailyAgendaAsync(parsedDate, clinicId, GetTenantId(), professionalId);
                 return Ok(agenda);
             }
             catch (InvalidOperationException ex)
@@ -113,11 +122,20 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpGet("agenda")]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
-        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgendaAlias([FromQuery] DateTime date, [FromQuery] Guid clinicId, [FromQuery] Guid? professionalId = null)
+        public async Task<ActionResult<DailyAgendaDto>> GetDailyAgendaAlias([FromQuery] string date, [FromQuery] Guid clinicId, [FromQuery] Guid? professionalId = null)
         {
             try
             {
-                var agenda = await _appointmentService.GetDailyAgendaAsync(date, clinicId, GetTenantId(), professionalId);
+                // Parse date string explicitly to avoid timezone issues
+                if (!DateTime.TryParseExact(date, "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
+                    out var parsedDate))
+                {
+                    return BadRequest("Data inválida. Use o formato yyyy-MM-dd");
+                }
+
+                var agenda = await _appointmentService.GetDailyAgendaAsync(parsedDate, clinicId, GetTenantId(), professionalId);
                 return Ok(agenda);
             }
             catch (InvalidOperationException ex)
@@ -132,14 +150,31 @@ namespace MedicSoft.Api.Controllers
         [HttpGet("week-agenda")]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
         public async Task<ActionResult<WeekAgendaDto>> GetWeekAgenda(
-            [FromQuery] DateTime startDate, 
-            [FromQuery] DateTime endDate, 
+            [FromQuery] string startDate, 
+            [FromQuery] string endDate, 
             [FromQuery] Guid clinicId, 
             [FromQuery] Guid? professionalId = null)
         {
             try
             {
-                var agenda = await _appointmentService.GetWeekAgendaAsync(startDate, endDate, clinicId, GetTenantId(), professionalId);
+                // Parse date strings explicitly to avoid timezone issues
+                if (!DateTime.TryParseExact(startDate, "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
+                    out var parsedStartDate))
+                {
+                    return BadRequest("Data inicial inválida. Use o formato yyyy-MM-dd");
+                }
+
+                if (!DateTime.TryParseExact(endDate, "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
+                    out var parsedEndDate))
+                {
+                    return BadRequest("Data final inválida. Use o formato yyyy-MM-dd");
+                }
+
+                var agenda = await _appointmentService.GetWeekAgendaAsync(parsedStartDate, parsedEndDate, clinicId, GetTenantId(), professionalId);
                 return Ok(agenda);
             }
             catch (InvalidOperationException ex)
@@ -175,13 +210,22 @@ namespace MedicSoft.Api.Controllers
         /// </summary>
         [HttpGet("available-slots")]
         public async Task<ActionResult<IEnumerable<AvailableSlotDto>>> GetAvailableSlots(
-            [FromQuery] DateTime date, 
+            [FromQuery] string date, 
             [FromQuery] Guid clinicId, 
             [FromQuery] int durationMinutes = 30)
         {
             try
             {
-                var slots = await _appointmentService.GetAvailableSlotsAsync(date, clinicId, durationMinutes, GetTenantId());
+                // Parse date string explicitly to avoid timezone issues
+                if (!DateTime.TryParseExact(date, "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, 
+                    out var parsedDate))
+                {
+                    return BadRequest("Data inválida. Use o formato yyyy-MM-dd");
+                }
+
+                var slots = await _appointmentService.GetAvailableSlotsAsync(parsedDate, clinicId, durationMinutes, GetTenantId());
                 return Ok(slots);
             }
             catch (InvalidOperationException ex)
