@@ -382,7 +382,7 @@ public class AppointmentsController : BaseController
     /// <summary>
     /// Gets available time slots for booking appointments
     /// </summary>
-    /// <param name="date">Date to check availability</param>
+    /// <param name="date">Date to check availability in yyyy-MM-dd format</param>
     /// <param name="clinicId">Clinic ID</param>
     /// <param name="doctorId">Optional specific doctor</param>
     /// <param name="specialty">Optional specialty filter</param>
@@ -393,7 +393,7 @@ public class AppointmentsController : BaseController
     /// <response code="500">Internal server error</response>
     [HttpGet("available-slots")]
     public async Task<ActionResult<List<DoctorAvailabilityDto>>> GetAvailableSlots(
-        [FromQuery] DateTime date,
+        [FromQuery] string date,
         [FromQuery] Guid clinicId,
         [FromQuery] Guid? doctorId = null,
         [FromQuery] string? specialty = null)
@@ -408,8 +408,14 @@ public class AppointmentsController : BaseController
             if (string.IsNullOrEmpty(tenantId))
                 return BadRequest(new { message = "Tenant ID is required" });
 
+            // Parse date string explicitly to avoid timezone issues
+            if (!TryParseDateParameter(date, out var parsedDate))
+            {
+                return BadRequest(new { message = "Data inválida. Use o formato yyyy-MM-dd" });
+            }
+
             var slots = await _doctorAvailabilityService.GetAvailableSlotsAsync(
-                doctorId, date, specialty, clinicId, tenantId);
+                doctorId, parsedDate, specialty, clinicId, tenantId);
             
             return Ok(slots);
         }
