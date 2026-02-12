@@ -1,4 +1,6 @@
 using PatientPortal.Domain.Enums;
+using System.Text.Json.Serialization;
+using PatientPortal.Application.JsonConverters;
 
 namespace PatientPortal.Application.DTOs.Appointments;
 
@@ -11,6 +13,7 @@ public class AppointmentDto
     public string DoctorName { get; set; } = string.Empty;
     public string DoctorSpecialty { get; set; } = string.Empty;
     public string ClinicName { get; set; } = string.Empty;
+    [JsonConverter(typeof(DateOnlyJsonConverter))]
     public DateTime AppointmentDate { get; set; }
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }

@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using PatientPortal.Application.JsonConverters;
 
 namespace PatientPortal.Application.DTOs.Appointments;
 
@@ -14,6 +16,7 @@ public class BookAppointmentRequestDto
     public Guid ClinicId { get; set; }
 
     [Required]
+    [JsonConverter(typeof(DateOnlyJsonConverter))]
     public DateTime AppointmentDate { get; set; }
 
     [Required]
