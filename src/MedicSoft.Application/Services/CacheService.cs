@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,16 @@ namespace MedicSoft.Application.Services
     {
         private readonly IDistributedCache _cache;
         private readonly ILogger<CacheService> _logger;
+        
+        // Optimized serialization options for entities with parameterized constructors
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            // Allows deserialization of types with parameterized constructors
+            PreferredObjectCreationHandling = JsonObjectCreationHandling.Replace
+        };
 
         public CacheService(IDistributedCache cache, ILogger<CacheService> logger)
         {
@@ -26,13 +37,16 @@ namespace MedicSoft.Application.Services
                 if (data == null)
                     return default;
 
-                return JsonSerializer.Deserialize<T>(data);
+                // Use JsonOptions configured for entities with parameterized constructors
+                return JsonSerializer.Deserialize<T>(data, JsonOptions);
             }
             catch (JsonException ex)
             {
                 // Handle corrupted or incompatible cached data
                 // This can happen when entity schemas change between deployments
-                _logger.LogWarning(ex, "Failed to deserialize cache key {Key}. Removing corrupted cache entry. This may occur after schema changes.", key);
+                _logger.LogWarning(ex, 
+                    "Failed to deserialize cache key {Key}. Removing corrupted cache entry. " +
+                    "This may occur after schema changes or entity modifications.", key);
                 
                 // Remove the corrupted cache entry to prevent repeated errors
                 await RemoveAsync(key);
@@ -55,7 +69,8 @@ namespace MedicSoft.Application.Services
                     AbsoluteExpirationRelativeToNow = expiration ?? TimeSpan.FromMinutes(30)
                 };
 
-                var json = JsonSerializer.Serialize(value);
+                // Use JsonOptions configured for entities with parameterized constructors
+                var json = JsonSerializer.Serialize(value, JsonOptions);
                 await _cache.SetStringAsync(key, json, options);
             }
             catch (Exception ex)
@@ -69,6 +84,7 @@ namespace MedicSoft.Application.Services
             try
             {
                 await _cache.RemoveAsync(key);
+                _logger.LogDebug("Cache key removed: {Key}", key);
             }
             catch (Exception ex)
             {
