@@ -55,11 +55,17 @@ namespace MedicSoft.Api.Controllers
         [HttpGet]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
         public async Task<ActionResult<IEnumerable<BlockedTimeSlotDto>>> GetByDate(
-            [FromQuery] DateTime date, 
+            [FromQuery] string date, 
             [FromQuery] Guid clinicId,
             [FromQuery] Guid? professionalId = null)
         {
-            var query = new GetBlockedTimeSlotsQuery(date, clinicId, GetTenantId(), professionalId);
+            // Parse date string explicitly to avoid timezone issues
+            if (!TryParseDateParameter(date, out var parsedDate))
+            {
+                return BadRequest("Data inválida. Use o formato yyyy-MM-dd");
+            }
+
+            var query = new GetBlockedTimeSlotsQuery(parsedDate, clinicId, GetTenantId(), professionalId);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -70,11 +76,22 @@ namespace MedicSoft.Api.Controllers
         [HttpGet("range")]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
         public async Task<ActionResult<IEnumerable<BlockedTimeSlotDto>>> GetByDateRange(
-            [FromQuery] DateTime startDate, 
-            [FromQuery] DateTime endDate, 
+            [FromQuery] string startDate, 
+            [FromQuery] string endDate, 
             [FromQuery] Guid clinicId)
         {
-            var query = new GetBlockedTimeSlotsRangeQuery(startDate, endDate, clinicId, GetTenantId());
+            // Parse date strings explicitly to avoid timezone issues
+            if (!TryParseDateParameter(startDate, out var parsedStartDate))
+            {
+                return BadRequest("Data inicial inválida. Use o formato yyyy-MM-dd");
+            }
+
+            if (!TryParseDateParameter(endDate, out var parsedEndDate))
+            {
+                return BadRequest("Data final inválida. Use o formato yyyy-MM-dd");
+            }
+
+            var query = new GetBlockedTimeSlotsRangeQuery(parsedStartDate, parsedEndDate, clinicId, GetTenantId());
             var result = await _mediator.Send(query);
             return Ok(result);
         }
