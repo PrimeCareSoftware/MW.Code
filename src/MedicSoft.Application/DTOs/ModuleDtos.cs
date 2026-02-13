@@ -18,6 +18,10 @@ namespace MedicSoft.Application.DTOs
         public string[] RequiredModules { get; set; } = Array.Empty<string>();
         public string? Configuration { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public bool RequiresConfiguration { get; set; }
+        public string? ConfigurationType { get; set; }
+        public string? ConfigurationExample { get; set; }
+        public string? ConfigurationHelp { get; set; }
     }
 
     /// <summary>
@@ -106,5 +110,9 @@ namespace MedicSoft.Application.DTOs
         public bool IsCore { get; set; }
         public string[] RequiredModules { get; set; } = Array.Empty<string>();
         public string MinimumPlan { get; set; } = string.Empty;
+        public bool RequiresConfiguration { get; set; }
+        public string? ConfigurationType { get; set; }
+        public string? ConfigurationExample { get; set; }
+        public string? ConfigurationHelp { get; set; }
     }
 }

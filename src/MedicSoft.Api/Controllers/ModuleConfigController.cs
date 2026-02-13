@@ -282,7 +282,11 @@ namespace MedicSoft.Api.Controllers
                 Icon = m.Icon,
                 IsCore = m.IsCore,
                 RequiredModules = m.RequiredModules,
-                MinimumPlan = m.MinimumPlan.ToString()
+                MinimumPlan = m.MinimumPlan.ToString(),
+                RequiresConfiguration = m.RequiresConfiguration,
+                ConfigurationType = m.ConfigurationType,
+                ConfigurationExample = m.ConfigurationExample,
+                ConfigurationHelp = m.ConfigurationHelp
             });
 
             return Ok(result);

@@ -158,7 +158,16 @@ namespace MedicSoft.Domain.Entities
                 Icon = "assessment",
                 IsCore = false,
                 RequiredModules = Array.Empty<string>(),
-                MinimumPlan = SubscriptionPlanType.Standard
+                MinimumPlan = SubscriptionPlanType.Standard,
+                RequiresConfiguration = true,
+                ConfigurationType = "ReportsConfig",
+                ConfigurationExample = @"{
+  ""defaultFormat"": ""PDF"",
+  ""enableAutomaticGeneration"": false,
+  ""enableCustomTemplates"": true,
+  ""retentionDays"": 90
+}",
+                ConfigurationHelp = "Configure a geração de relatórios avançados. Defina formato padrão, habilite geração automática e templates personalizados."
             },
             [WhatsAppIntegration] = new ModuleInfo
             {
@@ -169,7 +178,17 @@ namespace MedicSoft.Domain.Entities
                 Icon = "chat",
                 IsCore = false,
                 RequiredModules = new[] { PatientManagement },
-                MinimumPlan = SubscriptionPlanType.Standard
+                MinimumPlan = SubscriptionPlanType.Standard,
+                RequiresConfiguration = true,
+                ConfigurationType = "WhatsAppIntegrationConfig",
+                ConfigurationExample = @"{
+  ""apiKey"": ""sua_api_key_aqui"",
+  ""phoneNumber"": ""+5511999999999"",
+  ""webhookUrl"": ""https://suaurl.com/webhook"",
+  ""enableAppointmentReminders"": true,
+  ""reminderHoursBefore"": 24
+}",
+                ConfigurationHelp = "Configure a API do WhatsApp Business para enviar mensagens automáticas aos pacientes. Você precisará de uma API Key válida e número de telefone verificado."
             },
             [SMSNotifications] = new ModuleInfo
             {
@@ -180,7 +199,18 @@ namespace MedicSoft.Domain.Entities
                 Icon = "sms",
                 IsCore = false,
                 RequiredModules = new[] { PatientManagement },
-                MinimumPlan = SubscriptionPlanType.Standard
+                MinimumPlan = SubscriptionPlanType.Standard,
+                RequiresConfiguration = true,
+                ConfigurationType = "SMSNotificationsConfig",
+                ConfigurationExample = @"{
+  ""provider"": ""Twilio"",
+  ""apiKey"": ""sua_account_sid"",
+  ""authToken"": ""seu_auth_token"",
+  ""senderId"": ""+5511888888888"",
+  ""enableAppointmentReminders"": true,
+  ""dailyLimit"": 500
+}",
+                ConfigurationHelp = "Configure um provedor de SMS (Twilio, Nexmo, AWS SNS) para enviar notificações aos pacientes. Você precisará de credenciais da API do provedor escolhido."
             },
             [TissExport] = new ModuleInfo
             {
@@ -191,7 +221,18 @@ namespace MedicSoft.Domain.Entities
                 Icon = "upload_file",
                 IsCore = false,
                 RequiredModules = new[] { FinancialManagement },
-                MinimumPlan = SubscriptionPlanType.Premium
+                MinimumPlan = SubscriptionPlanType.Premium,
+                RequiresConfiguration = true,
+                ConfigurationType = "TissExportConfig",
+                ConfigurationExample = @"{
+  ""ansCode"": ""123456"",
+  ""tissVersion"": ""3.05.00"",
+  ""exportPath"": ""C:\\TISS\\Export"",
+  ""generateXml"": true,
+  ""generatePdf"": true,
+  ""autoSignXml"": false
+}",
+                ConfigurationHelp = "Configure a exportação de guias TISS com seu código ANS e diretório de exportação. Opcionalmente, configure assinatura digital automática dos arquivos XML."
             },
             [InventoryManagement] = new ModuleInfo
             {
@@ -202,7 +243,17 @@ namespace MedicSoft.Domain.Entities
                 Icon = "inventory",
                 IsCore = false,
                 RequiredModules = Array.Empty<string>(),
-                MinimumPlan = SubscriptionPlanType.Standard
+                MinimumPlan = SubscriptionPlanType.Standard,
+                RequiresConfiguration = true,
+                ConfigurationType = "InventoryManagementConfig",
+                ConfigurationExample = @"{
+  ""lowStockThresholdPercent"": 20,
+  ""enableLowStockAlerts"": true,
+  ""alertEmails"": ""estoque@clinica.com,gerente@clinica.com"",
+  ""trackExpirationDates"": true,
+  ""expirationAlertDays"": 30
+}",
+                ConfigurationHelp = "Configure alertas de estoque baixo e controle de validade. Defina o percentual mínimo de estoque e os emails para receber notificações."
             },
             [WaitingQueue] = new ModuleInfo
             {
@@ -213,7 +264,17 @@ namespace MedicSoft.Domain.Entities
                 Icon = "queue",
                 IsCore = false,
                 RequiredModules = new[] { AppointmentScheduling },
-                MinimumPlan = SubscriptionPlanType.Standard
+                MinimumPlan = SubscriptionPlanType.Standard,
+                RequiresConfiguration = true,
+                ConfigurationType = "WaitingQueueConfig",
+                ConfigurationExample = @"{
+  ""enableAutoProgression"": true,
+  ""enableDisplayScreen"": true,
+  ""displayRefreshSeconds"": 30,
+  ""maxWaitingMinutes"": 120,
+  ""enablePriorityQueues"": true
+}",
+                ConfigurationHelp = "Configure a fila de espera com progressão automática e tela de exibição. Defina o tempo máximo de espera e intervalo de atualização da tela."
             },
             [DoctorFieldsConfig] = new ModuleInfo
             {
@@ -224,7 +285,17 @@ namespace MedicSoft.Domain.Entities
                 Icon = "settings",
                 IsCore = false,
                 RequiredModules = new[] { MedicalRecords },
-                MinimumPlan = SubscriptionPlanType.Premium
+                MinimumPlan = SubscriptionPlanType.Premium,
+                RequiresConfiguration = true,
+                ConfigurationType = "DoctorFieldsConfigOptions",
+                ConfigurationExample = @"{
+  ""enableCustomFields"": true,
+  ""maxCustomFieldsPerSpecialty"": 20,
+  ""enableFieldTemplates"": true,
+  ""enableConditionalFields"": false,
+  ""enableValidationRules"": true
+}",
+                ConfigurationHelp = "Configure campos personalizados no prontuário eletrônico. Defina limites, habilite templates e regras de validação para os campos customizados."
             },
             [Chat] = new ModuleInfo
             {
@@ -235,7 +306,18 @@ namespace MedicSoft.Domain.Entities
                 Icon = "chat",
                 IsCore = false,
                 RequiredModules = Array.Empty<string>(),
-                MinimumPlan = SubscriptionPlanType.Basic
+                MinimumPlan = SubscriptionPlanType.Basic,
+                RequiresConfiguration = true,
+                ConfigurationType = "ChatConfig",
+                ConfigurationExample = @"{
+  ""enableFileSharing"": true,
+  ""maxFileSizeMB"": 10,
+  ""enableMessageHistory"": true,
+  ""messageRetentionDays"": 90,
+  ""enableGroupChats"": true,
+  ""maxGroupMembers"": 20
+}",
+                ConfigurationHelp = "Configure o chat interno da clínica. Defina limites de tamanho de arquivo, retenção de mensagens e número máximo de membros em grupos."
             }
         };
 
@@ -276,5 +358,25 @@ namespace MedicSoft.Domain.Entities
         public bool IsCore { get; set; } // If true, cannot be disabled
         public string[] RequiredModules { get; set; } = Array.Empty<string>();
         public SubscriptionPlanType MinimumPlan { get; set; }
+        
+        /// <summary>
+        /// Indicates if this module requires specific configuration
+        /// </summary>
+        public bool RequiresConfiguration { get; set; }
+        
+        /// <summary>
+        /// Type name of the configuration DTO for this module (e.g., "WhatsAppIntegrationConfig")
+        /// </summary>
+        public string? ConfigurationType { get; set; }
+        
+        /// <summary>
+        /// Example configuration JSON to help users understand the required format
+        /// </summary>
+        public string? ConfigurationExample { get; set; }
+        
+        /// <summary>
+        /// Help text describing what this module does and how to configure it
+        /// </summary>
+        public string? ConfigurationHelp { get; set; }
     }
 }
