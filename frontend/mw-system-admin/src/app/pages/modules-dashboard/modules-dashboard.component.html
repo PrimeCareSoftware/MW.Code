@@ -42,7 +42,7 @@
         <mat-card class="kpi-card">
           <mat-icon class="kpi-icon">trending_up</mat-icon>
           <div class="kpi-content">
-            <div class="kpi-value">{{ (averageAdoption ?? 0) | number:'1.1-1' }}%</div>
+            <div class="kpi-value">{{ averageAdoption ?? 0 | number:'1.1-1' }}%</div>
             <div class="kpi-label">Taxa Média de Adoção</div>
           </div>
         </mat-card>
@@ -103,16 +103,16 @@
                   {{ module?.category || 'N/A' }}
                 </span>
               </td>
-              <td>{{ (module?.clinicsWithModuleEnabled ?? 0) }} / {{ (module?.totalClinics ?? 0) }}</td>
+              <td>{{ module?.clinicsWithModuleEnabled ?? 0 }} / {{ module?.totalClinics ?? 0 }}</td>
               <td>
                 <div class="adoption-cell">
                   <div class="adoption-bar">
                     <div class="adoption-fill" 
-                         [style.width.%]="(module?.adoptionRate ?? 0)"
+                         [style.width.%]="module?.adoptionRate ?? 0"
                          [ngClass]="getAdoptionClass(module?.adoptionRate ?? 0)">
                     </div>
                   </div>
-                  <span class="adoption-text">{{ (module?.adoptionRate ?? 0) | number:'1.1-1' }}%</span>
+                  <span class="adoption-text">{{ module?.adoptionRate ?? 0 | number:'1.1-1' }}%</span>
                 </div>
               </td>
               <td>

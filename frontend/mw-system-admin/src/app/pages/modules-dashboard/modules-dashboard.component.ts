@@ -11,6 +11,7 @@ import { forkJoin } from 'rxjs';
 import { ModuleConfigService } from '../../services/module-config.service';
 import { ModuleUsage, ModuleAdoption } from '../../models/module-config.model';
 import { Navbar } from '../../shared/navbar/navbar';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-modules-dashboard',
@@ -53,30 +54,36 @@ export class ModulesDashboardComponent implements OnInit {
       adoption: this.moduleService.getModuleAdoption()
     }).subscribe({
       next: ({ usage, adoption }) => {
-        console.log('[ModulesDashboard] Dados recebidos do backend:');
-        console.log('Usage data:', usage);
-        console.log('Adoption data:', adoption);
+        if (environment.enableDebug) {
+          console.log('[ModulesDashboard] Dados recebidos do backend:');
+          console.log('Usage data:', usage);
+          console.log('Adoption data:', adoption);
+        }
         
         this.moduleUsage = usage || [];
         this.moduleAdoption = adoption || [];
         this.totalModules = this.moduleUsage.length;
         this.averageAdoption = this.calculateAverageAdoption();
         
-        console.log('[ModulesDashboard] Dados processados:');
-        console.log('Total modules:', this.totalModules);
-        console.log('Average adoption:', this.averageAdoption);
-        console.log('Module usage array:', this.moduleUsage);
+        if (environment.enableDebug) {
+          console.log('[ModulesDashboard] Dados processados:');
+          console.log('Total modules:', this.totalModules);
+          console.log('Average adoption:', this.averageAdoption);
+          console.log('Module usage array:', this.moduleUsage);
+        }
         
         this.loading = false;
       },
       error: (error) => {
         console.error('[ModulesDashboard] Erro ao carregar dados:', error);
-        console.error('Error details:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          url: error.url
-        });
+        if (environment.enableDebug) {
+          console.error('Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            url: error.url
+          });
+        }
         this.error = 'Erro ao carregar dados do dashboard. Por favor, tente novamente.';
         this.loading = false;
       }
