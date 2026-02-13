@@ -1,19 +1,37 @@
 export interface ClinicAdminInfoDto {
-  id: string;
+  clinicId: string;
   name: string;
-  subdomain: string;
-  phone?: string;
-  email?: string;
-  address?: string;
-  workingHours?: string;
-  tenantId: string;
+  tradeName: string;
+  document: string;
+  subdomain?: string;
+  phone: string;
+  email: string;
+  address: string;
+  openingTime: string; // TimeSpan as string (HH:mm:ss)
+  closingTime: string; // TimeSpan as string (HH:mm:ss)
+  appointmentDurationMinutes: number;
+  allowEmergencySlots: boolean;
+  enableOnlineAppointmentScheduling: boolean;
+  isActive: boolean;
+  showOnPublicSite: boolean;
+  clinicType: string;
+  whatsAppNumber?: string;
+  defaultPaymentReceiverType: string;
+  numberOfRooms: number;
+  notifyPrimaryDoctorOnOtherDoctorAppointment: boolean;
 }
 
 export interface UpdateClinicInfoRequest {
   phone?: string;
   email?: string;
   address?: string;
-  workingHours?: string;
+  openingTime?: string; // TimeSpan as string (HH:mm:ss)
+  closingTime?: string; // TimeSpan as string (HH:mm:ss)
+  appointmentDurationMinutes?: number;
+  allowEmergencySlots?: boolean;
+  numberOfRooms?: number;
+  notifyPrimaryDoctorOnOtherDoctorAppointment?: boolean;
+  enableOnlineAppointmentScheduling?: boolean;
 }
 
 export interface ClinicUserDto {

@@ -65,6 +65,86 @@
       </div>
     </section>
 
+    <!-- Schedule Settings Section -->
+    <section class="config-section">
+      <h2>Horário de Atendimento</h2>
+      <p class="section-description">
+        Configure os horários de funcionamento da clínica e duração das consultas.
+      </p>
+
+      <div class="schedule-settings-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="openingTime">Horário de Abertura</label>
+            <input 
+              type="time" 
+              id="openingTime" 
+              [(ngModel)]="openingTime"
+              class="time-input"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="closingTime">Horário de Fechamento</label>
+            <input 
+              type="time" 
+              id="closingTime" 
+              [(ngModel)]="closingTime"
+              class="time-input"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="appointmentDuration">Duração da Consulta</label>
+            <select 
+              id="appointmentDuration" 
+              [(ngModel)]="appointmentDurationMinutes"
+              class="select-input"
+            >
+              <option *ngFor="let option of appointmentDurationOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row toggles-row">
+          <div class="toggle-group">
+            <label class="toggle-label">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="allowEmergencySlots"
+              >
+              <span class="toggle-text">Permitir horários de emergência</span>
+            </label>
+            <p class="toggle-description">Permite agendamentos fora do horário normal para emergências</p>
+          </div>
+
+          <div class="toggle-group">
+            <label class="toggle-label">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="enableOnlineAppointmentScheduling"
+              >
+              <span class="toggle-text">Agendamento online habilitado</span>
+            </label>
+            <p class="toggle-description">Permite que pacientes agendem consultas pelo portal</p>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="btn btn-primary"
+            (click)="updateScheduleSettings()"
+            [disabled]="savingSchedule"
+          >
+            {{ savingSchedule ? 'Salvando...' : 'Salvar Configurações de Horário' }}
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- Features Section -->
     <section class="config-section">
       <h2>Recursos e Funcionalidades</h2>
