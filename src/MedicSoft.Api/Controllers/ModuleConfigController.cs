@@ -25,18 +25,21 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IModuleConfigurationService _moduleConfigService;
+        private readonly IModuleConfigurationValidator _configValidator;
 
         public ModuleConfigController(
             ITenantContext tenantContext,
             MedicSoftDbContext context,
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
-            IModuleConfigurationService moduleConfigService) : base(tenantContext)
+            IModuleConfigurationService moduleConfigService,
+            IModuleConfigurationValidator configValidator) : base(tenantContext)
         {
             _context = context;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _moduleConfigService = moduleConfigService;
+            _configValidator = configValidator;
         }
 
         /// <summary>
@@ -412,8 +415,7 @@ namespace MedicSoft.Api.Controllers
         public ActionResult<ConfigurationValidationResult> ValidateConfiguration(
             [FromBody] ValidateConfigurationRequest request)
         {
-            var validator = new ModuleConfigurationValidator();
-            var result = validator.ValidateConfiguration(request.ModuleName, request.ConfigurationJson);
+            var result = _configValidator.ValidateConfiguration(request.ModuleName, request.ConfigurationJson);
             return Ok(result);
         }
 
@@ -433,8 +435,7 @@ namespace MedicSoft.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<string> GetDefaultConfiguration(string moduleName)
         {
-            var validator = new ModuleConfigurationValidator();
-            var defaultConfig = validator.GetDefaultConfiguration(moduleName);
+            var defaultConfig = _configValidator.GetDefaultConfiguration(moduleName);
             
             if (defaultConfig == null)
             {

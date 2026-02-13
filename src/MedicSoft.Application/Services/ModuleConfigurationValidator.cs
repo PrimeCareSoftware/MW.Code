@@ -58,18 +58,29 @@ namespace MedicSoft.Application.Services
         {
             var result = new ConfigurationValidationResult();
 
-            // If module doesn't require configuration, empty config is valid
-            var moduleInfo = SystemModules.GetModuleInfo(moduleName);
-            if (!moduleInfo.RequiresConfiguration)
+            // Validate that module exists
+            try
             {
-                return result;
-            }
+                var moduleInfo = SystemModules.GetModuleInfo(moduleName);
+                
+                // If module doesn't require configuration, empty config is valid
+                if (!moduleInfo.RequiresConfiguration)
+                {
+                    return result;
+                }
 
-            // If configuration is required but not provided, that's an error
-            if (string.IsNullOrWhiteSpace(configurationJson))
+                // If configuration is required but not provided, that's an error
+                if (string.IsNullOrWhiteSpace(configurationJson))
+                {
+                    result.IsValid = false;
+                    result.Errors.Add($"Configuração é obrigatória para o módulo {moduleInfo.DisplayName}");
+                    return result;
+                }
+            }
+            catch (ArgumentException ex)
             {
                 result.IsValid = false;
-                result.Errors.Add($"Configuração é obrigatória para o módulo {moduleInfo.DisplayName}");
+                result.Errors.Add($"Módulo não encontrado: {ex.Message}");
                 return result;
             }
 

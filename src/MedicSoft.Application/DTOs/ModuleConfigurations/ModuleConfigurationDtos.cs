@@ -38,10 +38,10 @@ namespace MedicSoft.Application.DTOs.ModuleConfigurations
         public string ApiKey { get; set; } = string.Empty;
 
         /// <summary>
-        /// WhatsApp Business Phone Number (with country code)
+        /// WhatsApp Business Phone Number (with country code, e.g., +5511999999999)
         /// </summary>
         [Required(ErrorMessage = "Número de telefone é obrigatório")]
-        [Phone(ErrorMessage = "Número de telefone inválido")]
+        [RegularExpression(@"^\+?[1-9]\d{1,14}$", ErrorMessage = "Número de telefone inválido. Use formato internacional com código do país (ex: +5511999999999)")]
         public string PhoneNumber { get; set; } = string.Empty;
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace MedicSoft.Application.DTOs.ModuleConfigurations
             var results = new List<ValidationResult>();
 
             var validFormats = new[] { "PDF", "Excel", "CSV", "HTML" };
-            if (!validFormats.Contains(DefaultFormat))
+            if (!validFormats.Any(f => string.Equals(f, DefaultFormat, StringComparison.OrdinalIgnoreCase)))
                 results.Add(new ValidationResult("Formato deve ser PDF, Excel, CSV ou HTML", new[] { nameof(DefaultFormat) }));
 
             if (EnableAutomaticGeneration && string.IsNullOrWhiteSpace(AutoReportRecipients))
