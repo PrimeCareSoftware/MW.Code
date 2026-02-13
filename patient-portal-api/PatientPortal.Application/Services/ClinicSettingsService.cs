@@ -51,9 +51,59 @@ public class ClinicSettingsService : IClinicSettingsService
         }
     }
 
+    /// <summary>
+    /// Gets the schedule settings for a clinic (opening/closing times and appointment duration)
+    /// </summary>
+    /// <param name="clinicId">Clinic ID</param>
+    /// <param name="tenantId">Tenant ID</param>
+    /// <returns>Clinic schedule settings</returns>
+    public async Task<ClinicScheduleSettings?> GetScheduleSettingsAsync(Guid clinicId, string tenantId)
+    {
+        try
+        {
+            var query = @"
+                SELECT ""OpeningTime"", ""ClosingTime"", ""AppointmentDurationMinutes""
+                FROM ""Clinics""
+                WHERE ""Id"" = {0} AND ""TenantId"" = {1}";
+
+            var result = await _mainDatabase.ExecuteQueryAsync<ClinicScheduleSettingsDto>(
+                query,
+                clinicId,
+                tenantId
+            );
+
+            var settings = result.FirstOrDefault();
+            if (settings == null)
+            {
+                _logger.LogWarning("Schedule settings not found for clinic {ClinicId}", clinicId);
+                return null;
+            }
+
+            return new ClinicScheduleSettings
+            {
+                OpeningTime = settings.OpeningTime,
+                ClosingTime = settings.ClosingTime,
+                AppointmentDurationMinutes = settings.AppointmentDurationMinutes
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching schedule settings for clinic {ClinicId}", clinicId);
+            return null;
+        }
+    }
+
     // Helper class for query result
     private class ClinicSchedulingSetting
     {
         public bool EnableOnlineAppointmentScheduling { get; set; }
+    }
+
+    // Helper class for schedule settings query result
+    private class ClinicScheduleSettingsDto
+    {
+        public TimeSpan OpeningTime { get; set; }
+        public TimeSpan ClosingTime { get; set; }
+        public int AppointmentDurationMinutes { get; set; }
     }
 }

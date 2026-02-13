@@ -10,6 +10,8 @@ import {
 } from '../../../services/business-configuration.service';
 import { TerminologyService } from '../../../services/terminology.service';
 import { ClinicSelectionService } from '../../../services/clinic-selection.service';
+import { ClinicAdminService } from '../../../services/clinic-admin.service';
+import { ClinicAdminInfoDto, UpdateClinicInfoRequest } from '../../../models/clinic-admin.model';
 
 interface FeatureCategory {
   name: string;
@@ -32,10 +34,26 @@ interface FeatureInfo {
 })
 export class BusinessConfigurationComponent implements OnInit {
   configuration: BusinessConfiguration | null = null;
+  clinicInfo: ClinicAdminInfoDto | null = null;
   loading = false;
   saving = false;
+  savingSchedule = false;
   error = '';
   success = '';
+
+  // Schedule settings
+  openingTime = '08:00';
+  closingTime = '18:00';
+  appointmentDurationMinutes = 30;
+  allowEmergencySlots = true;
+  enableOnlineAppointmentScheduling = true;
+
+  appointmentDurationOptions = [
+    { value: 15, label: '15 minutos' },
+    { value: 30, label: '30 minutos' },
+    { value: 45, label: '45 minutos' },
+    { value: 60, label: '60 minutos' }
+  ];
 
   BusinessType = BusinessType;
   ProfessionalSpecialty = ProfessionalSpecialty;
@@ -64,11 +82,13 @@ export class BusinessConfigurationComponent implements OnInit {
   constructor(
     private businessConfigService: BusinessConfigurationService,
     private terminologyService: TerminologyService,
-    private clinicSelectionService: ClinicSelectionService
+    private clinicSelectionService: ClinicSelectionService,
+    private clinicAdminService: ClinicAdminService
   ) {}
 
   ngOnInit(): void {
     this.loadConfiguration();
+    this.loadClinicInfo();
   }
 
   private loadConfiguration(): void {
@@ -330,5 +350,125 @@ export class BusinessConfigurationComponent implements OnInit {
 
   getSpecialtyLabel(specialty: ProfessionalSpecialty): string {
     return this.specialtyOptions.find(opt => opt.value === specialty)?.label || 'Desconhecido';
+  }
+
+  private loadClinicInfo(): void {
+    this.loading = true;
+    this.error = '';
+
+    this.clinicAdminService.getClinicInfo().subscribe({
+      next: (info) => {
+        this.clinicInfo = info;
+        // Parse TimeSpan strings to HH:mm format for time inputs
+        this.openingTime = this.parseTimeSpan(info.openingTime);
+        this.closingTime = this.parseTimeSpan(info.closingTime);
+        this.appointmentDurationMinutes = info.appointmentDurationMinutes;
+        this.allowEmergencySlots = info.allowEmergencySlots;
+        this.enableOnlineAppointmentScheduling = info.enableOnlineAppointmentScheduling;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error loading clinic info:', err);
+        this.error = 'Erro ao carregar informações da clínica';
+        this.loading = false;
+      }
+    });
+  }
+
+  private parseTimeSpan(timeSpan: string): string {
+    // TimeSpan comes as "HH:mm:ss" or "HH:mm:ss.fffffff"
+    // We need "HH:mm" for HTML time input
+    if (!timeSpan) return '08:00';
+    const parts = timeSpan.split(':');
+    if (parts.length >= 2) {
+      // Validate and pad hours and minutes
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      
+      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        console.error('Invalid time format:', timeSpan);
+        return '08:00';
+      }
+      
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    }
+    return '08:00';
+  }
+
+  private formatTimeForBackend(time: string): string {
+    // Convert "HH:mm" to "HH:mm:ss" for backend
+    if (!time) return '08:00:00';
+    const parts = time.split(':');
+    if (parts.length >= 2) {
+      // Validate and pad hours and minutes
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      
+      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        console.error('Invalid time format:', time);
+        return '08:00:00';
+      }
+      
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+    }
+    return '08:00:00';
+  }
+
+  private parseTimeToMinutes(time: string): number {
+    // Convert "HH:mm" to total minutes for comparison
+    if (!time) return 0;
+    const parts = time.split(':');
+    if (parts.length >= 2) {
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      
+      if (isNaN(hours) || isNaN(minutes)) {
+        return 0;
+      }
+      
+      return hours * 60 + minutes;
+    }
+    return 0;
+  }
+
+  updateScheduleSettings(): void {
+    if (!this.clinicInfo) return;
+
+    // Validate times using proper time comparison
+    const opening = this.parseTimeToMinutes(this.openingTime);
+    const closing = this.parseTimeToMinutes(this.closingTime);
+    
+    if (opening >= closing) {
+      this.error = 'Horário de abertura deve ser antes do horário de fechamento';
+      return;
+    }
+
+    this.savingSchedule = true;
+    this.error = '';
+    this.success = '';
+
+    const request: UpdateClinicInfoRequest = {
+      openingTime: this.formatTimeForBackend(this.openingTime),
+      closingTime: this.formatTimeForBackend(this.closingTime),
+      appointmentDurationMinutes: this.appointmentDurationMinutes,
+      allowEmergencySlots: this.allowEmergencySlots,
+      enableOnlineAppointmentScheduling: this.enableOnlineAppointmentScheduling
+    };
+
+    this.clinicAdminService.updateClinicInfo(request).subscribe({
+      next: () => {
+        this.success = 'Configurações de horário atualizadas com sucesso!';
+        this.savingSchedule = false;
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          this.success = '';
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('Error updating schedule settings:', err);
+        this.error = 'Erro ao atualizar configurações de horário';
+        this.savingSchedule = false;
+      }
+    });
   }
 }
