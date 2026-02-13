@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
   BusinessConfiguration,
@@ -28,7 +29,7 @@ interface FeatureInfo {
 @Component({
   selector: 'app-business-configuration',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './business-configuration.component.html',
   styleUrls: ['./business-configuration.component.scss']
 })
