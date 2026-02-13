@@ -43,6 +43,7 @@ namespace MedicSoft.Application.Services
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
         private readonly IAnamnesisTemplateRepository _anamnesisTemplateRepository;
+        private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
         private readonly string _demoTenantId = "demo-clinic-001";
         private const string _demoDoctorCRM = "CRM-123456";
         private const string _demoDoctorSpecialty = "Clínico Geral";
@@ -77,7 +78,8 @@ namespace MedicSoft.Application.Services
             IHealthInsuranceOperatorRepository healthInsuranceOperatorRepository,
             IInvoiceRepository invoiceRepository,
             IConsultationFormProfileRepository consultationFormProfileRepository,
-            IAnamnesisTemplateRepository anamnesisTemplateRepository)
+            IAnamnesisTemplateRepository anamnesisTemplateRepository,
+            IBusinessConfigurationRepository businessConfigurationRepository)
         {
             _clinicRepository = clinicRepository;
             _userRepository = userRepository;
@@ -108,6 +110,7 @@ namespace MedicSoft.Application.Services
             _invoiceRepository = invoiceRepository;
             _consultationFormProfileRepository = consultationFormProfileRepository;
             _anamnesisTemplateRepository = anamnesisTemplateRepository;
+            _businessConfigurationRepository = businessConfigurationRepository;
         }
 
         public async Task SeedDemoDataAsync()
@@ -150,6 +153,15 @@ namespace MedicSoft.Application.Services
                 // 3. Create Demo Clinic
                 var clinic = CreateDemoClinic();
                 await _clinicRepository.AddWithoutSaveAsync(clinic);
+
+                // 3a. Create Business Configuration for the clinic
+                var businessConfig = new BusinessConfiguration(
+                    clinic.Id,
+                    BusinessType.SmallClinic,
+                    ProfessionalSpecialty.Medico,
+                    _demoTenantId
+                );
+                await _businessConfigurationRepository.AddWithoutSaveAsync(businessConfig);
 
                 // 4. Create Clinic Subscription
                 var clinicSubscription = CreateClinicSubscription(clinic.Id, subscriptionPlans[2].Id); // Standard plan

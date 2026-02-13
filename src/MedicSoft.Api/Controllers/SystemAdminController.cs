@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
@@ -30,6 +31,8 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordHasher _passwordHasher;
         private readonly MedicSoftDbContext _context;
         private readonly IOwnerService _ownerService;
+        private readonly BusinessConfigurationService _businessConfigService;
+        private readonly ILogger<SystemAdminController> _logger;
 
         public SystemAdminController(
             ITenantContext tenantContext,
@@ -39,7 +42,9 @@ namespace MedicSoft.Api.Controllers
             ISubscriptionPlanRepository planRepository,
             IPasswordHasher passwordHasher,
             MedicSoftDbContext context,
-            IOwnerService ownerService) : base(tenantContext)
+            IOwnerService ownerService,
+            BusinessConfigurationService businessConfigService,
+            ILogger<SystemAdminController> logger) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
             _subscriptionRepository = subscriptionRepository;
@@ -48,6 +53,8 @@ namespace MedicSoft.Api.Controllers
             _passwordHasher = passwordHasher;
             _context = context;
             _ownerService = ownerService;
+            _businessConfigService = businessConfigService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -160,6 +167,27 @@ namespace MedicSoft.Api.Controllers
                 );
 
                 await _clinicRepository.AddAsync(clinic);
+
+                // Create default business configuration for the clinic
+                try
+                {
+                    await _businessConfigService.CreateAsync(
+                        clinic.Id,
+                        Domain.Enums.BusinessType.SmallClinic, // Default to small clinic
+                        Domain.Enums.ProfessionalSpecialty.Medico, // Default to medical doctor
+                        tenantId
+                    );
+                    _logger.LogInformation(
+                        "Business configuration created successfully for clinic {ClinicId} with tenant {TenantId}",
+                        clinic.Id, tenantId);
+                }
+                catch (Exception ex)
+                {
+                    // Log but don't fail clinic creation if business config fails
+                    _logger.LogWarning(ex,
+                        "Failed to create business configuration for clinic {ClinicId} with tenant {TenantId}",
+                        clinic.Id, tenantId);
+                }
 
                 // Create owner for the clinic
                 var owner = await _ownerService.CreateOwnerAsync(
