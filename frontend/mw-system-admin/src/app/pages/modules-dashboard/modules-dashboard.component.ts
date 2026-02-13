@@ -53,7 +53,6 @@ export class ModulesDashboardComponent implements OnInit {
       adoption: this.moduleService.getModuleAdoption()
     }).subscribe({
       next: ({ usage, adoption }) => {
-        console.log('Dados carregados com sucesso:', { usage, adoption });
         this.moduleUsage = usage || [];
         this.moduleAdoption = adoption || [];
         this.totalModules = this.moduleUsage.length;
