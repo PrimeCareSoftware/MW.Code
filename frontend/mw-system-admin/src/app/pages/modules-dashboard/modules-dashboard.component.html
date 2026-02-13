@@ -11,8 +11,17 @@
     <mat-spinner></mat-spinner>
   </div>
 
+  <!-- Error Message -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadDashboardData()">
+      Tentar Novamente
+    </button>
+  </div>
+
   <!-- Dashboard Content -->
-  <div *ngIf="!loading" class="dashboard-content">
+  <div *ngIf="!loading && !error" class="dashboard-content">
     
     <!-- KPI Cards -->
     <mat-grid-list cols="4" rowHeight="120px" gutterSize="16px" class="kpi-grid">
@@ -85,25 +94,25 @@
                   <mat-icon [style.color]="getCategoryColor(module.category)">
                     extension
                   </mat-icon>
-                  <span class="module-name">{{ module.displayName }}</span>
+                  <span class="module-name">{{ module.displayName || 'N/A' }}</span>
                 </div>
               </td>
               <td>
                 <span class="category-badge" 
                       [style.background-color]="getCategoryColor(module.category)">
-                  {{ module.category }}
+                  {{ module.category || 'N/A' }}
                 </span>
               </td>
-              <td>{{ module.clinicsWithModuleEnabled }} / {{ module.totalClinics }}</td>
+              <td>{{ module.clinicsWithModuleEnabled || 0 }} / {{ module.totalClinics || 0 }}</td>
               <td>
                 <div class="adoption-cell">
                   <div class="adoption-bar">
                     <div class="adoption-fill" 
-                         [style.width.%]="module.adoptionRate"
-                         [ngClass]="getAdoptionClass(module.adoptionRate)">
+                         [style.width.%]="module.adoptionRate || 0"
+                         [ngClass]="getAdoptionClass(module.adoptionRate || 0)">
                     </div>
                   </div>
-                  <span class="adoption-text">{{ module.adoptionRate | number:'1.1-1' }}%</span>
+                  <span class="adoption-text">{{ module.adoptionRate || 0 | number:'1.1-1' }}%</span>
                 </div>
               </td>
               <td>
@@ -112,6 +121,11 @@
                         matTooltip="Ver detalhes">
                   <mat-icon>visibility</mat-icon>
                 </button>
+              </td>
+            </tr>
+            <tr *ngIf="moduleUsage.length === 0">
+              <td colspan="5" class="text-center">
+                <p>Nenhum módulo disponível no momento.</p>
               </td>
             </tr>
           </tbody>
