@@ -11,6 +11,7 @@ import { MOCK_PROCEDURES, MOCK_APPOINTMENT_PROCEDURES, MOCK_BILLING_SUMMARY } fr
 import { MOCK_EXAM_REQUESTS, MOCK_PENDING_EXAMS, MOCK_URGENT_EXAMS } from '../mocks/exam-request.mock';
 import { MOCK_MEDICAL_RECORDS } from '../mocks/medical-record.mock';
 import { MOCK_QUEUE_ENTRIES, MOCK_QUEUE_SUMMARY, MOCK_QUEUE_CONFIGURATION, MOCK_PUBLIC_QUEUE_DISPLAY } from '../mocks/waiting-queue.mock';
+import { MOCK_MODULE_USAGE, MOCK_MODULE_ADOPTION } from '../mocks/module.mock';
 
 /**
  * HTTP Interceptor for returning mocked data when useMockData flag is enabled
@@ -222,6 +223,14 @@ export const mockDataInterceptor: HttpInterceptorFn = (req, next) => {
   }
   if (url.match(/\/waiting-queue\/[^/]+\/triage$/) && method === 'PUT') {
     return of(new HttpResponse({ status: 204 })).pipe(delay(mockDelay));
+  }
+
+  // Module endpoints
+  if (url.includes('/system-admin/modules/usage') && method === 'GET') {
+    return of(new HttpResponse({ status: 200, body: MOCK_MODULE_USAGE })).pipe(delay(mockDelay));
+  }
+  if (url.includes('/system-admin/modules/adoption') && method === 'GET') {
+    return of(new HttpResponse({ status: 200, body: MOCK_MODULE_ADOPTION })).pipe(delay(mockDelay));
   }
 
   // If no mock matches, pass through to real API
