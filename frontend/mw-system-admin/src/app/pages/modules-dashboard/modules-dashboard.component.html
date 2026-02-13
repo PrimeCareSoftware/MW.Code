@@ -42,7 +42,7 @@
         <mat-card class="kpi-card">
           <mat-icon class="kpi-icon">trending_up</mat-icon>
           <div class="kpi-content">
-            <div class="kpi-value">{{ averageAdoption | number:'1.1-1' }}%</div>
+            <div class="kpi-value">{{ averageAdoption ?? 0 | number:'1.1-1' }}%</div>
             <div class="kpi-label">Taxa Média de Adoção</div>
           </div>
         </mat-card>
@@ -88,37 +88,38 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let module of moduleUsage">
+            <tr *ngFor="let module of moduleUsage; trackBy: trackByModuleName">
               <td>
                 <div class="module-cell">
-                  <mat-icon [style.color]="getCategoryColor(module.category)">
+                  <mat-icon [style.color]="getCategoryColor(module?.category || 'Core')">
                     extension
                   </mat-icon>
-                  <span class="module-name">{{ module.displayName || 'N/A' }}</span>
+                  <span class="module-name">{{ module?.displayName || module?.moduleName || 'N/A' }}</span>
                 </div>
               </td>
               <td>
                 <span class="category-badge" 
-                      [style.background-color]="getCategoryColor(module.category)">
-                  {{ module.category || 'N/A' }}
+                      [style.background-color]="getCategoryColor(module?.category || 'Core')">
+                  {{ module?.category || 'N/A' }}
                 </span>
               </td>
-              <td>{{ module.clinicsWithModuleEnabled || 0 }} / {{ module.totalClinics || 0 }}</td>
+              <td>{{ module?.clinicsWithModuleEnabled ?? 0 }} / {{ module?.totalClinics ?? 0 }}</td>
               <td>
                 <div class="adoption-cell">
                   <div class="adoption-bar">
                     <div class="adoption-fill" 
-                         [style.width.%]="module.adoptionRate || 0"
-                         [ngClass]="getAdoptionClass(module.adoptionRate || 0)">
+                         [style.width.%]="module?.adoptionRate ?? 0"
+                         [ngClass]="getAdoptionClass(module?.adoptionRate ?? 0)">
                     </div>
                   </div>
-                  <span class="adoption-text">{{ module.adoptionRate || 0 | number:'1.1-1' }}%</span>
+                  <span class="adoption-text">{{ module?.adoptionRate ?? 0 | number:'1.1-1' }}%</span>
                 </div>
               </td>
               <td>
                 <button mat-icon-button 
-                        [routerLink]="['/modules', module.moduleName]"
-                        matTooltip="Ver detalhes">
+                        [routerLink]="['/modules', module?.moduleName || '']"
+                        matTooltip="Ver detalhes"
+                        [disabled]="!module?.moduleName">
                   <mat-icon>visibility</mat-icon>
                 </button>
               </td>
