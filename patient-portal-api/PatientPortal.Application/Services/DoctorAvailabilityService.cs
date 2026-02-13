@@ -15,10 +15,10 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
     private readonly IClinicSettingsService _clinicSettings;
     private readonly ILogger<DoctorAvailabilityService> _logger;
 
-    // Default working hours (can be overridden by doctor schedule)
-    private readonly TimeSpan _defaultStartTime = new TimeSpan(8, 0, 0);  // 8 AM
-    private readonly TimeSpan _defaultEndTime = new TimeSpan(18, 0, 0);   // 6 PM
-    private const int DefaultAppointmentDuration = 30; // 30 minutes
+    // Default working hours (fallback if clinic settings are not available)
+    private readonly TimeSpan _fallbackStartTime = new TimeSpan(8, 0, 0);  // 8 AM
+    private readonly TimeSpan _fallbackEndTime = new TimeSpan(18, 0, 0);   // 6 PM
+    private const int FallbackAppointmentDuration = 30; // 30 minutes
 
     public DoctorAvailabilityService(
         IMainDatabaseContext mainDatabase,
@@ -82,7 +82,18 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
             // For each doctor, find available slots
             foreach (var doctor in doctors)
             {
-                var slots = await GetDoctorAvailableSlotsAsync(doctor.Id, date, clinicId, tenantId);
+                // Get clinic schedule settings
+                var scheduleSettings = await _clinicSettings.GetScheduleSettingsAsync(clinicId, tenantId);
+                
+                var slots = await GetDoctorAvailableSlotsAsync(
+                    doctor.Id, 
+                    date, 
+                    clinicId, 
+                    tenantId,
+                    scheduleSettings
+                );
+
+                var duration = scheduleSettings?.AppointmentDurationMinutes ?? FallbackAppointmentDuration;
 
                 foreach (var slot in slots)
                 {
@@ -92,7 +103,7 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
                         DoctorName = doctor.FullName,
                         Specialty = doctor.Specialty,
                         AvailableDate = slot,
-                        Duration = DefaultAppointmentDuration
+                        Duration = duration
                     });
                 }
             }
@@ -226,13 +237,23 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
         }
     }
 
-    private async Task<List<DateTime>> GetDoctorAvailableSlotsAsync(Guid doctorId, DateTime date, Guid clinicId, string tenantId)
+    private async Task<List<DateTime>> GetDoctorAvailableSlotsAsync(
+        Guid doctorId, 
+        DateTime date, 
+        Guid clinicId, 
+        string tenantId,
+        ClinicScheduleSettings? scheduleSettings)
     {
         var availableSlots = new List<DateTime>();
 
         // Skip past dates
         if (date.Date < DateTime.Today)
             return availableSlots;
+
+        // Use clinic settings or fallback defaults
+        var startTime = scheduleSettings?.OpeningTime ?? _fallbackStartTime;
+        var endTime = scheduleSettings?.ClosingTime ?? _fallbackEndTime;
+        var appointmentDuration = scheduleSettings?.AppointmentDurationMinutes ?? FallbackAppointmentDuration;
 
         // Get existing appointments for the doctor on this date
         var appointmentsQuery = @"
@@ -252,8 +273,8 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
             (int)AppointmentStatus.NoShow
         );
 
-        // Generate time slots for the day
-        var slots = GenerateTimeSlots(_defaultStartTime, _defaultEndTime, DefaultAppointmentDuration);
+        // Generate time slots for the day using clinic settings
+        var slots = GenerateTimeSlots(startTime, endTime, appointmentDuration);
 
         foreach (var slot in slots)
         {
@@ -268,7 +289,7 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
             {
                 var appointmentStart = a.ScheduledDate.Add(a.ScheduledTime);
                 var appointmentEnd = appointmentStart.AddMinutes(a.DurationMinutes);
-                var slotEnd = slotDateTime.AddMinutes(DefaultAppointmentDuration);
+                var slotEnd = slotDateTime.AddMinutes(appointmentDuration);
 
                 return slotDateTime < appointmentEnd && slotEnd > appointmentStart;
             });
