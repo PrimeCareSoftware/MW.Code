@@ -53,14 +53,30 @@ export class ModulesDashboardComponent implements OnInit {
       adoption: this.moduleService.getModuleAdoption()
     }).subscribe({
       next: ({ usage, adoption }) => {
+        console.log('[ModulesDashboard] Dados recebidos do backend:');
+        console.log('Usage data:', usage);
+        console.log('Adoption data:', adoption);
+        
         this.moduleUsage = usage || [];
         this.moduleAdoption = adoption || [];
         this.totalModules = this.moduleUsage.length;
         this.averageAdoption = this.calculateAverageAdoption();
+        
+        console.log('[ModulesDashboard] Dados processados:');
+        console.log('Total modules:', this.totalModules);
+        console.log('Average adoption:', this.averageAdoption);
+        console.log('Module usage array:', this.moduleUsage);
+        
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar dados:', error);
+        console.error('[ModulesDashboard] Erro ao carregar dados:', error);
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          url: error.url
+        });
         this.error = 'Erro ao carregar dados do dashboard. Por favor, tente novamente.';
         this.loading = false;
       }
@@ -99,5 +115,9 @@ export class ModulesDashboardComponent implements OnInit {
     if (this.moduleUsage.length === 0) return '-';
     const sorted = [...this.moduleUsage].sort((a, b) => a.adoptionRate - b.adoptionRate);
     return sorted[0]?.displayName || '-';
+  }
+
+  trackByModuleName(index: number, module: ModuleUsage): string {
+    return module?.moduleName || index.toString();
   }
 }
