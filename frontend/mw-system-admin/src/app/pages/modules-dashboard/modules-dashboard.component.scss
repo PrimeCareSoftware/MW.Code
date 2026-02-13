@@ -26,6 +26,30 @@
     color: var(--gray-500);
   }
 
+  .error-container {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--gray-700);
+    
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
+    
+    p {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  }
+
+  .text-center {
+    text-align: center;
+    padding: 24px;
+    color: var(--gray-500);
+  }
+
   .dashboard-content {
     display: flex;
     flex-direction: column;

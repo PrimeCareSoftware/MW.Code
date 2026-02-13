@@ -31,6 +31,7 @@ import { Navbar } from '../../shared/navbar/navbar';
 })
 export class ModulesDashboardComponent implements OnInit {
   loading = false;
+  error: string | null = null;
   moduleUsage: ModuleUsage[] = [];
   moduleAdoption: ModuleAdoption[] = [];
   totalModules = 0;
@@ -44,6 +45,7 @@ export class ModulesDashboardComponent implements OnInit {
 
   loadDashboardData(): void {
     this.loading = true;
+    this.error = null;
 
     // Carregar dados em paralelo usando forkJoin
     forkJoin({
@@ -51,6 +53,7 @@ export class ModulesDashboardComponent implements OnInit {
       adoption: this.moduleService.getModuleAdoption()
     }).subscribe({
       next: ({ usage, adoption }) => {
+        console.log('Dados carregados com sucesso:', { usage, adoption });
         this.moduleUsage = usage || [];
         this.moduleAdoption = adoption || [];
         this.totalModules = this.moduleUsage.length;
@@ -59,6 +62,7 @@ export class ModulesDashboardComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao carregar dados:', error);
+        this.error = 'Erro ao carregar dados do dashboard. Por favor, tente novamente.';
         this.loading = false;
       }
     });
