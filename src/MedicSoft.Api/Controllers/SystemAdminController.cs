@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
@@ -31,6 +32,7 @@ namespace MedicSoft.Api.Controllers
         private readonly MedicSoftDbContext _context;
         private readonly IOwnerService _ownerService;
         private readonly BusinessConfigurationService _businessConfigService;
+        private readonly ILogger<SystemAdminController> _logger;
 
         public SystemAdminController(
             ITenantContext tenantContext,
@@ -41,7 +43,8 @@ namespace MedicSoft.Api.Controllers
             IPasswordHasher passwordHasher,
             MedicSoftDbContext context,
             IOwnerService ownerService,
-            BusinessConfigurationService businessConfigService) : base(tenantContext)
+            BusinessConfigurationService businessConfigService,
+            ILogger<SystemAdminController> logger) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
             _subscriptionRepository = subscriptionRepository;
@@ -51,6 +54,7 @@ namespace MedicSoft.Api.Controllers
             _context = context;
             _ownerService = ownerService;
             _businessConfigService = businessConfigService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -173,11 +177,16 @@ namespace MedicSoft.Api.Controllers
                         Domain.Enums.ProfessionalSpecialty.Medico, // Default to medical doctor
                         tenantId
                     );
+                    _logger.LogInformation(
+                        "Business configuration created successfully for clinic {ClinicId} with tenant {TenantId}",
+                        clinic.Id, tenantId);
                 }
                 catch (Exception ex)
                 {
                     // Log but don't fail clinic creation if business config fails
-                    Console.WriteLine($"Warning: Failed to create business configuration: {ex.Message}");
+                    _logger.LogWarning(ex,
+                        "Failed to create business configuration for clinic {ClinicId} with tenant {TenantId}",
+                        clinic.Id, tenantId);
                 }
 
                 // Create owner for the clinic

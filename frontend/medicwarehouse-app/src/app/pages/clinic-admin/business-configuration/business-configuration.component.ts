@@ -33,6 +33,9 @@ interface FeatureInfo {
   styleUrls: ['./business-configuration.component.scss']
 })
 export class BusinessConfigurationComponent implements OnInit {
+  private readonly SUCCESS_MESSAGE_DURATION = 5000; // milliseconds
+  private readonly SCHEDULE_SUCCESS_MESSAGE_DURATION = 3000; // milliseconds
+  
   configuration: BusinessConfiguration | null = null;
   clinicInfo: ClinicAdminInfoDto | null = null;
   loading = false;
@@ -136,10 +139,10 @@ export class BusinessConfigurationComponent implements OnInit {
         this.loadTerminology(clinicId);
         this.success = 'Configuração padrão criada com sucesso! Você pode personalizá-la abaixo.';
         this.loading = false;
-        // Clear success message after 5 seconds
+        // Clear success message after configured duration
         setTimeout(() => {
           this.success = '';
-        }, 5000);
+        }, this.SUCCESS_MESSAGE_DURATION);
       },
       error: (err) => {
         console.error('Error creating default configuration:', err);
@@ -492,10 +495,10 @@ export class BusinessConfigurationComponent implements OnInit {
       next: () => {
         this.success = 'Configurações de horário atualizadas com sucesso!';
         this.savingSchedule = false;
-        // Clear success message after 3 seconds
+        // Clear success message after configured duration
         setTimeout(() => {
           this.success = '';
-        }, 3000);
+        }, this.SCHEDULE_SUCCESS_MESSAGE_DURATION);
       },
       error: (err) => {
         console.error('Error updating schedule settings:', err);
