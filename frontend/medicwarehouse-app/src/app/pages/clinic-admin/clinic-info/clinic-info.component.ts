@@ -38,8 +38,7 @@ export class ClinicInfoComponent implements OnInit {
     this.clinicForm = this.fb.group({
       phone: [''],
       email: [''],
-      address: [''],
-      workingHours: ['']
+      address: ['']
     });
 
     this.clinicModalForm = this.fb.group({
@@ -74,8 +73,7 @@ export class ClinicInfoComponent implements OnInit {
         this.clinicForm.patchValue({
           phone: data.phone || '',
           email: data.email || '',
-          address: data.address || '',
-          workingHours: data.workingHours || ''
+          address: data.address || ''
         });
         this.isLoading.set(false);
       },
