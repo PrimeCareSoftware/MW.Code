@@ -63,13 +63,15 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // In a real app, get clinicId from auth service
-    this.clinicId = localStorage.getItem('clinicId') || '';
-    
-    if (this.clinicId) {
-      this.loadQueueSummary();
-      this.startAutoRefresh();
+    this.clinicId = this.resolveClinicId();
+
+    if (!this.clinicId) {
+      this.error = 'Clínica não encontrada. Selecione uma clínica válida.';
+      return;
     }
+
+    this.loadQueueSummary();
+    this.startAutoRefresh();
   }
 
   ngOnDestroy(): void {
@@ -79,6 +81,12 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
   loadQueueSummary(): void {
     this.loading = true;
     this.error = null;
+
+    if (!this.clinicId) {
+      this.error = 'Clínica não encontrada. Selecione uma clínica válida.';
+      this.loading = false;
+      return;
+    }
 
     this.waitingQueueService.getQueueSummary(this.clinicId).subscribe({
       next: (summary) => {
@@ -94,6 +102,9 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
   }
 
   startAutoRefresh(): void {
+    if (!this.clinicId) {
+      return;
+    }
     this.autoRefreshSubscription = interval(this.AUTO_REFRESH_INTERVAL)
       .pipe(
         switchMap(() => this.waitingQueueService.getQueueSummary(this.clinicId))
@@ -112,6 +123,31 @@ export class QueueManagementComponent implements OnInit, OnDestroy {
     if (this.autoRefreshSubscription) {
       this.autoRefreshSubscription.unsubscribe();
     }
+  }
+
+  private resolveClinicId(): string {
+    const userInfoRaw = localStorage.getItem('user_info');
+    if (userInfoRaw) {
+      try {
+        const userInfo = JSON.parse(userInfoRaw);
+        if (userInfo.currentClinicId) return String(userInfo.currentClinicId);
+        if (userInfo.clinicId) return String(userInfo.clinicId);
+      } catch {
+        // ignore parse errors
+      }
+    }
+
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.clinic_id || payload.clinicId || '';
+      } catch {
+        // ignore parse errors
+      }
+    }
+
+    return '';
   }
 
   openTriageDialog(entry: WaitingQueueEntry): void {

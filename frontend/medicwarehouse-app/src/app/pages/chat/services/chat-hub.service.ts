@@ -29,6 +29,11 @@ export class ChatHubService {
   public connectionState$ = this.connectionStateSubject.asObservable();
 
   async startConnection(accessToken: string): Promise<void> {
+    if (!accessToken) {
+      console.warn('ChatHub not started: missing access token');
+      this.connectionStateSubject.next(HubConnectionState.Disconnected);
+      return;
+    }
     if (this.hubConnection?.state === HubConnectionState.Connected) {
       console.log('ChatHub already connected');
       return;
@@ -97,6 +102,10 @@ export class ChatHubService {
   }
 
   private scheduleReconnect(accessToken: string): void {
+    if (!accessToken) {
+      console.warn('ChatHub reconnect aborted: missing access token');
+      return;
+    }
     this.reconnectAttempts++;
     const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
     

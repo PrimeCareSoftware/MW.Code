@@ -58,12 +58,8 @@ export class ChatFabComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // Get current user ID from localStorage
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const user = JSON.parse(userData);
-      this.currentUserId = user.userId || user.id;
-    }
+    // Extract userId from JWT token
+    this.currentUserId = this.extractUserIdFromToken() || '';
 
     // Initialize SignalR connection
     await this.initializeHub();
@@ -71,6 +67,20 @@ export class ChatFabComponent implements OnInit, OnDestroy, AfterViewInit {
     // Load initial data
     await this.loadConversations();
     await this.loadUsers();
+  }
+
+  private extractUserIdFromToken(): string | null {
+    const token = localStorage.getItem('auth_token');
+    if (!token) return null;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Try different claim names that might contain the userId
+      return payload.sub || payload.userId || payload.nameid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || null;
+    } catch (error) {
+      console.error('Error parsing JWT token:', error);
+      return null;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -91,7 +101,7 @@ export class ChatFabComponent implements OnInit, OnDestroy, AfterViewInit {
   private async initializeHub(): Promise<void> {
     try {
       // Get access token
-      const token = localStorage.getItem('accessToken') || '';
+      const token = localStorage.getItem('auth_token') || '';
       
       await this.chatHubService.startConnection(token);
       this.isConnected.set(this.chatHubService.isConnected());

@@ -53,6 +53,16 @@ namespace MedicSoft.Application.Services
                 
                 return default;
             }
+            catch (InvalidOperationException ex)
+            {
+                // Handle invalid deserialization scenarios (e.g., parameterized constructors)
+                _logger.LogWarning(ex,
+                    "Failed to deserialize cache key {Key} due to invalid constructor binding. " +
+                    "Removing corrupted cache entry.", key);
+
+                await RemoveAsync(key);
+                return default;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unexpected error getting cache key: {Key}", key);

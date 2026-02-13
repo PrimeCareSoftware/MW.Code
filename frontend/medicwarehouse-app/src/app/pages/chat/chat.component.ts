@@ -90,9 +90,26 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     
-    // Use username as userId since there's no id field in UserInfo
-    this.currentUserId.set(user.username || '');
+    // Extract userId from JWT token
+    const userId = this.extractUserIdFromToken();
+    if (userId) {
+      this.currentUserId.set(userId);
+    }
     this.initializeChat();
+  }
+
+  private extractUserIdFromToken(): string | null {
+    const token = this.authService.getToken();
+    if (!token) return null;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // Try different claim names that might contain the userId
+      return payload.sub || payload.userId || payload.nameid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"] || null;
+    } catch (error) {
+      console.error('Error parsing JWT token:', error);
+      return null;
+    }
   }
 
   ngOnDestroy(): void {
