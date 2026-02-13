@@ -108,6 +108,8 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
         // Enable case-insensitive property name matching
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        // Use camelCase for JSON property names to match frontend expectations
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
 builder.Services.AddEndpointsApiExplorer();
 
