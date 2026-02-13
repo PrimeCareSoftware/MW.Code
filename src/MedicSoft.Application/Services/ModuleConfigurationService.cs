@@ -84,7 +84,11 @@ namespace MedicSoft.Application.Services
                 IsCore = moduleInfo.IsCore,
                 RequiredModules = moduleInfo.RequiredModules,
                 Configuration = config?.Configuration,
-                UpdatedAt = config?.UpdatedAt
+                UpdatedAt = config?.UpdatedAt,
+                RequiresConfiguration = moduleInfo.RequiresConfiguration,
+                ConfigurationType = moduleInfo.ConfigurationType,
+                ConfigurationExample = moduleInfo.ConfigurationExample,
+                ConfigurationHelp = moduleInfo.ConfigurationHelp
             };
         }
 
@@ -130,7 +134,11 @@ namespace MedicSoft.Application.Services
                     IsCore = moduleInfo.IsCore,
                     RequiredModules = moduleInfo.RequiredModules,
                     Configuration = config?.Configuration,
-                    UpdatedAt = config?.UpdatedAt
+                    UpdatedAt = config?.UpdatedAt,
+                    RequiresConfiguration = moduleInfo.RequiresConfiguration,
+                    ConfigurationType = moduleInfo.ConfigurationType,
+                    ConfigurationExample = moduleInfo.ConfigurationExample,
+                    ConfigurationHelp = moduleInfo.ConfigurationHelp
                 });
             }
 

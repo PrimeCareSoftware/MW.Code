@@ -538,6 +538,7 @@ builder.Services.AddScoped<ExternalServiceConfigurationService>();
 // Module Configuration Services
 builder.Services.AddScoped<IModuleConfigurationService, ModuleConfigurationService>();
 builder.Services.AddScoped<IModuleAnalyticsService, ModuleAnalyticsService>();
+builder.Services.AddScoped<IModuleConfigurationValidator, ModuleConfigurationValidator>();
 
 // Digital Prescriptions and SNGPC Services
 builder.Services.AddScoped<ISNGPCXmlGeneratorService, SNGPCXmlGeneratorService>();

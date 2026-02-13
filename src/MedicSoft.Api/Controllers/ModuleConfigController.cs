@@ -25,18 +25,21 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IModuleConfigurationService _moduleConfigService;
+        private readonly IModuleConfigurationValidator _configValidator;
 
         public ModuleConfigController(
             ITenantContext tenantContext,
             MedicSoftDbContext context,
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
-            IModuleConfigurationService moduleConfigService) : base(tenantContext)
+            IModuleConfigurationService moduleConfigService,
+            IModuleConfigurationValidator configValidator) : base(tenantContext)
         {
             _context = context;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _moduleConfigService = moduleConfigService;
+            _configValidator = configValidator;
         }
 
         /// <summary>
@@ -282,7 +285,11 @@ namespace MedicSoft.Api.Controllers
                 Icon = m.Icon,
                 IsCore = m.IsCore,
                 RequiredModules = m.RequiredModules,
-                MinimumPlan = m.MinimumPlan.ToString()
+                MinimumPlan = m.MinimumPlan.ToString(),
+                RequiresConfiguration = m.RequiresConfiguration,
+                ConfigurationType = m.ConfigurationType,
+                ConfigurationExample = m.ConfigurationExample,
+                ConfigurationHelp = m.ConfigurationHelp
             });
 
             return Ok(result);
@@ -385,6 +392,59 @@ namespace MedicSoft.Api.Controllers
             return Ok(new { message = $"Module {moduleName} enabled successfully" });
         }
 
+        /// <summary>
+        /// Validate module configuration JSON
+        /// </summary>
+        /// <param name="request">Request containing module name and configuration JSON</param>
+        /// <returns>Validation result with errors if any</returns>
+        /// <response code="200">Validation completed</response>
+        /// <remarks>
+        /// Validates configuration JSON against module-specific schema.
+        /// Returns detailed validation errors for each field.
+        /// 
+        /// Sample request:
+        /// 
+        ///     POST /api/ModuleConfig/validate-configuration
+        ///     {
+        ///       "moduleName": "WhatsAppIntegration",
+        ///       "configurationJson": "{\"apiKey\": \"test\", \"phoneNumber\": \"+5511999999999\"}"
+        ///     }
+        /// </remarks>
+        [HttpPost("validate-configuration")]
+        [ProducesResponseType(typeof(ConfigurationValidationResult), StatusCodes.Status200OK)]
+        public ActionResult<ConfigurationValidationResult> ValidateConfiguration(
+            [FromBody] ValidateConfigurationRequest request)
+        {
+            var result = _configValidator.ValidateConfiguration(request.ModuleName, request.ConfigurationJson);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get default configuration for a module
+        /// </summary>
+        /// <param name="moduleName">Name of the module</param>
+        /// <returns>Default configuration JSON</returns>
+        /// <response code="200">Default configuration returned</response>
+        /// <response code="404">Module not found or doesn't require configuration</response>
+        /// <remarks>
+        /// Returns a default configuration template with recommended values.
+        /// Use this as a starting point when configuring a module.
+        /// </remarks>
+        [HttpGet("{moduleName}/default-configuration")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<string> GetDefaultConfiguration(string moduleName)
+        {
+            var defaultConfig = _configValidator.GetDefaultConfiguration(moduleName);
+            
+            if (defaultConfig == null)
+            {
+                return NotFound(new { message = $"Module {moduleName} does not require configuration or was not found" });
+            }
+
+            return Ok(new { moduleName, configuration = defaultConfig });
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
@@ -465,5 +525,21 @@ namespace MedicSoft.Api.Controllers
         /// Error message if validation failed
         /// </summary>
         public string ErrorMessage { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// Request object for validating module configuration
+    /// </summary>
+    public class ValidateConfigurationRequest
+    {
+        /// <summary>
+        /// Name of the module
+        /// </summary>
+        public string ModuleName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Configuration JSON to validate
+        /// </summary>
+        public string? ConfigurationJson { get; set; }
     }
 }
