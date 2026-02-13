@@ -110,7 +110,40 @@ export class BusinessConfigurationComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading configuration:', err);
-        this.error = 'Erro ao carregar configuração. A clínica pode não ter sido configurada ainda.';
+        // If configuration doesn't exist, create a default one
+        if (err.status === 404) {
+          this.createDefaultConfiguration(selectedClinic.clinicId);
+        } else {
+          this.error = 'Erro ao carregar configuração. A clínica pode não ter sido configurada ainda.';
+          this.loading = false;
+        }
+      }
+    });
+  }
+
+  private createDefaultConfiguration(clinicId: string): void {
+    // Create default configuration
+    const dto = {
+      clinicId: clinicId,
+      businessType: BusinessType.SmallClinic,
+      primarySpecialty: ProfessionalSpecialty.Medico
+    };
+
+    this.businessConfigService.create(dto).subscribe({
+      next: (config) => {
+        this.configuration = config;
+        this.buildFeatureCategories();
+        this.loadTerminology(clinicId);
+        this.success = 'Configuração padrão criada com sucesso! Você pode personalizá-la abaixo.';
+        this.loading = false;
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          this.success = '';
+        }, 5000);
+      },
+      error: (err) => {
+        console.error('Error creating default configuration:', err);
+        this.error = 'Erro ao criar configuração padrão. Entre em contato com o suporte.';
         this.loading = false;
       }
     });

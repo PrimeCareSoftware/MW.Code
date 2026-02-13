@@ -30,6 +30,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordHasher _passwordHasher;
         private readonly MedicSoftDbContext _context;
         private readonly IOwnerService _ownerService;
+        private readonly BusinessConfigurationService _businessConfigService;
 
         public SystemAdminController(
             ITenantContext tenantContext,
@@ -39,7 +40,8 @@ namespace MedicSoft.Api.Controllers
             ISubscriptionPlanRepository planRepository,
             IPasswordHasher passwordHasher,
             MedicSoftDbContext context,
-            IOwnerService ownerService) : base(tenantContext)
+            IOwnerService ownerService,
+            BusinessConfigurationService businessConfigService) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
             _subscriptionRepository = subscriptionRepository;
@@ -48,6 +50,7 @@ namespace MedicSoft.Api.Controllers
             _passwordHasher = passwordHasher;
             _context = context;
             _ownerService = ownerService;
+            _businessConfigService = businessConfigService;
         }
 
         /// <summary>
@@ -160,6 +163,22 @@ namespace MedicSoft.Api.Controllers
                 );
 
                 await _clinicRepository.AddAsync(clinic);
+
+                // Create default business configuration for the clinic
+                try
+                {
+                    await _businessConfigService.CreateAsync(
+                        clinic.Id,
+                        Domain.Enums.BusinessType.SmallClinic, // Default to small clinic
+                        Domain.Enums.ProfessionalSpecialty.Medico, // Default to medical doctor
+                        tenantId
+                    );
+                }
+                catch (Exception ex)
+                {
+                    // Log but don't fail clinic creation if business config fails
+                    Console.WriteLine($"Warning: Failed to create business configuration: {ex.Message}");
+                }
 
                 // Create owner for the clinic
                 var owner = await _ownerService.CreateOwnerAsync(
