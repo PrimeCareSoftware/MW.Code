@@ -381,26 +381,64 @@ export class BusinessConfigurationComponent implements OnInit {
     if (!timeSpan) return '08:00';
     const parts = timeSpan.split(':');
     if (parts.length >= 2) {
-      return `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}`;
+      // Validate and pad hours and minutes
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      
+      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        console.error('Invalid time format:', timeSpan);
+        return '08:00';
+      }
+      
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     }
-    return timeSpan;
+    return '08:00';
   }
 
   private formatTimeForBackend(time: string): string {
     // Convert "HH:mm" to "HH:mm:ss" for backend
     if (!time) return '08:00:00';
     const parts = time.split(':');
-    if (parts.length === 2) {
-      return `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}:00`;
+    if (parts.length >= 2) {
+      // Validate and pad hours and minutes
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      
+      if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        console.error('Invalid time format:', time);
+        return '08:00:00';
+      }
+      
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
     }
-    return time;
+    return '08:00:00';
+  }
+
+  private parseTimeToMinutes(time: string): number {
+    // Convert "HH:mm" to total minutes for comparison
+    if (!time) return 0;
+    const parts = time.split(':');
+    if (parts.length >= 2) {
+      const hours = parseInt(parts[0], 10);
+      const minutes = parseInt(parts[1], 10);
+      
+      if (isNaN(hours) || isNaN(minutes)) {
+        return 0;
+      }
+      
+      return hours * 60 + minutes;
+    }
+    return 0;
   }
 
   updateScheduleSettings(): void {
     if (!this.clinicInfo) return;
 
-    // Validate times
-    if (this.openingTime >= this.closingTime) {
+    // Validate times using proper time comparison
+    const opening = this.parseTimeToMinutes(this.openingTime);
+    const closing = this.parseTimeToMinutes(this.closingTime);
+    
+    if (opening >= closing) {
       this.error = 'Horário de abertura deve ser antes do horário de fechamento';
       return;
     }

@@ -79,12 +79,13 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
                 parameters.ToArray()
             );
 
+            // Get clinic schedule settings once for all doctors
+            var scheduleSettings = await _clinicSettings.GetScheduleSettingsAsync(clinicId, tenantId);
+            var duration = scheduleSettings?.AppointmentDurationMinutes ?? FallbackAppointmentDuration;
+
             // For each doctor, find available slots
             foreach (var doctor in doctors)
             {
-                // Get clinic schedule settings
-                var scheduleSettings = await _clinicSettings.GetScheduleSettingsAsync(clinicId, tenantId);
-                
                 var slots = await GetDoctorAvailableSlotsAsync(
                     doctor.Id, 
                     date, 
@@ -92,8 +93,6 @@ public class DoctorAvailabilityService : IDoctorAvailabilityService
                     tenantId,
                     scheduleSettings
                 );
-
-                var duration = scheduleSettings?.AppointmentDurationMinutes ?? FallbackAppointmentDuration;
 
                 foreach (var slot in slots)
                 {
