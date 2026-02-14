@@ -1,0 +1,321 @@
+<app-navbar></app-navbar>
+
+<div class="business-config-management">
+  <div class="header">
+    <div>
+      <button class="btn-back" (click)="goBack()">← Voltar</button>
+      <h1>Configuração de Negócio</h1>
+      <p class="subtitle">Gerencie as configurações e funcionalidades da clínica</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">Carregando configurações...</div>
+  } @else if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  } @else if (config()) {
+    <div class="config-container">
+      @if (successMessage()) {
+        <div class="success-message">{{ successMessage() }}</div>
+      }
+      
+      @if (saveError()) {
+        <div class="error-message">{{ saveError() }}</div>
+      }
+
+      <!-- Business Type and Specialty Section -->
+      <div class="config-section">
+        <h2>Informações Básicas</h2>
+        <div class="config-grid">
+          <div class="config-item">
+            <label>Tipo de Negócio</label>
+            <select 
+              [(ngModel)]="config()!.businessType" 
+              (change)="updateBusinessType(config()!.businessType)"
+              [disabled]="saving()"
+            >
+              <option [value]="businessTypeEnum.SoloPractitioner">Profissional Solo</option>
+              <option [value]="businessTypeEnum.SmallClinic">Clínica Pequena (2-5 profissionais)</option>
+              <option [value]="businessTypeEnum.MediumClinic">Clínica Média (6-20 profissionais)</option>
+              <option [value]="businessTypeEnum.LargeClinic">Clínica Grande (20+ profissionais)</option>
+            </select>
+          </div>
+
+          <div class="config-item">
+            <label>Especialidade Principal</label>
+            <select 
+              [(ngModel)]="config()!.primarySpecialty" 
+              (change)="updatePrimarySpecialty(config()!.primarySpecialty)"
+              [disabled]="saving()"
+            >
+              <option [value]="specialtyEnum.Medico">Médico</option>
+              <option [value]="specialtyEnum.Psicologo">Psicólogo</option>
+              <option [value]="specialtyEnum.Nutricionista">Nutricionista</option>
+              <option [value]="specialtyEnum.Fisioterapeuta">Fisioterapeuta</option>
+              <option [value]="specialtyEnum.Dentista">Dentista</option>
+              <option [value]="specialtyEnum.Enfermeiro">Enfermeiro</option>
+              <option [value]="specialtyEnum.TerapeutaOcupacional">Terapeuta Ocupacional</option>
+              <option [value]="specialtyEnum.Fonoaudiologo">Fonoaudiólogo</option>
+              <option [value]="specialtyEnum.Veterinario">Veterinário</option>
+              <option [value]="specialtyEnum.Outro">Outro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clinical Features -->
+      <div class="config-section">
+        <h2>Funcionalidades Clínicas</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.electronicPrescription"
+                (change)="toggleFeature('ElectronicPrescription', config()!.electronicPrescription)"
+                [disabled]="saving()"
+              />
+              <span>Prescrição Eletrônica</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.labIntegration"
+                (change)="toggleFeature('LabIntegration', config()!.labIntegration)"
+                [disabled]="saving()"
+              />
+              <span>Integração com Laboratório</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.vaccineControl"
+                (change)="toggleFeature('VaccineControl', config()!.vaccineControl)"
+                [disabled]="saving()"
+              />
+              <span>Controle de Vacinas</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.inventoryManagement"
+                (change)="toggleFeature('InventoryManagement', config()!.inventoryManagement)"
+                [disabled]="saving()"
+              />
+              <span>Gestão de Estoque</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Administrative Features -->
+      <div class="config-section">
+        <h2>Funcionalidades Administrativas</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.multiRoom"
+                (change)="toggleFeature('MultiRoom', config()!.multiRoom)"
+                [disabled]="saving()"
+              />
+              <span>Múltiplas Salas</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.receptionQueue"
+                (change)="toggleFeature('ReceptionQueue', config()!.receptionQueue)"
+                [disabled]="saving()"
+              />
+              <span>Fila de Recepção</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.financialModule"
+                (change)="toggleFeature('FinancialModule', config()!.financialModule)"
+                [disabled]="saving()"
+              />
+              <span>Módulo Financeiro</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.healthInsurance"
+                (change)="toggleFeature('HealthInsurance', config()!.healthInsurance)"
+                [disabled]="saving()"
+              />
+              <span>Convênios Médicos</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Consultation Features -->
+      <div class="config-section">
+        <h2>Funcionalidades de Consulta</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.telemedicine"
+                (change)="toggleFeature('Telemedicine', config()!.telemedicine)"
+                [disabled]="saving()"
+              />
+              <span>Telemedicina</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.homeVisit"
+                (change)="toggleFeature('HomeVisit', config()!.homeVisit)"
+                [disabled]="saving()"
+              />
+              <span>Visita Domiciliar</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.groupSessions"
+                (change)="toggleFeature('GroupSessions', config()!.groupSessions)"
+                [disabled]="saving()"
+              />
+              <span>Sessões em Grupo</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing Features -->
+      <div class="config-section">
+        <h2>Funcionalidades de Marketing</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.publicProfile"
+                (change)="toggleFeature('PublicProfile', config()!.publicProfile)"
+                [disabled]="saving()"
+              />
+              <span>Perfil Público</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.onlineBooking"
+                (change)="toggleFeature('OnlineBooking', config()!.onlineBooking)"
+                [disabled]="saving()"
+              />
+              <span>Agendamento Online</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.patientReviews"
+                (change)="toggleFeature('PatientReviews', config()!.patientReviews)"
+                [disabled]="saving()"
+              />
+              <span>Avaliações de Pacientes</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Features -->
+      <div class="config-section">
+        <h2>Funcionalidades Avançadas</h2>
+        <div class="features-grid">
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.biReports"
+                (change)="toggleFeature('BiReports', config()!.biReports)"
+                [disabled]="saving()"
+              />
+              <span>Relatórios BI</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.apiAccess"
+                (change)="toggleFeature('ApiAccess', config()!.apiAccess)"
+                [disabled]="saving()"
+              />
+              <span>Acesso API</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.whiteLabel"
+                (change)="toggleFeature('WhiteLabel', config()!.whiteLabel)"
+                [disabled]="saving()"
+              />
+              <span>White Label</span>
+            </label>
+          </div>
+
+          <div class="feature-item">
+            <label class="feature-label">
+              <input 
+                type="checkbox" 
+                [checked]="config()!.creditCardPayments"
+                (change)="toggleFeature('CreditCardPayments', config()!.creditCardPayments)"
+                [disabled]="saving()"
+              />
+              <span>Pagamentos com Cartão de Crédito</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metadata -->
+      <div class="config-section metadata">
+        <p><strong>Criado em:</strong> {{ config()!.createdAt | date:'short' }}</p>
+        @if (config()!.updatedAt) {
+          <p><strong>Atualizado em:</strong> {{ config()!.updatedAt | date:'short' }}</p>
+        }
+      </div>
+    </div>
+  }
+</div>

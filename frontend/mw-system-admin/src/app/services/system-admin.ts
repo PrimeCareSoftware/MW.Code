@@ -28,7 +28,12 @@ import {
   ClinicFilter,
   CrossTenantUser,
   CrossTenantUserFilter,
-  BulkActionRequest
+  BulkActionRequest,
+  BusinessConfiguration,
+  CreateBusinessConfigurationRequest,
+  UpdateBusinessTypeRequest,
+  UpdatePrimarySpecialtyRequest,
+  UpdateFeatureRequest
 } from '../models/system-admin.model';
 
 @Injectable({
@@ -456,6 +461,45 @@ export class SystemAdminService {
       request,
       { responseType: 'blob' }
     );
+  }
+
+  // Business Configuration Management
+
+  /**
+   * Get business configuration for a clinic
+   */
+  getBusinessConfiguration(clinicId: string, tenantId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/business-configuration/clinic/${clinicId}`, {
+      params: { tenantId }
+    });
+  }
+
+  /**
+   * Create business configuration for a clinic
+   */
+  createBusinessConfiguration(request: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/business-configuration`, request);
+  }
+
+  /**
+   * Update business type
+   */
+  updateBusinessType(configId: string, request: any): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/business-configuration/${configId}/business-type`, request);
+  }
+
+  /**
+   * Update primary specialty
+   */
+  updatePrimarySpecialty(configId: string, request: any): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/business-configuration/${configId}/primary-specialty`, request);
+  }
+
+  /**
+   * Update feature flag
+   */
+  updateFeature(configId: string, request: any): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/business-configuration/${configId}/feature`, request);
   }
 }
 

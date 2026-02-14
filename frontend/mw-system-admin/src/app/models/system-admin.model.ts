@@ -64,6 +64,8 @@ export interface CreateClinicRequest {
   ownerPassword: string;
   ownerFullName: string;
   planId: string;
+  businessType?: number;
+  primarySpecialty?: number;
 }
 
 export interface SystemOwner {
@@ -628,4 +630,89 @@ export interface BehaviorCohort {
   month: string;
   size: number;
   features: { [key: string]: number[] };
+}
+
+// Business Configuration Enums
+export enum BusinessType {
+  SoloPractitioner = 1,
+  SmallClinic = 2,
+  MediumClinic = 3,
+  LargeClinic = 4
+}
+
+export enum ProfessionalSpecialty {
+  Medico = 1,
+  Psicologo = 2,
+  Nutricionista = 3,
+  Fisioterapeuta = 4,
+  Dentista = 5,
+  Enfermeiro = 6,
+  TerapeutaOcupacional = 7,
+  Fonoaudiologo = 8,
+  Veterinario = 9,
+  Outro = 99
+}
+
+// Business Configuration Interfaces
+export interface BusinessConfiguration {
+  id: string;
+  clinicId: string;
+  businessType: BusinessType;
+  primarySpecialty: ProfessionalSpecialty;
+  
+  // Clinical Features
+  electronicPrescription: boolean;
+  labIntegration: boolean;
+  vaccineControl: boolean;
+  inventoryManagement: boolean;
+  
+  // Administrative Features
+  multiRoom: boolean;
+  receptionQueue: boolean;
+  financialModule: boolean;
+  healthInsurance: boolean;
+  
+  // Consultation Features
+  telemedicine: boolean;
+  homeVisit: boolean;
+  groupSessions: boolean;
+  
+  // Marketing Features
+  publicProfile: boolean;
+  onlineBooking: boolean;
+  patientReviews: boolean;
+  
+  // Advanced Features
+  biReports: boolean;
+  apiAccess: boolean;
+  whiteLabel: boolean;
+  
+  // Payment Features
+  creditCardPayments: boolean;
+  
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface CreateBusinessConfigurationRequest {
+  clinicId: string;
+  businessType: BusinessType;
+  primarySpecialty: ProfessionalSpecialty;
+  tenantId: string;
+}
+
+export interface UpdateBusinessTypeRequest {
+  businessType: BusinessType;
+  tenantId: string;
+}
+
+export interface UpdatePrimarySpecialtyRequest {
+  primarySpecialty: ProfessionalSpecialty;
+  tenantId: string;
+}
+
+export interface UpdateFeatureRequest {
+  featureName: string;
+  enabled: boolean;
+  tenantId: string;
 }

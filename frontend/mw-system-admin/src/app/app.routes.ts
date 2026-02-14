@@ -44,6 +44,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/clinics/clinic-detail').then(m => m.ClinicDetail),
     canActivate: [systemAdminGuard]
   },
+  {
+    path: 'clinics/business-config/manage',
+    loadComponent: () => import('./pages/clinics/business-config-management').then(m => m.BusinessConfigManagement),
+    canActivate: [systemAdminGuard]
+  },
   
   // Subscription Plans Management
   {
