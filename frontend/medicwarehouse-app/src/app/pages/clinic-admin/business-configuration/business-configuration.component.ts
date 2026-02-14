@@ -508,4 +508,42 @@ export class BusinessConfigurationComponent implements OnInit {
       }
     });
   }
+
+  createConfiguration(): void {
+    const selectedClinic = this.clinicSelectionService.currentClinic();
+    if (!selectedClinic) {
+      this.error = 'Nenhuma clínica selecionada';
+      return;
+    }
+
+    this.saving = true;
+    this.error = '';
+    this.success = '';
+
+    // Create default configuration
+    const dto = {
+      clinicId: selectedClinic.clinicId,
+      businessType: BusinessType.SmallClinic,
+      primarySpecialty: ProfessionalSpecialty.Medico
+    };
+
+    this.businessConfigService.create(dto).subscribe({
+      next: (config) => {
+        this.configuration = config;
+        this.buildFeatureCategories();
+        this.loadTerminology(selectedClinic.clinicId);
+        this.success = 'Configuração criada com sucesso! Você pode personalizá-la abaixo.';
+        this.saving = false;
+        // Clear success message after configured duration
+        setTimeout(() => {
+          this.success = '';
+        }, this.SUCCESS_MESSAGE_DURATION);
+      },
+      error: (err) => {
+        console.error('Error creating configuration:', err);
+        this.error = err.error?.message || 'Erro ao criar configuração. Tente novamente.';
+        this.saving = false;
+      }
+    });
+  }
 }

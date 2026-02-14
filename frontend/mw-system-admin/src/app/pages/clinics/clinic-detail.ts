@@ -248,6 +248,18 @@ export class ClinicDetail implements OnInit {
     }
   }
 
+  navigateToBusinessConfig(): void {
+    const c = this.clinic();
+    if (c) {
+      this.router.navigate(['/clinics/business-config'], { 
+        queryParams: { 
+          clinicId: c.id,
+          tenantId: c.tenantId
+        } 
+      });
+    }
+  }
+
   goBack(): void {
     this.router.navigate(['/clinics']);
   }
