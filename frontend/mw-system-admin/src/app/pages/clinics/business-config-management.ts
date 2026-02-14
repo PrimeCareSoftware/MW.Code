@@ -179,12 +179,12 @@ export class BusinessConfigManagement implements OnInit {
     this.systemAdminService.createBusinessConfiguration(request).subscribe({
       next: (config) => {
         this.config.set(config);
-        this.successMessage.set('Configuração criada com sucesso! Você pode personalizá-la abaixo.');
+        this.successMessage.set('Configuration created successfully! You can customize it below.');
         this.saving.set(false);
         setTimeout(() => this.successMessage.set(null), 5000);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Falha ao criar configuração');
+        this.saveError.set(err.error?.message || 'Failed to create configuration');
         this.saving.set(false);
       }
     });
