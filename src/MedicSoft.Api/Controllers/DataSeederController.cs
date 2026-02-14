@@ -352,5 +352,36 @@ namespace MedicSoft.Api.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// Seed business configurations for existing clinics
+        /// Creates default business configuration for clinics that don't have one
+        /// WARNING: This endpoint should be disabled in production after initial migration
+        /// </summary>
+        [HttpPost("seed-business-configurations")]
+        public async Task<ActionResult> SeedBusinessConfigurations()
+        {
+            try
+            {
+                var count = await _seederService.SeedBusinessConfigurationsAsync();
+                
+                return Ok(new
+                {
+                    message = $"Business configurations seeded successfully for {count} clinic(s)",
+                    clinicsUpdated = count,
+                    note = count == 0 
+                        ? "All clinics already have business configurations" 
+                        : $"{count} clinic(s) now have default business configurations (SmallClinic/Medico)"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "An error occurred while seeding business configurations",
+                    details = ex.Message
+                });
+            }
+        }
     }
 }

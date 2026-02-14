@@ -37,6 +37,9 @@ namespace MedicSoft.Application.DTOs
         public bool ApiAccess { get; set; }
         public bool WhiteLabel { get; set; }
         
+        // Payment Features
+        public bool CreditCardPayments { get; set; }
+        
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

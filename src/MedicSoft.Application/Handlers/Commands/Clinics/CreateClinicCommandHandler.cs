@@ -3,6 +3,7 @@ using MediatR;
 using MedicSoft.Application.Commands.Clinics;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Entities;
+using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Application.Handlers.Commands.Clinics
@@ -13,6 +14,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
         private readonly IOwnerClinicLinkRepository _ownerClinicLinkRepository;
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
+        private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
         private readonly IMapper _mapper;
 
         public CreateClinicCommandHandler(
@@ -20,12 +22,14 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             IOwnerClinicLinkRepository ownerClinicLinkRepository,
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
+            IBusinessConfigurationRepository businessConfigurationRepository,
             IMapper mapper)
         {
             _clinicRepository = clinicRepository;
             _ownerClinicLinkRepository = ownerClinicLinkRepository;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
+            _businessConfigurationRepository = businessConfigurationRepository;
             _mapper = mapper;
         }
 
@@ -85,6 +89,18 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
                 ownershipPercentage: 100
             );
             await _ownerClinicLinkRepository.AddAsync(ownerLink);
+
+            // Automatically create business configuration for the clinic
+            var businessType = (BusinessType)request.Clinic.BusinessType;
+            var primarySpecialty = (ProfessionalSpecialty)request.Clinic.PrimarySpecialty;
+            
+            var businessConfig = new BusinessConfiguration(
+                createdClinic.Id,
+                businessType,
+                primarySpecialty,
+                request.TenantId
+            );
+            await _businessConfigurationRepository.AddAsync(businessConfig);
 
             return _mapper.Map<ClinicDto>(createdClinic);
         }
