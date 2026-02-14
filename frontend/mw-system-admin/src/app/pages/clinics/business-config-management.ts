@@ -27,6 +27,7 @@ export class BusinessConfigManagement implements OnInit {
   saving = signal(false);
   saveError = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+  configNotFound = signal(false);
   
   clinicId: string | null = null;
   tenantId: string | null = null;
@@ -60,6 +61,7 @@ export class BusinessConfigManagement implements OnInit {
     
     this.loading.set(true);
     this.error.set(null);
+    this.configNotFound.set(false);
 
     this.systemAdminService.getBusinessConfiguration(this.clinicId, this.tenantId).subscribe({
       next: (data) => {
@@ -67,7 +69,13 @@ export class BusinessConfigManagement implements OnInit {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set(err.error?.message || 'Failed to load business configuration');
+        // Check if it's a 404 (configuration not found)
+        if (err.status === 404) {
+          this.configNotFound.set(true);
+          this.error.set('Business configuration not found for this clinic');
+        } else {
+          this.error.set(err.error?.message || 'Failed to load business configuration');
+        }
         this.loading.set(false);
       }
     });
@@ -158,6 +166,7 @@ export class BusinessConfigManagement implements OnInit {
     this.saving.set(true);
     this.saveError.set(null);
     this.error.set(null);
+    this.configNotFound.set(false);
 
     // Create default configuration
     const request = {

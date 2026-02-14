@@ -115,7 +115,7 @@ export class BusinessConfigurationComponent implements OnInit {
               this.loadClinicInfo();
             } else {
               // This shouldn't happen, but handle it gracefully
-              console.warn('Clinics available but currentClinic not set, retrying...');
+              console.warn('Clinics available but currentClinic not set, setting manually...');
               // Force set the current clinic to the preferred or first one
               const preferred = clinics.find(c => c.isPreferred) || clinics[0];
               this.clinicSelectionService.currentClinic.set(preferred);

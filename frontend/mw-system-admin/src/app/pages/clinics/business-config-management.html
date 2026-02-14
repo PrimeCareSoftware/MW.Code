@@ -14,7 +14,7 @@
   } @else if (error()) {
     <div class="error-message">
       {{ error() }}
-      @if (error()?.includes('not found')) {
+      @if (configNotFound()) {
         <div class="create-config-prompt">
           <p>Esta clínica ainda não possui uma configuração de negócio.</p>
           <button class="btn-create" (click)="createConfiguration()" [disabled]="saving()">
