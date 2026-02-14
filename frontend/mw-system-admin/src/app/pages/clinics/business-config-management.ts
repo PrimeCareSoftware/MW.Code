@@ -21,12 +21,16 @@ import { Navbar } from '../../shared/navbar/navbar';
   styleUrl: './business-config-management.scss'
 })
 export class BusinessConfigManagement implements OnInit {
+  private readonly SUCCESS_MESSAGE_DURATION_MS = 5000;
+  private readonly SHORT_SUCCESS_MESSAGE_DURATION_MS = 3000;
+  
   config = signal<BusinessConfiguration | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
   saving = signal(false);
   saveError = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+  configNotFound = signal(false);
   
   clinicId: string | null = null;
   tenantId: string | null = null;
@@ -60,6 +64,7 @@ export class BusinessConfigManagement implements OnInit {
     
     this.loading.set(true);
     this.error.set(null);
+    this.configNotFound.set(false);
 
     this.systemAdminService.getBusinessConfiguration(this.clinicId, this.tenantId).subscribe({
       next: (data) => {
@@ -67,7 +72,13 @@ export class BusinessConfigManagement implements OnInit {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set(err.error?.message || 'Failed to load business configuration');
+        // Check if it's a 404 (configuration not found)
+        if (err.status === 404) {
+          this.configNotFound.set(true);
+          this.error.set('Configuração de negócio não encontrada para esta clínica');
+        } else {
+          this.error.set(err.error?.message || 'Falha ao carregar configuração de negócio');
+        }
         this.loading.set(false);
       }
     });
@@ -87,13 +98,13 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.updateBusinessType(currentConfig.id, request).subscribe({
       next: () => {
-        this.successMessage.set('Business type updated successfully');
+        this.successMessage.set('Tipo de negócio atualizado com sucesso');
         this.loadConfiguration();
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 3000);
+        setTimeout(() => this.successMessage.set(null), this.SHORT_SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to update business type');
+        this.saveError.set(err.error?.message || 'Falha ao atualizar tipo de negócio');
         this.saving.set(false);
       }
     });
@@ -113,13 +124,13 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.updatePrimarySpecialty(currentConfig.id, request).subscribe({
       next: () => {
-        this.successMessage.set('Primary specialty updated successfully');
+        this.successMessage.set('Especialidade principal atualizada com sucesso');
         this.loadConfiguration();
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 3000);
+        setTimeout(() => this.successMessage.set(null), this.SHORT_SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to update primary specialty');
+        this.saveError.set(err.error?.message || 'Falha ao atualizar especialidade principal');
         this.saving.set(false);
       }
     });
@@ -140,13 +151,43 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.updateFeature(currentConfig.id, request).subscribe({
       next: () => {
-        this.successMessage.set(`Feature "${featureName}" updated successfully`);
+        this.successMessage.set(`Funcionalidade "${featureName}" atualizada com sucesso`);
         this.loadConfiguration();
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 3000);
+        setTimeout(() => this.successMessage.set(null), this.SHORT_SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to update feature');
+        this.saveError.set(err.error?.message || 'Falha ao atualizar funcionalidade');
+        this.saving.set(false);
+      }
+    });
+  }
+
+  createConfiguration(): void {
+    if (!this.clinicId || !this.tenantId) return;
+
+    this.saving.set(true);
+    this.saveError.set(null);
+    this.error.set(null);
+    this.configNotFound.set(false);
+
+    // Create default configuration
+    const request = {
+      clinicId: this.clinicId,
+      businessType: BusinessType.SmallClinic,
+      primarySpecialty: ProfessionalSpecialty.Medico,
+      tenantId: this.tenantId
+    };
+
+    this.systemAdminService.createBusinessConfiguration(request).subscribe({
+      next: (config) => {
+        this.config.set(config);
+        this.successMessage.set('Configuração criada com sucesso! Você pode personalizá-la abaixo.');
+        this.saving.set(false);
+        setTimeout(() => this.successMessage.set(null), this.SUCCESS_MESSAGE_DURATION_MS);
+      },
+      error: (err) => {
+        this.saveError.set(err.error?.message || 'Falha ao criar configuração');
         this.saving.set(false);
       }
     });
