@@ -74,9 +74,9 @@ export class BusinessConfigManagement implements OnInit {
         // Check if it's a 404 (configuration not found)
         if (err.status === 404) {
           this.configNotFound.set(true);
-          this.error.set('Business configuration not found for this clinic');
+          this.error.set('Configuração de negócio não encontrada para esta clínica');
         } else {
-          this.error.set(err.error?.message || 'Failed to load business configuration');
+          this.error.set(err.error?.message || 'Falha ao carregar configuração de negócio');
         }
         this.loading.set(false);
       }
@@ -97,13 +97,13 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.updateBusinessType(currentConfig.id, request).subscribe({
       next: () => {
-        this.successMessage.set('Business type updated successfully');
+        this.successMessage.set('Tipo de negócio atualizado com sucesso');
         this.loadConfiguration();
         this.saving.set(false);
         setTimeout(() => this.successMessage.set(null), 3000);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to update business type');
+        this.saveError.set(err.error?.message || 'Falha ao atualizar tipo de negócio');
         this.saving.set(false);
       }
     });
@@ -123,13 +123,13 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.updatePrimarySpecialty(currentConfig.id, request).subscribe({
       next: () => {
-        this.successMessage.set('Primary specialty updated successfully');
+        this.successMessage.set('Especialidade principal atualizada com sucesso');
         this.loadConfiguration();
         this.saving.set(false);
         setTimeout(() => this.successMessage.set(null), 3000);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to update primary specialty');
+        this.saveError.set(err.error?.message || 'Falha ao atualizar especialidade principal');
         this.saving.set(false);
       }
     });
@@ -150,13 +150,13 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.updateFeature(currentConfig.id, request).subscribe({
       next: () => {
-        this.successMessage.set(`Feature "${featureName}" updated successfully`);
+        this.successMessage.set(`Funcionalidade "${featureName}" atualizada com sucesso`);
         this.loadConfiguration();
         this.saving.set(false);
         setTimeout(() => this.successMessage.set(null), 3000);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to update feature');
+        this.saveError.set(err.error?.message || 'Falha ao atualizar funcionalidade');
         this.saving.set(false);
       }
     });
@@ -181,12 +181,12 @@ export class BusinessConfigManagement implements OnInit {
     this.systemAdminService.createBusinessConfiguration(request).subscribe({
       next: (config) => {
         this.config.set(config);
-        this.successMessage.set('Configuration created successfully! You can customize it below.');
+        this.successMessage.set('Configuração criada com sucesso! Você pode personalizá-la abaixo.');
         this.saving.set(false);
         setTimeout(() => this.successMessage.set(null), this.SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
-        this.saveError.set(err.error?.message || 'Failed to create configuration');
+        this.saveError.set(err.error?.message || 'Falha ao criar configuração');
         this.saving.set(false);
       }
     });
