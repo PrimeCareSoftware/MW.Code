@@ -22,6 +22,7 @@ import { Navbar } from '../../shared/navbar/navbar';
 })
 export class BusinessConfigManagement implements OnInit {
   private readonly SUCCESS_MESSAGE_DURATION_MS = 5000;
+  private readonly SHORT_SUCCESS_MESSAGE_DURATION_MS = 3000;
   
   config = signal<BusinessConfiguration | null>(null);
   loading = signal(true);
@@ -100,7 +101,7 @@ export class BusinessConfigManagement implements OnInit {
         this.successMessage.set('Tipo de negócio atualizado com sucesso');
         this.loadConfiguration();
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 3000);
+        setTimeout(() => this.successMessage.set(null), this.SHORT_SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
         this.saveError.set(err.error?.message || 'Falha ao atualizar tipo de negócio');
@@ -126,7 +127,7 @@ export class BusinessConfigManagement implements OnInit {
         this.successMessage.set('Especialidade principal atualizada com sucesso');
         this.loadConfiguration();
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 3000);
+        setTimeout(() => this.successMessage.set(null), this.SHORT_SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
         this.saveError.set(err.error?.message || 'Falha ao atualizar especialidade principal');
@@ -153,7 +154,7 @@ export class BusinessConfigManagement implements OnInit {
         this.successMessage.set(`Funcionalidade "${featureName}" atualizada com sucesso`);
         this.loadConfiguration();
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 3000);
+        setTimeout(() => this.successMessage.set(null), this.SHORT_SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
         this.saveError.set(err.error?.message || 'Falha ao atualizar funcionalidade');
