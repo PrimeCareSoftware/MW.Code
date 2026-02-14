@@ -3143,8 +3143,8 @@ RETORNO: {{return_date}}",
         {
             var count = 0;
             
-            // Get all clinics across all tenants
-            var allClinics = await _clinicRepository.GetAllAsync();
+            // Get all active clinics across all tenants
+            var allClinics = await _clinicRepository.GetAllActiveAsync();
             
             foreach (var clinic in allClinics)
             {
