@@ -468,8 +468,8 @@ export class SystemAdminService {
   /**
    * Get business configuration for a clinic
    */
-  getBusinessConfiguration(clinicId: string, tenantId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/business-configuration/clinic/${clinicId}`, {
+  getBusinessConfiguration(clinicId: string, tenantId: string): Observable<BusinessConfiguration> {
+    return this.http.get<BusinessConfiguration>(`${this.apiUrl}/business-configuration/clinic/${clinicId}`, {
       params: { tenantId }
     });
   }
@@ -477,28 +477,28 @@ export class SystemAdminService {
   /**
    * Create business configuration for a clinic
    */
-  createBusinessConfiguration(request: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/business-configuration`, request);
+  createBusinessConfiguration(request: CreateBusinessConfigurationRequest): Observable<BusinessConfiguration> {
+    return this.http.post<BusinessConfiguration>(`${this.apiUrl}/business-configuration`, request);
   }
 
   /**
    * Update business type
    */
-  updateBusinessType(configId: string, request: any): Observable<void> {
+  updateBusinessType(configId: string, request: UpdateBusinessTypeRequest): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/business-configuration/${configId}/business-type`, request);
   }
 
   /**
    * Update primary specialty
    */
-  updatePrimarySpecialty(configId: string, request: any): Observable<void> {
+  updatePrimarySpecialty(configId: string, request: UpdatePrimarySpecialtyRequest): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/business-configuration/${configId}/primary-specialty`, request);
   }
 
   /**
    * Update feature flag
    */
-  updateFeature(configId: string, request: any): Observable<void> {
+  updateFeature(configId: string, request: UpdateFeatureRequest): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/business-configuration/${configId}/feature`, request);
   }
 }

@@ -33,7 +33,7 @@ export class ClinicCreate {
     ownerFullName: '',
     planId: '',
     businessType: 2, // Default to SmallClinic
-    primarySpecialty: 1 // Default to Medico
+    primarySpecialty: 1 // Default to Medico (Doctor)
   };
 
   constructor(

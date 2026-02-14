@@ -35,8 +35,8 @@ namespace MedicSoft.Application.DTOs
         public TimeSpan OpeningTime { get; set; }
         public TimeSpan ClosingTime { get; set; }
         public int AppointmentDurationMinutes { get; set; } = 30;
-        public int BusinessType { get; set; } = 1; // Default to SoloPractitioner
-        public int PrimarySpecialty { get; set; } = 1; // Default to Medico
+        public int BusinessType { get; set; } = 2; // Default to SmallClinic
+        public int PrimarySpecialty { get; set; } = 1; // Default to Medico (Doctor)
     }
 
     public class UpdateClinicDto
