@@ -3135,5 +3135,39 @@ RETORNO: {{return_date}}",
 
             return templates;
         }
+
+        /// <summary>
+        /// Seeds business configurations for existing clinics that don't have one
+        /// </summary>
+        public async Task<int> SeedBusinessConfigurationsAsync()
+        {
+            var count = 0;
+            
+            // Get all active clinics across all tenants
+            var allClinics = await _clinicRepository.GetAllActiveAsync();
+            
+            foreach (var clinic in allClinics)
+            {
+                // Check if configuration already exists
+                var existingConfig = await _businessConfigurationRepository.GetByClinicIdAsync(clinic.Id, clinic.TenantId);
+                
+                if (existingConfig == null)
+                {
+                    // Create default business configuration
+                    // Default to SmallClinic and Medico as most common case
+                    var businessConfig = new BusinessConfiguration(
+                        clinic.Id,
+                        BusinessType.SmallClinic,
+                        ProfessionalSpecialty.Medico,
+                        clinic.TenantId
+                    );
+                    
+                    await _businessConfigurationRepository.AddAsync(businessConfig);
+                    count++;
+                }
+            }
+            
+            return count;
+        }
     }
 }

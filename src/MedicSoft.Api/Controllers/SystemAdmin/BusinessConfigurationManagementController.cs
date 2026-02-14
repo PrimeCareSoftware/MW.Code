@@ -1,24 +1,25 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Identity;
-using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 
-namespace MedicSoft.Api.Controllers
+namespace MedicSoft.Api.Controllers.SystemAdmin
 {
+    /// <summary>
+    /// Controller for system admins to manage business configurations for clinics
+    /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    public class BusinessConfigurationController : BaseController
+    [Route("api/system-admin/business-configuration")]
+    [Authorize(Roles = "SystemAdmin")]
+    public class BusinessConfigurationManagementController : BaseController
     {
         private readonly BusinessConfigurationService _service;
 
-        public BusinessConfigurationController(
+        public BusinessConfigurationManagementController(
             ITenantContext tenantContext,
             BusinessConfigurationService service) : base(tenantContext)
         {
@@ -26,12 +27,14 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Gets the business configuration for a clinic
+        /// Gets the business configuration for any clinic (system admin)
         /// </summary>
         [HttpGet("clinic/{clinicId}")]
-        public async Task<ActionResult<BusinessConfigurationDto>> GetByClinicId(Guid clinicId)
+        public async Task<ActionResult<BusinessConfigurationDto>> GetByClinicId(Guid clinicId, [FromQuery] string tenantId)
         {
-            var tenantId = GetTenantId();
+            if (string.IsNullOrWhiteSpace(tenantId))
+                return BadRequest(new { message = "TenantId is required" });
+
             var config = await _service.GetByClinicIdAsync(clinicId, tenantId);
             
             if (config == null)
@@ -41,26 +44,28 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Creates a new business configuration
+        /// Creates a new business configuration for any clinic (system admin)
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<BusinessConfigurationDto>> Create([FromBody] CreateBusinessConfigurationDto dto)
+        public async Task<ActionResult<BusinessConfigurationDto>> Create([FromBody] CreateBusinessConfigurationForClinicDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequestInvalidModel();
+
+            if (string.IsNullOrWhiteSpace(dto.TenantId))
+                return BadRequest(new { message = "TenantId is required" });
             
             try
             {
-                var tenantId = GetTenantId();
                 var config = await _service.CreateAsync(
                     dto.ClinicId,
                     dto.BusinessType,
                     dto.PrimarySpecialty,
-                    tenantId);
+                    dto.TenantId);
                 
                 return CreatedAtAction(
                     nameof(GetByClinicId),
-                    new { clinicId = config.ClinicId },
+                    new { clinicId = config.ClinicId, tenantId = dto.TenantId },
                     MapToDto(config));
             }
             catch (InvalidOperationException ex)
@@ -70,18 +75,20 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Updates the business type
+        /// Updates the business type for any clinic (system admin)
         /// </summary>
         [HttpPut("{id}/business-type")]
-        public async Task<ActionResult> UpdateBusinessType(Guid id, [FromBody] UpdateBusinessTypeDto dto)
+        public async Task<ActionResult> UpdateBusinessType(Guid id, [FromBody] UpdateBusinessTypeForClinicDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequestInvalidModel();
+
+            if (string.IsNullOrWhiteSpace(dto.TenantId))
+                return BadRequest(new { message = "TenantId is required" });
             
             try
             {
-                var tenantId = GetTenantId();
-                await _service.UpdateBusinessTypeAsync(id, dto.BusinessType, tenantId);
+                await _service.UpdateBusinessTypeAsync(id, dto.BusinessType, dto.TenantId);
                 return NoContent();
             }
             catch (InvalidOperationException ex)
@@ -91,18 +98,20 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Updates the primary specialty
+        /// Updates the primary specialty for any clinic (system admin)
         /// </summary>
         [HttpPut("{id}/primary-specialty")]
-        public async Task<ActionResult> UpdatePrimarySpecialty(Guid id, [FromBody] UpdatePrimarySpecialtyDto dto)
+        public async Task<ActionResult> UpdatePrimarySpecialty(Guid id, [FromBody] UpdatePrimarySpecialtyForClinicDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequestInvalidModel();
+
+            if (string.IsNullOrWhiteSpace(dto.TenantId))
+                return BadRequest(new { message = "TenantId is required" });
             
             try
             {
-                var tenantId = GetTenantId();
-                await _service.UpdatePrimarySpecialtyAsync(id, dto.PrimarySpecialty, tenantId);
+                await _service.UpdatePrimarySpecialtyAsync(id, dto.PrimarySpecialty, dto.TenantId);
                 return NoContent();
             }
             catch (InvalidOperationException ex)
@@ -112,21 +121,23 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Updates a feature flag
+        /// Updates a feature flag for any clinic (system admin)
         /// </summary>
         [HttpPut("{id}/feature")]
-        public async Task<ActionResult> UpdateFeature(Guid id, [FromBody] UpdateFeatureDto dto)
+        public async Task<ActionResult> UpdateFeature(Guid id, [FromBody] UpdateFeatureForClinicDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequestInvalidModel();
-            
+
+            if (string.IsNullOrWhiteSpace(dto.TenantId))
+                return BadRequest(new { message = "TenantId is required" });
+
             if (string.IsNullOrWhiteSpace(dto.FeatureName))
                 return BadRequest(new { message = "Feature name is required" });
             
             try
             {
-                var tenantId = GetTenantId();
-                await _service.UpdateFeatureAsync(id, dto.FeatureName, dto.Enabled, tenantId);
+                await _service.UpdateFeatureAsync(id, dto.FeatureName, dto.Enabled, dto.TenantId);
                 return NoContent();
             }
             catch (InvalidOperationException ex)
@@ -139,29 +150,7 @@ namespace MedicSoft.Api.Controllers
             }
         }
 
-        /// <summary>
-        /// Checks if a feature is enabled for a clinic
-        /// </summary>
-        [HttpGet("clinic/{clinicId}/feature/{featureName}")]
-        public async Task<ActionResult<bool>> IsFeatureEnabled(Guid clinicId, string featureName)
-        {
-            var tenantId = GetTenantId();
-            var isEnabled = await _service.IsFeatureEnabledAsync(clinicId, featureName, tenantId);
-            return Ok(new { featureName, enabled = isEnabled });
-        }
-
-        /// <summary>
-        /// Gets the terminology map for a clinic
-        /// </summary>
-        [HttpGet("clinic/{clinicId}/terminology")]
-        public async Task<ActionResult<Dictionary<string, string>>> GetTerminology(Guid clinicId)
-        {
-            var tenantId = GetTenantId();
-            var terminology = await _service.GetTerminologyAsync(clinicId, tenantId);
-            return Ok(terminology);
-        }
-
-        private static BusinessConfigurationDto MapToDto(BusinessConfiguration config)
+        private static BusinessConfigurationDto MapToDto(Domain.Entities.BusinessConfiguration config)
         {
             return new BusinessConfigurationDto
             {
@@ -191,5 +180,32 @@ namespace MedicSoft.Api.Controllers
                 UpdatedAt = config.UpdatedAt
             };
         }
+    }
+
+    public class CreateBusinessConfigurationForClinicDto
+    {
+        public Guid ClinicId { get; set; }
+        public BusinessType BusinessType { get; set; }
+        public ProfessionalSpecialty PrimarySpecialty { get; set; }
+        public string TenantId { get; set; } = string.Empty;
+    }
+
+    public class UpdateBusinessTypeForClinicDto
+    {
+        public BusinessType BusinessType { get; set; }
+        public string TenantId { get; set; } = string.Empty;
+    }
+
+    public class UpdatePrimarySpecialtyForClinicDto
+    {
+        public ProfessionalSpecialty PrimarySpecialty { get; set; }
+        public string TenantId { get; set; } = string.Empty;
+    }
+
+    public class UpdateFeatureForClinicDto
+    {
+        public string FeatureName { get; set; } = string.Empty;
+        public bool Enabled { get; set; }
+        public string TenantId { get; set; } = string.Empty;
     }
 }

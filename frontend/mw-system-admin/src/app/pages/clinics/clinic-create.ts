@@ -31,7 +31,9 @@ export class ClinicCreate {
     ownerUsername: '',
     ownerPassword: '',
     ownerFullName: '',
-    planId: ''
+    planId: '',
+    businessType: 2, // Default to SmallClinic
+    primarySpecialty: 1 // Default to Medico (Doctor)
   };
 
   constructor(

@@ -95,7 +95,51 @@
                   }
                 </select>
               </div>
+
+              <div class="form-group">
+                <label for="businessType">Tipo de Negócio *</label>
+                <select
+                  id="businessType"
+                  [(ngModel)]="formData.businessType"
+                  name="businessType"
+                  required
+                >
+                  <option [value]="1">Profissional Solo</option>
+                  <option [value]="2">Clínica Pequena (2-5 profissionais)</option>
+                  <option [value]="3">Clínica Média (6-20 profissionais)</option>
+                  <option [value]="4">Clínica Grande (20+ profissionais)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="primarySpecialty">Especialidade Principal *</label>
+                <select
+                  id="primarySpecialty"
+                  [(ngModel)]="formData.primarySpecialty"
+                  name="primarySpecialty"
+                  required
+                >
+                  <option [value]="1">Médico</option>
+                  <option [value]="2">Psicólogo</option>
+                  <option [value]="3">Nutricionista</option>
+                  <option [value]="4">Fisioterapeuta</option>
+                  <option [value]="5">Dentista</option>
+                  <option [value]="6">Enfermeiro</option>
+                  <option [value]="7">Terapeuta Ocupacional</option>
+                  <option [value]="8">Fonoaudiólogo</option>
+                  <option [value]="9">Veterinário</option>
+                  <option [value]="99">Outro</option>
+                </select>
+              </div>
             </div>
+          </div>
+
+          <div class="form-section">
+            <h2>Configuração de Negócio</h2>
+            <p class="section-description">
+              As configurações padrão serão automaticamente definidas com base no tipo de negócio e especialidade selecionados. 
+              Você poderá personalizá-las posteriormente nas configurações da clínica.
+            </p>
           </div>
 
           <div class="form-section">
