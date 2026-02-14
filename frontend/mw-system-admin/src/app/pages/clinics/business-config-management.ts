@@ -21,6 +21,8 @@ import { Navbar } from '../../shared/navbar/navbar';
   styleUrl: './business-config-management.scss'
 })
 export class BusinessConfigManagement implements OnInit {
+  private readonly SUCCESS_MESSAGE_DURATION_MS = 5000;
+  
   config = signal<BusinessConfiguration | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -181,7 +183,7 @@ export class BusinessConfigManagement implements OnInit {
         this.config.set(config);
         this.successMessage.set('Configuration created successfully! You can customize it below.');
         this.saving.set(false);
-        setTimeout(() => this.successMessage.set(null), 5000);
+        setTimeout(() => this.successMessage.set(null), this.SUCCESS_MESSAGE_DURATION_MS);
       },
       error: (err) => {
         this.saveError.set(err.error?.message || 'Failed to create configuration');
