@@ -91,8 +91,37 @@ export class BusinessConfigurationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadConfiguration();
-    this.loadClinicInfo();
+    this.ensureClinicLoaded();
+  }
+
+  private ensureClinicLoaded(): void {
+    const selectedClinic = this.clinicSelectionService.currentClinic();
+    
+    if (selectedClinic) {
+      // Clinic already loaded, proceed normally
+      this.loadConfiguration();
+      this.loadClinicInfo();
+    } else {
+      // Clinic not loaded yet, fetch it first
+      this.loading = true;
+      this.clinicSelectionService.getUserClinics().subscribe({
+        next: () => {
+          const clinic = this.clinicSelectionService.currentClinic();
+          if (clinic) {
+            this.loadConfiguration();
+            this.loadClinicInfo();
+          } else {
+            this.error = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
+            this.loading = false;
+          }
+        },
+        error: (err) => {
+          console.error('Error loading clinics:', err);
+          this.error = 'Erro ao carregar clínicas. Tente novamente.';
+          this.loading = false;
+        }
+      });
+    }
   }
 
   private loadConfiguration(): void {
