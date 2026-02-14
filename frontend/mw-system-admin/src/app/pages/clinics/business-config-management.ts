@@ -152,6 +152,35 @@ export class BusinessConfigManagement implements OnInit {
     });
   }
 
+  createConfiguration(): void {
+    if (!this.clinicId || !this.tenantId) return;
+
+    this.saving.set(true);
+    this.saveError.set(null);
+    this.error.set(null);
+
+    // Create default configuration
+    const request = {
+      clinicId: this.clinicId,
+      businessType: BusinessType.SmallClinic,
+      primarySpecialty: ProfessionalSpecialty.Medico,
+      tenantId: this.tenantId
+    };
+
+    this.systemAdminService.createBusinessConfiguration(request).subscribe({
+      next: (config) => {
+        this.config.set(config);
+        this.successMessage.set('Configuração criada com sucesso! Você pode personalizá-la abaixo.');
+        this.saving.set(false);
+        setTimeout(() => this.successMessage.set(null), 5000);
+      },
+      error: (err) => {
+        this.saveError.set(err.error?.message || 'Falha ao criar configuração');
+        this.saving.set(false);
+      }
+    });
+  }
+
   getBusinessTypeName(type: BusinessType): string {
     switch (type) {
       case BusinessType.SoloPractitioner: return 'Profissional Solo';
