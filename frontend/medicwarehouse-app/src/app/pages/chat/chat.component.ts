@@ -7,6 +7,7 @@ import { HubConnectionState } from '@microsoft/signalr';
 import { ChatService } from './services/chat.service';
 import { ChatHubService } from './services/chat-hub.service';
 import { Auth } from '../../services/auth';
+import { Navbar } from '../../shared/navbar/navbar';
 import { 
   Conversation, 
   ChatMessage, 
@@ -17,7 +18,7 @@ import {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })

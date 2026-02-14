@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   DocumentTemplate, 
   DocumentTemplateType, 
@@ -15,7 +16,7 @@ import { DocumentTemplateService } from '../../../services/document-template.ser
 @Component({
   selector: 'app-document-templates',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './document-templates.component.html',
   styleUrls: ['./document-templates.component.scss']
 })
