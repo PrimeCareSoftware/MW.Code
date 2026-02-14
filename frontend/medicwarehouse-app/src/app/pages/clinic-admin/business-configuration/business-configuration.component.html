@@ -204,6 +204,12 @@
     <div class="empty-state-icon">⚙️</div>
     <h2>Configuração não encontrada</h2>
     <p>Esta clínica ainda não possui configuração de negócio.</p>
-    <p>Entre em contato com o suporte para configurar sua clínica.</p>
+    <button 
+      class="btn btn-primary btn-create-config"
+      (click)="createConfiguration()"
+      [disabled]="saving"
+    >
+      {{ saving ? 'Criando...' : '✨ Criar Configuração Automaticamente' }}
+    </button>
   </div>
 </div>

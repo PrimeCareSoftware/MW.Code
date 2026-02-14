@@ -114,41 +114,14 @@ export class BusinessConfigurationComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading configuration:', err);
-        // If configuration doesn't exist, create a default one
+        // Show error message so user can manually create configuration
         if (err.status === 404) {
-          this.createDefaultConfiguration(selectedClinic.clinicId);
+          this.error = '';
+          this.loading = false;
         } else {
-          this.error = 'Erro ao carregar configuração. A clínica pode não ter sido configurada ainda.';
+          this.error = 'Erro ao carregar configuração. Tente novamente.';
           this.loading = false;
         }
-      }
-    });
-  }
-
-  private createDefaultConfiguration(clinicId: string): void {
-    // Create default configuration
-    const dto = {
-      clinicId: clinicId,
-      businessType: BusinessType.SmallClinic,
-      primarySpecialty: ProfessionalSpecialty.Medico
-    };
-
-    this.businessConfigService.create(dto).subscribe({
-      next: (config) => {
-        this.configuration = config;
-        this.buildFeatureCategories();
-        this.loadTerminology(clinicId);
-        this.success = 'Configuração padrão criada com sucesso! Você pode personalizá-la abaixo.';
-        this.loading = false;
-        // Clear success message after configured duration
-        setTimeout(() => {
-          this.success = '';
-        }, this.SUCCESS_MESSAGE_DURATION);
-      },
-      error: (err) => {
-        console.error('Error creating default configuration:', err);
-        this.error = 'Erro ao criar configuração padrão. Entre em contato com o suporte.';
-        this.loading = false;
       }
     });
   }
@@ -505,6 +478,44 @@ export class BusinessConfigurationComponent implements OnInit {
         console.error('Error updating schedule settings:', err);
         this.error = 'Erro ao atualizar configurações de horário';
         this.savingSchedule = false;
+      }
+    });
+  }
+
+  createConfiguration(): void {
+    const selectedClinic = this.clinicSelectionService.currentClinic();
+    if (!selectedClinic) {
+      this.error = 'Nenhuma clínica selecionada';
+      return;
+    }
+
+    this.saving = true;
+    this.error = '';
+    this.success = '';
+
+    // Create default configuration
+    const dto = {
+      clinicId: selectedClinic.clinicId,
+      businessType: BusinessType.SmallClinic,
+      primarySpecialty: ProfessionalSpecialty.Medico
+    };
+
+    this.businessConfigService.create(dto).subscribe({
+      next: (config) => {
+        this.configuration = config;
+        this.buildFeatureCategories();
+        this.loadTerminology(selectedClinic.clinicId);
+        this.success = 'Configuração criada com sucesso! Você pode personalizá-la abaixo.';
+        this.saving = false;
+        // Clear success message after configured duration
+        setTimeout(() => {
+          this.success = '';
+        }, this.SUCCESS_MESSAGE_DURATION);
+      },
+      error: (err) => {
+        console.error('Error creating configuration:', err);
+        this.error = err.error?.message || 'Erro ao criar configuração. Tente novamente.';
+        this.saving = false;
       }
     });
   }
