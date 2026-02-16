@@ -58,8 +58,13 @@ namespace MedicSoft.Application.Services
             TissBatch? batch = null;
             await _batchRepository.ExecuteInTransactionAsync(async () =>
             {
-                // Generate batch number
-                var batchNumber = $"BATCH-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+                // Generate batch number with sufficient entropy to ensure uniqueness
+                // Format: BATCH-YYYYMMDD-HHMMSS-GUID12 (using 12 chars from Guid for better uniqueness)
+                var timestamp = DateTime.UtcNow;
+                var datePart = timestamp.ToString("yyyyMMdd");
+                var timePart = timestamp.ToString("HHmmss");
+                var guidPart = Guid.NewGuid().ToString("N")[..12].ToUpper();
+                var batchNumber = $"BATCH-{datePart}-{timePart}-{guidPart}";
 
                 batch = new TissBatch(
                     dto.ClinicId,

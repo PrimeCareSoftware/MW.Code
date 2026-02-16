@@ -67,38 +67,37 @@ namespace MedicSoft.Application.Services
 
             try
             {
+                // Validate inputs before starting transaction
+                var appointment = await _appointmentRepository.GetByIdAsync(appointmentId, tenantId);
+                if (appointment == null)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Appointment not found";
+                    return result;
+                }
+
+                if (!Enum.TryParse<PaymentReceiverType>(paymentReceiverType, out var receiverType))
+                {
+                    result.Success = false;
+                    result.ErrorMessage = $"Invalid PaymentReceiverType: {paymentReceiverType}";
+                    return result;
+                }
+
+                if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
+                {
+                    result.Success = false;
+                    result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
+                    return result;
+                }
+
                 // Execute entire payment flow in a transaction to ensure data consistency
                 await _paymentRepository.ExecuteInTransactionAsync(async () =>
                 {
-                    // 1. Get appointment
-                    var appointment = await _appointmentRepository.GetByIdAsync(appointmentId, tenantId);
-                    if (appointment == null)
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = "Appointment not found";
-                        return;
-                    }
-
-                    // 2. Parse enums
-                    if (!Enum.TryParse<PaymentReceiverType>(paymentReceiverType, out var receiverType))
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = $"Invalid PaymentReceiverType: {paymentReceiverType}";
-                        return;
-                    }
-
-                    if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
-                        return;
-                    }
-
-                    // 3. Mark appointment as paid
+                    // Mark appointment as paid
                     appointment.MarkAsPaid(paidByUserId, receiverType, amount, method);
                     await _appointmentRepository.UpdateAsync(appointment);
 
-                    // 4. Create Payment entity
+                    // Create Payment entity
                     var payment = new Payment(
                         amount,
                         method,
@@ -109,18 +108,18 @@ namespace MedicSoft.Application.Services
                     await _paymentRepository.AddAsync(payment);
                     result.PaymentId = payment.Id;
 
-                    // 5. Mark payment as processed
+                    // Mark payment as processed
                     payment.MarkAsPaid(transactionId: $"APT-{appointmentId:N}");
                     await _paymentRepository.UpdateAsync(payment);
 
-                    // 6. Create Invoice
+                    // Create Invoice
                     var invoice = await CreateInvoiceForPaymentAsync(payment, appointment, tenantId);
                     if (invoice != null)
                     {
                         result.InvoiceId = invoice.Id;
                     }
 
-                    // 7. Create TISS guide if health insurance
+                    // Create TISS guide if health insurance
                     if (appointment.PaymentType == PaymentType.HealthInsurance && appointment.HealthInsurancePlanId.HasValue)
                     {
                         try
@@ -140,10 +139,9 @@ namespace MedicSoft.Application.Services
                             // Don't fail the entire flow if TISS creation fails - it can be created manually later
                         }
                     }
-
-                    result.Success = true;
                 });
 
+                result.Success = true;
                 return result;
             }
             catch (Exception ex)
@@ -273,34 +271,33 @@ namespace MedicSoft.Application.Services
 
             try
             {
+                // Validate inputs before starting transaction
+                var appointmentProcedure = await _appointmentProcedureRepository.GetByIdAsync(appointmentProcedureId, tenantId);
+                if (appointmentProcedure == null)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Appointment procedure not found";
+                    return result;
+                }
+
+                var appointment = await _appointmentRepository.GetByIdAsync(appointmentProcedure.AppointmentId, tenantId);
+                if (appointment == null)
+                {
+                    result.Success = false;
+                    result.ErrorMessage = "Appointment not found";
+                    return result;
+                }
+
+                if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
+                {
+                    result.Success = false;
+                    result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
+                    return result;
+                }
+
                 // Execute entire payment flow in a transaction to ensure data consistency
                 await _paymentRepository.ExecuteInTransactionAsync(async () =>
                 {
-                    // Get appointment procedure
-                    var appointmentProcedure = await _appointmentProcedureRepository.GetByIdAsync(appointmentProcedureId, tenantId);
-                    if (appointmentProcedure == null)
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = "Appointment procedure not found";
-                        return;
-                    }
-
-                    // Get appointment
-                    var appointment = await _appointmentRepository.GetByIdAsync(appointmentProcedure.AppointmentId, tenantId);
-                    if (appointment == null)
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = "Appointment not found";
-                        return;
-                    }
-
-                    if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
-                    {
-                        result.Success = false;
-                        result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
-                        return;
-                    }
-
                     // Create Payment entity for procedure
                     var payment = new Payment(
                         appointmentProcedure.PriceCharged,
@@ -322,10 +319,9 @@ namespace MedicSoft.Application.Services
                     {
                         result.InvoiceId = invoice.Id;
                     }
-
-                    result.Success = true;
                 });
 
+                result.Success = true;
                 return result;
             }
             catch (Exception ex)
