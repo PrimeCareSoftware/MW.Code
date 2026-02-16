@@ -64,6 +64,10 @@ export interface CreateBusinessConfigurationDto {
   primarySpecialty: ProfessionalSpecialty;
 }
 
+export interface CreateBusinessConfigurationForClinicDto extends CreateBusinessConfigurationDto {
+  tenantId: string;
+}
+
 export interface UpdateBusinessTypeDto {
   businessType: BusinessType;
 }
@@ -87,6 +91,7 @@ export interface FeatureCheckResponse {
 })
 export class BusinessConfigurationService {
   private readonly baseUrl = '/api/BusinessConfiguration';
+  private readonly systemAdminBaseUrl = '/api/system-admin/business-configuration';
 
   constructor(private http: HttpClient) {}
 
@@ -102,6 +107,22 @@ export class BusinessConfigurationService {
    */
   create(dto: CreateBusinessConfigurationDto): Observable<BusinessConfiguration> {
     return this.http.post<BusinessConfiguration>(this.baseUrl, dto);
+  }
+
+  /**
+   * System admin: Get business configuration for any clinic
+   */
+  getByClinicIdSystemAdmin(clinicId: string, tenantId: string): Observable<BusinessConfiguration> {
+    return this.http.get<BusinessConfiguration>(`${this.systemAdminBaseUrl}/clinic/${clinicId}`, {
+      params: { tenantId }
+    });
+  }
+
+  /**
+   * System admin: Create business configuration for any clinic
+   */
+  createSystemAdmin(dto: CreateBusinessConfigurationForClinicDto): Observable<BusinessConfiguration> {
+    return this.http.post<BusinessConfiguration>(this.systemAdminBaseUrl, dto);
   }
 
   /**

@@ -66,6 +66,9 @@ namespace MedicSoft.Domain.Entities
             
             // Set default features based on business type and specialty
             SetDefaultFeatures();
+
+            // Ensure UpdatedAt is initialized for not-null database constraint
+            UpdateTimestamp();
         }
         
         /// <summary>

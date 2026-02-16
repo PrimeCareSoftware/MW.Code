@@ -145,14 +145,14 @@
   .currency {
     font-size: 1.25rem;
     font-weight: 600;
-    color: hsl(var(--omni-foreground));
+    color: hsl(194.44, 59.64%, 43.73%);
   }
   
   .amount {
     font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
     font-size: 3rem;
     font-weight: 700;
-    color: hsl(var(--omni-foreground));
+    color: hsl(194.44, 59.64%, 43.73%);
     margin: 0 0.25rem;
     
     &.custom-price {
@@ -162,7 +162,7 @@
   
   .period {
     font-size: 1rem;
-    color: hsl(var(--omni-muted-foreground));
+    color: hsl(194.44, 59.64%, 43.73%);
   }
 }
 
