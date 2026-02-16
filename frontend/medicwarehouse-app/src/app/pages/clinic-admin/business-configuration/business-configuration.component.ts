@@ -190,10 +190,14 @@ export class BusinessConfigurationComponent implements OnInit {
     });
   }
 
+  /**
+   * Load configuration only (used for refresh operations after updates).
+   * Does not manage loading state - caller is responsible for loading indicators.
+   * For initial page load, use loadDataInParallel() instead.
+   */
   private loadConfiguration(): void {
     const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
-      this.error = 'Nenhuma clínica selecionada';
       return;
     }
 
@@ -205,18 +209,36 @@ export class BusinessConfigurationComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading configuration:', err);
-        // Show error message so user can manually create configuration
-        if (err.status === 404) {
-          this.error = '';
-        } else {
-          this.error = 'Erro ao carregar configuração. Tente novamente.';
-        }
+        // Silent failure for refresh operations - original state remains
       }
     });
   }
 
   private loadTerminology(clinicId: string): void {
     this.terminologyService.loadTerminology(clinicId).subscribe();
+  }
+
+  /**
+   * Load clinic info only (used for refresh operations after wizard completion).
+   * Does not manage loading state - caller is responsible for loading indicators.
+   * For initial page load, use loadDataInParallel() instead.
+   */
+  private loadClinicInfo(): void {
+    this.clinicAdminService.getClinicInfo().subscribe({
+      next: (info) => {
+        this.clinicInfo = info;
+        // Parse TimeSpan strings to HH:mm format for time inputs
+        this.openingTime = this.parseTimeSpan(info.openingTime);
+        this.closingTime = this.parseTimeSpan(info.closingTime);
+        this.appointmentDurationMinutes = info.appointmentDurationMinutes;
+        this.allowEmergencySlots = info.allowEmergencySlots;
+        this.enableOnlineAppointmentScheduling = info.enableOnlineAppointmentScheduling;
+      },
+      error: (err) => {
+        console.error('Error loading clinic info:', err);
+        // Silent failure for refresh operations - original state remains
+      }
+    });
   }
 
   private buildFeatureCategories(): void {
