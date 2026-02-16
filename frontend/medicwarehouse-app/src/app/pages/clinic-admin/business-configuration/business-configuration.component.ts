@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, EMPTY } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -16,6 +16,7 @@ import { ClinicSelectionService } from '../../../services/clinic-selection.servi
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicAdminInfoDto, UpdateClinicInfoRequest } from '../../../models/clinic-admin.model';
 import { SetupWizardComponent, WizardConfiguration } from './setup-wizard/setup-wizard.component';
+import { environment } from '../../../../environments/environment';
 
 interface FeatureCategory {
   name: string;
@@ -108,27 +109,34 @@ export class BusinessConfigurationComponent implements OnInit {
     } else {
       // Clinic not loaded yet, fetch it first
       this.loading = true;
-      this.clinicSelectionService.getUserClinics().subscribe({
-        next: (clinics) => {
-          // Check the returned clinics array directly instead of relying on signal timing
+      this.clinicSelectionService.getUserClinics().pipe(
+        tap(clinics => {
+          if (!environment.production) {
+            console.log('Clinics loaded:', clinics);
+          }
+          // Check the returned clinics array directly
           if (clinics && clinics.length > 0) {
-            // Signal should be set by the service, but we'll verify it
-            const clinic = this.clinicSelectionService.currentClinic();
-            if (clinic) {
-              this.loadConfiguration();
-              this.loadClinicInfo();
-            } else {
-              // This shouldn't happen, but handle it gracefully
-              console.warn('Clinics are available but currentClinic is not set, setting manually...');
-              // Force set the current clinic to the preferred or first one
-              const preferred = clinics.find(c => c.isPreferred) || clinics[0];
-              this.clinicSelectionService.currentClinic.set(preferred);
-              this.loadConfiguration();
-              this.loadClinicInfo();
+            // Set the clinic manually to ensure signal is updated
+            const preferred = clinics.find(c => c.isPreferred) || clinics[0];
+            if (!environment.production) {
+              console.log('Setting current clinic to:', preferred);
             }
+            this.clinicSelectionService.currentClinic.set(preferred);
           } else {
+            if (!environment.production) {
+              console.warn('No clinics returned from API:', clinics);
+            }
             this.error = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
             this.loading = false;
+          }
+        })
+      ).subscribe({
+        next: () => {
+          // After signal is set in tap(), load configuration if clinics exist
+          // The tap() operator has already validated and set the clinic
+          if (this.clinicSelectionService.currentClinic()) {
+            this.loadConfiguration();
+            this.loadClinicInfo();
           }
         },
         error: (err) => {
