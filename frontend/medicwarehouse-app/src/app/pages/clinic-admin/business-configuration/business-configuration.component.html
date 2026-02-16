@@ -1,4 +1,12 @@
 <app-navbar></app-navbar>
+
+<!-- Setup Wizard -->
+<app-setup-wizard 
+  *ngIf="showWizard"
+  (complete)="onWizardComplete($event)"
+  (cancel)="closeWizard()"
+></app-setup-wizard>
+
 <div class="business-configuration-container">
   <div class="page-header">
     <h1>Configuração do Negócio</h1>
@@ -202,14 +210,45 @@
   <!-- No Configuration State -->
   <div *ngIf="!loading && !configuration && !error" class="no-config-state">
     <div class="empty-state-icon">⚙️</div>
-    <h2>Configuração não encontrada</h2>
-    <p>Esta clínica ainda não possui configuração de negócio.</p>
-    <button 
-      class="btn btn-primary btn-create-config"
-      (click)="createConfiguration()"
-      [disabled]="saving"
-    >
-      {{ saving ? 'Criando...' : '✨ Criar Configuração Automaticamente' }}
-    </button>
+    <h2>Configure sua clínica em minutos</h2>
+    <p class="subtitle-large">Escolha entre configuração rápida ou personalizada</p>
+    
+    <div class="action-buttons">
+      <button 
+        class="btn btn-primary btn-wizard"
+        (click)="openWizard()"
+        [disabled]="saving"
+      >
+        <span class="btn-icon">✨</span>
+        <span class="btn-content">
+          <span class="btn-title">Configuração Rápida (Recomendado)</span>
+          <span class="btn-subtitle">Assistente em 3 passos simples</span>
+        </span>
+      </button>
+
+      <button 
+        class="btn btn-secondary btn-manual"
+        (click)="createConfiguration()"
+        [disabled]="saving"
+      >
+        <span class="btn-icon">⚙️</span>
+        <span class="btn-content">
+          <span class="btn-title">Configuração Manual</span>
+          <span class="btn-subtitle">Configure tudo do seu jeito</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="features-preview">
+      <h3>O que você pode configurar:</h3>
+      <div class="features-grid">
+        <div class="feature-badge">📋 Tipo de negócio e especialidade</div>
+        <div class="feature-badge">🕐 Horários de atendimento</div>
+        <div class="feature-badge">💊 Recursos clínicos</div>
+        <div class="feature-badge">💳 Gestão financeira</div>
+        <div class="feature-badge">🌐 Agendamento online</div>
+        <div class="feature-badge">📊 E muito mais...</div>
+      </div>
+    </div>
   </div>
 </div>

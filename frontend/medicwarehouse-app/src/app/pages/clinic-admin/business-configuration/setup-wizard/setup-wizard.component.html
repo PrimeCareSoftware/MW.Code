@@ -1,0 +1,189 @@
+<div class="wizard-overlay">
+  <div class="wizard-container">
+    <!-- Header -->
+    <div class="wizard-header">
+      <h2>🚀 Configuração Rápida</h2>
+      <p>Configure sua clínica em 3 passos simples</p>
+      <button class="close-btn" (click)="onCancel()" aria-label="Fechar">&times;</button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+    </div>
+    <div class="step-indicators">
+      <div class="step-indicator" [class.active]="currentStep >= 0" [class.current]="currentStep === 0">
+        <span class="step-number">1</span>
+        <span class="step-label">Tipo</span>
+      </div>
+      <div class="step-indicator" [class.active]="currentStep >= 1" [class.current]="currentStep === 1">
+        <span class="step-number">2</span>
+        <span class="step-label">Horário</span>
+      </div>
+      <div class="step-indicator" [class.active]="currentStep >= 2" [class.current]="currentStep === 2">
+        <span class="step-number">3</span>
+        <span class="step-label">Confirmar</span>
+      </div>
+    </div>
+
+    <!-- Step Content -->
+    <div class="wizard-content">
+      <!-- Step 1: Template Selection -->
+      <div *ngIf="currentStep === 0" class="step-content">
+        <h3>Escolha o tipo de configuração</h3>
+        <p class="step-description">Selecione o modelo que melhor se adequa ao seu negócio. Você poderá personalizar depois.</p>
+        
+        <div class="templates-grid">
+          <div
+            *ngFor="let template of templates"
+            class="template-card"
+            [class.selected]="selectedTemplate?.id === template.id"
+            (click)="selectTemplate(template)"
+          >
+            <div class="template-icon">{{ template.icon }}</div>
+            <h4>{{ template.name }}</h4>
+            <p>{{ template.description }}</p>
+            <div class="template-check" *ngIf="selectedTemplate?.id === template.id">✓</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Schedule Configuration -->
+      <div *ngIf="currentStep === 1" class="step-content">
+        <h3>Configure o horário de atendimento</h3>
+        <p class="step-description">Defina os horários de funcionamento e duração das consultas.</p>
+        
+        <div class="schedule-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="opening">🕐 Horário de Abertura</label>
+              <input 
+                type="time" 
+                id="opening"
+                [(ngModel)]="openingTime"
+                class="time-input"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="closing">🕔 Horário de Fechamento</label>
+              <input 
+                type="time" 
+                id="closing"
+                [(ngModel)]="closingTime"
+                class="time-input"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="duration">⏱️ Duração da Consulta</label>
+            <select 
+              id="duration"
+              [(ngModel)]="appointmentDurationMinutes"
+              class="select-input"
+            >
+              <option *ngFor="let option of appointmentDurationOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+
+          <div class="checkboxes">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="allowEmergencySlots"
+              >
+              <span>🚨 Permitir horários de emergência</span>
+            </label>
+
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="enableOnlineAppointmentScheduling"
+              >
+              <span>🌐 Habilitar agendamento online</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review -->
+      <div *ngIf="currentStep === 2" class="step-content">
+        <h3>✅ Revise sua configuração</h3>
+        <p class="step-description">Confira os detalhes antes de finalizar. Você poderá ajustar tudo depois.</p>
+        
+        <div class="review-section">
+          <div class="review-item">
+            <div class="review-label">Tipo de Configuração:</div>
+            <div class="review-value">{{ selectedTemplate?.name }}</div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-label">Horário de Funcionamento:</div>
+            <div class="review-value">{{ openingTime }} - {{ closingTime }}</div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-label">Duração das Consultas:</div>
+            <div class="review-value">{{ appointmentDurationMinutes }} minutos</div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-label">Horários de Emergência:</div>
+            <div class="review-value">{{ allowEmergencySlots ? '✓ Habilitado' : '✗ Desabilitado' }}</div>
+          </div>
+
+          <div class="review-item">
+            <div class="review-label">Agendamento Online:</div>
+            <div class="review-value">{{ enableOnlineAppointmentScheduling ? '✓ Habilitado' : '✗ Desabilitado' }}</div>
+          </div>
+        </div>
+
+        <div class="success-message">
+          <span class="success-icon">🎉</span>
+          <p>Sua configuração está pronta! Clique em "Concluir" para aplicar.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="wizard-footer">
+      <button 
+        class="btn btn-secondary"
+        (click)="previousStep()"
+        *ngIf="currentStep > 0"
+      >
+        ← Voltar
+      </button>
+
+      <button 
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        *ngIf="currentStep === 0"
+      >
+        Cancelar
+      </button>
+
+      <div class="spacer"></div>
+
+      <button 
+        class="btn btn-primary"
+        (click)="nextStep()"
+        [disabled]="!canProceed()"
+        *ngIf="currentStep < totalSteps - 1"
+      >
+        Próximo →
+      </button>
+
+      <button 
+        class="btn btn-success"
+        (click)="finish()"
+        *ngIf="currentStep === totalSteps - 1"
+      >
+        ✓ Concluir Configuração
+      </button>
+    </div>
+  </div>
+</div>
