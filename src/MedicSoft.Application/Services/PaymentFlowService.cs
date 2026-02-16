@@ -37,17 +37,17 @@ namespace MedicSoft.Application.Services
             ITissGuideService tissGuideService,
             ILogger<PaymentFlowService> logger)
         {
-            _appointmentRepository = appointmentRepository;
-            _paymentRepository = paymentRepository;
-            _invoiceRepository = invoiceRepository;
-            _patientRepository = patientRepository;
-            _clinicRepository = clinicRepository;
-            _appointmentProcedureRepository = appointmentProcedureRepository;
-            _procedureRepository = procedureRepository;
-            _clinicPricingConfigurationRepository = clinicPricingConfigurationRepository;
-            _procedurePricingConfigurationRepository = procedurePricingConfigurationRepository;
-            _tissGuideService = tissGuideService;
-            _logger = logger;
+            _appointmentRepository = appointmentRepository ?? throw new ArgumentNullException(nameof(appointmentRepository));
+            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            _invoiceRepository = invoiceRepository ?? throw new ArgumentNullException(nameof(invoiceRepository));
+            _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _clinicRepository = clinicRepository ?? throw new ArgumentNullException(nameof(clinicRepository));
+            _appointmentProcedureRepository = appointmentProcedureRepository ?? throw new ArgumentNullException(nameof(appointmentProcedureRepository));
+            _procedureRepository = procedureRepository ?? throw new ArgumentNullException(nameof(procedureRepository));
+            _clinicPricingConfigurationRepository = clinicPricingConfigurationRepository ?? throw new ArgumentNullException(nameof(clinicPricingConfigurationRepository));
+            _procedurePricingConfigurationRepository = procedurePricingConfigurationRepository ?? throw new ArgumentNullException(nameof(procedurePricingConfigurationRepository));
+            _tissGuideService = tissGuideService ?? throw new ArgumentNullException(nameof(tissGuideService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<PaymentFlowResultDto> RegisterAppointmentPaymentAsync(
@@ -67,82 +67,88 @@ namespace MedicSoft.Application.Services
 
             try
             {
-                // 1. Get appointment
-                var appointment = await _appointmentRepository.GetByIdAsync(appointmentId, tenantId);
-                if (appointment == null)
+                // Execute entire payment flow in a transaction to ensure data consistency
+                await _paymentRepository.ExecuteInTransactionAsync(async () =>
                 {
-                    result.Success = false;
-                    result.ErrorMessage = "Appointment not found";
-                    return result;
-                }
-
-                // 2. Parse enums
-                if (!Enum.TryParse<PaymentReceiverType>(paymentReceiverType, out var receiverType))
-                {
-                    result.Success = false;
-                    result.ErrorMessage = $"Invalid PaymentReceiverType: {paymentReceiverType}";
-                    return result;
-                }
-
-                if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
-                {
-                    result.Success = false;
-                    result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
-                    return result;
-                }
-
-                // 3. Mark appointment as paid
-                appointment.MarkAsPaid(paidByUserId, receiverType, amount, method);
-                await _appointmentRepository.UpdateAsync(appointment);
-
-                // 4. Create Payment entity
-                var payment = new Payment(
-                    amount,
-                    method,
-                    tenantId,
-                    appointmentId: appointmentId,
-                    notes: notes
-                );
-                await _paymentRepository.AddAsync(payment);
-                result.PaymentId = payment.Id;
-
-                // 5. Mark payment as processed
-                payment.MarkAsPaid(transactionId: $"APT-{appointmentId:N}");
-                await _paymentRepository.UpdateAsync(payment);
-
-                // 6. Create Invoice
-                var invoice = await CreateInvoiceForPaymentAsync(payment, appointment, tenantId);
-                if (invoice != null)
-                {
-                    result.InvoiceId = invoice.Id;
-                }
-
-                // 7. Create TISS guide if health insurance
-                if (appointment.PaymentType == PaymentType.HealthInsurance && appointment.HealthInsurancePlanId.HasValue)
-                {
-                    try
+                    // 1. Get appointment
+                    var appointment = await _appointmentRepository.GetByIdAsync(appointmentId, tenantId);
+                    if (appointment == null)
                     {
-                        result.TissGuideId = await CreateTissGuideForAppointmentAsync(appointment, payment, tenantId);
-                        
-                        // Link TISS guide to invoice if both exist
-                        if (invoice != null && result.TissGuideId.HasValue)
+                        result.Success = false;
+                        result.ErrorMessage = "Appointment not found";
+                        return;
+                    }
+
+                    // 2. Parse enums
+                    if (!Enum.TryParse<PaymentReceiverType>(paymentReceiverType, out var receiverType))
+                    {
+                        result.Success = false;
+                        result.ErrorMessage = $"Invalid PaymentReceiverType: {paymentReceiverType}";
+                        return;
+                    }
+
+                    if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
+                    {
+                        result.Success = false;
+                        result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
+                        return;
+                    }
+
+                    // 3. Mark appointment as paid
+                    appointment.MarkAsPaid(paidByUserId, receiverType, amount, method);
+                    await _appointmentRepository.UpdateAsync(appointment);
+
+                    // 4. Create Payment entity
+                    var payment = new Payment(
+                        amount,
+                        method,
+                        tenantId,
+                        appointmentId: appointmentId,
+                        notes: notes
+                    );
+                    await _paymentRepository.AddAsync(payment);
+                    result.PaymentId = payment.Id;
+
+                    // 5. Mark payment as processed
+                    payment.MarkAsPaid(transactionId: $"APT-{appointmentId:N}");
+                    await _paymentRepository.UpdateAsync(payment);
+
+                    // 6. Create Invoice
+                    var invoice = await CreateInvoiceForPaymentAsync(payment, appointment, tenantId);
+                    if (invoice != null)
+                    {
+                        result.InvoiceId = invoice.Id;
+                    }
+
+                    // 7. Create TISS guide if health insurance
+                    if (appointment.PaymentType == PaymentType.HealthInsurance && appointment.HealthInsurancePlanId.HasValue)
+                    {
+                        try
                         {
-                            invoice.LinkToTissGuide(result.TissGuideId.Value);
-                            await _invoiceRepository.UpdateAsync(invoice);
+                            result.TissGuideId = await CreateTissGuideForAppointmentAsync(appointment, payment, tenantId);
+                            
+                            // Link TISS guide to invoice if both exist
+                            if (invoice != null && result.TissGuideId.HasValue)
+                            {
+                                invoice.LinkToTissGuide(result.TissGuideId.Value);
+                                await _invoiceRepository.UpdateAsync(invoice);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Failed to create TISS guide for appointment {AppointmentId}", appointmentId);
+                            // Don't fail the entire flow if TISS creation fails - it can be created manually later
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Failed to create TISS guide for appointment {AppointmentId}", appointmentId);
-                        // Don't fail the entire flow if TISS creation fails
-                    }
-                }
 
-                result.Success = true;
+                    result.Success = true;
+                });
+
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error processing payment for appointment {AppointmentId}", appointmentId);
                 result.Success = false;
                 result.ErrorMessage = $"Error processing payment: {ex.Message}";
                 return result;
@@ -267,58 +273,64 @@ namespace MedicSoft.Application.Services
 
             try
             {
-                // Get appointment procedure
-                var appointmentProcedure = await _appointmentProcedureRepository.GetByIdAsync(appointmentProcedureId, tenantId);
-                if (appointmentProcedure == null)
+                // Execute entire payment flow in a transaction to ensure data consistency
+                await _paymentRepository.ExecuteInTransactionAsync(async () =>
                 {
-                    result.Success = false;
-                    result.ErrorMessage = "Appointment procedure not found";
-                    return result;
-                }
+                    // Get appointment procedure
+                    var appointmentProcedure = await _appointmentProcedureRepository.GetByIdAsync(appointmentProcedureId, tenantId);
+                    if (appointmentProcedure == null)
+                    {
+                        result.Success = false;
+                        result.ErrorMessage = "Appointment procedure not found";
+                        return;
+                    }
 
-                // Get appointment
-                var appointment = await _appointmentRepository.GetByIdAsync(appointmentProcedure.AppointmentId, tenantId);
-                if (appointment == null)
-                {
-                    result.Success = false;
-                    result.ErrorMessage = "Appointment not found";
-                    return result;
-                }
+                    // Get appointment
+                    var appointment = await _appointmentRepository.GetByIdAsync(appointmentProcedure.AppointmentId, tenantId);
+                    if (appointment == null)
+                    {
+                        result.Success = false;
+                        result.ErrorMessage = "Appointment not found";
+                        return;
+                    }
 
-                if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
-                {
-                    result.Success = false;
-                    result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
-                    return result;
-                }
+                    if (!Enum.TryParse<PaymentMethod>(paymentMethod, out var method))
+                    {
+                        result.Success = false;
+                        result.ErrorMessage = $"Invalid PaymentMethod: {paymentMethod}";
+                        return;
+                    }
 
-                // Create Payment entity for procedure
-                var payment = new Payment(
-                    appointmentProcedure.PriceCharged,
-                    method,
-                    tenantId,
-                    appointmentProcedureId: appointmentProcedureId,
-                    notes: notes
-                );
-                await _paymentRepository.AddAsync(payment);
-                result.PaymentId = payment.Id;
+                    // Create Payment entity for procedure
+                    var payment = new Payment(
+                        appointmentProcedure.PriceCharged,
+                        method,
+                        tenantId,
+                        appointmentProcedureId: appointmentProcedureId,
+                        notes: notes
+                    );
+                    await _paymentRepository.AddAsync(payment);
+                    result.PaymentId = payment.Id;
 
-                // Mark payment as processed
-                payment.MarkAsPaid(transactionId: $"PROC-{appointmentProcedureId:N}");
-                await _paymentRepository.UpdateAsync(payment);
+                    // Mark payment as processed
+                    payment.MarkAsPaid(transactionId: $"PROC-{appointmentProcedureId:N}");
+                    await _paymentRepository.UpdateAsync(payment);
 
-                // Create Invoice
-                var invoice = await CreateInvoiceForProcedurePaymentAsync(payment, appointmentProcedure, appointment, tenantId);
-                if (invoice != null)
-                {
-                    result.InvoiceId = invoice.Id;
-                }
+                    // Create Invoice
+                    var invoice = await CreateInvoiceForProcedurePaymentAsync(payment, appointmentProcedure, appointment, tenantId);
+                    if (invoice != null)
+                    {
+                        result.InvoiceId = invoice.Id;
+                    }
 
-                result.Success = true;
+                    result.Success = true;
+                });
+
                 return result;
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error processing procedure payment for {ProcedureId}", appointmentProcedureId);
                 result.Success = false;
                 result.ErrorMessage = $"Error processing procedure payment: {ex.Message}";
                 return result;

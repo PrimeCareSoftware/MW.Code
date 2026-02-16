@@ -269,8 +269,8 @@ namespace MedicSoft.Application.Services.Dashboards
                 
                 case DashboardExportFormat.Pdf:
                 case DashboardExportFormat.Excel:
-                    _logger.LogWarning("Dashboard export to {Format} format is not yet implemented", format);
-                    throw new NotImplementedException($"Dashboard export to {format} format is not yet implemented");
+                    _logger.LogWarning("Dashboard export to {Format} format is not yet available. Only JSON export is currently supported.", format);
+                    throw new InvalidOperationException($"Dashboard export to {format} format is not yet available. Only JSON export is currently supported. Please use JSON format or contact support for additional export options.");
                 
                 default:
                     throw new ArgumentException($"Unsupported export format: {format}");
