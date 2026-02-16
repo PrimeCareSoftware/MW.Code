@@ -110,23 +110,21 @@ export class BusinessConfigurationComponent implements OnInit {
       this.loading = true;
       this.clinicSelectionService.getUserClinics().subscribe({
         next: (clinics) => {
+          console.log('Clinics loaded:', clinics);
           // Check the returned clinics array directly instead of relying on signal timing
           if (clinics && clinics.length > 0) {
-            // Signal should be set by the service, but we'll verify it
-            const clinic = this.clinicSelectionService.currentClinic();
-            if (clinic) {
+            // Always set the clinic manually to avoid signal timing issues
+            const preferred = clinics.find(c => c.isPreferred) || clinics[0];
+            console.log('Setting current clinic to:', preferred);
+            this.clinicSelectionService.currentClinic.set(preferred);
+            
+            // Use a small delay to ensure the signal is properly set
+            setTimeout(() => {
               this.loadConfiguration();
               this.loadClinicInfo();
-            } else {
-              // This shouldn't happen, but handle it gracefully
-              console.warn('Clinics are available but currentClinic is not set, setting manually...');
-              // Force set the current clinic to the preferred or first one
-              const preferred = clinics.find(c => c.isPreferred) || clinics[0];
-              this.clinicSelectionService.currentClinic.set(preferred);
-              this.loadConfiguration();
-              this.loadClinicInfo();
-            }
+            }, 0);
           } else {
+            console.warn('No clinics returned from API:', clinics);
             this.error = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
             this.loading = false;
           }
