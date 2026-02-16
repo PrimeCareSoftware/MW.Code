@@ -12,6 +12,7 @@ import {
   UpdateFeatureRequest 
 } from '../../models/system-admin.model';
 import { Navbar } from '../../shared/navbar/navbar';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-business-config-management',
@@ -31,6 +32,7 @@ export class BusinessConfigManagement implements OnInit {
   saveError = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   configNotFound = signal(false);
+  isSystemOwner = signal(false);
   
   clinicId: string | null = null;
   tenantId: string | null = null;
@@ -42,10 +44,15 @@ export class BusinessConfigManagement implements OnInit {
   constructor(
     private systemAdminService: SystemAdminService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private auth: Auth
   ) {}
 
   ngOnInit(): void {
+    // Check if user is system owner
+    const userInfo = this.auth.getUserInfo();
+    this.isSystemOwner.set(userInfo?.isSystemOwner || false);
+    
     this.route.queryParams.subscribe(params => {
       this.clinicId = params['clinicId'];
       this.tenantId = params['tenantId'];
