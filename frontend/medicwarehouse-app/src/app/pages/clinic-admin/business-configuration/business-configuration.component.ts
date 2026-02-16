@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, EMPTY } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -16,6 +16,7 @@ import { ClinicSelectionService } from '../../../services/clinic-selection.servi
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicAdminInfoDto, UpdateClinicInfoRequest } from '../../../models/clinic-admin.model';
 import { SetupWizardComponent, WizardConfiguration } from './setup-wizard/setup-wizard.component';
+import { environment } from '../../../../environments/environment';
 
 interface FeatureCategory {
   name: string;
@@ -108,25 +109,33 @@ export class BusinessConfigurationComponent implements OnInit {
     } else {
       // Clinic not loaded yet, fetch it first
       this.loading = true;
-      this.clinicSelectionService.getUserClinics().subscribe({
-        next: (clinics) => {
-          console.log('Clinics loaded:', clinics);
-          // Check the returned clinics array directly instead of relying on signal timing
+      this.clinicSelectionService.getUserClinics().pipe(
+        tap(clinics => {
+          if (!environment.production) {
+            console.log('Clinics loaded:', clinics);
+          }
+          // Check the returned clinics array directly
           if (clinics && clinics.length > 0) {
-            // Always set the clinic manually to avoid signal timing issues
+            // Set the clinic manually to ensure signal is updated
             const preferred = clinics.find(c => c.isPreferred) || clinics[0];
-            console.log('Setting current clinic to:', preferred);
+            if (!environment.production) {
+              console.log('Setting current clinic to:', preferred);
+            }
             this.clinicSelectionService.currentClinic.set(preferred);
-            
-            // Use a small delay to ensure the signal is properly set
-            setTimeout(() => {
-              this.loadConfiguration();
-              this.loadClinicInfo();
-            }, 0);
           } else {
-            console.warn('No clinics returned from API:', clinics);
+            if (!environment.production) {
+              console.warn('No clinics returned from API:', clinics);
+            }
             this.error = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
             this.loading = false;
+          }
+        })
+      ).subscribe({
+        next: (clinics) => {
+          // After signal is set, load configuration
+          if (clinics && clinics.length > 0) {
+            this.loadConfiguration();
+            this.loadClinicInfo();
           }
         },
         error: (err) => {
