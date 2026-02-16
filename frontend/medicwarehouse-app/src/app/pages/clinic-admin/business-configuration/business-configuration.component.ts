@@ -148,14 +148,16 @@ export class BusinessConfigurationComponent implements OnInit {
           }
           // For other errors, log and re-throw to fail the entire operation
           console.error('Error loading business configuration:', err);
-          throw new Error(`Failed to load business configuration: ${err.message || 'Unknown error'}`);
+          const errorMsg = err?.message || err?.error?.message || 'Unknown error';
+          throw new Error(`Failed to load business configuration: ${errorMsg}`);
         })
       ),
       clinicInfo: this.clinicAdminService.getClinicInfo().pipe(
         catchError((err) => {
           console.error('Error loading clinic info:', err);
           // Re-throw to fail the entire operation since clinic info is required for the page
-          throw new Error(`Failed to load clinic information: ${err.message || 'Unknown error'}`);
+          const errorMsg = err?.message || err?.error?.message || 'Unknown error';
+          throw new Error(`Failed to load clinic information: ${errorMsg}`);
         })
       )
     }).subscribe({
@@ -191,9 +193,9 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   /**
-   * Load configuration only (used for refresh operations after updates).
-   * Does not manage loading state - caller is responsible for loading indicators.
-   * For initial page load, use loadDataInParallel() instead.
+   * Load configuration only (used for silent refresh operations after updates).
+   * Does not manage loading or error state - silently fails to preserve UI state.
+   * For initial page load with loading indicators, use loadDataInParallel() instead.
    */
   private loadConfiguration(): void {
     const selectedClinic = this.clinicSelectionService.currentClinic();
@@ -219,9 +221,9 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   /**
-   * Load clinic info only (used for refresh operations after wizard completion).
-   * Does not manage loading state - caller is responsible for loading indicators.
-   * For initial page load, use loadDataInParallel() instead.
+   * Load clinic info only (used for silent refresh operations after wizard completion).
+   * Does not manage loading or error state - silently fails to preserve UI state.
+   * For initial page load with loading indicators, use loadDataInParallel() instead.
    */
   private loadClinicInfo(): void {
     this.clinicAdminService.getClinicInfo().subscribe({
