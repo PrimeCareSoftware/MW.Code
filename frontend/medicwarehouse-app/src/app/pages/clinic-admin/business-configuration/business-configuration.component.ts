@@ -473,24 +473,6 @@ export class BusinessConfigurationComponent implements OnInit {
     return this.specialtyOptions.find(opt => opt.value === specialty)?.label || 'Desconhecido';
   }
 
-  private loadClinicInfo(): void {
-    this.clinicAdminService.getClinicInfo().subscribe({
-      next: (info) => {
-        this.clinicInfo = info;
-        // Parse TimeSpan strings to HH:mm format for time inputs
-        this.openingTime = this.parseTimeSpan(info.openingTime);
-        this.closingTime = this.parseTimeSpan(info.closingTime);
-        this.appointmentDurationMinutes = info.appointmentDurationMinutes;
-        this.allowEmergencySlots = info.allowEmergencySlots;
-        this.enableOnlineAppointmentScheduling = info.enableOnlineAppointmentScheduling;
-      },
-      error: (err) => {
-        console.error('Error loading clinic info:', err);
-        this.error = 'Erro ao carregar informações da clínica';
-      }
-    });
-  }
-
   private parseTimeSpan(timeSpan: string): string {
     // TimeSpan comes as "HH:mm:ss" or "HH:mm:ss.fffffff"
     // We need "HH:mm" for HTML time input
