@@ -119,11 +119,13 @@ export class BusinessConfigurationComponent implements OnInit {
             this.loadDataInParallel();
           } else {
             // No clinics returned from the service, try to use the clinic from auth token as fallback
+            console.log('No clinics returned from getUserClinics(), attempting fallback to auth token');
             this.tryFallbackToAuthClinic();
           }
         },
         error: (err) => {
           console.error('Error loading clinics:', err);
+          console.log('Attempting fallback to auth token due to clinic loading error');
           // On error, try to use the clinic from auth token as fallback
           this.tryFallbackToAuthClinic();
         }
@@ -143,13 +145,14 @@ export class BusinessConfigurationComponent implements OnInit {
     if (clinicIdFromAuth) {
       console.log('Using clinic from auth token as fallback:', clinicIdFromAuth);
       // Create a minimal UserClinicDto from the auth data
+      // Note: The actual clinic name will be loaded when loadDataInParallel() calls getClinicInfo()
       const fallbackClinic: UserClinicDto = {
         clinicId: clinicIdFromAuth,
-        clinicName: 'Minha Clínica', // Default name, will be loaded from API
+        clinicName: '', // Will be populated by getClinicInfo()
         clinicAddress: '',
         isPreferred: true,
         isActive: true,
-        linkedDate: new Date().toISOString()
+        linkedDate: '' // No actual link date available for fallback data
       };
       
       // Set this as the current clinic and proceed
