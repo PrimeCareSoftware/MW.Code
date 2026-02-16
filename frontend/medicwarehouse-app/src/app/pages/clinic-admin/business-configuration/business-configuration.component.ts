@@ -145,14 +145,14 @@ export class BusinessConfigurationComponent implements OnInit {
     if (clinicIdFromAuth) {
       console.log('Using clinic from auth token as fallback:', clinicIdFromAuth);
       // Create a minimal UserClinicDto from the auth data
-      // Note: The actual clinic name will be loaded when loadDataInParallel() calls getClinicInfo()
+      // Note: Empty fields will be populated when loadDataInParallel() calls getClinicInfo()
       const fallbackClinic: UserClinicDto = {
         clinicId: clinicIdFromAuth,
         clinicName: '', // Will be populated by getClinicInfo()
-        clinicAddress: '',
+        clinicAddress: '', // Will be populated by getClinicInfo()
         isPreferred: true,
         isActive: true,
-        linkedDate: '' // No actual link date available for fallback data
+        linkedDate: '' // No actual link date available for fallback data; empty string to satisfy interface
       };
       
       // Set this as the current clinic and proceed
