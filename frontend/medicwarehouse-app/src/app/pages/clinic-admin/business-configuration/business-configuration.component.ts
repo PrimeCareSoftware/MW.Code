@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, EMPTY } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -16,7 +16,6 @@ import { ClinicSelectionService } from '../../../services/clinic-selection.servi
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicAdminInfoDto, UpdateClinicInfoRequest } from '../../../models/clinic-admin.model';
 import { SetupWizardComponent, WizardConfiguration } from './setup-wizard/setup-wizard.component';
-import { environment } from '../../../../environments/environment';
 
 interface FeatureCategory {
   name: string;
@@ -103,40 +102,20 @@ export class BusinessConfigurationComponent implements OnInit {
     const selectedClinic = this.clinicSelectionService.currentClinic();
     
     if (selectedClinic) {
-      // Clinic already loaded, proceed normally
-      this.loadConfiguration();
-      this.loadClinicInfo();
+      // Clinic already loaded, proceed normally with coordinated loading
+      this.loadDataInParallel();
     } else {
       // Clinic not loaded yet, fetch it first
+      // The service already sets the currentClinic signal in its tap() operator
       this.loading = true;
-      this.clinicSelectionService.getUserClinics().pipe(
-        tap(clinics => {
-          if (!environment.production) {
-            console.log('Clinics loaded:', clinics);
-          }
-          // Check the returned clinics array directly
-          if (clinics && clinics.length > 0) {
-            // Set the clinic manually to ensure signal is updated
-            const preferred = clinics.find(c => c.isPreferred) || clinics[0];
-            if (!environment.production) {
-              console.log('Setting current clinic to:', preferred);
-            }
-            this.clinicSelectionService.currentClinic.set(preferred);
+      this.clinicSelectionService.getUserClinics().subscribe({
+        next: () => {
+          // Service has already set the signal in its tap() operator
+          if (this.clinicSelectionService.currentClinic()) {
+            this.loadDataInParallel();
           } else {
-            if (!environment.production) {
-              console.warn('No clinics returned from API:', clinics);
-            }
             this.error = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
             this.loading = false;
-          }
-        })
-      ).subscribe({
-        next: () => {
-          // After signal is set in tap(), load configuration if clinics exist
-          // The tap() operator has already validated and set the clinic
-          if (this.clinicSelectionService.currentClinic()) {
-            this.loadConfiguration();
-            this.loadClinicInfo();
           }
         },
         error: (err) => {
@@ -148,7 +127,7 @@ export class BusinessConfigurationComponent implements OnInit {
     }
   }
 
-  private loadConfiguration(): void {
+  private loadDataInParallel(): void {
     const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
       this.error = 'Nenhuma clínica selecionada';
@@ -158,22 +137,74 @@ export class BusinessConfigurationComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
+    // Use forkJoin to coordinate parallel operations and manage loading state only after both complete
+    forkJoin({
+      config: this.businessConfigService.getByClinicId(selectedClinic.clinicId).pipe(
+        catchError((err) => {
+          console.error('Error loading configuration:', err);
+          // Return EMPTY to continue with other operations
+          if (err.status === 404) {
+            return EMPTY;
+          }
+          throw err;
+        })
+      ),
+      clinicInfo: this.clinicAdminService.getClinicInfo().pipe(
+        catchError((err) => {
+          console.error('Error loading clinic info:', err);
+          throw err;
+        })
+      )
+    }).subscribe({
+      next: (results) => {
+        // Handle configuration result
+        if (results.config) {
+          this.configuration = results.config;
+          this.buildFeatureCategories();
+          this.loadTerminology(selectedClinic.clinicId);
+        }
+        
+        // Handle clinic info result
+        if (results.clinicInfo) {
+          this.clinicInfo = results.clinicInfo;
+          this.openingTime = this.parseTimeSpan(results.clinicInfo.openingTime);
+          this.closingTime = this.parseTimeSpan(results.clinicInfo.closingTime);
+          this.appointmentDurationMinutes = results.clinicInfo.appointmentDurationMinutes;
+          this.allowEmergencySlots = results.clinicInfo.allowEmergencySlots;
+          this.enableOnlineAppointmentScheduling = results.clinicInfo.enableOnlineAppointmentScheduling;
+        }
+        
+        // Set loading to false only after both operations complete
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error loading data:', err);
+        this.error = 'Erro ao carregar dados. Tente novamente.';
+        this.loading = false;
+      }
+    });
+  }
+
+  private loadConfiguration(): void {
+    const selectedClinic = this.clinicSelectionService.currentClinic();
+    if (!selectedClinic) {
+      this.error = 'Nenhuma clínica selecionada';
+      return;
+    }
+
     this.businessConfigService.getByClinicId(selectedClinic.clinicId).subscribe({
       next: (config) => {
         this.configuration = config;
         this.buildFeatureCategories();
         this.loadTerminology(selectedClinic.clinicId);
-        this.loading = false;
       },
       error: (err) => {
         console.error('Error loading configuration:', err);
         // Show error message so user can manually create configuration
         if (err.status === 404) {
           this.error = '';
-          this.loading = false;
         } else {
           this.error = 'Erro ao carregar configuração. Tente novamente.';
-          this.loading = false;
         }
       }
     });
@@ -416,9 +447,6 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   private loadClinicInfo(): void {
-    this.loading = true;
-    this.error = '';
-
     this.clinicAdminService.getClinicInfo().subscribe({
       next: (info) => {
         this.clinicInfo = info;
@@ -428,12 +456,10 @@ export class BusinessConfigurationComponent implements OnInit {
         this.appointmentDurationMinutes = info.appointmentDurationMinutes;
         this.allowEmergencySlots = info.allowEmergencySlots;
         this.enableOnlineAppointmentScheduling = info.enableOnlineAppointmentScheduling;
-        this.loading = false;
       },
       error: (err) => {
         console.error('Error loading clinic info:', err);
         this.error = 'Erro ao carregar informações da clínica';
-        this.loading = false;
       }
     });
   }
