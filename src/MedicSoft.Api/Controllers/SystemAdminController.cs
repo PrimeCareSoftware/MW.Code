@@ -32,6 +32,7 @@ namespace MedicSoft.Api.Controllers
         private readonly MedicSoftDbContext _context;
         private readonly IOwnerService _ownerService;
         private readonly BusinessConfigurationService _businessConfigService;
+        private readonly ICompanyRepository _companyRepository;
         private readonly ILogger<SystemAdminController> _logger;
 
         public SystemAdminController(
@@ -44,6 +45,7 @@ namespace MedicSoft.Api.Controllers
             MedicSoftDbContext context,
             IOwnerService ownerService,
             BusinessConfigurationService businessConfigService,
+            ICompanyRepository companyRepository,
             ILogger<SystemAdminController> logger) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
@@ -54,6 +56,7 @@ namespace MedicSoft.Api.Controllers
             _context = context;
             _ownerService = ownerService;
             _businessConfigService = businessConfigService;
+            _companyRepository = companyRepository;
             _logger = logger;
         }
 
@@ -134,8 +137,77 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                // Generate unique tenant ID for the clinic
-                var tenantId = Guid.NewGuid().ToString();
+                // Generate friendly subdomain from clinic name (like website registration does)
+                var baseSubdomain = GenerateFriendlySubdomain(request.Name);
+                var subdomain = baseSubdomain;
+                
+                // Ensure subdomain uniqueness
+                var isUnique = await _companyRepository.IsSubdomainUniqueAsync(subdomain);
+                if (!isUnique)
+                {
+                    // If not unique, append sequential numbers (2, 3, 4, etc.) to make it unique
+                    var counter = 2;
+                    const int MaxSubdomainAttempts = 100;
+                    
+                    while (!isUnique && counter <= MaxSubdomainAttempts)
+                    {
+                        subdomain = $"{baseSubdomain}-{counter}";
+                        isUnique = await _companyRepository.IsSubdomainUniqueAsync(subdomain);
+                        counter++;
+                    }
+                    
+                    if (!isUnique)
+                    {
+                        return BadRequest(new { message = "Não foi possível gerar um identificador único. Por favor, tente novamente com um nome de clínica diferente." });
+                    }
+                }
+                
+                // Use the friendly subdomain as the tenant ID (consistent with website registration)
+                var tenantId = subdomain;
+
+                // Determine document type based on document length
+                var cleanDocument = new string(request.Document.Where(char.IsDigit).ToArray());
+                Domain.Enums.DocumentType documentType;
+                
+                if (cleanDocument.Length == 11)
+                {
+                    documentType = Domain.Enums.DocumentType.CPF;
+                }
+                else if (cleanDocument.Length == 14)
+                {
+                    documentType = Domain.Enums.DocumentType.CNPJ;
+                }
+                else
+                {
+                    return BadRequest(new { message = "Documento inválido. Deve ser um CPF (11 dígitos) ou CNPJ (14 dígitos)." });
+                }
+
+                // Check if company already exists by document
+                var existingCompany = await _companyRepository.GetByDocumentAsync(request.Document);
+                Company company;
+                
+                if (existingCompany != null)
+                {
+                    // Use existing company's tenantId
+                    company = existingCompany;
+                    tenantId = company.TenantId;
+                }
+                else
+                {
+                    // Create new company entity
+                    company = new Company(
+                        request.Name,
+                        request.Name, // TradeName same as Name
+                        request.Document,
+                        documentType,
+                        request.Phone,
+                        request.Email,
+                        tenantId
+                    );
+                    company.SetSubdomain(subdomain);
+                    await _companyRepository.AddAsync(company);
+                    await _context.SaveChangesAsync(); // Save to get Company.Id
+                }
 
                 // Check if a plan was specified and validate it
                 SubscriptionPlan? plan = null;
@@ -152,7 +224,7 @@ namespace MedicSoft.Api.Controllers
                         return BadRequest(new { message = "Plano não encontrado" });
                 }
 
-                // Create clinic
+                // Create clinic linked to company
                 var clinic = new Clinic(
                     request.Name,
                     request.Name, // TradeName same as Name
@@ -163,7 +235,9 @@ namespace MedicSoft.Api.Controllers
                     new TimeSpan(8, 0, 0), // Default 8 AM
                     new TimeSpan(18, 0, 0), // Default 6 PM
                     tenantId,
-                    30 // Default 30 minute appointments
+                    30, // Default 30 minute appointments
+                    documentType,
+                    company.Id // Link to company
                 );
 
                 await _clinicRepository.AddAsync(clinic);
@@ -1223,6 +1297,56 @@ namespace MedicSoft.Api.Controllers
             return Ok(result);
         }
 
+        #endregion
+        
+        #region Helper Methods
+        
+        /// <summary>
+        /// Generate a friendly subdomain from clinic name.
+        /// This implementation matches RegistrationService.GenerateFriendlySubdomain to ensure consistency.
+        /// </summary>
+        private static string GenerateFriendlySubdomain(string clinicName)
+        {
+            if (string.IsNullOrWhiteSpace(clinicName))
+            {
+                return "clinic";
+            }
+
+            // Convert to lowercase and remove accents
+            var subdomain = clinicName.ToLowerInvariant()
+                .Normalize(System.Text.NormalizationForm.FormD);
+
+            // Remove diacritics (accents)
+            var chars = subdomain.Where(c => 
+                System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != 
+                System.Globalization.UnicodeCategory.NonSpacingMark).ToArray();
+            subdomain = new string(chars).Normalize(System.Text.NormalizationForm.FormC);
+
+            // Replace spaces and invalid characters with hyphens
+            subdomain = System.Text.RegularExpressions.Regex.Replace(subdomain, @"[^a-z0-9]+", "-");
+
+            // Remove leading/trailing hyphens
+            subdomain = subdomain.Trim('-');
+
+            // Ensure length constraints (3-63 characters)
+            if (subdomain.Length < 3)
+            {
+                subdomain = "clinic";
+            }
+            else if (subdomain.Length > 63)
+            {
+                subdomain = subdomain[..63].TrimEnd('-');
+                
+                // Ensure minimum length after truncation
+                if (subdomain.Length < 3)
+                {
+                    subdomain = "clinic";
+                }
+            }
+
+            return subdomain;
+        }
+        
         #endregion
     }
 
