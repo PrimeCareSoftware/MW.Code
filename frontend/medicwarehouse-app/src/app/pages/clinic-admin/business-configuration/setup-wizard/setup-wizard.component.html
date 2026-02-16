@@ -1,8 +1,17 @@
-<div class="wizard-overlay">
-  <div class="wizard-container">
+<div class="wizard-overlay" (click)="onCancel()">
+  <div
+    class="wizard-container"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="setup-wizard-title"
+    appFocusTrap
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+    (keydown.escape)="onCancel()"
+  >
     <!-- Header -->
     <div class="wizard-header">
-      <h2>🚀 Configuração Rápida</h2>
+      <h2 id="setup-wizard-title">🚀 Configuração Rápida</h2>
       <p>Configure sua clínica em 3 passos simples</p>
       <button class="close-btn" (click)="onCancel()" aria-label="Fechar">&times;</button>
     </div>
@@ -34,8 +43,9 @@
         <p class="step-description">Selecione o modelo que melhor se adequa ao seu negócio. Você poderá personalizar depois.</p>
         
         <div class="templates-grid">
-          <div
+          <button
             *ngFor="let template of templates"
+            type="button"
             class="template-card"
             [class.selected]="selectedTemplate?.id === template.id"
             (click)="selectTemplate(template)"
@@ -44,7 +54,7 @@
             <h4>{{ template.name }}</h4>
             <p>{{ template.description }}</p>
             <div class="template-check" *ngIf="selectedTemplate?.id === template.id">✓</div>
-          </div>
+          </button>
         </div>
       </div>
 

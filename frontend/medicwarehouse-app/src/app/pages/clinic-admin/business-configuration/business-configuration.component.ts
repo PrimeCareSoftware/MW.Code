@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -597,6 +599,11 @@ export class BusinessConfigurationComponent implements OnInit {
         this.buildFeatureCategories();
         this.loadTerminology(selectedClinic.clinicId);
         
+        // Apply template features if provided
+        if (wizardConfig.features) {
+          this.applyTemplateFeatures(config.id, wizardConfig.features);
+        }
+        
         // Update schedule settings
         // Convert wizard time format (HH:mm) to backend format (HH:mm:ss) using existing formatTimeForBackend method
         const scheduleRequest: UpdateClinicInfoRequest = {
@@ -621,6 +628,10 @@ export class BusinessConfigurationComponent implements OnInit {
             console.error('Error updating schedule:', err);
             this.success = 'Configuração criada, mas houve um erro ao atualizar o horário. Configure manualmente abaixo.';
             this.saving = false;
+            // Clear partial-success message after configured duration to avoid persistent banner
+            setTimeout(() => {
+              this.success = '';
+            }, this.SUCCESS_MESSAGE_DURATION);
           }
         });
       },
@@ -630,5 +641,27 @@ export class BusinessConfigurationComponent implements OnInit {
         this.saving = false;
       }
     });
+  }
+
+  private applyTemplateFeatures(configId: string, features: WizardConfiguration['features']): void {
+    if (!features) return;
+    
+    // Apply each feature from the template in parallel
+    const featureUpdates = Object.entries(features).map(([featureName, enabled]) => 
+      this.businessConfigService.updateFeature(configId, { featureName, enabled }).pipe(
+        catchError((err) => {
+          console.warn(`Failed to apply template feature ${featureName}:`, err);
+          return EMPTY;
+        })
+      )
+    );
+
+    // Execute all feature updates (forkJoin completes automatically after all observables emit)
+    // This is fire-and-forget - failures won't prevent the wizard from completing
+    if (featureUpdates.length > 0) {
+      forkJoin(featureUpdates).subscribe(() => {
+        console.log('Template feature application completed');
+      });
+    }
   }
 }

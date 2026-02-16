@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FocusTrapDirective } from '../../../../shared/accessibility/directives/focus-trap.directive';
 import { 
   BusinessType,
   ProfessionalSpecialty
@@ -42,16 +43,35 @@ export interface WizardConfiguration {
   appointmentDurationMinutes: number;
   allowEmergencySlots: boolean;
   enableOnlineAppointmentScheduling: boolean;
+  features?: {
+    electronicPrescription: boolean;
+    labIntegration: boolean;
+    vaccineControl: boolean;
+    inventoryManagement: boolean;
+    multiRoom: boolean;
+    receptionQueue: boolean;
+    financialModule: boolean;
+    healthInsurance: boolean;
+    telemedicine: boolean;
+    homeVisit: boolean;
+    groupSessions: boolean;
+    publicProfile: boolean;
+    onlineBooking: boolean;
+    patientReviews: boolean;
+    biReports: boolean;
+    apiAccess: boolean;
+    whiteLabel: boolean;
+  };
 }
 
 @Component({
   selector: 'app-setup-wizard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FocusTrapDirective],
   templateUrl: './setup-wizard.component.html',
   styleUrls: ['./setup-wizard.component.scss']
 })
-export class SetupWizardComponent implements OnInit {
+export class SetupWizardComponent {
   @Output() complete = new EventEmitter<WizardConfiguration>();
   @Output() cancel = new EventEmitter<void>();
 
@@ -243,10 +263,6 @@ export class SetupWizardComponent implements OnInit {
     { value: 60, label: '60 minutos' }
   ];
 
-  ngOnInit(): void {
-    // Start with step 0 (template selection)
-  }
-
   selectTemplate(template: ConfigurationTemplate): void {
     this.selectedTemplate = template;
     this.businessType = template.businessType;
@@ -303,7 +319,8 @@ export class SetupWizardComponent implements OnInit {
       closingTime: this.closingTime,
       appointmentDurationMinutes: this.appointmentDurationMinutes,
       allowEmergencySlots: this.allowEmergencySlots,
-      enableOnlineAppointmentScheduling: this.enableOnlineAppointmentScheduling
+      enableOnlineAppointmentScheduling: this.enableOnlineAppointmentScheduling,
+      features: this.selectedTemplate ? this.selectedTemplate.features : undefined
     };
     this.complete.emit(config);
   }
