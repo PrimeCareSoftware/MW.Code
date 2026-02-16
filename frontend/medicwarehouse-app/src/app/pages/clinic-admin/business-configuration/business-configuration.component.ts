@@ -131,7 +131,7 @@ export class BusinessConfigurationComponent implements OnInit {
           }
         })
       ).subscribe({
-        next: (clinics) => {
+        next: () => {
           // After signal is set in tap(), load configuration if clinics exist
           // The tap() operator has already validated and set the clinic
           if (this.clinicSelectionService.currentClinic()) {
