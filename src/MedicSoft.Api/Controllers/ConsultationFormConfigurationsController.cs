@@ -5,6 +5,7 @@ using MedicSoft.Application.Services;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Interfaces;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -14,13 +15,16 @@ namespace MedicSoft.Api.Controllers
     public class ConsultationFormConfigurationsController : BaseController
     {
         private readonly IConsultationFormConfigurationService _formConfigService;
+        private readonly IUserClinicLinkRepository _userClinicLinkRepository;
 
         public ConsultationFormConfigurationsController(
             IConsultationFormConfigurationService formConfigService,
+            IUserClinicLinkRepository userClinicLinkRepository,
             ITenantContext tenantContext)
             : base(tenantContext)
         {
-            _formConfigService = formConfigService;
+            _formConfigService = formConfigService ?? throw new ArgumentNullException(nameof(formConfigService));
+            _userClinicLinkRepository = userClinicLinkRepository ?? throw new ArgumentNullException(nameof(userClinicLinkRepository));
         }
 
         /// <summary>
@@ -32,6 +36,19 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
+                // Validate user has access to the requested clinic
+                var userId = GetUserId();
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized("User ID not found in token");
+                }
+
+                var hasAccess = await _userClinicLinkRepository.UserHasAccessToClinicAsync(userId, clinicId, GetTenantId());
+                if (!hasAccess)
+                {
+                    return Forbid("You do not have access to this clinic's consultation forms");
+                }
+
                 var configuration = await _formConfigService.GetActiveConfigurationByClinicIdAsync(clinicId, GetTenantId());
                 if (configuration == null)
                     return NotFound();
@@ -77,6 +94,19 @@ namespace MedicSoft.Api.Controllers
 
             try
             {
+                // Validate user has access to the clinic
+                var userId = GetUserId();
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized("User ID not found in token");
+                }
+
+                var hasAccess = await _userClinicLinkRepository.UserHasAccessToClinicAsync(userId, createDto.ClinicId, GetTenantId());
+                if (!hasAccess)
+                {
+                    return Forbid("You do not have access to create configurations for this clinic");
+                }
+
                 var configuration = await _formConfigService.CreateConfigurationAsync(createDto, GetTenantId());
                 return CreatedAtAction(nameof(GetById), new { id = configuration.Id }, configuration);
             }
@@ -98,6 +128,19 @@ namespace MedicSoft.Api.Controllers
 
             try
             {
+                // Validate user has access to the clinic
+                var userId = GetUserId();
+                if (userId == Guid.Empty)
+                {
+                    return Unauthorized("User ID not found in token");
+                }
+
+                var hasAccess = await _userClinicLinkRepository.UserHasAccessToClinicAsync(userId, request.ClinicId, GetTenantId());
+                if (!hasAccess)
+                {
+                    return Forbid("You do not have access to create configurations for this clinic");
+                }
+
                 var configuration = await _formConfigService.CreateConfigurationFromProfileAsync(
                     request.ClinicId,
                     request.ProfileId,

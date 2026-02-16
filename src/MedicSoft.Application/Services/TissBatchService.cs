@@ -54,18 +54,35 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException($"Health insurance operator with ID {dto.OperatorId} not found");
             }
 
-            // Generate batch number
-            var batchNumber = $"BATCH-{DateTime.UtcNow:yyyyMMddHHmmss}-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+            // Execute batch creation in transaction to ensure data consistency
+            TissBatch? batch = null;
+            await _batchRepository.ExecuteInTransactionAsync(async () =>
+            {
+                // Generate batch number with sufficient entropy to ensure uniqueness
+                // Format: BATCH-YYYYMMDD-HHMMSS-GUID12
+                // Using 12 hex chars from GUID provides 48 bits of entropy (16^12 possible values)
+                // Combined with timestamp, this ensures uniqueness even with concurrent requests
+                // Collision probability: ~1 in 281 trillion for same second operations
+                var timestamp = DateTime.UtcNow;
+                var datePart = timestamp.ToString("yyyyMMdd");
+                var timePart = timestamp.ToString("HHmmss");
+                var guidPart = Guid.NewGuid().ToString("N")[..12].ToUpper();
+                var batchNumber = $"BATCH-{datePart}-{timePart}-{guidPart}";
 
-            var batch = new TissBatch(
-                dto.ClinicId,
-                dto.OperatorId,
-                batchNumber,
-                tenantId
-            );
+                batch = new TissBatch(
+                    dto.ClinicId,
+                    dto.OperatorId,
+                    batchNumber,
+                    tenantId
+                );
 
-            await _batchRepository.AddAsync(batch);
-            await _batchRepository.SaveChangesAsync();
+                await _batchRepository.AddAsync(batch);
+            });
+
+            if (batch == null)
+            {
+                throw new InvalidOperationException("Failed to create TISS batch");
+            }
 
             // Reload with navigation properties
             var result = await _batchRepository.GetWithGuidesAsync(batch.Id, tenantId);
@@ -86,14 +103,17 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException($"TISS guide with ID {guideId} not found");
             }
 
-            // Verify guide belongs to same operator
-            var guideInsurance = guide.PatientHealthInsurance;
-            // Note: Would need to navigate to operator through plan, assuming this is validated elsewhere
+            // Execute guide addition in transaction to ensure data consistency
+            await _batchRepository.ExecuteInTransactionAsync(async () =>
+            {
+                // Verify guide belongs to same operator
+                var guideInsurance = guide.PatientHealthInsurance;
+                // Note: Would need to navigate to operator through plan, assuming this is validated elsewhere
 
-            batch.AddGuide(guide);
-            
-            await _batchRepository.UpdateAsync(batch);
-            await _batchRepository.SaveChangesAsync();
+                batch.AddGuide(guide);
+                
+                await _batchRepository.UpdateAsync(batch);
+            });
 
             var result = await _batchRepository.GetWithGuidesAsync(batchId, tenantId);
             return _mapper.Map<TissBatchDto>(result);
@@ -107,10 +127,13 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException($"TISS batch with ID {batchId} not found");
             }
 
-            batch.RemoveGuide(guideId);
-            
-            await _batchRepository.UpdateAsync(batch);
-            await _batchRepository.SaveChangesAsync();
+            // Execute guide removal in transaction to ensure data consistency
+            await _batchRepository.ExecuteInTransactionAsync(async () =>
+            {
+                batch.RemoveGuide(guideId);
+                
+                await _batchRepository.UpdateAsync(batch);
+            });
 
             var result = await _batchRepository.GetWithGuidesAsync(batchId, tenantId);
             return _mapper.Map<TissBatchDto>(result);
@@ -138,11 +161,14 @@ namespace MedicSoft.Application.Services
                 var xmlFilePath = await _xmlGenerator.GenerateBatchXmlAsync(batch, outputDir);
                 var xmlFileName = Path.GetFileName(xmlFilePath);
 
-                // Update batch with XML info
-                batch.GenerateXml(xmlFileName, xmlFilePath);
-                
-                await _batchRepository.UpdateAsync(batch);
-                await _batchRepository.SaveChangesAsync();
+                // Execute update in transaction to ensure data consistency
+                await _batchRepository.ExecuteInTransactionAsync(async () =>
+                {
+                    // Update batch with XML info
+                    batch.GenerateXml(xmlFileName, xmlFilePath);
+                    
+                    await _batchRepository.UpdateAsync(batch);
+                });
 
                 return new TissXmlGenerationResultDto
                 {
@@ -206,54 +232,57 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException($"TISS batch with ID {batchId} not found");
             }
 
-            // Mark as processing first
-            if (batch.Status == BatchStatus.Sent)
+            // Execute response processing in transaction to ensure data consistency
+            await _batchRepository.ExecuteInTransactionAsync(async () =>
             {
-                batch.MarkAsProcessing();
-            }
-
-            // Process batch-level response
-            batch.ProcessResponse(
-                dto.ResponseXmlFileName,
-                dto.ApprovedAmount,
-                dto.GlosedAmount
-            );
-
-            // Process guide-level responses
-            foreach (var guideResponse in dto.GuideResponses)
-            {
-                var guide = batch.Guides.FirstOrDefault(g => g.GuideNumber == guideResponse.GuideNumber);
-                if (guide != null)
+                // Mark as processing first
+                if (batch.Status == BatchStatus.Sent)
                 {
-                    if (guideResponse.ApprovedAmount.HasValue)
-                    {
-                        guide.Approve(guideResponse.ApprovedAmount.Value);
-                    }
-                    else if (!string.IsNullOrWhiteSpace(guideResponse.GlossReason))
-                    {
-                        guide.Reject(guideResponse.GlossReason);
-                    }
-
-                    // Process procedure-level responses
-                    foreach (var procResponse in guideResponse.ProcedureResponses)
-                    {
-                        var procedure = guide.Procedures.FirstOrDefault(p => p.Id == procResponse.ProcedureId);
-                        if (procedure != null)
-                        {
-                            procedure.ProcessOperatorResponse(
-                                null,
-                                procResponse.ApprovedAmount,
-                                procResponse.GlossReason
-                            );
-                        }
-                    }
-                    
-                    await _guideRepository.UpdateAsync(guide);
+                    batch.MarkAsProcessing();
                 }
-            }
 
-            await _batchRepository.UpdateAsync(batch);
-            await _batchRepository.SaveChangesAsync();
+                // Process batch-level response
+                batch.ProcessResponse(
+                    dto.ResponseXmlFileName,
+                    dto.ApprovedAmount,
+                    dto.GlosedAmount
+                );
+
+                // Process guide-level responses
+                foreach (var guideResponse in dto.GuideResponses)
+                {
+                    var guide = batch.Guides.FirstOrDefault(g => g.GuideNumber == guideResponse.GuideNumber);
+                    if (guide != null)
+                    {
+                        if (guideResponse.ApprovedAmount.HasValue)
+                        {
+                            guide.Approve(guideResponse.ApprovedAmount.Value);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(guideResponse.GlossReason))
+                        {
+                            guide.Reject(guideResponse.GlossReason);
+                        }
+
+                        // Process procedure-level responses
+                        foreach (var procResponse in guideResponse.ProcedureResponses)
+                        {
+                            var procedure = guide.Procedures.FirstOrDefault(p => p.Id == procResponse.ProcedureId);
+                            if (procedure != null)
+                            {
+                                procedure.ProcessOperatorResponse(
+                                    null,
+                                    procResponse.ApprovedAmount,
+                                    procResponse.GlossReason
+                                );
+                            }
+                        }
+                        
+                        await _guideRepository.UpdateAsync(guide);
+                    }
+                }
+
+                await _batchRepository.UpdateAsync(batch);
+            });
 
             var result = await _batchRepository.GetWithGuidesAsync(batchId, tenantId);
             return _mapper.Map<TissBatchDto>(result);
@@ -267,20 +296,23 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException($"TISS batch with ID {batchId} not found");
             }
 
-            batch.MarkAsPaid();
-            
-            // Also mark all guides as paid
-            foreach (var guide in batch.Guides)
+            // Execute payment marking in transaction to ensure data consistency
+            await _batchRepository.ExecuteInTransactionAsync(async () =>
             {
-                if (guide.Status == GuideStatus.Approved || guide.Status == GuideStatus.PartiallyApproved)
+                batch.MarkAsPaid();
+                
+                // Also mark all guides as paid
+                foreach (var guide in batch.Guides)
                 {
-                    guide.MarkAsPaid();
-                    await _guideRepository.UpdateAsync(guide);
+                    if (guide.Status == GuideStatus.Approved || guide.Status == GuideStatus.PartiallyApproved)
+                    {
+                        guide.MarkAsPaid();
+                        await _guideRepository.UpdateAsync(guide);
+                    }
                 }
-            }
 
-            await _batchRepository.UpdateAsync(batch);
-            await _batchRepository.SaveChangesAsync();
+                await _batchRepository.UpdateAsync(batch);
+            });
 
             var result = await _batchRepository.GetWithGuidesAsync(batchId, tenantId);
             return _mapper.Map<TissBatchDto>(result);

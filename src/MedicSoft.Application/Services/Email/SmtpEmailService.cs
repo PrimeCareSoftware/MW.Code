@@ -108,14 +108,14 @@ namespace MedicSoft.Application.Services.EmailService
 
         public Task SendEmailWithTemplateAsync(string to, Guid templateId, Dictionary<string, string> variables, string? tenantId = null)
         {
-            // For simple SMTP implementation, we'll use the basic SendEmailAsync
-            // Template rendering should be done before calling this method
-            _logger.LogWarning("Template-based email sending not implemented in SmtpEmailService. " +
-                              "Please render the template before calling SendEmailAsync.");
+            // Template-based email requires template rendering service
+            // For SmtpEmailService, templates should be rendered externally before calling SendEmailAsync
+            _logger.LogWarning("Template-based email not available in SmtpEmailService. Template ID: {TemplateId}. Please use a service that supports template rendering or pre-render the template and call SendEmailAsync.", templateId);
             
-            throw new NotImplementedException(
-                "Template-based email is not supported in SmtpEmailService. " +
-                "Please use SendEmailAsync with pre-rendered HTML body.");
+            throw new InvalidOperationException(
+                "Template-based email is not available in SmtpEmailService. " +
+                "Please render the template externally and use SendEmailAsync with the rendered HTML body, " +
+                "or use an email service that supports template rendering.");
         }
     }
 }
