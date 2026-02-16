@@ -597,6 +597,11 @@ export class BusinessConfigurationComponent implements OnInit {
         this.buildFeatureCategories();
         this.loadTerminology(selectedClinic.clinicId);
         
+        // Apply template features if provided
+        if (wizardConfig.features) {
+          this.applyTemplateFeatures(config.id, wizardConfig.features);
+        }
+        
         // Update schedule settings
         // Convert wizard time format (HH:mm) to backend format (HH:mm:ss) using existing formatTimeForBackend method
         const scheduleRequest: UpdateClinicInfoRequest = {
@@ -621,6 +626,10 @@ export class BusinessConfigurationComponent implements OnInit {
             console.error('Error updating schedule:', err);
             this.success = 'Configuração criada, mas houve um erro ao atualizar o horário. Configure manualmente abaixo.';
             this.saving = false;
+            // Clear partial-success message after configured duration to avoid persistent banner
+            setTimeout(() => {
+              this.success = '';
+            }, this.SUCCESS_MESSAGE_DURATION);
           }
         });
       },
@@ -629,6 +638,27 @@ export class BusinessConfigurationComponent implements OnInit {
         this.error = err.error?.message || 'Erro ao criar configuração. Tente novamente.';
         this.saving = false;
       }
+    });
+  }
+
+  private applyTemplateFeatures(configId: string, features: any): void {
+    // Apply each feature from the template
+    const featureUpdates = Object.entries(features).map(([featureName, enabled]) => {
+      const dto: UpdateFeatureDto = {
+        featureName,
+        enabled: enabled as boolean
+      };
+      return this.businessConfigService.updateFeature(configId, dto);
+    });
+
+    // Note: We're not waiting for these to complete as they're optimizations
+    // and failures won't prevent the wizard from completing successfully
+    featureUpdates.forEach(update => {
+      update.subscribe({
+        error: (err) => {
+          console.warn('Failed to apply template feature:', err);
+        }
+      });
     });
   }
 }
