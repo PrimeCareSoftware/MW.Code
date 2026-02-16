@@ -650,7 +650,7 @@ export class BusinessConfigurationComponent implements OnInit {
     const featureUpdates = Object.entries(features).map(([featureName, enabled]) => {
       const dto: UpdateFeatureDto = {
         featureName,
-        enabled: enabled
+        enabled
       };
       return this.businessConfigService.updateFeature(configId, dto).pipe(
         catchError((err) => {
@@ -665,14 +665,8 @@ export class BusinessConfigurationComponent implements OnInit {
     if (featureUpdates.length > 0) {
       forkJoin(featureUpdates).pipe(
         take(1)  // Automatically unsubscribe after first emission
-      ).subscribe({
-        next: () => {
-          console.log('Template features applied successfully');
-        },
-        error: (err) => {
-          // This should not happen due to catchError, but handle it just in case
-          console.warn('Unexpected error applying template features:', err);
-        }
+      ).subscribe(() => {
+        console.log('Template features applied successfully');
       });
     }
   }
