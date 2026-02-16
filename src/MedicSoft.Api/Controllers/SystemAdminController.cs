@@ -171,15 +171,24 @@ namespace MedicSoft.Api.Controllers
                 // Create default business configuration for the clinic
                 try
                 {
+                    // Use values from request, or default to SmallClinic and Medico
+                    var businessType = request.BusinessType.HasValue 
+                        ? (Domain.Enums.BusinessType)request.BusinessType.Value 
+                        : Domain.Enums.BusinessType.SmallClinic;
+                    
+                    var primarySpecialty = request.PrimarySpecialty.HasValue 
+                        ? (Domain.Enums.ProfessionalSpecialty)request.PrimarySpecialty.Value 
+                        : Domain.Enums.ProfessionalSpecialty.Medico;
+                    
                     await _businessConfigService.CreateAsync(
                         clinic.Id,
-                        Domain.Enums.BusinessType.SmallClinic, // Default to small clinic
-                        Domain.Enums.ProfessionalSpecialty.Medico, // Default to medical doctor
+                        businessType,
+                        primarySpecialty,
                         tenantId
                     );
                     _logger.LogInformation(
-                        "Business configuration created successfully for clinic {ClinicId} with tenant {TenantId}",
-                        clinic.Id, tenantId);
+                        "Business configuration created successfully for clinic {ClinicId} with tenant {TenantId}, BusinessType: {BusinessType}, PrimarySpecialty: {PrimarySpecialty}",
+                        clinic.Id, tenantId, businessType, primarySpecialty);
                 }
                 catch (Exception ex)
                 {
@@ -1280,6 +1289,8 @@ namespace MedicSoft.Api.Controllers
         public string OwnerPassword { get; set; } = string.Empty;
         public string OwnerFullName { get; set; } = string.Empty;
         public string PlanId { get; set; } = string.Empty;
+        public int? BusinessType { get; set; }
+        public int? PrimarySpecialty { get; set; }
     }
 
     public class CreateSystemOwnerRequest

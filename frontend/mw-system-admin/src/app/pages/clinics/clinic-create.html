@@ -39,6 +39,7 @@
                   name="document"
                   required
                   placeholder="00.000.000/0000-00"
+                  appCnpjMask
                 />
               </div>
 
@@ -62,7 +63,8 @@
                   [(ngModel)]="formData.phone"
                   name="phone"
                   required
-                  placeholder="(00) 0000-0000"
+                  placeholder="(00) 00000-0000"
+                  appPhoneMask
                 />
               </div>
 
@@ -109,6 +111,7 @@
                   <option [value]="3">Clínica Média (6-20 profissionais)</option>
                   <option [value]="4">Clínica Grande (20+ profissionais)</option>
                 </select>
+                <small class="help-text">Define funcionalidades e configurações iniciais da clínica</small>
               </div>
 
               <div class="form-group">
@@ -130,6 +133,7 @@
                   <option [value]="9">Veterinário</option>
                   <option [value]="99">Outro</option>
                 </select>
+                <small class="help-text">Configura perfis de acesso e formulários apropriados</small>
               </div>
             </div>
           </div>
@@ -137,8 +141,9 @@
           <div class="form-section">
             <h2>Configuração de Negócio</h2>
             <p class="section-description">
-              As configurações padrão serão automaticamente definidas com base no tipo de negócio e especialidade selecionados. 
-              Você poderá personalizá-las posteriormente nas configurações da clínica.
+              Estes campos definem o perfil da clínica e determinam quais funcionalidades serão habilitadas automaticamente. 
+              O sistema irá criar perfis de acesso apropriados (ex: Dentista para clínicas odontológicas, Psicólogo para clínicas de psicologia) 
+              e configurar módulos específicos baseados no tipo de negócio escolhido.
             </p>
           </div>
 
@@ -181,9 +186,10 @@
                   [(ngModel)]="formData.ownerPassword"
                   name="ownerPassword"
                   required
-                  placeholder="Senha forte"
+                  placeholder="Mínimo 8 caracteres"
                   minlength="8"
                 />
+                <small class="help-text">Mínimo 8 caracteres (recomendado: letras, números e símbolos)</small>
               </div>
 
               <div class="form-group">
@@ -197,6 +203,9 @@
                   placeholder="Repita a senha"
                   minlength="8"
                 />
+                @if (confirmPassword && formData.ownerPassword && confirmPassword !== formData.ownerPassword) {
+                  <small class="error-text">As senhas não coincidem</small>
+                }
               </div>
             </div>
           </div>

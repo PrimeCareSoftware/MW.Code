@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { SystemAdminService } from '../../services/system-admin';
 import { CreateClinicRequest, SubscriptionPlan } from '../../models/system-admin.model';
 import { Navbar } from '../../shared/navbar/navbar';
+import { CnpjMaskDirective } from '../../directives/cnpj-mask.directive';
+import { PhoneMaskDirective } from '../../directives/phone-mask.directive';
 
 @Component({
   selector: 'app-clinic-create',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, Navbar],
+  imports: [CommonModule, RouterModule, FormsModule, Navbar, CnpjMaskDirective, PhoneMaskDirective],
   templateUrl: './clinic-create.html',
   styleUrl: './clinic-create.scss'})
 export class ClinicCreate {
