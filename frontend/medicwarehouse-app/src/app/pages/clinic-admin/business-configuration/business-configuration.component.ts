@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -641,24 +643,35 @@ export class BusinessConfigurationComponent implements OnInit {
     });
   }
 
-  private applyTemplateFeatures(configId: string, features: any): void {
+  private applyTemplateFeatures(configId: string, features: WizardConfiguration['features']): void {
+    if (!features) return;
+    
     // Apply each feature from the template
     const featureUpdates = Object.entries(features).map(([featureName, enabled]) => {
       const dto: UpdateFeatureDto = {
         featureName,
         enabled: enabled as boolean
       };
-      return this.businessConfigService.updateFeature(configId, dto);
+      return this.businessConfigService.updateFeature(configId, dto).pipe(
+        catchError((err) => {
+          console.warn(`Failed to apply template feature ${featureName}:`, err);
+          return EMPTY;
+        })
+      );
     });
 
-    // Note: We're not waiting for these to complete as they're optimizations
-    // and failures won't prevent the wizard from completing successfully
-    featureUpdates.forEach(update => {
-      update.subscribe({
+    // Execute all feature updates in parallel, but don't wait for completion
+    // This is fire-and-forget - failures won't prevent the wizard from completing
+    if (featureUpdates.length > 0) {
+      forkJoin(featureUpdates).subscribe({
+        next: () => {
+          console.log('Template features applied successfully');
+        },
         error: (err) => {
-          console.warn('Failed to apply template feature:', err);
+          // This should not happen due to catchError, but handle it just in case
+          console.warn('Unexpected error applying template features:', err);
         }
       });
-    });
+    }
   }
 }
