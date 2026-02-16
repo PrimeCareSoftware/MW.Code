@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, EMPTY } from 'rxjs';
-import { catchError, take } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -646,26 +646,20 @@ export class BusinessConfigurationComponent implements OnInit {
   private applyTemplateFeatures(configId: string, features: WizardConfiguration['features']): void {
     if (!features) return;
     
-    // Apply each feature from the template
-    const featureUpdates = Object.entries(features).map(([featureName, enabled]) => {
-      const dto: UpdateFeatureDto = {
-        featureName,
-        enabled
-      };
-      return this.businessConfigService.updateFeature(configId, dto).pipe(
+    // Apply each feature from the template in parallel
+    const featureUpdates = Object.entries(features).map(([featureName, enabled]) => 
+      this.businessConfigService.updateFeature(configId, { featureName, enabled }).pipe(
         catchError((err) => {
           console.warn(`Failed to apply template feature ${featureName}:`, err);
           return EMPTY;
         })
-      );
-    });
+      )
+    );
 
-    // Execute all feature updates in parallel with automatic cleanup
+    // Execute all feature updates (forkJoin completes automatically after all observables emit)
     // This is fire-and-forget - failures won't prevent the wizard from completing
     if (featureUpdates.length > 0) {
-      forkJoin(featureUpdates).pipe(
-        take(1)  // Automatically unsubscribe after first emission
-      ).subscribe(() => {
+      forkJoin(featureUpdates).subscribe(() => {
         console.log('Template features applied successfully');
       });
     }
