@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, EMPTY } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
@@ -142,9 +142,9 @@ export class BusinessConfigurationComponent implements OnInit {
       config: this.businessConfigService.getByClinicId(selectedClinic.clinicId).pipe(
         catchError((err) => {
           console.error('Error loading configuration:', err);
-          // Return EMPTY to continue with other operations
+          // Return null to allow forkJoin to complete - 404 means config doesn't exist yet
           if (err.status === 404) {
-            return EMPTY;
+            return of(null);
           }
           throw err;
         })
@@ -163,6 +163,7 @@ export class BusinessConfigurationComponent implements OnInit {
           this.buildFeatureCategories();
           this.loadTerminology(selectedClinic.clinicId);
         }
+        // If config is null (404), user can create it manually via UI
         
         // Handle clinic info result
         if (results.clinicInfo) {
@@ -685,12 +686,13 @@ export class BusinessConfigurationComponent implements OnInit {
       this.businessConfigService.updateFeature(configId, { featureName, enabled }).pipe(
         catchError((err) => {
           console.warn(`Failed to apply template feature ${featureName}:`, err);
-          return EMPTY;
+          // Return of(null) to allow forkJoin to complete even when individual features fail
+          return of(null);
         })
       )
     );
 
-    // Execute all feature updates (forkJoin completes automatically after all observables emit)
+    // Execute all feature updates (forkJoin completes after all observables emit)
     // This is fire-and-forget - failures won't prevent the wizard from completing
     if (featureUpdates.length > 0) {
       forkJoin(featureUpdates).subscribe(() => {
