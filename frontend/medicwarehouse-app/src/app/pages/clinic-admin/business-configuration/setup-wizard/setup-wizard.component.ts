@@ -270,10 +270,10 @@ export class SetupWizardComponent implements OnInit {
       case 0:
         return this.selectedTemplate !== null;
       case 1:
-        // Schedule validation
+        // Schedule validation - ensure both times are valid and opening < closing
         const opening = this.parseTimeToMinutes(this.openingTime);
         const closing = this.parseTimeToMinutes(this.closingTime);
-        return opening < closing;
+        return opening >= 0 && closing >= 0 && opening < closing;
       case 2:
         return true;
       default:
@@ -282,16 +282,17 @@ export class SetupWizardComponent implements OnInit {
   }
 
   private parseTimeToMinutes(time: string): number {
-    if (!time) return 0;
+    // Returns total minutes from "HH:mm" format, or -1 for invalid input
+    if (!time) return -1;
     const parts = time.split(':');
     if (parts.length >= 2) {
       const hours = parseInt(parts[0], 10);
       const minutes = parseInt(parts[1], 10);
-      if (!isNaN(hours) && !isNaN(minutes)) {
+      if (!isNaN(hours) && !isNaN(minutes) && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
         return hours * 60 + minutes;
       }
     }
-    return 0;
+    return -1; // Invalid time format
   }
 
   finish(): void {
@@ -312,6 +313,7 @@ export class SetupWizardComponent implements OnInit {
   }
 
   getProgressPercentage(): number {
+    // Convert 0-indexed currentStep to 1-indexed for percentage (e.g., step 0 = 33%, step 1 = 66%, step 2 = 100%)
     return ((this.currentStep + 1) / this.totalSteps) * 100;
   }
 }

@@ -598,6 +598,7 @@ export class BusinessConfigurationComponent implements OnInit {
         this.loadTerminology(selectedClinic.clinicId);
         
         // Update schedule settings
+        // Convert wizard time format (HH:mm) to backend format (HH:mm:ss) using existing formatTimeForBackend method
         const scheduleRequest: UpdateClinicInfoRequest = {
           openingTime: this.formatTimeForBackend(wizardConfig.openingTime),
           closingTime: this.formatTimeForBackend(wizardConfig.closingTime),
