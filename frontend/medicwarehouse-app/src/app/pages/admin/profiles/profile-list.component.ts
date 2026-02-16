@@ -76,4 +76,21 @@ export class ProfileListComponent implements OnInit {
   getPermissionCount(profile: AccessProfile): number {
     return profile.permissions.length;
   }
+
+  createDefaultProfilesByType(): void {
+    if (confirm('Deseja criar os perfis padrão específicos para o tipo da sua clínica? Esta operação irá criar perfis apropriados baseados na especialidade da clínica.')) {
+      this.loading = true;
+      this.profileService.createDefaultProfilesByClinicType().subscribe({
+        next: (profiles) => {
+          this.loading = false;
+          alert(`${profiles.length} perfil(is) criado(s) com sucesso!`);
+          this.loadProfiles();
+        },
+        error: () => {
+          this.loading = false;
+          // Erro já tratado pelo interceptor
+        }
+      });
+    }
+  }
 }

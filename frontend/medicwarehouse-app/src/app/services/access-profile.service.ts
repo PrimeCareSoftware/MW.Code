@@ -73,4 +73,11 @@ export class AccessProfileService {
   createDefaultProfiles(): Observable<AccessProfile[]> {
     return this.http.post<AccessProfile[]>(`${this.apiUrl}/create-defaults`, {});
   }
+
+  /**
+   * Create default profiles based on clinic type
+   */
+  createDefaultProfilesByClinicType(): Observable<AccessProfile[]> {
+    return this.http.post<AccessProfile[]>(`${this.apiUrl}/create-defaults-by-type`, {});
+  }
 }
