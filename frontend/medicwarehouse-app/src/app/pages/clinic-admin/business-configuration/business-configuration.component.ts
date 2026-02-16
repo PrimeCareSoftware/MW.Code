@@ -141,18 +141,21 @@ export class BusinessConfigurationComponent implements OnInit {
     forkJoin({
       config: this.businessConfigService.getByClinicId(selectedClinic.clinicId).pipe(
         catchError((err) => {
-          console.error('Error loading configuration:', err);
-          // Return null to allow forkJoin to complete - 404 means config doesn't exist yet
+          // 404 means config doesn't exist yet - this is expected for new clinics
           if (err.status === 404) {
+            console.log('Configuration not found for clinic - user can create it');
             return of(null);
           }
-          throw err;
+          // For other errors, log and re-throw to fail the entire operation
+          console.error('Error loading business configuration:', err);
+          throw new Error('Failed to load business configuration: ' + (err.message || 'Unknown error'));
         })
       ),
       clinicInfo: this.clinicAdminService.getClinicInfo().pipe(
         catchError((err) => {
           console.error('Error loading clinic info:', err);
-          throw err;
+          // Re-throw to fail the entire operation since clinic info is required for the page
+          throw new Error('Failed to load clinic information: ' + (err.message || 'Unknown error'));
         })
       )
     }).subscribe({
@@ -163,9 +166,9 @@ export class BusinessConfigurationComponent implements OnInit {
           this.buildFeatureCategories();
           this.loadTerminology(selectedClinic.clinicId);
         }
-        // If config is null (404), user can create it manually via UI
+        // If config is null (404), the page UI shows a button to create configuration
         
-        // Handle clinic info result
+        // Handle clinic info result (always present if we reach here)
         if (results.clinicInfo) {
           this.clinicInfo = results.clinicInfo;
           this.openingTime = this.parseTimeSpan(results.clinicInfo.openingTime);
@@ -180,7 +183,8 @@ export class BusinessConfigurationComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading data:', err);
-        this.error = 'Erro ao carregar dados. Tente novamente.';
+        // Provide specific error message based on the error
+        this.error = err.message || 'Erro ao carregar dados. Tente novamente.';
         this.loading = false;
       }
     });
