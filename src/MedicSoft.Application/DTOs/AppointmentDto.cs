@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using MedicSoft.Application.JsonConverters;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Application.DTOs
 {
@@ -24,6 +25,8 @@ namespace MedicSoft.Application.DTOs
         public string? ProfessionalName { get; set; }
         
         public string? ProfessionalSpecialty { get; set; }
+        
+        public ProfessionalSpecialty? ProfessionalSpecialtyEnum { get; set; }
         
         [Required(ErrorMessage = "Data agendada é obrigatória")]
         public DateTime ScheduledDate { get; set; }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MedicSoft.Domain.Common;
+using MedicSoft.Domain.Enums;
 
 namespace MedicSoft.Domain.Entities
 {
@@ -22,7 +23,8 @@ namespace MedicSoft.Domain.Entities
         public DateTime? LastLoginAt { get; private set; }
         public string? CurrentSessionId { get; private set; } // Tracks the current active session
         public string? ProfessionalId { get; private set; } // CRM, CRO, etc.
-        public string? Specialty { get; private set; }
+        public string? Specialty { get; private set; } // Legacy specialty field (kept for backward compatibility)
+        public ProfessionalSpecialty? ProfessionalSpecialty { get; private set; } // Strongly-typed specialty from AccessProfile
         public Guid? CurrentClinicId { get; private set; } // The clinic where the user is currently working
         public DateTime? MfaGracePeriodEndsAt { get; private set; } // Grace period for MFA setup
         public DateTime? FirstLoginAt { get; private set; } // Track first login to calculate grace period
@@ -139,6 +141,34 @@ namespace MedicSoft.Domain.Entities
         public void AssignProfile(Guid? profileId)
         {
             ProfileId = profileId;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
+        /// Synchronizes the user's professional specialty with their assigned access profile
+        /// This should be called after loading the Profile navigation property
+        /// </summary>
+        public void SyncSpecialtyFromProfile()
+        {
+            if (Profile?.ConsultationFormProfile != null)
+            {
+                ProfessionalSpecialty = Profile.ConsultationFormProfile.Specialty;
+                // Also update the legacy Specialty string for backward compatibility
+                Specialty = Profile.ConsultationFormProfile.Specialty.ToString();
+                UpdateTimestamp();
+            }
+        }
+
+        /// <summary>
+        /// Sets the professional specialty directly (for users without profiles or manual override)
+        /// </summary>
+        public void SetProfessionalSpecialty(ProfessionalSpecialty? specialty)
+        {
+            ProfessionalSpecialty = specialty;
+            if (specialty.HasValue)
+            {
+                Specialty = specialty.Value.ToString();
+            }
             UpdateTimestamp();
         }
 

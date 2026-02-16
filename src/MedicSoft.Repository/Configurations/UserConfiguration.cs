@@ -53,6 +53,9 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(u => u.Specialty)
                 .HasMaxLength(100);
 
+            builder.Property(u => u.ProfessionalSpecialty)
+                .IsRequired(false); // Nullable enum
+
             builder.Property(u => u.CurrentClinicId);
 
             builder.Property(u => u.TenantId)
@@ -89,6 +92,7 @@ namespace MedicSoft.Repository.Configurations
             builder.HasIndex(u => u.CurrentClinicId);
             builder.HasIndex(u => u.Role);
             builder.HasIndex(u => u.ProfileId);
+            builder.HasIndex(u => u.ProfessionalSpecialty);
             builder.HasIndex(u => new { u.TenantId, u.IsActive });
         }
     }
