@@ -773,6 +773,42 @@ if (applyMigrations)
             dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
         {
             dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"SystemNotifications\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"Type\" text NOT NULL, " +
+                "\"Category\" text NOT NULL, " +
+                "\"Title\" text NOT NULL, " +
+                "\"Message\" text NOT NULL, " +
+                "\"ActionUrl\" text NULL, " +
+                "\"ActionLabel\" text NULL, " +
+                "\"IsRead\" boolean NOT NULL DEFAULT false, " +
+                "\"ReadAt\" timestamp without time zone NULL, " +
+                "\"Data\" text NULL, " +
+                "\"TenantId\" text NOT NULL DEFAULT '', " +
+                "\"CreatedAt\" timestamp without time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp without time zone NULL, " +
+                "CONSTRAINT \"PK_SystemNotifications\" PRIMARY KEY (\"Id\")" +
+                ");");
+
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"NotificationRules\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"Trigger\" text NOT NULL, " +
+                "\"IsEnabled\" boolean NOT NULL DEFAULT true, " +
+                "\"Conditions\" text NULL, " +
+                "\"Actions\" text NULL, " +
+                "\"TenantId\" text NOT NULL DEFAULT '', " +
+                "\"CreatedAt\" timestamp without time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp without time zone NULL, " +
+                "CONSTRAINT \"PK_NotificationRules\" PRIMARY KEY (\"Id\")" +
+                ");");
+
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"Users\" ADD COLUMN IF NOT EXISTS \"ProfessionalSpecialty\" integer NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE INDEX IF NOT EXISTS \"IX_Users_ProfessionalSpecialty\" ON \"Users\" (\"ProfessionalSpecialty\");");
+
+            dbContext.Database.ExecuteSqlRaw(
                 "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"EffectiveEndDate\" timestamp with time zone NULL;");
             dbContext.Database.ExecuteSqlRaw(
                 "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"ParentPatternId\" uuid NULL;");

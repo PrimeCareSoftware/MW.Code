@@ -39,6 +39,7 @@ interface FeatureInfo {
 export class BusinessConfigurationComponent implements OnInit {
   private readonly SUCCESS_MESSAGE_DURATION = 5000; // milliseconds
   private readonly SCHEDULE_SUCCESS_MESSAGE_DURATION = 3000; // milliseconds
+  private readonly NO_CLINIC_MESSAGE = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
   
   configuration: BusinessConfiguration | null = null;
   clinicInfo: ClinicAdminInfoDto | null = null;
@@ -114,7 +115,7 @@ export class BusinessConfigurationComponent implements OnInit {
           if (this.clinicSelectionService.currentClinic()) {
             this.loadDataInParallel();
           } else {
-            this.error = 'Nenhuma clínica disponível. Por favor, contate o suporte.';
+            this.error = this.NO_CLINIC_MESSAGE;
             this.loading = false;
           }
         },
@@ -130,7 +131,8 @@ export class BusinessConfigurationComponent implements OnInit {
   private loadDataInParallel(): void {
     const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
-      this.error = 'Nenhuma clínica selecionada';
+      this.error = this.NO_CLINIC_MESSAGE;
+      this.loading = false;
       return;
     }
 
@@ -575,7 +577,7 @@ export class BusinessConfigurationComponent implements OnInit {
   createConfiguration(): void {
     const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
-      this.error = 'Nenhuma clínica selecionada';
+      this.error = this.NO_CLINIC_MESSAGE;
       return;
     }
 
@@ -621,7 +623,7 @@ export class BusinessConfigurationComponent implements OnInit {
   onWizardComplete(wizardConfig: WizardConfiguration): void {
     const selectedClinic = this.clinicSelectionService.currentClinic();
     if (!selectedClinic) {
-      this.error = 'Nenhuma clínica selecionada';
+      this.error = this.NO_CLINIC_MESSAGE;
       this.showWizard = false;
       return;
     }

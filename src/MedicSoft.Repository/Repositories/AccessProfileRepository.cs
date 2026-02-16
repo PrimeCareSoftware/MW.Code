@@ -53,6 +53,11 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
+        public IQueryable<AccessProfile> GetAllQueryable()
+        {
+            return _context.AccessProfiles.AsQueryable();
+        }
+
         public async Task<AccessProfile?> GetByNameAsync(string name, Guid clinicId, string tenantId)
         {
             return await _context.AccessProfiles
