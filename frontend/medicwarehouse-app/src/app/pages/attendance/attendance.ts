@@ -24,7 +24,7 @@ import { TherapeuticPlanService } from '../../services/therapeutic-plan.service'
 import { InformedConsentService } from '../../services/informed-consent.service';
 import { ConsultationFormConfigurationService } from '../../services/consultation-form-configuration.service';
 import { TerminologyService, TerminologyMap } from '../../services/terminology.service';
-import { Appointment } from '../../models/appointment.model';
+import { Appointment, ProfessionalSpecialty } from '../../models/appointment.model';
 import { MedicalRecord, ClinicalExamination, DiagnosticHypothesis, TherapeuticPlan, InformedConsent, DiagnosisType, DiagnosisTypeLabels } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
 import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
@@ -212,7 +212,11 @@ export class Attendance implements OnInit, OnDestroy {
         this.loadPatient(appointment.patientId);
         this.loadOrCreateMedicalRecord(appointment.id, appointment.patientId);
         this.loadFormConfiguration(appointment.clinicId);
-        this.loadTerminology(appointment.professionalSpecialty);
+        // Use strongly-typed enum if available, fallback to string specialty
+        const specialtyToLoad = appointment.professionalSpecialtyEnum 
+          ? this.getSpecialtyString(appointment.professionalSpecialtyEnum)
+          : appointment.professionalSpecialty;
+        this.loadTerminology(specialtyToLoad);
         this.isLoading.set(false);
       },
       error: (error) => {
@@ -221,6 +225,23 @@ export class Attendance implements OnInit, OnDestroy {
         this.isLoading.set(false);
       }
     });
+  }
+
+  // Helper method to convert enum to string for terminology service
+  private getSpecialtyString(specialty: number): string {
+    const specialtyMap: { [key: number]: string } = {
+      1: 'Medico',
+      2: 'Psicologo',
+      3: 'Nutricionista',
+      4: 'Fisioterapeuta',
+      5: 'Dentista',
+      6: 'Enfermeiro',
+      7: 'TerapeutaOcupacional',
+      8: 'Fonoaudiologo',
+      9: 'Veterinario',
+      99: 'Outro'
+    };
+    return specialtyMap[specialty] || 'Medico';
   }
 
   loadTerminology(specialty?: string): void {

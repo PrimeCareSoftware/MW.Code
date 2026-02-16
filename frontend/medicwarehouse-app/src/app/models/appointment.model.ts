@@ -4,7 +4,8 @@ export interface Appointment {
   patientName: string;
   professionalId?: string; // Backend uses ProfessionalId
   professionalName?: string;
-  professionalSpecialty?: string; // Added: Professional's specialty (e.g., "Médico", "Psicólogo", etc.)
+  professionalSpecialty?: string; // Legacy: Professional's specialty as string
+  professionalSpecialtyEnum?: ProfessionalSpecialty; // NEW: Strongly-typed specialty
   doctorId?: string; // Alias for professionalId (for backward compatibility)
   doctorName?: string; // Alias for professionalName
   clinicId: string;
@@ -26,6 +27,33 @@ export interface Appointment {
   createdAt: string;
   updatedAt?: string;
 }
+
+// Professional Specialty Enum - matches backend ProfessionalSpecialty
+export enum ProfessionalSpecialty {
+  Medico = 1,
+  Psicologo = 2,
+  Nutricionista = 3,
+  Fisioterapeuta = 4,
+  Dentista = 5,
+  Enfermeiro = 6,
+  TerapeutaOcupacional = 7,
+  Fonoaudiologo = 8,
+  Veterinario = 9,
+  Outro = 99
+}
+
+export const ProfessionalSpecialtyLabels: { [key: number]: string } = {
+  [ProfessionalSpecialty.Medico]: 'Médico',
+  [ProfessionalSpecialty.Psicologo]: 'Psicólogo',
+  [ProfessionalSpecialty.Nutricionista]: 'Nutricionista',
+  [ProfessionalSpecialty.Fisioterapeuta]: 'Fisioterapeuta',
+  [ProfessionalSpecialty.Dentista]: 'Dentista',
+  [ProfessionalSpecialty.Enfermeiro]: 'Enfermeiro',
+  [ProfessionalSpecialty.TerapeutaOcupacional]: 'Terapeuta Ocupacional',
+  [ProfessionalSpecialty.Fonoaudiologo]: 'Fonoaudiólogo',
+  [ProfessionalSpecialty.Veterinario]: 'Veterinário',
+  [ProfessionalSpecialty.Outro]: 'Outro'
+};
 
 export interface CreateAppointment {
   patientId: string;
@@ -51,7 +79,8 @@ export interface Professional {
   id: string;
   fullName: string;
   professionalId?: string; // CRM, CRO, etc.
-  specialty?: string;
+  specialty?: string; // Legacy string specialty
+  professionalSpecialty?: ProfessionalSpecialty; // NEW: Typed specialty
   role: string;
   calendarColor?: string; // Hex color for calendar display
 }
