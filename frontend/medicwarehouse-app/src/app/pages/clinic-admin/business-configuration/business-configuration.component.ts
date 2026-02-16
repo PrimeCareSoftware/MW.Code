@@ -13,6 +13,7 @@ import { TerminologyService } from '../../../services/terminology.service';
 import { ClinicSelectionService } from '../../../services/clinic-selection.service';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicAdminInfoDto, UpdateClinicInfoRequest } from '../../../models/clinic-admin.model';
+import { SetupWizardComponent, WizardConfiguration } from './setup-wizard/setup-wizard.component';
 
 interface FeatureCategory {
   name: string;
@@ -29,7 +30,7 @@ interface FeatureInfo {
 @Component({
   selector: 'app-business-configuration',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, Navbar, SetupWizardComponent],
   templateUrl: './business-configuration.component.html',
   styleUrls: ['./business-configuration.component.scss']
 })
@@ -44,6 +45,7 @@ export class BusinessConfigurationComponent implements OnInit {
   savingSchedule = false;
   error = '';
   success = '';
+  showWizard = false;
 
   // Schedule settings
   openingTime = '08:00';
@@ -559,5 +561,74 @@ export class BusinessConfigurationComponent implements OnInit {
         this.saving = false;
       }
     });
+  }
+
+  openWizard(): void {
+    this.showWizard = true;
+  }
+
+  closeWizard(): void {
+    this.showWizard = false;
+  }
+
+  onWizardComplete(wizardConfig: WizardConfiguration): void {
+    const selectedClinic = this.clinicSelectionService.currentClinic();
+    if (!selectedClinic) {
+      this.error = 'Nenhuma clínica selecionada';
+      this.showWizard = false;
+      return;
+    }
+
+    this.saving = true;
+    this.error = '';
+    this.success = '';
+    this.showWizard = false;
+
+    // Create configuration with wizard data
+    const dto = {
+      clinicId: selectedClinic.clinicId,
+      businessType: wizardConfig.businessType,
+      primarySpecialty: wizardConfig.primarySpecialty
+    };
+
+    this.businessConfigService.create(dto).subscribe({
+      next: (config) => {
+        this.configuration = config;
+        this.buildFeatureCategories();
+        this.loadTerminology(selectedClinic.clinicId);
+        
+        // Update schedule settings
+        const scheduleRequest: UpdateClinicInfoRequest = {
+          openingTime: this.formatTimeForBackend(wizardConfig.openingTime),
+          closingTime: this.formatTimeForBackend(wizardConfig.closingTime),
+          appointmentDurationMinutes: wizardConfig.appointmentDurationMinutes,
+          allowEmergencySlots: wizardConfig.allowEmergencySlots,
+          enableOnlineAppointmentScheduling: wizardConfig.enableOnlineAppointmentScheduling
+        };
+
+        this.clinicAdminService.updateClinicInfo(scheduleRequest).subscribe({
+          next: () => {
+            this.success = '🎉 Configuração criada com sucesso! Sua clínica está pronta para começar.';
+            this.saving = false;
+            this.loadClinicInfo();
+            // Clear success message after configured duration
+            setTimeout(() => {
+              this.success = '';
+            }, this.SUCCESS_MESSAGE_DURATION);
+          },
+          error: (err) => {
+            console.error('Error updating schedule:', err);
+            this.success = 'Configuração criada, mas houve um erro ao atualizar o horário. Configure manualmente abaixo.';
+            this.saving = false;
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error creating configuration:', err);
+        this.error = err.error?.message || 'Erro ao criar configuração. Tente novamente.';
+        this.saving = false;
+      }
+    });
+  }
   }
 }
