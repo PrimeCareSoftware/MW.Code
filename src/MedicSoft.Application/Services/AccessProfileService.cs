@@ -150,7 +150,12 @@ namespace MedicSoft.Application.Services
             if (user == null)
                 throw new InvalidOperationException("User not found");
 
-            var profile = await _profileRepository.GetByIdAsync(profileId, tenantId);
+            // Load profile with navigation properties to access ConsultationFormProfile
+            var profile = await _profileRepository
+                .GetAllQueryable()
+                .Include(p => p.ConsultationFormProfile)
+                .FirstOrDefaultAsync(p => p.Id == profileId && p.TenantId == tenantId);
+            
             if (profile == null)
                 throw new InvalidOperationException("Profile not found");
 
@@ -158,6 +163,13 @@ namespace MedicSoft.Application.Services
                 throw new InvalidOperationException("Cannot assign inactive profile");
 
             user.AssignProfile(profileId);
+            
+            // Synchronize professional specialty from profile's consultation form profile
+            if (profile.ConsultationFormProfile != null)
+            {
+                user.SetProfessionalSpecialty(profile.ConsultationFormProfile.Specialty);
+            }
+            
             await _userRepository.UpdateAsync(user);
         }
 
