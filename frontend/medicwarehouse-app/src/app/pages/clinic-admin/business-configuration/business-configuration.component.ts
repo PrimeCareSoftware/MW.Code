@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, EMPTY } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
@@ -650,7 +650,7 @@ export class BusinessConfigurationComponent implements OnInit {
     const featureUpdates = Object.entries(features).map(([featureName, enabled]) => {
       const dto: UpdateFeatureDto = {
         featureName,
-        enabled: enabled as boolean
+        enabled: enabled
       };
       return this.businessConfigService.updateFeature(configId, dto).pipe(
         catchError((err) => {
@@ -660,10 +660,12 @@ export class BusinessConfigurationComponent implements OnInit {
       );
     });
 
-    // Execute all feature updates in parallel, but don't wait for completion
+    // Execute all feature updates in parallel with automatic cleanup
     // This is fire-and-forget - failures won't prevent the wizard from completing
     if (featureUpdates.length > 0) {
-      forkJoin(featureUpdates).subscribe({
+      forkJoin(featureUpdates).pipe(
+        take(1)  // Automatically unsubscribe after first emission
+      ).subscribe({
         next: () => {
           console.log('Template features applied successfully');
         },
