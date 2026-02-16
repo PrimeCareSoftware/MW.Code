@@ -660,7 +660,7 @@ export class BusinessConfigurationComponent implements OnInit {
     // This is fire-and-forget - failures won't prevent the wizard from completing
     if (featureUpdates.length > 0) {
       forkJoin(featureUpdates).subscribe(() => {
-        console.log('Template features applied successfully');
+        console.log('Template feature application completed');
       });
     }
   }
