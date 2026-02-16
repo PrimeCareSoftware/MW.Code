@@ -55,6 +55,25 @@ export const ProfessionalSpecialtyLabels: { [key: number]: string } = {
   [ProfessionalSpecialty.Outro]: 'Outro'
 };
 
+// Mapping for API compatibility - converts enum to string used by terminology service
+export const ProfessionalSpecialtyApiStrings: { [key: number]: string } = {
+  [ProfessionalSpecialty.Medico]: 'Medico',
+  [ProfessionalSpecialty.Psicologo]: 'Psicologo',
+  [ProfessionalSpecialty.Nutricionista]: 'Nutricionista',
+  [ProfessionalSpecialty.Fisioterapeuta]: 'Fisioterapeuta',
+  [ProfessionalSpecialty.Dentista]: 'Dentista',
+  [ProfessionalSpecialty.Enfermeiro]: 'Enfermeiro',
+  [ProfessionalSpecialty.TerapeutaOcupacional]: 'TerapeutaOcupacional',
+  [ProfessionalSpecialty.Fonoaudiologo]: 'Fonoaudiologo',
+  [ProfessionalSpecialty.Veterinario]: 'Veterinario',
+  [ProfessionalSpecialty.Outro]: 'Outro'
+};
+
+// Helper function to convert enum to API string
+export function professionalSpecialtyToString(specialty: ProfessionalSpecialty | number): string {
+  return ProfessionalSpecialtyApiStrings[specialty] || 'Medico';
+}
+
 export interface CreateAppointment {
   patientId: string;
   clinicId: string;
