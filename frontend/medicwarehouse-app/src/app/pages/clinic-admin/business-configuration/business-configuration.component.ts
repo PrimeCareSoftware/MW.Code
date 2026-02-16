@@ -630,5 +630,4 @@ export class BusinessConfigurationComponent implements OnInit {
       }
     });
   }
-  }
 }
