@@ -148,14 +148,14 @@ export class BusinessConfigurationComponent implements OnInit {
           }
           // For other errors, log and re-throw to fail the entire operation
           console.error('Error loading business configuration:', err);
-          throw new Error('Failed to load business configuration: ' + (err.message || 'Unknown error'));
+          throw new Error(`Failed to load business configuration: ${err.message || 'Unknown error'}`);
         })
       ),
       clinicInfo: this.clinicAdminService.getClinicInfo().pipe(
         catchError((err) => {
           console.error('Error loading clinic info:', err);
           // Re-throw to fail the entire operation since clinic info is required for the page
-          throw new Error('Failed to load clinic information: ' + (err.message || 'Unknown error'));
+          throw new Error(`Failed to load clinic information: ${err.message || 'Unknown error'}`);
         })
       )
     }).subscribe({
@@ -690,7 +690,8 @@ export class BusinessConfigurationComponent implements OnInit {
       this.businessConfigService.updateFeature(configId, { featureName, enabled }).pipe(
         catchError((err) => {
           console.warn(`Failed to apply template feature ${featureName}:`, err);
-          // Return of(null) to allow forkJoin to complete even when individual features fail
+          // Return of(null) for non-critical template feature updates to allow forkJoin to complete
+          // This differs from loadDataInParallel where errors are re-thrown for critical operations
           return of(null);
         })
       )
