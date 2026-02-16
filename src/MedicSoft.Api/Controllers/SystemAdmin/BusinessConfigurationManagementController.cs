@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Enums;
 
@@ -15,6 +16,7 @@ namespace MedicSoft.Api.Controllers.SystemAdmin
     [ApiController]
     [Route("api/system-admin/business-configuration")]
     [Authorize(Roles = "SystemAdmin")]
+    [RequireSystemOwner]
     public class BusinessConfigurationManagementController : BaseController
     {
         private readonly BusinessConfigurationService _service;

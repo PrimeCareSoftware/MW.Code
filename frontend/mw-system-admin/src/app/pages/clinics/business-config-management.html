@@ -14,12 +14,17 @@
   } @else if (error()) {
     <div class="error-message">
       {{ error() }}
-      @if (configNotFound()) {
+      @if (configNotFound() && isSystemOwner()) {
         <div class="create-config-prompt">
           <p>Esta clínica ainda não possui uma configuração de negócio.</p>
           <button class="btn-create" (click)="createConfiguration()" [disabled]="saving()">
             {{ saving() ? 'Criando...' : 'Criar Configuração Padrão' }}
           </button>
+        </div>
+      } @else if (configNotFound() && !isSystemOwner()) {
+        <div class="create-config-prompt">
+          <p>Esta clínica ainda não possui uma configuração de negócio.</p>
+          <p class="warning-text">⚠️ Apenas proprietários do sistema podem criar configurações de negócio.</p>
         </div>
       }
     </div>
