@@ -59,7 +59,10 @@ namespace MedicSoft.Application.Services
             await _batchRepository.ExecuteInTransactionAsync(async () =>
             {
                 // Generate batch number with sufficient entropy to ensure uniqueness
-                // Format: BATCH-YYYYMMDD-HHMMSS-GUID12 (using 12 chars from Guid for better uniqueness)
+                // Format: BATCH-YYYYMMDD-HHMMSS-GUID12
+                // Using 12 hex chars from GUID provides 48 bits of entropy (16^12 possible values)
+                // Combined with timestamp, this ensures uniqueness even with concurrent requests
+                // Collision probability: ~1 in 281 trillion for same second operations
                 var timestamp = DateTime.UtcNow;
                 var datePart = timestamp.ToString("yyyyMMdd");
                 var timePart = timestamp.ToString("HHmmss");
