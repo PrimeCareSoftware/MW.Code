@@ -16,6 +16,8 @@ import { ClinicSelectionService } from '../../../services/clinic-selection.servi
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicAdminInfoDto, UpdateClinicInfoRequest } from '../../../models/clinic-admin.model';
 import { SetupWizardComponent, WizardConfiguration } from './setup-wizard/setup-wizard.component';
+import { Auth } from '../../../services/auth';
+import { UserClinicDto } from '../../../models/clinic.model';
 
 interface FeatureCategory {
   name: string;
@@ -92,7 +94,8 @@ export class BusinessConfigurationComponent implements OnInit {
     private businessConfigService: BusinessConfigurationService,
     private terminologyService: TerminologyService,
     private clinicSelectionService: ClinicSelectionService,
-    private clinicAdminService: ClinicAdminService
+    private clinicAdminService: ClinicAdminService,
+    private auth: Auth
   ) {}
 
   ngOnInit(): void {
@@ -115,16 +118,50 @@ export class BusinessConfigurationComponent implements OnInit {
           if (this.clinicSelectionService.currentClinic()) {
             this.loadDataInParallel();
           } else {
-            this.error = this.NO_CLINIC_MESSAGE;
-            this.loading = false;
+            // No clinics returned from the service, try to use the clinic from auth token as fallback
+            console.log('No clinics returned from getUserClinics(), attempting fallback to auth token');
+            this.tryFallbackToAuthClinic();
           }
         },
         error: (err) => {
           console.error('Error loading clinics:', err);
-          this.error = 'Erro ao carregar clínicas. Tente novamente.';
-          this.loading = false;
+          console.log('Attempting fallback to auth token due to clinic loading error');
+          // On error, try to use the clinic from auth token as fallback
+          this.tryFallbackToAuthClinic();
         }
       });
+    }
+  }
+
+  /**
+   * Fallback method to use the clinic ID from the auth token when getUserClinics() 
+   * returns an empty array. This handles cases where the user has a clinic assigned
+   * but no UserClinicLink records exist yet.
+   */
+  private tryFallbackToAuthClinic(): void {
+    const user = this.auth.currentUser();
+    const clinicIdFromAuth = user?.currentClinicId || user?.clinicId;
+    
+    if (clinicIdFromAuth) {
+      console.log('Using clinic from auth token as fallback:', clinicIdFromAuth);
+      // Create a minimal UserClinicDto from the auth data
+      // Note: Empty fields will be populated when loadDataInParallel() calls getClinicInfo()
+      const fallbackClinic: UserClinicDto = {
+        clinicId: clinicIdFromAuth,
+        clinicName: '', // Will be populated by getClinicInfo()
+        clinicAddress: '', // Will be populated by getClinicInfo()
+        isPreferred: true,
+        isActive: true,
+        linkedDate: '' // No actual link date available for fallback data; empty string to satisfy interface
+      };
+      
+      // Set this as the current clinic and proceed
+      this.clinicSelectionService.currentClinic.set(fallbackClinic);
+      this.loadDataInParallel();
+    } else {
+      // Truly no clinic available - show error
+      this.error = this.NO_CLINIC_MESSAGE;
+      this.loading = false;
     }
   }
 
