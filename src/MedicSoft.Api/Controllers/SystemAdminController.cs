@@ -167,7 +167,20 @@ namespace MedicSoft.Api.Controllers
 
                 // Determine document type based on document length
                 var cleanDocument = new string(request.Document.Where(char.IsDigit).ToArray());
-                var documentType = cleanDocument.Length == 11 ? Domain.Enums.DocumentType.CPF : Domain.Enums.DocumentType.CNPJ;
+                Domain.Enums.DocumentType documentType;
+                
+                if (cleanDocument.Length == 11)
+                {
+                    documentType = Domain.Enums.DocumentType.CPF;
+                }
+                else if (cleanDocument.Length == 14)
+                {
+                    documentType = Domain.Enums.DocumentType.CNPJ;
+                }
+                else
+                {
+                    return BadRequest(new { message = "Documento inválido. Deve ser um CPF (11 dígitos) ou CNPJ (14 dígitos)." });
+                }
 
                 // Check if company already exists by document
                 var existingCompany = await _companyRepository.GetByDocumentAsync(request.Document);
@@ -1289,7 +1302,8 @@ namespace MedicSoft.Api.Controllers
         #region Helper Methods
         
         /// <summary>
-        /// Generate a friendly subdomain from clinic name (consistent with website registration)
+        /// Generate a friendly subdomain from clinic name.
+        /// This implementation matches RegistrationService.GenerateFriendlySubdomain to ensure consistency.
         /// </summary>
         private static string GenerateFriendlySubdomain(string clinicName)
         {
@@ -1322,12 +1336,12 @@ namespace MedicSoft.Api.Controllers
             else if (subdomain.Length > 63)
             {
                 subdomain = subdomain[..63].TrimEnd('-');
-            }
-
-            // Ensure it doesn't start or end with hyphen (should be covered by Trim('-') above, but double-check)
-            if (subdomain.StartsWith('-') || subdomain.EndsWith('-'))
-            {
-                subdomain = subdomain.Trim('-');
+                
+                // Ensure minimum length after truncation
+                if (subdomain.Length < 3)
+                {
+                    subdomain = "clinic";
+                }
             }
 
             return subdomain;
