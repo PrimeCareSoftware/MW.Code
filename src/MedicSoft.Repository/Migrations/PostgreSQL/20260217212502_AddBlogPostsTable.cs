@@ -427,11 +427,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AddColumn<int>(
-                name: "ProfessionalSpecialty",
-                table: "Users",
-                type: "integer",
-                nullable: true);
+            // ProfessionalSpecialty column managed by migration 20260216184300_AddProfessionalSpecialtyToUser
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -4795,10 +4791,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                     { new Guid("f2fa60de-ed32-4e74-bd4f-541068fdfe98"), "customer", new DateTime(2026, 2, 17, 21, 25, 0, 17, DateTimeKind.Utc).AddTicks(2994), "{\"format\":\"percent\",\"icon\":\"warning\",\"color\":\"#ef4444\",\"threshold\":{\"warning\":5,\"critical\":10}}", "\nSELECT \n    ROUND(\n        CAST(COUNT(CASE WHEN \"Status\" = 'Cancelled' AND \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END) AS DECIMAL) / \n        NULLIF(COUNT(CASE WHEN \"EndDate\" >= CURRENT_DATE - INTERVAL '1 month' THEN 1 END), 0) * 100,\n        2\n    ) as value\nFROM \"ClinicSubscriptions\"", "Monthly customer churn percentage", "warning", true, "Churn Rate", "", "metric", null }
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_ProfessionalSpecialty",
-                table: "Users",
-                column: "ProfessionalSpecialty");
+            // IX_Users_ProfessionalSpecialty index managed by migration 20260216184300_AddProfessionalSpecialtyToUser
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecurringAppointmentPatterns_ParentPatternId",
@@ -4995,9 +4988,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
             migrationBuilder.DropTable(
                 name: "RecurrenceExceptions");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Users_ProfessionalSpecialty",
-                table: "Users");
+            // IX_Users_ProfessionalSpecialty index managed by migration 20260216184300_AddProfessionalSpecialtyToUser
 
             migrationBuilder.DropIndex(
                 name: "IX_RecurringAppointmentPatterns_ParentPatternId",
@@ -5148,9 +5139,7 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 keyColumn: "Id",
                 keyValue: new Guid("f2fa60de-ed32-4e74-bd4f-541068fdfe98"));
 
-            migrationBuilder.DropColumn(
-                name: "ProfessionalSpecialty",
-                table: "Users");
+            // ProfessionalSpecialty column managed by migration 20260216184300_AddProfessionalSpecialtyToUser
 
             migrationBuilder.DropColumn(
                 name: "EffectiveEndDate",
