@@ -5,6 +5,7 @@ using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.ValueObjects;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Application.Services
 {
@@ -12,13 +13,19 @@ namespace MedicSoft.Application.Services
     {
         private readonly IBusinessConfigurationRepository _repository;
         private readonly IClinicRepository _clinicRepository;
+        private readonly ILogger<BusinessConfigurationService> _logger;
+        
+        // Default number of rooms when MultiRoom is enabled
+        private const int DefaultMultiRoomCount = 2;
         
         public BusinessConfigurationService(
             IBusinessConfigurationRepository repository,
-            IClinicRepository clinicRepository)
+            IClinicRepository clinicRepository,
+            ILogger<BusinessConfigurationService> logger)
         {
             _repository = repository;
             _clinicRepository = clinicRepository;
+            _logger = logger;
         }
         
         public async Task<BusinessConfiguration?> GetByClinicIdAsync(Guid clinicId, string tenantId)
@@ -88,7 +95,10 @@ namespace MedicSoft.Application.Services
         {
             var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
             if (clinic == null)
-                return; // Clinic not found, skip sync
+            {
+                _logger.LogWarning("Cannot sync feature {FeatureName} to clinic {ClinicId}: Clinic not found", featureName, clinicId);
+                return;
+            }
             
             switch (featureName)
             {
@@ -100,8 +110,8 @@ namespace MedicSoft.Application.Services
                     
                 case "MultiRoom":
                     // Sync MultiRoom with NumberOfRooms
-                    // MultiRoom=true means multiple rooms (default to 2), false means 1 room
-                    var numberOfRooms = enabled ? Math.Max(2, clinic.NumberOfRooms) : 1;
+                    // MultiRoom=true means multiple rooms (default to DefaultMultiRoomCount), false means 1 room
+                    var numberOfRooms = enabled ? Math.Max(DefaultMultiRoomCount, clinic.NumberOfRooms) : 1;
                     clinic.UpdateNumberOfRooms(numberOfRooms);
                     await _clinicRepository.UpdateAsync(clinic);
                     break;
@@ -137,11 +147,17 @@ namespace MedicSoft.Application.Services
         {
             var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
             if (clinic == null)
+            {
+                _logger.LogWarning("Cannot sync clinic {ClinicId} properties to business config: Clinic not found", clinicId);
                 return;
+            }
             
             var config = await _repository.GetByClinicIdAsync(clinicId, tenantId);
             if (config == null)
-                return; // No business config exists, skip sync
+            {
+                _logger.LogWarning("Cannot sync clinic {ClinicId} properties to business config: Business configuration not found", clinicId);
+                return;
+            }
             
             // Sync EnableOnlineAppointmentScheduling -> OnlineBooking
             if (config.OnlineBooking != clinic.EnableOnlineAppointmentScheduling)

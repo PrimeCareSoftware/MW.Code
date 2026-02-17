@@ -17,6 +17,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
+        private readonly BusinessConfigurationService _businessConfigService;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateClinicCommandHandler> _logger;
 
@@ -26,6 +27,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
             IBusinessConfigurationRepository businessConfigurationRepository,
+            BusinessConfigurationService businessConfigService,
             IMapper mapper,
             ILogger<CreateClinicCommandHandler> logger)
         {
@@ -34,6 +36,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _businessConfigurationRepository = businessConfigurationRepository;
+            _businessConfigService = businessConfigService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -106,21 +109,18 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
                 request.TenantId
             );
             
-            // Sync initial clinic properties to business configuration
-            // OnlineBooking should match EnableOnlineAppointmentScheduling
-            if (createdClinic.EnableOnlineAppointmentScheduling != businessConfig.OnlineBooking)
-            {
-                businessConfig.UpdateFeature("OnlineBooking", createdClinic.EnableOnlineAppointmentScheduling);
-            }
-            
-            // MultiRoom should reflect NumberOfRooms (>1 rooms = true)
-            var shouldHaveMultiRoom = createdClinic.NumberOfRooms > 1;
-            if (businessConfig.MultiRoom != shouldHaveMultiRoom)
-            {
-                businessConfig.UpdateFeature("MultiRoom", shouldHaveMultiRoom);
-            }
-            
             await _businessConfigurationRepository.AddAsync(businessConfig);
+            
+            // Sync initial clinic properties to business configuration
+            try
+            {
+                await _businessConfigService.SyncClinicPropertiesToBusinessConfigAsync(createdClinic.Id, request.TenantId);
+            }
+            catch (Exception ex)
+            {
+                // Log but don't fail clinic creation if business config sync fails
+                _logger.LogWarning(ex, "Failed to sync initial clinic properties to business configuration for clinic {ClinicId}", createdClinic.Id);
+            }
 
             return _mapper.Map<ClinicDto>(createdClinic);
         }
