@@ -10,6 +10,43 @@ namespace MedicSoft.Application.Helpers
     public static class ProfileMappingHelper
     {
         /// <summary>
+        /// Collection of known profile name mappings
+        /// Used for validation and ensuring consistency
+        /// </summary>
+        private static readonly HashSet<string> KnownProfileNames = new(StringComparer.OrdinalIgnoreCase)
+        {
+            // Owner/Proprietário
+            "proprietário", "proprietario", "owner",
+            
+            // Medical Doctor/Médico
+            "médico", "medico", "doctor",
+            
+            // Dentist/Dentista
+            "dentista", "dentist",
+            
+            // Nurse/Enfermeiro
+            "enfermeiro", "enfermeira", "nurse",
+            
+            // Receptionist/Recepção
+            "recepção", "recepcao", "recepcionista", "receptionist",
+            
+            // Secretary/Secretaria
+            "secretaria", "secretário", "secretario", "secretary",
+            "recepção/secretaria", "recepcao/secretaria",
+            
+            // Financial
+            "financeiro", "financial",
+            
+            // Healthcare Specialties
+            "nutricionista", "nutritionist",
+            "psicólogo", "psicologo", "psychologist",
+            "fisioterapeuta", "physiotherapist",
+            "terapeuta ocupacional", "occupational therapist",
+            "fonoaudiólogo", "fonoaudiologo", "speech therapist",
+            "veterinário", "veterinario", "veterinarian"
+        };
+
+        /// <summary>
         /// Maps an AccessProfile name to a UserRole enum for backward compatibility
         /// Supports both Portuguese and English profile names
         /// </summary>
@@ -58,8 +95,14 @@ namespace MedicSoft.Application.Helpers
                 // This allows financial staff to have secretary-level permissions for managing payments
                 "financeiro" or "financial" => UserRole.Secretary,
                 
-                // Specialty-based profiles - All map to Doctor role as they're healthcare professionals
-                // who need similar permissions (view/manage patients, appointments, medical records)
+                // Healthcare Specialties - All map to Doctor role
+                // Note: These specialties (nutritionist, psychologist, physiotherapist, etc.) 
+                // currently map to the Doctor role because:
+                // 1. They are all healthcare professionals who need similar base permissions
+                // 2. They require access to patient records, appointments, and medical documentation
+                // 3. The granular permission system (AccessProfile) provides specialty-specific access control
+                // 4. Creating separate roles for each specialty would complicate the core role-based system
+                // Future: Consider adding specialized roles if distinct permission sets are needed
                 "nutricionista" or "nutritionist" => UserRole.Doctor,
                 "psicólogo" or "psicologo" or "psychologist" => UserRole.Doctor,
                 "fisioterapeuta" or "physiotherapist" => UserRole.Doctor,
@@ -71,15 +114,13 @@ namespace MedicSoft.Application.Helpers
                 _ => UserRole.Receptionist
             };
 
-            // Log warning if we used the fallback for an unrecognized profile
-            if (mappedRole == UserRole.Receptionist && 
-                !profileNameLower.Contains("recep") && 
-                !profileNameLower.Contains("recepcao"))
+            // Log warning if profile name is not in our known list
+            if (!IsRecognizedProfile(profileName))
             {
                 logger?.LogWarning(
-                    "Unrecognized profile name '{ProfileName}' mapped to Receptionist role. " +
+                    "Unrecognized profile name '{ProfileName}' mapped to {Role} role. " +
                     "Consider adding explicit mapping for this profile.", 
-                    profileName);
+                    profileName, mappedRole);
             }
 
             return mappedRole;
@@ -98,22 +139,7 @@ namespace MedicSoft.Application.Helpers
                 return true;
 
             // Check if it's in our known mappings
-            var profileNameLower = profileName.ToLowerInvariant();
-            return profileNameLower is 
-                "proprietário" or "proprietario" or "owner" or
-                "médico" or "medico" or "doctor" or
-                "dentista" or "dentist" or
-                "enfermeiro" or "enfermeira" or "nurse" or
-                "recepção" or "recepcao" or "recepcionista" or "receptionist" or
-                "secretaria" or "secretário" or "secretario" or "secretary" or
-                "recepção/secretaria" or "recepcao/secretaria" or
-                "financeiro" or "financial" or
-                "nutricionista" or "nutritionist" or
-                "psicólogo" or "psicologo" or "psychologist" or
-                "fisioterapeuta" or "physiotherapist" or
-                "terapeuta ocupacional" or "occupational therapist" or
-                "fonoaudiólogo" or "fonoaudiologo" or "speech therapist" or
-                "veterinário" or "veterinario" or "veterinarian";
+            return KnownProfileNames.Contains(profileName);
         }
     }
 }
