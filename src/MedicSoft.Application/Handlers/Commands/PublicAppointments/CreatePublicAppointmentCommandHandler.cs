@@ -18,17 +18,20 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
         private readonly IPatientRepository _patientRepository;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IPatientClinicLinkRepository _patientClinicLinkRepository;
+        private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
 
         public CreatePublicAppointmentCommandHandler(
             IClinicRepository clinicRepository,
             IPatientRepository patientRepository,
             IAppointmentRepository appointmentRepository,
-            IPatientClinicLinkRepository patientClinicLinkRepository)
+            IPatientClinicLinkRepository patientClinicLinkRepository,
+            IBusinessConfigurationRepository businessConfigurationRepository)
         {
             _clinicRepository = clinicRepository;
             _patientRepository = patientRepository;
             _appointmentRepository = appointmentRepository;
             _patientClinicLinkRepository = patientClinicLinkRepository;
+            _businessConfigurationRepository = businessConfigurationRepository;
         }
 
         public async Task<PublicAppointmentResponseDto> Handle(CreatePublicAppointmentCommand request, CancellationToken cancellationToken)
@@ -58,6 +61,23 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
 
             if (!clinic.IsActive)
                 throw new InvalidOperationException("Esta clínica não está aceitando agendamentos no momento.");
+
+            // Check if online booking is enabled for this clinic
+            var businessConfig = await _businessConfigurationRepository.GetByClinicIdAsync(dto.ClinicId, clinic.TenantId);
+            if (businessConfig != null && !businessConfig.OnlineBooking)
+                throw new InvalidOperationException("Agendamento online não está disponível para esta clínica.");
+            
+            // Check if the clinic has online scheduling enabled
+            if (!clinic.EnableOnlineAppointmentScheduling)
+                throw new InvalidOperationException("Agendamento online não está ativo para esta clínica.");
+
+            // Validate appointment time is within clinic working hours
+            if (!clinic.IsWithinWorkingHours(dto.ScheduledTime))
+                throw new InvalidOperationException($"O horário {dto.ScheduledTime:hh\\:mm} está fora do horário de funcionamento da clínica ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm}).");
+            
+            var endTime = dto.ScheduledTime.Add(TimeSpan.FromMinutes(dto.DurationMinutes));
+            if (!clinic.IsWithinWorkingHours(endTime))
+                throw new InvalidOperationException($"O término do atendimento ({endTime:hh\\:mm}) ultrapassa o horário de fechamento da clínica ({clinic.ClosingTime:hh\\:mm}).");
 
             // Verifica se existe conflito de horário
             var hasConflict = await _appointmentRepository.HasConflictingAppointmentAsync(
