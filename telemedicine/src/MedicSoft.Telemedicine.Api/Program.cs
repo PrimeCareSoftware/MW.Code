@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using MedicSoft.Telemedicine.Api.Filters;
 using MedicSoft.Telemedicine.Application.Interfaces;
 using MedicSoft.Telemedicine.Application.Services;
 using MedicSoft.Telemedicine.Domain.Interfaces;
@@ -34,6 +35,16 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "TenantId"
+    });
+    
+    // Add operation filter for file uploads
+    c.OperationFilter<FileUploadOperationFilter>();
+    
+    // Configure Swagger to handle file uploads with [FromForm] parameters
+    c.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
     });
 });
 
