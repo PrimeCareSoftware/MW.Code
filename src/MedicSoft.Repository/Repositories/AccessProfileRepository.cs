@@ -42,13 +42,34 @@ namespace MedicSoft.Repository.Repositories
             // Fisioterapeuta, Veterinarian, etc.) to their users, regardless of their clinic's primary specialty.
             // This supports multi-specialty clinics and expanding clinics.
             // Security: Tenant isolation is maintained via ap.TenantId == tenantId filter.
-            return await _context.AccessProfiles
+            
+            // Get all profiles: custom profiles for this clinic + all default profiles across tenant
+            var allProfiles = await _context.AccessProfiles
                 .Include(ap => ap.Permissions)
                 .Where(ap => ap.TenantId == tenantId && ap.IsActive && 
                             (ap.ClinicId == clinicId || ap.IsDefault))
-                .OrderByDescending(ap => ap.IsDefault)
-                .ThenBy(ap => ap.Name)
                 .ToListAsync();
+            
+            // For default profiles, return only one instance per profile name (deduplicate)
+            // This ensures all profile types are visible without duplication
+            // Partition profiles in a single pass for efficiency
+            var profilesByType = allProfiles.ToLookup(p => p.IsDefault);
+            
+            var result = new List<AccessProfile>();
+            
+            // Add deduplicated default profiles first (sorted by name)
+            result.AddRange(profilesByType[true]
+                .GroupBy(p => p.Name)
+                // For duplicate default profiles with same name across clinics, select consistently by lowest ID
+                // This ensures deterministic behavior - the first created profile for each name is used
+                .Select(g => g.OrderBy(p => p.Id).First())
+                .OrderBy(p => p.Name));
+            
+            // Add custom profiles (sorted by name)
+            result.AddRange(profilesByType[false]
+                .OrderBy(p => p.Name));
+            
+            return result;
         }
 
         public async Task<IEnumerable<AccessProfile>> GetDefaultProfilesAsync(string tenantId)
