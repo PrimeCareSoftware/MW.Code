@@ -15,8 +15,6 @@ export interface ModuleInfo {
 }
 
 export interface ModuleConfig {
-  id: string;
-  clinicId: string;
   moduleName: string;
   displayName: string;
   description: string;
@@ -26,9 +24,12 @@ export interface ModuleConfig {
   isCore: boolean;
   isAvailableInPlan: boolean;
   requiredModules: string[];
-  configuration: string;
-  lastModified: Date;
-  modifiedBy: string;
+  configuration?: string;
+  updatedAt?: Date;
+  requiresConfiguration: boolean;
+  configurationType?: string;
+  configurationExample?: string;
+  configurationHelp?: string;
 }
 
 export interface ValidationResponse {

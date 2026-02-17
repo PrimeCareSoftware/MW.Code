@@ -50,10 +50,10 @@ namespace MedicSoft.Api.Controllers
         /// <response code="400">Invalid subscription or plan</response>
         /// <response code="401">Unauthorized - Invalid or missing JWT token</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ModuleDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<ModuleConfigDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<ModuleDto>>> GetModules()
+        public async Task<ActionResult<IEnumerable<ModuleConfigDto>>> GetModules()
         {
             var tenantId = GetTenantId();
             var clinicId = GetClinicIdFromToken();
@@ -74,18 +74,30 @@ namespace MedicSoft.Api.Controllers
                 .Where(mc => mc.ClinicId == clinicId && mc.TenantId == tenantId)
                 .ToListAsync();
 
-            var modules = SystemModules.GetAllModules();
-            var result = modules.Select(moduleName =>
+            // Get all modules with their metadata
+            var modulesInfo = SystemModules.GetModulesInfo();
+            var result = modulesInfo.Values.Select(moduleInfo =>
             {
-                var config = configurations.FirstOrDefault(c => c.ModuleName == moduleName);
-                var isAvailableInPlan = SystemModules.IsModuleAvailableInPlan(moduleName, plan);
+                var config = configurations.FirstOrDefault(c => c.ModuleName == moduleInfo.Name);
+                var isAvailableInPlan = SystemModules.IsModuleAvailableInPlan(moduleInfo.Name, plan);
 
-                return new ModuleDto
+                return new ModuleConfigDto
                 {
-                    ModuleName = moduleName,
+                    ModuleName = moduleInfo.Name,
+                    DisplayName = moduleInfo.DisplayName,
+                    Description = moduleInfo.Description,
+                    Category = moduleInfo.Category,
+                    Icon = moduleInfo.Icon,
                     IsEnabled = config?.IsEnabled ?? false,
                     IsAvailableInPlan = isAvailableInPlan,
-                    Configuration = config?.Configuration
+                    IsCore = moduleInfo.IsCore,
+                    RequiredModules = moduleInfo.RequiredModules,
+                    Configuration = config?.Configuration,
+                    UpdatedAt = config?.UpdatedAt,
+                    RequiresConfiguration = moduleInfo.RequiresConfiguration,
+                    ConfigurationType = moduleInfo.ConfigurationType,
+                    ConfigurationExample = moduleInfo.ConfigurationExample,
+                    ConfigurationHelp = moduleInfo.ConfigurationHelp
                 };
             });
 

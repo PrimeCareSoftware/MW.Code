@@ -34,13 +34,28 @@ import { ModuleConfig } from '../../../../models/module-config.model';
     <mat-dialog-content>
       <p class="description">{{ data.module.description }}</p>
       
+      <!-- Configuration Help -->
+      <div class="help-section" *ngIf="data.module.configurationHelp">
+        <mat-icon>help_outline</mat-icon>
+        <p>{{ data.module.configurationHelp }}</p>
+      </div>
+      
+      <!-- Configuration Example -->
+      <div class="example-section" *ngIf="data.module.configurationExample">
+        <h4>
+          <mat-icon>code</mat-icon>
+          Exemplo de Configuração
+        </h4>
+        <pre>{{ data.module.configurationExample }}</pre>
+      </div>
+      
       <form [formGroup]="configForm">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Configurações (JSON)</mat-label>
           <textarea matInput 
                     formControlName="configuration" 
                     rows="10"
-                    placeholder='{"option1": "value1", "option2": "value2"}'></textarea>
+                    [placeholder]="data.module.configurationExample || '{\"option1\": \"value1\", \"option2\": \"value2\"}'"></textarea>
           <mat-hint>Configure opções específicas do módulo em formato JSON</mat-hint>
           <mat-error *ngIf="configForm.get('configuration')?.hasError('invalidJson')">
             JSON inválido. Por favor, corrija a sintaxe.
@@ -82,6 +97,67 @@ import { ModuleConfig } from '../../../../models/module-config.model';
       color: rgba(0, 0, 0, 0.7);
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    .help-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px;
+      background-color: #fff3e0;
+      border-radius: 4px;
+      margin-bottom: 16px;
+
+      mat-icon {
+        color: #f57c00;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+
+      p {
+        margin: 0;
+        font-size: 13px;
+        color: rgba(0, 0, 0, 0.8);
+        line-height: 1.5;
+      }
+    }
+
+    .example-section {
+      padding: 12px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      margin-bottom: 16px;
+
+      h4 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      pre {
+        margin: 0;
+        padding: 8px;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 12px;
+        line-height: 1.4;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
     }
 
     .full-width {
