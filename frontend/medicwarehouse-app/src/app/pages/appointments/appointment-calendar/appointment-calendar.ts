@@ -12,6 +12,7 @@ import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
 import { RecurrenceActionDialogComponent, RecurrenceActionDialogResult } from '../recurrence-action-dialog/recurrence-action-dialog.component';
+import { ClinicAdminService } from '../../../services/clinic-admin.service';
 
 interface TimeSlot {
   time: string;
@@ -70,6 +71,10 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   
   // Clinic ID will be retrieved from authenticated user
   clinicId: string | null = null;
+  
+  // Clinic hours loaded from configuration
+  private clinicOpeningHour: number = 8;  // Default fallback
+  private clinicClosingHour: number = 18; // Default fallback
 
   constructor(
     private appointmentService: AppointmentService,
@@ -77,7 +82,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     private auth: Auth,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private clinicAdminService: ClinicAdminService
   ) {}
 
   ngOnInit(): void {
@@ -89,7 +95,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       return;
     }
     
-    this.generateTimeSlots();
+    // Load clinic configuration to get opening/closing hours
+    this.loadClinicConfiguration();
     this.generateWeekDays();
     this.loadProfessionals();
     
@@ -188,10 +195,37 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     return new Date(d.setDate(diff));
   }
 
+  loadClinicConfiguration(): void {
+    this.clinicAdminService.getClinicInfo().subscribe({
+      next: (clinicInfo) => {
+        // Parse opening and closing times from TimeSpan string format (HH:mm:ss)
+        if (clinicInfo.openingTime) {
+          const openingParts = clinicInfo.openingTime.split(':');
+          this.clinicOpeningHour = parseInt(openingParts[0], 10);
+        }
+        if (clinicInfo.closingTime) {
+          const closingParts = clinicInfo.closingTime.split(':');
+          this.clinicClosingHour = parseInt(closingParts[0], 10);
+          // If closing time has minutes, round up to next hour for display
+          if (parseInt(closingParts[1], 10) > 0) {
+            this.clinicClosingHour += 1;
+          }
+        }
+        // Generate time slots with loaded configuration
+        this.generateTimeSlots();
+      },
+      error: (error) => {
+        console.error('Error loading clinic configuration, using default hours:', error);
+        // Use default hours (8-18) on error
+        this.generateTimeSlots();
+      }
+    });
+  }
+
   generateTimeSlots(): void {
     const slots: TimeSlot[] = [];
-    const startHour = 8; // 8 AM
-    const endHour = 18; // 6 PM
+    const startHour = this.clinicOpeningHour;
+    const endHour = this.clinicClosingHour;
     
     for (let hour = startHour; hour < endHour; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
