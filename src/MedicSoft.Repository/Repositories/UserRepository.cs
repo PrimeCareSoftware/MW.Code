@@ -111,7 +111,22 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task UpdateAsync(User user)
         {
-            _context.Users.Update(user);
+            var entry = _context.Entry(user);
+            
+            // If entity is detached (loaded with AsNoTracking), we need to attach it
+            if (entry.State == EntityState.Detached)
+            {
+                // Setting state to Modified will attach the entity automatically
+                // We don't use Attach() because it tries to track navigation properties
+                entry.State = EntityState.Modified;
+                
+                // Explicitly mark reference navigations as unchanged to avoid tracking conflicts
+                // These navigation properties might already be tracked from previous queries
+                entry.Reference(u => u.Clinic).IsModified = false;
+                entry.Reference(u => u.CurrentClinic).IsModified = false;
+                entry.Reference(u => u.Profile).IsModified = false;
+            }
+            
             await _context.SaveChangesAsync();
         }
     }
