@@ -1462,17 +1462,17 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AddColumn<DateTime>(
+            migrationBuilder.AlterColumn<DateTime>(
                 name: "EffectiveEndDate",
                 table: "RecurringAppointmentPatterns",
                 type: "timestamp without time zone",
-                nullable: true);
+                nullable: true,
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone",
+                oldNullable: true);
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "ParentPatternId",
-                table: "RecurringAppointmentPatterns",
-                type: "uuid",
-                nullable: true);
+            // ParentPatternId already added by migration 20260210140000_AddRecurrenceSeriesAndExceptions
+            // as uuid type, no conversion needed
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -5145,13 +5145,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
 
             // ProfessionalSpecialty column managed by migration 20260216184300_AddProfessionalSpecialtyToUser
 
-            migrationBuilder.DropColumn(
+            migrationBuilder.AlterColumn<DateTime>(
                 name: "EffectiveEndDate",
-                table: "RecurringAppointmentPatterns");
-
-            migrationBuilder.DropColumn(
-                name: "ParentPatternId",
-                table: "RecurringAppointmentPatterns");
+                table: "RecurringAppointmentPatterns",
+                type: "timestamp with time zone",
+                nullable: true,
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp without time zone",
+                oldNullable: true);
 
             migrationBuilder.DropColumn(
                 name: "IsException",
