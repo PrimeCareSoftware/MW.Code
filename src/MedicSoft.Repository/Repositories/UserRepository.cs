@@ -116,8 +116,8 @@ namespace MedicSoft.Repository.Repositories
             // If entity is detached (loaded with AsNoTracking), we need to attach it
             if (entry.State == EntityState.Detached)
             {
-                // Attach the user entity
-                _context.Users.Attach(user);
+                // Setting state to Modified will attach the entity automatically
+                // We don't use Attach() because it tries to track navigation properties
                 entry.State = EntityState.Modified;
                 
                 // Explicitly mark reference navigations as unchanged to avoid tracking conflicts
