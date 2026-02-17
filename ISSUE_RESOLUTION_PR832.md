@@ -1,6 +1,15 @@
-# Issue Resolution: PR #832 Changes Not Reflecting on Site
+# Issue Resolution: PR #832 and Omni Care Site Removal
 
-## Problem Statement
+## Update (February 2026)
+**RESOLVED**: The `omni-care-site` directory has been **removed** from the repository to prevent confusion during development. 
+
+**Reason**: PR #832 was incorrectly implemented in the `omni-care-site` React project instead of the correct location: `frontend/medicwarehouse-app` (Angular). The content from `omni-care-site` has been properly migrated to the Angular application as documented in `OMNI_CARE_MIGRATION_GUIDE.md` and `PLANO_MIGRACAO_OMNI_CARE.md`.
+
+**Action Taken**: Deleted the `omni-care-site` directory and its associated GitHub Actions workflow to ensure all future PRs are made in the correct project location.
+
+---
+
+## Original Problem Statement (Historical)
 > "PR 832 was implemented but didn't reflect on the site"
 
 ## Investigation Summary
@@ -131,6 +140,10 @@ The changes just need to be deployed to the live hosting environment to become v
 
 ---
 
+## Final Resolution (February 2026)
+
+The `omni-care-site` directory has been **permanently removed** from the repository. All marketing site functionality should be implemented in `frontend/medicwarehouse-app` following the migration guides.
+
 **Created**: February 17, 2026  
-**Status**: ✅ Complete - Ready for Deployment  
-**PR**: [Link to this PR]
+**Updated**: February 17, 2026  
+**Status**: ✅ Complete - omni-care-site removed, use medicwarehouse-app for all PRs
