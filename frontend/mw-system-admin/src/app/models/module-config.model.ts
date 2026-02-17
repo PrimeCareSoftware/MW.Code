@@ -7,6 +7,10 @@ export interface ModuleInfo {
   isCore: boolean;
   requiredModules: string[];
   minimumPlan: string;
+  requiresConfiguration?: boolean;
+  configurationType?: string;
+  configurationExample?: string;
+  configurationHelp?: string;
 }
 
 export interface ModuleConfig {
@@ -21,6 +25,10 @@ export interface ModuleConfig {
   requiredModules: string[];
   configuration?: string;
   updatedAt?: Date;
+  requiresConfiguration?: boolean;
+  configurationType?: string;
+  configurationExample?: string;
+  configurationHelp?: string;
 }
 
 export interface ModuleUsage {
