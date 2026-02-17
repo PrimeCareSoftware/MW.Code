@@ -855,6 +855,30 @@ if (applyMigrations)
     }
 }
 
+// Defensive repair for partial migrations (runs even when ApplyMigrations is false)
+var enableDefensiveRepair = app.Configuration.GetValue<bool?>("Database:EnableDefensiveRepair") ?? true;
+if (enableDefensiveRepair)
+{
+    try
+    {
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
+        var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+        if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+            dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE INDEX IF NOT EXISTS \"ix_documenttemplates_globaltemplateid\" ON \"DocumentTemplates\" (\"GlobalTemplateId\");");
+        }
+    }
+    catch (Exception ex)
+    {
+        Log.Warning(ex, "Failed to apply defensive database repair");
+    }
+}
+
 // Configure the HTTP request pipeline
 // Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
 // Swagger is placed early in the pipeline to bypass authentication/authorization

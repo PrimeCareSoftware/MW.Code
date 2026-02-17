@@ -46,12 +46,24 @@ namespace MedicSoft.Api.Middleware
                     ["StackTrace"] = ex.StackTrace ?? "No stack trace available"
                 }))
                 {
-                    _logger.LogError(ex, 
-                        "Erro não tratado: {Message} | Tipo: {ExceptionType} | Path: {Path} | Method: {Method}",
-                        ex.Message,
-                        ex.GetType().Name,
-                        context.Request.Path,
-                        context.Request.Method);
+                    if (ex is Microsoft.AspNetCore.Http.BadHttpRequestException)
+                    {
+                        _logger.LogWarning(ex,
+                            "Requisição inválida: {Message} | Tipo: {ExceptionType} | Path: {Path} | Method: {Method}",
+                            ex.Message,
+                            ex.GetType().Name,
+                            context.Request.Path,
+                            context.Request.Method);
+                    }
+                    else
+                    {
+                        _logger.LogError(ex, 
+                            "Erro não tratado: {Message} | Tipo: {ExceptionType} | Path: {Path} | Method: {Method}",
+                            ex.Message,
+                            ex.GetType().Name,
+                            context.Request.Path,
+                            context.Request.Method);
+                    }
                 }
                 await HandleExceptionAsync(context, ex);
             }
@@ -78,6 +90,11 @@ namespace MedicSoft.Api.Middleware
 
                 switch (exception)
                 {
+                    case Microsoft.AspNetCore.Http.BadHttpRequestException _:
+                        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        errorResponse.Message = "Requisição inválida. Verifique os dados e tente novamente.";
+                        errorResponse.ErrorCode = "BAD_REQUEST";
+                        break;
                     case UnauthorizedAccessException _:
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         errorResponse.Message = "Você não tem permissão para realizar esta ação.";
