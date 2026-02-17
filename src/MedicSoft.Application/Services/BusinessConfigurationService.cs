@@ -76,6 +76,36 @@ namespace MedicSoft.Application.Services
             
             config.UpdateFeature(featureName, enabled);
             await _repository.UpdateAsync(config);
+            
+            // Sync relevant features with Clinic entity
+            await SyncFeatureWithClinicAsync(config.ClinicId, featureName, enabled, tenantId);
+        }
+        
+        /// <summary>
+        /// Syncs specific business configuration features with corresponding Clinic properties
+        /// </summary>
+        private async Task SyncFeatureWithClinicAsync(Guid clinicId, string featureName, bool enabled, string tenantId)
+        {
+            var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+            if (clinic == null)
+                return; // Clinic not found, skip sync
+            
+            switch (featureName)
+            {
+                case "OnlineBooking":
+                    // Sync OnlineBooking with EnableOnlineAppointmentScheduling
+                    clinic.UpdateOnlineSchedulingSetting(enabled);
+                    await _clinicRepository.UpdateAsync(clinic);
+                    break;
+                    
+                case "MultiRoom":
+                    // Sync MultiRoom with NumberOfRooms
+                    // MultiRoom=true means multiple rooms (default to 2), false means 1 room
+                    var numberOfRooms = enabled ? Math.Max(2, clinic.NumberOfRooms) : 1;
+                    clinic.UpdateNumberOfRooms(numberOfRooms);
+                    await _clinicRepository.UpdateAsync(clinic);
+                    break;
+            }
         }
         
         public async Task<bool> IsFeatureEnabledAsync(Guid clinicId, string featureName, string tenantId)
@@ -97,6 +127,36 @@ namespace MedicSoft.Application.Services
             }
             
             return TerminologyMap.For(config.PrimarySpecialty).ToDictionary();
+        }
+        
+        /// <summary>
+        /// Syncs Clinic properties to BusinessConfiguration
+        /// Called when clinic operational settings change
+        /// </summary>
+        public async Task SyncClinicPropertiesToBusinessConfigAsync(Guid clinicId, string tenantId)
+        {
+            var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+            if (clinic == null)
+                return;
+            
+            var config = await _repository.GetByClinicIdAsync(clinicId, tenantId);
+            if (config == null)
+                return; // No business config exists, skip sync
+            
+            // Sync EnableOnlineAppointmentScheduling -> OnlineBooking
+            if (config.OnlineBooking != clinic.EnableOnlineAppointmentScheduling)
+            {
+                config.UpdateFeature("OnlineBooking", clinic.EnableOnlineAppointmentScheduling);
+            }
+            
+            // Sync NumberOfRooms -> MultiRoom (>1 rooms = true, 1 room = false)
+            var shouldHaveMultiRoom = clinic.NumberOfRooms > 1;
+            if (config.MultiRoom != shouldHaveMultiRoom)
+            {
+                config.UpdateFeature("MultiRoom", shouldHaveMultiRoom);
+            }
+            
+            await _repository.UpdateAsync(config);
         }
     }
 }

@@ -2,9 +2,11 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.Clinics;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Application.Handlers.Commands.Clinics
 {
@@ -16,6 +18,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<CreateClinicCommandHandler> _logger;
 
         public CreateClinicCommandHandler(
             IClinicRepository clinicRepository,
@@ -23,7 +26,8 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
             IBusinessConfigurationRepository businessConfigurationRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<CreateClinicCommandHandler> logger)
         {
             _clinicRepository = clinicRepository;
             _ownerClinicLinkRepository = ownerClinicLinkRepository;
@@ -31,6 +35,7 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             _planRepository = planRepository;
             _businessConfigurationRepository = businessConfigurationRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<ClinicDto> Handle(CreateClinicCommand request, CancellationToken cancellationToken)
@@ -100,6 +105,21 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
                 primarySpecialty,
                 request.TenantId
             );
+            
+            // Sync initial clinic properties to business configuration
+            // OnlineBooking should match EnableOnlineAppointmentScheduling
+            if (createdClinic.EnableOnlineAppointmentScheduling != businessConfig.OnlineBooking)
+            {
+                businessConfig.UpdateFeature("OnlineBooking", createdClinic.EnableOnlineAppointmentScheduling);
+            }
+            
+            // MultiRoom should reflect NumberOfRooms (>1 rooms = true)
+            var shouldHaveMultiRoom = createdClinic.NumberOfRooms > 1;
+            if (businessConfig.MultiRoom != shouldHaveMultiRoom)
+            {
+                businessConfig.UpdateFeature("MultiRoom", shouldHaveMultiRoom);
+            }
+            
             await _businessConfigurationRepository.AddAsync(businessConfig);
 
             return _mapper.Map<ClinicDto>(createdClinic);
