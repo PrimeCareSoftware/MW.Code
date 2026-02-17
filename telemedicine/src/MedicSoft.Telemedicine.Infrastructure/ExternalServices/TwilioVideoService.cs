@@ -36,8 +36,8 @@ public class TwilioVideoService : IVideoCallService
         _apiKeySecret = configuration["TwilioVideo:ApiKeySecret"] 
             ?? throw new InvalidOperationException("TwilioVideo:ApiKeySecret not configured");
 
-        // Initialize Twilio client
-        TwilioClient.Init(_accountSid, _apiKeySecret);
+        // Initialize Twilio client with API Key credentials
+        TwilioClient.Init(_apiKeySid, _apiKeySecret);
         
         _logger.LogInformation("Twilio Video Service initialized with Account SID: {AccountSid}", 
             MaskSensitiveData(_accountSid));
@@ -178,6 +178,6 @@ public class TwilioVideoService : IVideoCallService
         if (string.IsNullOrWhiteSpace(data) || data.Length < 8)
             return "****";
 
-        return $"{data.Substring(0, 4)}****{data.Substring(data.Length - 4)}";
+        return $"{data[..4]}****{data[^4..]}";
     }
 }
