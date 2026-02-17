@@ -95,16 +95,13 @@ namespace MedicSoft.Application.Helpers
                 // This allows financial staff to have secretary-level permissions for managing payments
                 "financeiro" or "financial" => UserRole.Secretary,
                 
-                // Healthcare Specialties - All map to Doctor role
-                // Note: These specialties (nutritionist, psychologist, physiotherapist, etc.) 
-                // currently map to the Doctor role because:
-                // 1. They are all healthcare professionals who need similar base permissions
-                // 2. They require access to patient records, appointments, and medical documentation
-                // 3. The granular permission system (AccessProfile) provides specialty-specific access control
-                // 4. Creating separate roles for each specialty would complicate the core role-based system
-                // Future: Consider adding specialized roles if distinct permission sets are needed
+                // Healthcare Specialties
+                // Note: These specialties currently map to the Doctor role or their own specific role
+                // They are all healthcare professionals who need similar base permissions
+                // They require access to patient records, appointments, and medical documentation
+                // The granular permission system (AccessProfile) provides specialty-specific access control
                 "nutricionista" or "nutritionist" => UserRole.Doctor,
-                "psicólogo" or "psicologo" or "psychologist" => UserRole.Doctor,
+                "psicólogo" or "psicologo" or "psychologist" => UserRole.Psychologist,
                 "fisioterapeuta" or "physiotherapist" => UserRole.Doctor,
                 "terapeuta ocupacional" or "occupational therapist" => UserRole.Doctor,
                 "fonoaudiólogo" or "fonoaudiologo" or "speech therapist" => UserRole.Doctor,
