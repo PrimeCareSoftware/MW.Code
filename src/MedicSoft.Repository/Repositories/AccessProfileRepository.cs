@@ -52,13 +52,14 @@ namespace MedicSoft.Repository.Repositories
             
             // For default profiles, return only one instance per profile name (deduplicate)
             // This ensures all profile types are visible without duplication
-            var customProfiles = allProfiles
-                .Where(p => !p.IsDefault)
+            // Partition profiles in a single pass for efficiency
+            var profilesByType = allProfiles.ToLookup(p => p.IsDefault);
+            
+            var customProfiles = profilesByType[false]
                 .OrderBy(p => p.Name)
                 .ToList();
             
-            var defaultProfiles = allProfiles
-                .Where(p => p.IsDefault)
+            var defaultProfiles = profilesByType[true]
                 .GroupBy(p => p.Name)
                 // For duplicate default profiles with same name across clinics, select consistently by lowest ID
                 // This ensures deterministic behavior - the first created profile for each name is used
