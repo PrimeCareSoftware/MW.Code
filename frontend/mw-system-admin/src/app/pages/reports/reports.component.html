@@ -1,0 +1,102 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Relatórios</h1>
+      <p class="subtitle">Gere e agende relatórios personalizados</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="generateReport()">
+      <mat-icon>assignment</mat-icon>
+      Gerar Relatório
+    </button>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Templates">
+      @if (loadingTemplates()) {
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      } @else {
+        <div class="templates-grid">
+          @for (template of templates(); track template.id) {
+            <mat-card class="template-card" (click)="selectTemplate(template)">
+              <mat-card-header>
+                <mat-card-title>{{ template.name }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>{{ template.description }}</p>
+                <div class="template-meta">
+                  <span class="category-badge" [class]="template.category">
+                    {{ getCategoryLabel(template.category) }}
+                  </span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      }
+    </mat-tab>
+
+    <mat-tab label="Agendados">
+      @if (loadingScheduled()) {
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+        </div>
+      } @else {
+        <div class="table-container">
+          <table mat-table [dataSource]="scheduledReports()">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nome</th>
+              <td mat-cell *matCellDef="let report">{{ report.templateName }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="frequency">
+              <th mat-header-cell *matHeaderCellDef>Frequência</th>
+              <td mat-cell *matCellDef="let report">{{ getFrequencyLabel(report.frequency) }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="recipients">
+              <th mat-header-cell *matHeaderCellDef>Destinatários</th>
+              <td mat-cell *matCellDef="let report">{{ report.recipients.length }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nextRun">
+              <th mat-header-cell *matHeaderCellDef>Próxima Execução</th>
+              <td mat-cell *matCellDef="let report">{{ report.nextRunAt | date:'short' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let report">
+                <span class="status-badge" [class.active]="report.isActive">
+                  {{ report.isActive ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let report">
+                <button mat-icon-button (click)="deleteScheduledReport(report.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="scheduledColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: scheduledColumns"></tr>
+          </table>
+
+          @if (scheduledReports().length === 0) {
+            <div class="empty-state">
+              <mat-icon>schedule</mat-icon>
+              <p>Nenhum relatório agendado</p>
+            </div>
+          }
+        </div>
+      }
+    </mat-tab>
+  </mat-tab-group>
+</div>

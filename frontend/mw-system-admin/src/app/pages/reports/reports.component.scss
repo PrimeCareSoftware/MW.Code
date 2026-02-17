@@ -1,0 +1,119 @@
+.page-container {
+  padding: var(--spacing-6);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-8);
+}
+
+.page-header h1 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+}
+
+.subtitle {
+  color: var(--gray-600);
+  margin: 0;
+  font-size: var(--font-size-base);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-20) var(--spacing-6);
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-6);
+  padding: var(--spacing-6) 0;
+}
+
+.template-card {
+  cursor: pointer;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.template-meta {
+  margin-top: var(--spacing-4);
+}
+
+.category-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-medium);
+}
+
+.category-badge.financial {
+  background: var(--success-100);
+  color: var(--success-700);
+}
+
+.category-badge.customer {
+  background: var(--info-100);
+  color: var(--info-700);
+}
+
+.category-badge.operational {
+  background: var(--warning-100);
+  color: var(--warning-700);
+}
+
+.table-container {
+  padding: var(--spacing-6) 0;
+}
+
+table {
+  width: 100%;
+}
+
+.status-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-medium);
+  background: var(--error-100);
+  color: var(--error-700);
+}
+
+.status-badge.active {
+  background: var(--success-100);
+  color: var(--success-700);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-20) var(--spacing-6);
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: var(--gray-300);
+  margin-bottom: var(--spacing-4);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--gray-600);
+}
