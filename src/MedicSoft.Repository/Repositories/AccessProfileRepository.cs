@@ -54,13 +54,15 @@ namespace MedicSoft.Repository.Repositories
             // This ensures all profile types are visible without duplication
             var customProfiles = allProfiles
                 .Where(p => !p.IsDefault)
-                .OrderBy(p => p.Name);
+                .OrderBy(p => p.Name)
+                .ToList();
             
             var defaultProfiles = allProfiles
                 .Where(p => p.IsDefault)
                 .GroupBy(p => p.Name)
                 .Select(g => g.First()) // Take first profile for each name
-                .OrderBy(p => p.Name);
+                .OrderBy(p => p.Name)
+                .ToList();
             
             // Return default profiles first, then custom profiles (both sorted by name)
             return defaultProfiles.Concat(customProfiles).ToList();
