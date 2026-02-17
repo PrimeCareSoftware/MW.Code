@@ -55,20 +55,21 @@ namespace MedicSoft.Repository.Repositories
             // Partition profiles in a single pass for efficiency
             var profilesByType = allProfiles.ToLookup(p => p.IsDefault);
             
-            var customProfiles = profilesByType[false]
-                .OrderBy(p => p.Name)
-                .ToList();
+            var result = new List<AccessProfile>();
             
-            var defaultProfiles = profilesByType[true]
+            // Add deduplicated default profiles first (sorted by name)
+            result.AddRange(profilesByType[true]
                 .GroupBy(p => p.Name)
                 // For duplicate default profiles with same name across clinics, select consistently by lowest ID
                 // This ensures deterministic behavior - the first created profile for each name is used
                 .Select(g => g.OrderBy(p => p.Id).First())
-                .OrderBy(p => p.Name)
-                .ToList();
+                .OrderBy(p => p.Name));
             
-            // Return default profiles first, then custom profiles (both sorted by name)
-            return defaultProfiles.Concat(customProfiles).ToList();
+            // Add custom profiles (sorted by name)
+            result.AddRange(profilesByType[false]
+                .OrderBy(p => p.Name));
+            
+            return result;
         }
 
         public async Task<IEnumerable<AccessProfile>> GetDefaultProfilesAsync(string tenantId)
