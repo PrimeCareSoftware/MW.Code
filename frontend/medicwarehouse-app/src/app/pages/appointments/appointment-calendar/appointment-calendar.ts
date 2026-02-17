@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
@@ -59,6 +59,12 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   // Subject for debounced filter changes
   private filterChange$ = new Subject<{ date?: Date; professionalId?: string | null }>();
   
+  // Subscription for router events (for cleanup)
+  private routerSubscription?: Subscription;
+  
+  // Track if initial load has completed to avoid duplicate loading
+  private initialLoadComplete = false;
+  
   // Clinic ID will be retrieved from authenticated user
   clinicId: string | null = null;
 
@@ -110,19 +116,27 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     
     // Listen for navigation events to reload data when returning to calendar
     // This fixes the issue where new appointments don't appear without F5
-    this.router.events.pipe(
+    this.routerSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       filter((event: NavigationEnd) => event.url === '/appointments' || event.url === '/appointments/calendar')
     ).subscribe(() => {
-      // Reload appointments when navigating back to calendar
-      this.loadWeekAppointments();
+      // Skip reload on initial navigation (first load)
+      if (this.initialLoadComplete) {
+        this.loadWeekAppointments();
+      }
     });
     
-    this.loadWeekAppointments();
+    this.loadWeekAppointments().then(() => {
+      this.initialLoadComplete = true;
+    });
   }
 
   ngOnDestroy(): void {
     this.filterChange$.complete();
+    // Cleanup router subscription to prevent memory leaks
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 
   /**
