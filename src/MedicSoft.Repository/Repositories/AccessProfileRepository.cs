@@ -48,8 +48,6 @@ namespace MedicSoft.Repository.Repositories
                 .Include(ap => ap.Permissions)
                 .Where(ap => ap.TenantId == tenantId && ap.IsActive && 
                             (ap.ClinicId == clinicId || ap.IsDefault))
-                .OrderByDescending(ap => ap.IsDefault)
-                .ThenBy(ap => ap.Name)
                 .ToListAsync();
             
             // For default profiles, return only one instance per profile name (deduplicate)
