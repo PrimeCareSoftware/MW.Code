@@ -100,8 +100,36 @@ namespace MedicSoft.Application.Services
             if (profile == null)
                 throw new InvalidOperationException("Profile not found");
 
+            // If trying to edit a default profile, create a clinic-specific copy instead
             if (profile.IsDefault)
-                throw new InvalidOperationException("Cannot modify default profiles");
+            {
+                if (!profile.ClinicId.HasValue)
+                    throw new InvalidOperationException("Cannot modify default profiles without a clinic context");
+
+                // Create a clinic-specific copy of the default profile
+                var clinicSpecificProfile = new AccessProfile(
+                    dto.Name, 
+                    dto.Description, 
+                    tenantId, 
+                    profile.ClinicId.Value, 
+                    isDefault: false,
+                    consultationFormProfileId: profile.ConsultationFormProfileId
+                );
+
+                // Copy permissions from the original or use the provided ones
+                if (dto.Permissions != null && dto.Permissions.Any())
+                {
+                    clinicSpecificProfile.SetPermissions(dto.Permissions);
+                }
+                else
+                {
+                    // Copy permissions from the default profile
+                    clinicSpecificProfile.SetPermissions(profile.GetPermissionKeys());
+                }
+
+                await _profileRepository.AddAsync(clinicSpecificProfile);
+                return MapToDto(clinicSpecificProfile);
+            }
 
             profile.Update(dto.Name, dto.Description);
             
