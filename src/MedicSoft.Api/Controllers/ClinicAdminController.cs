@@ -419,9 +419,7 @@ namespace MedicSoft.Api.Controllers
                     // Role-based creation (legacy system)
                     if (!Enum.TryParse<UserRole>(request.Role, true, out role))
                     {
-                        // Filter out SystemAdmin from the error message as it shouldn't be created through this endpoint
-                        var allowedRoles = Enum.GetNames(typeof(UserRole))
-                            .Where(r => r != nameof(UserRole.SystemAdmin));
+                        var allowedRoles = ProfileMappingHelper.GetAllowedRolesForCreation();
                         return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", allowedRoles)}" });
                     }
 

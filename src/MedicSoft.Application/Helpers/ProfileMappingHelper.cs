@@ -127,6 +127,16 @@ namespace MedicSoft.Application.Helpers
         }
 
         /// <summary>
+        /// Gets the list of roles that can be created through user creation endpoints
+        /// Excludes SystemAdmin as it should only be created through special system setup
+        /// </summary>
+        public static IEnumerable<string> GetAllowedRolesForCreation()
+        {
+            return Enum.GetNames(typeof(UserRole))
+                .Where(r => r != nameof(UserRole.SystemAdmin));
+        }
+
+        /// <summary>
         /// Checks if a profile name is recognized by the mapping system
         /// </summary>
         public static bool IsRecognizedProfile(string profileName)
