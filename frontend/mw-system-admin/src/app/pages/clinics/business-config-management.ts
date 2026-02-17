@@ -75,7 +75,7 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.getBusinessConfiguration(this.clinicId, this.tenantId).subscribe({
       next: (data) => {
-        this.config.set(data);
+        this.config.set(this.normalizeConfiguration(data));
         this.loading.set(false);
       },
       error: (err) => {
@@ -89,6 +89,27 @@ export class BusinessConfigManagement implements OnInit {
         this.loading.set(false);
       }
     });
+  }
+
+  /**
+   * Normalizes enum values from string names to numeric values.
+   * The backend JsonStringEnumConverter sends enum values as strings (e.g., "SmallClinic")
+   * but the frontend expects numeric values (e.g., 2) for comparisons.
+   */
+  private normalizeConfiguration(config: BusinessConfiguration): BusinessConfiguration {
+    return {
+      ...config,
+      businessType: this.normalizeBusinessType(config.businessType),
+      primarySpecialty: this.normalizePrimarySpecialty(config.primarySpecialty)
+    };
+  }
+
+  private normalizeBusinessType(type: BusinessType | string): BusinessType {
+    return typeof type === 'string' ? (BusinessType[type as keyof typeof BusinessType] as BusinessType) ?? BusinessType.SmallClinic : type;
+  }
+
+  private normalizePrimarySpecialty(specialty: ProfessionalSpecialty | string): ProfessionalSpecialty {
+    return typeof specialty === 'string' ? (ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] as ProfessionalSpecialty) ?? ProfessionalSpecialty.Medico : specialty;
   }
 
   updateBusinessType(newType: BusinessType): void {
@@ -188,7 +209,7 @@ export class BusinessConfigManagement implements OnInit {
 
     this.systemAdminService.createBusinessConfiguration(request).subscribe({
       next: (config) => {
-        this.config.set(config);
+        this.config.set(this.normalizeConfiguration(config));
         this.successMessage.set('Configuração criada com sucesso! Você pode personalizá-la abaixo.');
         this.saving.set(false);
         setTimeout(() => this.successMessage.set(null), this.SUCCESS_MESSAGE_DURATION_MS);

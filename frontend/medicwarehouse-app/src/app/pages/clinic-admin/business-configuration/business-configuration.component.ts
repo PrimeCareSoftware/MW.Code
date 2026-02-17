@@ -204,7 +204,7 @@ export class BusinessConfigurationComponent implements OnInit {
       next: (results) => {
         // Handle configuration result
         if (results.config) {
-          this.configuration = results.config;
+          this.configuration = this.normalizeConfiguration(results.config);
           this.buildFeatureCategories();
           this.loadTerminology(selectedClinic.clinicId);
         }
@@ -245,7 +245,7 @@ export class BusinessConfigurationComponent implements OnInit {
 
     this.businessConfigService.getByClinicId(selectedClinic.clinicId).subscribe({
       next: (config) => {
-        this.configuration = config;
+        this.configuration = this.normalizeConfiguration(config);
         this.buildFeatureCategories();
         this.loadTerminology(selectedClinic.clinicId);
       },
@@ -258,6 +258,27 @@ export class BusinessConfigurationComponent implements OnInit {
 
   private loadTerminology(clinicId: string): void {
     this.terminologyService.loadTerminology(clinicId).subscribe();
+  }
+
+  /**
+   * Normalizes enum values from string names to numeric values.
+   * The backend JsonStringEnumConverter sends enum values as strings (e.g., "SmallClinic")
+   * but the frontend expects numeric values (e.g., 2) for comparisons.
+   */
+  private normalizeConfiguration(config: BusinessConfiguration): BusinessConfiguration {
+    return {
+      ...config,
+      businessType: this.normalizeBusinessType(config.businessType),
+      primarySpecialty: this.normalizePrimarySpecialty(config.primarySpecialty)
+    };
+  }
+
+  private normalizeBusinessType(type: BusinessType | string): BusinessType {
+    return typeof type === 'string' ? (BusinessType[type as keyof typeof BusinessType] as BusinessType) ?? BusinessType.SmallClinic : type;
+  }
+
+  private normalizePrimarySpecialty(specialty: ProfessionalSpecialty | string): ProfessionalSpecialty {
+    return typeof specialty === 'string' ? (ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] as ProfessionalSpecialty) ?? ProfessionalSpecialty.Medico : specialty;
   }
 
   /**
@@ -508,10 +529,12 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   getBusinessTypeLabel(type: BusinessType): string {
+    // Values are normalized at load time, so we can do a simple comparison
     return this.businessTypeOptions.find(opt => opt.value === type)?.label || 'Desconhecido';
   }
 
   getSpecialtyLabel(specialty: ProfessionalSpecialty): string {
+    // Values are normalized at load time, so we can do a simple comparison
     return this.specialtyOptions.find(opt => opt.value === specialty)?.label || 'Desconhecido';
   }
 
@@ -632,7 +655,7 @@ export class BusinessConfigurationComponent implements OnInit {
 
     this.businessConfigService.create(dto).subscribe({
       next: (config) => {
-        this.configuration = config;
+        this.configuration = this.normalizeConfiguration(config);
         this.buildFeatureCategories();
         this.loadTerminology(selectedClinic.clinicId);
         this.success = 'Configuração criada com sucesso! Você pode personalizá-la abaixo.';
@@ -680,7 +703,7 @@ export class BusinessConfigurationComponent implements OnInit {
 
     this.businessConfigService.create(dto).subscribe({
       next: (config) => {
-        this.configuration = config;
+        this.configuration = this.normalizeConfiguration(config);
         this.buildFeatureCategories();
         this.loadTerminology(selectedClinic.clinicId);
         
