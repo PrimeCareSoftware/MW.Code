@@ -428,6 +428,97 @@ namespace MedicSoft.Api.Controllers
 
             return Ok(professionals);
         }
+
+        /// <summary>
+        /// Get current logged-in user's profile
+        /// </summary>
+        [HttpGet("me/profile")]
+        public async Task<ActionResult<UserProfileDto>> GetMyProfile()
+        {
+            var tenantId = GetTenantId();
+            var userId = GetUserId();
+
+            if (userId == Guid.Empty)
+                return BadRequest(new { message = "User ID not found in token" });
+
+            var user = await _userService.GetUserByIdAsync(userId, tenantId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            return Ok(new UserProfileDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                FullName = user.FullName,
+                Phone = user.Phone,
+                Role = user.Role.ToString(),
+                ProfessionalId = user.ProfessionalId,
+                Specialty = user.Specialty,
+                ShowInAppointmentScheduling = user.ShowInAppointmentScheduling
+            });
+        }
+
+        /// <summary>
+        /// Update current logged-in user's profile (self-service)
+        /// </summary>
+        [HttpPut("me/profile")]
+        public async Task<ActionResult> UpdateMyProfile([FromBody] UpdateMyProfileRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                    return BadRequest(new { message = "User ID not found in token" });
+
+                await _userService.UpdateUserProfileAsync(
+                    userId,
+                    request.Email,
+                    request.FullName,
+                    request.Phone,
+                    tenantId,
+                    null, // Don't allow changing professionalId via self-service
+                    null, // Don't allow changing specialty via self-service
+                    null  // Don't allow changing appointment visibility via self-service
+                );
+
+                return Ok(new { message = "Perfil atualizado com sucesso" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Change current logged-in user's password (self-service)
+        /// </summary>
+        [HttpPost("me/change-password")]
+        public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyPasswordRequest request)
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+                var userId = GetUserId();
+
+                if (userId == Guid.Empty)
+                    return BadRequest(new { message = "User ID not found in token" });
+
+                await _userService.ChangePasswordAsync(userId, request.CurrentPassword, request.NewPassword, tenantId);
+
+                return Ok(new { message = "Senha alterada com sucesso" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+        }
     }
 
     public class CreateUserRequest
@@ -497,5 +588,31 @@ namespace MedicSoft.Api.Controllers
         public string? Specialty { get; set; }
         public string Role { get; set; } = string.Empty;
         public string? CalendarColor { get; set; }
+    }
+
+    public class UserProfileDto
+    {
+        public Guid Id { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string? ProfessionalId { get; set; }
+        public string? Specialty { get; set; }
+        public bool ShowInAppointmentScheduling { get; set; }
+    }
+
+    public class UpdateMyProfileRequest
+    {
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+    }
+
+    public class ChangeMyPasswordRequest
+    {
+        public string CurrentPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
     }
 }

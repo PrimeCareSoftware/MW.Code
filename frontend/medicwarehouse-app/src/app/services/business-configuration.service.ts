@@ -18,6 +18,7 @@ export enum ProfessionalSpecialty {
   Enfermeiro = 6,
   TerapeutaOcupacional = 7,
   Fonoaudiologo = 8,
+  Veterinario = 9,
   Outro = 99
 }
 
