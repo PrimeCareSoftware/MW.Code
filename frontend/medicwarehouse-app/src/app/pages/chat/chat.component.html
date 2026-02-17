@@ -37,8 +37,17 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
           </svg>
-          <p>Nenhuma conversa ainda</p>
-          <button class="btn-primary" (click)="toggleUserList()">Iniciar conversa</button>
+          <h3>Nenhuma conversa ainda</h3>
+          <p>Clique no botão <strong>+</strong> acima para iniciar uma nova conversa com um usuário da clínica</p>
+          <button class="btn-primary" (click)="toggleUserList()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+            Iniciar Nova Conversa
+          </button>
         </div>
       } @else {
         @for (conversation of sortedConversations(); track conversation.id) {
@@ -177,7 +186,10 @@
     <div class="user-list-overlay" (click)="toggleUserList()">
       <div class="user-list-panel" (click)="$event.stopPropagation()">
         <div class="panel-header">
-          <h3>Nova Conversa</h3>
+          <div class="header-content">
+            <h3>Usuários da Clínica</h3>
+            <p class="subtitle">Selecione um usuário para iniciar uma conversa</p>
+          </div>
           <button class="btn-close" (click)="toggleUserList()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"/>
