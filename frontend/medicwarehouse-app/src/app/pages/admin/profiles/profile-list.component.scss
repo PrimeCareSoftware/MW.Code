@@ -26,6 +26,37 @@
   justify-content: flex-end;
 }
 
+.info-banner {
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+  border-left: 4px solid var(--primary-500);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-6);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+
+  i {
+    color: var(--primary-600);
+    font-size: var(--font-size-xl);
+    margin-top: var(--spacing-1);
+  }
+
+  strong {
+    display: block;
+    color: var(--gray-900);
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-1);
+  }
+
+  p {
+    color: var(--gray-600);
+    font-size: var(--font-size-sm);
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+  }
+}
+
 .btn {
   padding: var(--spacing-3) var(--spacing-6);
   border-radius: var(--radius-md);
@@ -160,6 +191,11 @@
 
   &.badge-default {
     background-color: var(--primary-500);
+    color: white;
+  }
+
+  &.badge-custom {
+    background-color: var(--gray-500);
     color: white;
   }
 }
