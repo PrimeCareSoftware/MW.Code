@@ -50,6 +50,20 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
+## What's included in this site?
+
+This is the **Omni Care** marketing/landing page featuring:
+
+- **Hero Section**: Main value proposition and call-to-action
+- **Services Section**: Overview of key services
+- **Benefits Section**: 6 feature cards highlighting main benefits (smart scheduling, digital records, patient management, financial control, security, multi-device access)
+- **Why Choose Section**: Unique value propositions and competitive advantages
+- **CTA Section**: Final call-to-action
+
+### Recent Updates
+
+- **PR #832** (Feb 2026): Replaced testimonials section with Benefits and Why Choose sections to better highlight product value and differentiation
+
 ## What technologies are used for this project?
 
 This project is built with:
@@ -62,7 +76,11 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+**Automated Builds**: A GitHub Actions workflow automatically builds the site on every push to main. Build artifacts are available in the Actions tab.
+
+**Manual Deployment**: Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+
+**Alternative Hosting**: See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions on deploying to Netlify, Vercel, Cloudflare Pages, or custom hosting.
 
 ## Can I connect a custom domain to my Lovable project?
 
