@@ -28,6 +28,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<ClinicAdminController> _logger;
         private readonly BusinessConfigurationService _businessConfigService;
+        private readonly IAccessProfileService _accessProfileService;
 
         public ClinicAdminController(
             IClinicRepository clinicRepository,
@@ -39,7 +40,8 @@ namespace MedicSoft.Api.Controllers
             IPasswordHasher passwordHasher,
             ILogger<ClinicAdminController> logger,
             ITenantContext tenantContext,
-            BusinessConfigurationService businessConfigService)
+            BusinessConfigurationService businessConfigService,
+            IAccessProfileService accessProfileService)
             : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
@@ -51,6 +53,7 @@ namespace MedicSoft.Api.Controllers
             _passwordHasher = passwordHasher;
             _logger = logger;
             _businessConfigService = businessConfigService;
+            _accessProfileService = accessProfileService;
         }
 
         /// <summary>
@@ -339,6 +342,7 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Create a new user in the clinic (owner only)
         /// Note: User is created for the clinic in the current tenant context
+        /// Supports both role-based (legacy) and profile-based (new) user creation
         /// </summary>
         [HttpPost("users")]
         [RequirePermissionKey(PermissionKeys.UsersCreate)]
@@ -382,12 +386,45 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
                 }
 
-                // Parse role
-                if (!Enum.TryParse<UserRole>(request.Role, out var role))
+                // Determine if using profile-based or role-based creation
+                UserRole role;
+                Guid? profileIdToAssign = null;
+
+                if (request.ProfileId.HasValue)
                 {
-                    return BadRequest(new { message = "Invalid role" });
+                    // Profile-based creation (new system)
+                    var profile = await _accessProfileService.GetByIdAsync(request.ProfileId.Value, tenantId);
+                    if (profile == null)
+                    {
+                        return BadRequest(new { message = "Invalid profile ID" });
+                    }
+
+                    // Verify profile belongs to this clinic
+                    if (profile.ClinicId != clinicId)
+                    {
+                        return BadRequest(new { message = "Profile does not belong to this clinic" });
+                    }
+
+                    // Map profile name to a UserRole for backward compatibility
+                    // This ensures the user has a valid role enum value
+                    role = MapProfileNameToRole(profile.Name);
+                    profileIdToAssign = request.ProfileId.Value;
+
+                    _logger.LogInformation("Creating user with profile-based system. Profile: {ProfileId}, MappedRole: {Role}", 
+                        request.ProfileId.Value, role);
+                }
+                else
+                {
+                    // Role-based creation (legacy system)
+                    if (!Enum.TryParse<UserRole>(request.Role, true, out role))
+                    {
+                        return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}" });
+                    }
+
+                    _logger.LogInformation("Creating user with role-based system. Role: {Role}", role);
                 }
 
+                // Create the user with the determined role
                 var user = await _userService.CreateUserAsync(
                     request.Username,
                     request.Email,
@@ -396,8 +433,17 @@ namespace MedicSoft.Api.Controllers
                     request.Phone ?? "",
                     role,
                     tenantId,
-                    clinicId
+                    clinicId,
+                    request.ProfessionalId,
+                    request.Specialty
                 );
+
+                // If using profile-based creation, assign the profile to the user
+                if (profileIdToAssign.HasValue)
+                {
+                    await _accessProfileService.AssignProfileToUserAsync(user.Id, profileIdToAssign.Value, tenantId);
+                    _logger.LogInformation("Profile {ProfileId} assigned to user {UserId}", profileIdToAssign.Value, user.Id);
+                }
 
                 _logger.LogInformation("User created in clinic: {UserId} in {ClinicId}", user.Id, clinicId);
 
@@ -409,7 +455,10 @@ namespace MedicSoft.Api.Controllers
                     Email = user.Email,
                     Role = user.Role.ToString(),
                     IsActive = user.IsActive,
-                    CreatedAt = user.CreatedAt
+                    CreatedAt = user.CreatedAt,
+                    ProfessionalId = user.ProfessionalId,
+                    Specialty = user.Specialty,
+                    ProfileId = profileIdToAssign
                 });
             }
             catch (InvalidOperationException ex)
@@ -421,6 +470,44 @@ namespace MedicSoft.Api.Controllers
                 _logger.LogError(ex, "Error creating clinic user");
                 return StatusCode(500, new { message = "An error occurred while creating user" });
             }
+        }
+
+        /// <summary>
+        /// Maps an AccessProfile name to a UserRole enum for backward compatibility
+        /// </summary>
+        private UserRole MapProfileNameToRole(string profileName)
+        {
+            // Try direct enum parsing first (case insensitive)
+            if (Enum.TryParse<UserRole>(profileName, true, out var directRole))
+            {
+                return directRole;
+            }
+
+            // Map Portuguese profile names to UserRole enum
+            var profileNameLower = profileName.ToLowerInvariant();
+            
+            return profileNameLower switch
+            {
+                "proprietário" or "proprietario" or "owner" => UserRole.ClinicOwner,
+                "médico" or "medico" or "doctor" => UserRole.Doctor,
+                "dentista" or "dentist" => UserRole.Dentist,
+                "enfermeiro" or "enfermeira" or "nurse" => UserRole.Nurse,
+                "recepção" or "recepcao" or "recepcionista" or "receptionist" => UserRole.Receptionist,
+                "secretaria" or "secretário" or "secretario" or "secretary" => UserRole.Secretary,
+                "recepção/secretaria" or "recepcao/secretaria" => UserRole.Secretary,
+                "financeiro" or "financial" => UserRole.Secretary, // Map financial to secretary for now
+                
+                // Specialty-based profiles - map to appropriate role
+                "nutricionista" or "nutritionist" => UserRole.Doctor,
+                "psicólogo" or "psicologo" or "psychologist" => UserRole.Doctor,
+                "fisioterapeuta" or "physiotherapist" => UserRole.Doctor,
+                "terapeuta ocupacional" or "occupational therapist" => UserRole.Doctor,
+                "fonoaudiólogo" or "fonoaudiologo" or "speech therapist" => UserRole.Doctor,
+                "veterinário" or "veterinario" or "veterinarian" => UserRole.Doctor,
+                
+                // Default fallback
+                _ => UserRole.Receptionist
+            };
         }
 
         /// <summary>

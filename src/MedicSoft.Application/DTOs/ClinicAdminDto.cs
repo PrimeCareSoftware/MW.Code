@@ -47,6 +47,9 @@ namespace MedicSoft.Application.DTOs
         public string Role { get; set; } = string.Empty;
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string? ProfessionalId { get; set; } // CRM, CRP, CRN, CRO, etc.
+        public string? Specialty { get; set; } // Professional specialty
+        public Guid? ProfileId { get; set; } // Access profile ID
     }
 
     public class CreateClinicUserRequest
@@ -58,6 +61,9 @@ namespace MedicSoft.Application.DTOs
         public string Role { get; set; } = string.Empty;
         public string? Phone { get; set; }
         public string? Document { get; set; }
+        public Guid? ProfileId { get; set; } // Optional: New profile-based system
+        public string? ProfessionalId { get; set; } // CRM, CRP, CRN, CRO, etc.
+        public string? Specialty { get; set; } // Professional specialty
     }
 
     public class UpdateClinicUserRequest

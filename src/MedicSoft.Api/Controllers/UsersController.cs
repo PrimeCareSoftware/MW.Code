@@ -22,18 +22,21 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IClinicSelectionService _clinicSelectionService;
+        private readonly IAccessProfileService _accessProfileService;
 
         public UsersController(
             ITenantContext tenantContext,
             IUserService userService,
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
-            IClinicSelectionService clinicSelectionService) : base(tenantContext)
+            IClinicSelectionService clinicSelectionService,
+            IAccessProfileService accessProfileService) : base(tenantContext)
         {
             _userService = userService;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _clinicSelectionService = clinicSelectionService;
+            _accessProfileService = accessProfileService;
         }
 
         /// <summary>
@@ -96,6 +99,7 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Create new user (requires users.create permission)
         /// ClinicOwner can manage users in their clinic
+        /// Supports both role-based (legacy) and profile-based (new) user creation
         /// </summary>
         [HttpPost]
         [RequirePermissionKey(PermissionKeys.UsersCreate)]
@@ -121,9 +125,37 @@ namespace MedicSoft.Api.Controllers
                 if (currentUserCount >= plan.MaxUsers)
                     return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
 
-                // Parse role
-                if (!Enum.TryParse<UserRole>(request.Role, out var role))
-                    return BadRequest(new { message = "Invalid role" });
+                // Determine if using profile-based or role-based creation
+                UserRole role;
+                Guid? profileIdToAssign = null;
+
+                if (request.ProfileId.HasValue)
+                {
+                    // Profile-based creation (new system)
+                    var profile = await _accessProfileService.GetByIdAsync(request.ProfileId.Value, tenantId);
+                    if (profile == null)
+                    {
+                        return BadRequest(new { message = "Invalid profile ID" });
+                    }
+
+                    // Verify profile belongs to this clinic
+                    if (profile.ClinicId != clinicId)
+                    {
+                        return BadRequest(new { message = "Profile does not belong to this clinic" });
+                    }
+
+                    // Map profile name to a UserRole for backward compatibility
+                    role = MapProfileNameToRole(profile.Name);
+                    profileIdToAssign = request.ProfileId.Value;
+                }
+                else
+                {
+                    // Role-based creation (legacy system)
+                    if (!Enum.TryParse<UserRole>(request.Role, true, out role))
+                    {
+                        return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", Enum.GetNames(typeof(UserRole)))}" });
+                    }
+                }
 
                 var user = await _userService.CreateUserAsync(
                     request.Username,
@@ -138,6 +170,12 @@ namespace MedicSoft.Api.Controllers
                     request.Specialty,
                     request.ShowInAppointmentScheduling
                 );
+
+                // If using profile-based creation, assign the profile to the user
+                if (profileIdToAssign.HasValue)
+                {
+                    await _accessProfileService.AssignProfileToUserAsync(user.Id, profileIdToAssign.Value, tenantId);
+                }
 
                 return CreatedAtAction(nameof(GetUser), new { id = user.Id }, new UserDto
                 {
@@ -157,6 +195,44 @@ namespace MedicSoft.Api.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Maps an AccessProfile name to a UserRole enum for backward compatibility
+        /// </summary>
+        private static UserRole MapProfileNameToRole(string profileName)
+        {
+            // Try direct enum parsing first (case insensitive)
+            if (Enum.TryParse<UserRole>(profileName, true, out var directRole))
+            {
+                return directRole;
+            }
+
+            // Map Portuguese profile names to UserRole enum
+            var profileNameLower = profileName.ToLowerInvariant();
+            
+            return profileNameLower switch
+            {
+                "proprietário" or "proprietario" or "owner" => UserRole.ClinicOwner,
+                "médico" or "medico" or "doctor" => UserRole.Doctor,
+                "dentista" or "dentist" => UserRole.Dentist,
+                "enfermeiro" or "enfermeira" or "nurse" => UserRole.Nurse,
+                "recepção" or "recepcao" or "recepcionista" or "receptionist" => UserRole.Receptionist,
+                "secretaria" or "secretário" or "secretario" or "secretary" => UserRole.Secretary,
+                "recepção/secretaria" or "recepcao/secretaria" => UserRole.Secretary,
+                "financeiro" or "financial" => UserRole.Secretary,
+                
+                // Specialty-based profiles - map to appropriate role
+                "nutricionista" or "nutritionist" => UserRole.Doctor,
+                "psicólogo" or "psicologo" or "psychologist" => UserRole.Doctor,
+                "fisioterapeuta" or "physiotherapist" => UserRole.Doctor,
+                "terapeuta ocupacional" or "occupational therapist" => UserRole.Doctor,
+                "fonoaudiólogo" or "fonoaudiologo" or "speech therapist" => UserRole.Doctor,
+                "veterinário" or "veterinario" or "veterinarian" => UserRole.Doctor,
+                
+                // Default fallback
+                _ => UserRole.Receptionist
+            };
         }
 
         /// <summary>
@@ -529,9 +605,10 @@ namespace MedicSoft.Api.Controllers
         public string FullName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public string? ProfessionalId { get; set; }
+        public string? ProfessionalId { get; set; } // CRM, CRP, CRN, CRO, CREFITO, COREN, etc.
         public string? Specialty { get; set; }
         public bool ShowInAppointmentScheduling { get; set; } = true;
+        public Guid? ProfileId { get; set; } // Optional: New profile-based system
     }
 
     public class UpdateUserRequest
