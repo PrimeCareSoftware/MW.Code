@@ -176,8 +176,8 @@ export class UserManagementComponent implements OnInit {
     const professionalIdControl = this.createUserForm.get('professionalId');
     const specialtyControl = this.createUserForm.get('specialty');
 
-    if (role === 'Doctor') {
-      // Apply validation based on configuration
+    if (this.isProfessionalRole(role)) {
+      // Apply validation based on configuration for all professional roles
       if (this.doctorFieldsConfig().professionalIdRequired) {
         professionalIdControl?.setValidators([Validators.required]);
       } else {
@@ -190,7 +190,7 @@ export class UserManagementComponent implements OnInit {
         specialtyControl?.clearValidators();
       }
     } else {
-      // Clear validators for non-doctor roles
+      // Clear validators for non-professional roles (admin, receptionist, etc.)
       professionalIdControl?.clearValidators();
       specialtyControl?.clearValidators();
     }
@@ -199,12 +199,33 @@ export class UserManagementComponent implements OnInit {
     specialtyControl?.updateValueAndValidity();
   }
 
-  isDoctorRole(): boolean {
-    return this.createUserForm.get('role')?.value === 'Doctor';
+  isProfessionalRole(role?: string): boolean {
+    if (!role) return false;
+    
+    // Check if it's a professional role (healthcare provider)
+    const professionalRoles = [
+      'Doctor', 'Médico',
+      'Dentist', 'Dentista', 
+      'Psychologist', 'Psicólogo',
+      'Nutritionist', 'Nutricionista',
+      'PhysicalTherapist', 'Fisioterapeuta',
+      'Veterinarian', 'Veterinário',
+      'Nurse', 'Enfermeiro', 'Enfermeira',
+      'OccupationalTherapist', 'Terapeuta Ocupacional',
+      'SpeechTherapist', 'Fonoaudiólogo'
+    ];
+    
+    return professionalRoles.some(pr => pr.toLowerCase() === role.toLowerCase());
   }
 
-  isEditingDoctor(): boolean {
-    return this.selectedUser()?.role === 'Doctor';
+  isCurrentRoleProfessional(): boolean {
+    const role = this.createUserForm.get('role')?.value;
+    return this.isProfessionalRole(role);
+  }
+
+  isEditingProfessional(): boolean {
+    const role = this.selectedUser()?.role;
+    return this.isProfessionalRole(role);
   }
 
   // Create User
@@ -434,5 +455,36 @@ export class UserManagementComponent implements OnInit {
   getProfileName(profileId: string): string {
     const profile = this.availableProfiles().find(p => p.id === profileId);
     return profile?.name || 'Perfil não encontrado';
+  }
+
+  // Check if the given user has a professional role
+  isProfessionalUser(user: ClinicUserDto): boolean {
+    return this.isProfessionalRole(user.role);
+  }
+
+  // Get the label for professional ID based on role
+  getProfessionalIdLabel(role: string): string {
+    const labelMap: { [key: string]: string } = {
+      'Doctor': 'CRM',
+      'Médico': 'CRM',
+      'Dentist': 'CRO',
+      'Dentista': 'CRO',
+      'Psychologist': 'CRP',
+      'Psicólogo': 'CRP',
+      'Nutritionist': 'CRN',
+      'Nutricionista': 'CRN',
+      'PhysicalTherapist': 'CREFITO',
+      'Fisioterapeuta': 'CREFITO',
+      'Veterinarian': 'CRMV',
+      'Veterinário': 'CRMV',
+      'Nurse': 'COREN',
+      'Enfermeiro': 'COREN',
+      'Enfermeira': 'COREN',
+      'OccupationalTherapist': 'CREFITO',
+      'Terapeuta Ocupacional': 'CREFITO',
+      'SpeechTherapist': 'CRFa',
+      'Fonoaudiólogo': 'CRFa'
+    };
+    return labelMap[role] || 'Registro';
   }
 }
