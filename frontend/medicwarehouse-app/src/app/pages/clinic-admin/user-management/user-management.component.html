@@ -257,7 +257,7 @@
                   Mostrando todos os perfis disponíveis ({{ availableProfiles().length }} perfis)
                 </small>
               } @else if (isLoadingProfiles()) {
-                <select id="role" formControlName="role" class="form-control" disabled>
+                <select id="role" formControlName="role" class="form-control" [disabled]="true">
                   <option>Carregando perfis...</option>
                 </select>
               } @else {

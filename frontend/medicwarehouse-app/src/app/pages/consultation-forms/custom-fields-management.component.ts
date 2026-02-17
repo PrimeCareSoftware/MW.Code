@@ -309,4 +309,11 @@ export class CustomFieldsManagementComponent implements OnInit {
     this.selectedProfile.set(null);
     this.initializeForm();
   }
+
+  getSelectedSpecialtyLabel(): string {
+    const specialty = this.selectedSpecialty();
+    if (specialty === null) return '';
+    const specialtyOption = this.specialties().find(s => s.value === specialty);
+    return specialtyOption ? specialtyOption.label : '';
+  }
 }
