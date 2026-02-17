@@ -37,12 +37,13 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task<IEnumerable<AccessProfile>> GetByClinicIdAsync(Guid clinicId, string tenantId)
         {
-            // Get profiles for this clinic PLUS all default system profiles (regardless of clinic)
-            // This allows owners to see and assign all default profile types to their users
+            // Get profiles for this clinic (custom profiles) PLUS all default profiles from all clinics in the tenant
+            // This allows owners to see and assign all default profile types (Medical, Dental, Nutritionist, etc.) to their users
+            // regardless of their clinic's primary specialty, supporting multi-specialty and expanding clinics
             return await _context.AccessProfiles
                 .Include(ap => ap.Permissions)
                 .Where(ap => ap.TenantId == tenantId && ap.IsActive && 
-                            (ap.ClinicId == clinicId || ap.IsDefault))
+                            (ap.ClinicId == clinicId || (ap.IsDefault && ap.ClinicId != null)))
                 .OrderByDescending(ap => ap.IsDefault)
                 .ThenBy(ap => ap.Name)
                 .ToListAsync();
