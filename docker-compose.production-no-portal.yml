@@ -1,0 +1,367 @@
+version: '3.8'
+
+# Docker Compose para Produção - SEM Portal do Paciente
+# Otimizado para Hostinger KVM 2 (8GB RAM, 4 vCPU)
+
+services:
+  # PostgreSQL - Banco de Dados Principal
+  postgres:
+    image: docker.io/library/postgres:16-alpine
+    container_name: primecare-postgres
+    pull_policy: missing
+    restart: unless-stopped
+    environment:
+      # Banco Principal
+      POSTGRES_DB: primecare
+      POSTGRES_USER: primecare_user
+      # IMPORTANTE: Defina uma senha forte no arquivo .env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD é obrigatório}
+      # Otimizações para produção (8GB RAM)
+      POSTGRES_SHARED_BUFFERS: 2GB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 6GB
+      POSTGRES_WORK_MEM: 10MB
+      POSTGRES_MAINTENANCE_WORK_MEM: 512MB
+    ports:
+      # PostgreSQL acessível apenas internamente
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db-postgres.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - primecare-network
+    healthcheck:
+      test: pg_isready -U primecare_user -d primecare
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    # Limites de recursos
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # API Principal - MedicSoft.Api
+  api:
+    build:
+      context: .
+      dockerfile: src/MedicSoft.Api/Dockerfile
+      args:
+        CONFIGURATION: Release
+    container_name: primecare-api
+    restart: unless-stopped
+    environment:
+      # Ambiente de Produção
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      
+      # Database Connection
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=primecare;Username=primecare_user;Password=${POSTGRES_PASSWORD};Include Error Detail=false;SSL Mode=Prefer;Trust Server Certificate=true
+      
+      # JWT Settings - USAR CHAVE FORTE!
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:?JWT_SECRET_KEY é obrigatório}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare-API
+      
+      # Segurança
+      - Security__RequireHttps=true
+      - Security__MinPasswordLength=12
+      - Security__RequireStrongPasswords=true
+      
+      # Rate Limiting (Proteção contra DDoS)
+      - RateLimiting__EnableRateLimiting=true
+      - RateLimiting__PermitLimit=100
+      - RateLimiting__WindowSeconds=60
+      
+      # CORS - Adicione SEUS domínios de produção
+      - Cors__AllowedOrigins__0=${FRONTEND_URL:?FRONTEND_URL é obrigatório}
+      - Cors__AllowedOrigins__1=${ADMIN_URL:?ADMIN_URL é obrigatório}
+      - Cors__AllowedOrigins__2=${API_URL}
+      
+      # Logging otimizado para produção
+      - Logging__LogLevel__Default=Warning
+      - Logging__LogLevel__Microsoft=Warning
+      - Logging__LogLevel__Microsoft.AspNetCore=Warning
+      - Logging__LogLevel__System=Warning
+      
+    ports:
+      # API acessível apenas via localhost (Nginx fará proxy reverso)
+      - "127.0.0.1:5000:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - primecare-network
+    volumes:
+      - ./logs/api:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Limites de recursos para API
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.5'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+  # Microserviço de Telemedicina
+  telemedicine-api:
+    build:
+      context: .
+      dockerfile: telemedicine/src/MedicSoft.Telemedicine.Api/Dockerfile
+      args:
+        CONFIGURATION: Release
+    container_name: primecare-telemedicine
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      
+      # Database Connection (banco separado para telemedicina)
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=telemedicine;Username=primecare_user;Password=${POSTGRES_PASSWORD};Include Error Detail=false;SSL Mode=Prefer
+      
+      # JWT (mesma chave da API principal)
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY}
+      - JwtSettings__ExpiryMinutes=60
+      - JwtSettings__Issuer=PrimeCare Software
+      - JwtSettings__Audience=PrimeCare-API
+      
+      # Daily.co para videochamadas
+      - DailyCo__ApiKey=${DAILYCO_API_KEY:?DAILYCO_API_KEY é obrigatório}
+      - DailyCo__Domain=${DAILYCO_DOMAIN:-primecare}
+      
+      # CORS
+      - Cors__AllowedOrigins__0=${FRONTEND_URL}
+      - Cors__AllowedOrigins__1=${ADMIN_URL}
+      
+      # Logging
+      - Logging__LogLevel__Default=Warning
+      - Logging__LogLevel__Microsoft=Warning
+      
+    ports:
+      # Telemedicina acessível apenas via localhost
+      - "127.0.0.1:5084:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - primecare-network
+    volumes:
+      - ./logs/telemedicine:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # Frontend Principal (Build de Produção)
+  frontend:
+    build:
+      context: ./frontend/medicwarehouse-app
+      dockerfile: Dockerfile.production
+      args:
+        API_URL: ${API_URL}
+        TELEMEDICINE_API_URL: ${TELEMEDICINE_API_URL}
+    container_name: primecare-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "127.0.0.1:4200:80"
+    depends_on:
+      - api
+      - telemedicine-api
+    networks:
+      - primecare-network
+    # Nginx servindo arquivos estáticos consome poucos recursos
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+
+  # System Admin Frontend
+  system-admin:
+    build:
+      context: ./frontend/mw-system-admin
+      dockerfile: Dockerfile.production
+      args:
+        API_URL: ${API_URL}
+    container_name: primecare-system-admin
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "127.0.0.1:4201:80"
+    depends_on:
+      - api
+    networks:
+      - primecare-network
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+
+  # NOTA: Portal do Paciente NÃO incluído nesta configuração de produção
+  # Para incluir o portal do paciente no futuro, descomente e configure:
+  #
+  # patient-portal-api:
+  #   build:
+  #     context: ./patient-portal-api
+  #     dockerfile: PatientPortal.Api/Dockerfile
+  #   ...
+  #
+  # patient-portal:
+  #   build:
+  #     context: ./frontend/patient-portal
+  #   ...
+
+volumes:
+  postgres_data:
+    driver: local
+    # Para facilitar backups, você pode mapear para um diretório específico:
+    # driver_opts:
+    #   type: none
+    #   device: /var/backups/primecare/data
+    #   o: bind
+
+networks:
+  primecare-network:
+    driver: bridge
+
+# ═══════════════════════════════════════════════════════════════════════
+# INSTRUÇÕES DE USO
+# ═══════════════════════════════════════════════════════════════════════
+#
+# 1. Criar arquivo .env na raiz do projeto com as seguintes variáveis:
+#
+#    POSTGRES_PASSWORD=SuaSenhaForte123!@#$
+#    JWT_SECRET_KEY=Gere-Uma-Chave-Super-Segura-De-Pelo-Menos-64-Caracteres-Aqui!
+#    DAILYCO_API_KEY=sua-chave-dailyco
+#    DAILYCO_DOMAIN=primecare
+#    FRONTEND_URL=https://suaclinica.com.br
+#    ADMIN_URL=https://admin.suaclinica.com.br
+#    API_URL=https://api.suaclinica.com.br
+#    TELEMEDICINE_API_URL=https://tele.suaclinica.com.br
+#
+# 2. Build e iniciar todos os serviços:
+#
+#    docker compose -f docker-compose.production-no-portal.yml up -d --build
+#
+# 3. Ver logs em tempo real:
+#
+#    docker compose -f docker-compose.production-no-portal.yml logs -f
+#
+# 4. Ver status dos containers:
+#
+#    docker compose -f docker-compose.production-no-portal.yml ps
+#
+# 5. Parar todos os serviços:
+#
+#    docker compose -f docker-compose.production-no-portal.yml down
+#
+# 6. Parar e remover volumes (CUIDADO - apaga dados):
+#
+#    docker compose -f docker-compose.production-no-portal.yml down -v
+#
+# 7. Executar migrations:
+#
+#    docker compose -f docker-compose.production-no-portal.yml exec api \
+#      dotnet MedicSoft.Api.dll --migrate
+#
+#    docker compose -f docker-compose.production-no-portal.yml exec telemedicine-api \
+#      dotnet MedicSoft.Telemedicine.Api.dll --migrate
+#
+# 8. Backup manual do banco de dados:
+#
+#    docker compose -f docker-compose.production-no-portal.yml exec postgres \
+#      pg_dump -U primecare_user primecare > backup_primecare_$(date +%Y%m%d).sql
+#
+#    docker compose -f docker-compose.production-no-portal.yml exec postgres \
+#      pg_dump -U primecare_user telemedicine > backup_telemedicine_$(date +%Y%m%d).sql
+#
+# 9. Restore de backup:
+#
+#    docker compose -f docker-compose.production-no-portal.yml exec -T postgres \
+#      psql -U primecare_user primecare < backup_primecare_YYYYMMDD.sql
+#
+# ═══════════════════════════════════════════════════════════════════════
+# RECURSOS ESTIMADOS (Hostinger KVM 2 - 8GB RAM, 4 vCPU)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# - PostgreSQL:          2GB RAM,  1.0 vCPU
+# - API Principal:       1GB RAM,  1.5 vCPU
+# - Telemedicina API:  512MB RAM,  1.0 vCPU
+# - Frontend:          128MB RAM, 0.25 vCPU
+# - System Admin:      128MB RAM, 0.25 vCPU
+# - Sistema:             ~2GB RAM
+# ────────────────────────────────────────
+# TOTAL ESTIMADO:       ~6GB RAM, 4.0 vCPU
+#
+# Margem de segurança:   ~2GB RAM disponível para picos
+#
+# CAPACIDADE ESTIMADA:
+# - 10-30 clínicas pequenas
+# - 20-50 usuários simultâneos
+# - 100-500 agendamentos/dia
+#
+# ═══════════════════════════════════════════════════════════════════════
+# SEGURANÇA
+# ═══════════════════════════════════════════════════════════════════════
+#
+# ✅ Portas expostas apenas em localhost (127.0.0.1)
+# ✅ Nginx fará proxy reverso para acesso externo
+# ✅ SSL/TLS gerenciado pelo Nginx + Certbot
+# ✅ Senhas nunca em plain text (sempre via variáveis de ambiente)
+# ✅ CORS configurado para domínios específicos
+# ✅ Rate limiting habilitado
+# ✅ Logs separados por serviço
+# ✅ Health checks configurados
+# ✅ Restart automático em caso de falha
+#
+# ═══════════════════════════════════════════════════════════════════════
+# MONITORAMENTO
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Ver uso de recursos em tempo real:
+#
+#   docker stats
+#
+# Ver logs de um serviço específico:
+#
+#   docker compose -f docker-compose.production-no-portal.yml logs -f api
+#   docker compose -f docker-compose.production-no-portal.yml logs -f telemedicine-api
+#   docker compose -f docker-compose.production-no-portal.yml logs -f postgres
+#
+# Verificar health de todos os serviços:
+#
+#   docker compose -f docker-compose.production-no-portal.yml ps
+#
+# ═══════════════════════════════════════════════════════════════════════
