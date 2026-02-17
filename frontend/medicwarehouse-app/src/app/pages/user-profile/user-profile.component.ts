@@ -184,7 +184,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getPasswordStrength(): { label: string, class: string, width: string } {
-    const password = this.passwordForm.get('newPassword')?.value || '';
+    const password = this.currentPassword;
     if (password.length === 0) {
       return { label: '', class: '', width: '0%' };
     }
@@ -205,28 +205,27 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  private get currentPassword(): string {
+    return this.passwordForm.get('newPassword')?.value || '';
+  }
+
   hasMinLength(): boolean {
-    const password = this.passwordForm.get('newPassword')?.value || '';
-    return password.length >= 8;
+    return this.currentPassword.length >= 8;
   }
 
   hasUpperCase(): boolean {
-    const password = this.passwordForm.get('newPassword')?.value || '';
-    return /[A-Z]/.test(password);
+    return /[A-Z]/.test(this.currentPassword);
   }
 
   hasLowerCase(): boolean {
-    const password = this.passwordForm.get('newPassword')?.value || '';
-    return /[a-z]/.test(password);
+    return /[a-z]/.test(this.currentPassword);
   }
 
   hasNumber(): boolean {
-    const password = this.passwordForm.get('newPassword')?.value || '';
-    return /[0-9]/.test(password);
+    return /[0-9]/.test(this.currentPassword);
   }
 
   hasSpecialChar(): boolean {
-    const password = this.passwordForm.get('newPassword')?.value || '';
-    return /[^a-zA-Z0-9]/.test(password);
+    return /[^a-zA-Z0-9]/.test(this.currentPassword);
   }
 }
