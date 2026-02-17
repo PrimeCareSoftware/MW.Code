@@ -273,6 +273,23 @@ export const routes: Routes = [
     canActivate: [systemAdminGuard]
   },
   
+  // Blog Posts Management
+  {
+    path: 'blog-posts',
+    loadComponent: () => import('./pages/blog-posts/blog-posts-list').then(m => m.BlogPostsList),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'blog-posts/create',
+    loadComponent: () => import('./pages/blog-posts/blog-post-editor').then(m => m.BlogPostEditor),
+    canActivate: [systemAdminGuard]
+  },
+  {
+    path: 'blog-posts/edit/:id',
+    loadComponent: () => import('./pages/blog-posts/blog-post-editor').then(m => m.BlogPostEditor),
+    canActivate: [systemAdminGuard]
+  },
+  
   // Wildcard route - redirect to dashboard
   { path: '**', redirectTo: '/dashboard' }
 ];
