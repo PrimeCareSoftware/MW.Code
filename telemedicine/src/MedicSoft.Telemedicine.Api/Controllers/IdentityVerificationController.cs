@@ -38,10 +38,16 @@ public class IdentityVerificationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<IdentityVerificationResponse>> CreateVerification(
-        [FromForm] CreateIdentityVerificationRequest request,
-        [FromForm] IFormFile documentPhoto,
-        [FromForm] IFormFile? selfie,
-        [FromForm] IFormFile? crmCardPhoto,
+        [FromForm] Guid userId,
+        [FromForm] string userType,
+        [FromForm] string documentType,
+        [FromForm] string documentNumber,
+        [FromForm] string? crmNumber,
+        [FromForm] string? crmState,
+        [FromForm] Guid? telemedicineSessionId,
+        IFormFile documentPhoto,
+        IFormFile? selfie,
+        IFormFile? crmCardPhoto,
         [FromHeader(Name = "X-Tenant-Id")] string tenantId)
     {
         try
@@ -51,6 +57,18 @@ public class IdentityVerificationController : ControllerBase
 
             if (documentPhoto == null || documentPhoto.Length == 0)
                 return BadRequest("Document photo is required");
+
+            // Create request object from individual parameters
+            var request = new CreateIdentityVerificationRequest
+            {
+                UserId = userId,
+                UserType = userType,
+                DocumentType = documentType,
+                DocumentNumber = documentNumber,
+                CrmNumber = crmNumber,
+                CrmState = crmState,
+                TelemedicineSessionId = telemedicineSessionId
+            };
 
             // Validate provider requirements
             if (request.UserType == "Provider")
