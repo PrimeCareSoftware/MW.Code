@@ -24,6 +24,7 @@ namespace MedicSoft.Application.Services
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesAsync(Guid clinicId, string tenantId);
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType);
         Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId);
+        Task<BackfillProfilesResult> BackfillMissingProfilesForAllClinicsAsync(string tenantId);
     }
 
     public class AccessProfileService : IAccessProfileService
@@ -31,15 +32,18 @@ namespace MedicSoft.Application.Services
         private readonly IAccessProfileRepository _profileRepository;
         private readonly IUserRepository _userRepository;
         private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
+        private readonly IClinicRepository _clinicRepository;
 
         public AccessProfileService(
             IAccessProfileRepository profileRepository,
             IUserRepository userRepository,
-            IConsultationFormProfileRepository consultationFormProfileRepository)
+            IConsultationFormProfileRepository consultationFormProfileRepository,
+            IClinicRepository clinicRepository)
         {
             _profileRepository = profileRepository;
             _userRepository = userRepository;
             _consultationFormProfileRepository = consultationFormProfileRepository;
+            _clinicRepository = clinicRepository;
         }
 
         public async Task<AccessProfileDto?> GetByIdAsync(Guid id, string tenantId)
@@ -260,6 +264,75 @@ namespace MedicSoft.Application.Services
             await _profileRepository.UpdateAsync(profile);
 
             return MapToDto(profile);
+        }
+
+        /// <summary>
+        /// Backfills missing default profiles for all clinics in the tenant.
+        /// This ensures existing clinics have all professional profiles available, not just their clinic type's profile.
+        /// </summary>
+        public async Task<BackfillProfilesResult> BackfillMissingProfilesForAllClinicsAsync(string tenantId)
+        {
+            var result = new BackfillProfilesResult
+            {
+                ClinicsProcessed = 0,
+                ProfilesCreated = 0,
+                ProfilesSkipped = 0,
+                ClinicDetails = new List<ClinicBackfillDetail>()
+            };
+
+            // Get all clinics in this tenant
+            var clinics = await _clinicRepository.GetAllQueryable()
+                .Where(c => c.TenantId == tenantId && c.IsActive)
+                .ToListAsync();
+
+            foreach (var clinic in clinics)
+            {
+                var clinicDetail = new ClinicBackfillDetail
+                {
+                    ClinicId = clinic.Id,
+                    ClinicName = clinic.Name,
+                    ProfilesCreated = new List<string>(),
+                    ProfilesSkipped = new List<string>()
+                };
+
+                // Create all default profiles for this clinic
+                var profiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinic.Id, clinic.ClinicType);
+
+                foreach (var profile in profiles)
+                {
+                    // Check if profile already exists
+                    var existing = await _profileRepository.GetByNameAsync(profile.Name, clinic.Id, tenantId);
+                    if (existing == null)
+                    {
+                        // Link consultation form profile to professional profiles
+                        if (profile.IsProfessionalProfile())
+                        {
+                            var specialty = AccessProfile.GetProfessionalSpecialtyForClinicType(clinic.ClinicType);
+                            var allSystemProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
+                            var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty);
+                            
+                            if (consultationFormProfile != null)
+                            {
+                                profile.SetConsultationFormProfile(consultationFormProfile.Id);
+                            }
+                        }
+
+                        await _profileRepository.AddAsync(profile);
+                        clinicDetail.ProfilesCreated.Add(profile.Name);
+                        result.ProfilesCreated++;
+                    }
+                    else
+                    {
+                        clinicDetail.ProfilesSkipped.Add(profile.Name);
+                        result.ProfilesSkipped++;
+                    }
+                }
+
+                result.ClinicDetails.Add(clinicDetail);
+                result.ClinicsProcessed++;
+            }
+
+            return result;
         }
 
         private AccessProfileDto MapToDto(AccessProfile profile)
