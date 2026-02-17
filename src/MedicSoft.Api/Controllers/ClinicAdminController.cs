@@ -417,10 +417,19 @@ namespace MedicSoft.Api.Controllers
                 else
                 {
                     // Role-based creation (legacy system)
+                    // Try direct enum parsing first
                     if (!Enum.TryParse<UserRole>(request.Role, true, out role))
                     {
-                        var allowedRoles = ProfileMappingHelper.GetAllowedRolesForCreation();
-                        return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", allowedRoles)}" });
+                        // If direct parsing fails, try mapping from Portuguese profile names
+                        role = ProfileMappingHelper.MapProfileNameToRole(request.Role, _logger);
+                        
+                        // Check if the mapped role is Receptionist (default fallback)
+                        // If the original input wasn't a recognized profile name, this is an error
+                        if (role == UserRole.Receptionist && !ProfileMappingHelper.IsRecognizedProfile(request.Role))
+                        {
+                            var allowedRoles = ProfileMappingHelper.GetAllowedRolesForCreation();
+                            return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", allowedRoles)}" });
+                        }
                     }
 
                     // Prevent creation of SystemAdmin through this endpoint
@@ -429,7 +438,7 @@ namespace MedicSoft.Api.Controllers
                         return BadRequest(new { message = "SystemAdmin users cannot be created through this endpoint" });
                     }
 
-                    _logger.LogInformation("Creating user with role-based system. Role: {Role}", role);
+                    _logger.LogInformation("Creating user with role-based system. Role: {Role}, MappedFrom: {InputRole}", role, request.Role);
                 }
 
                 // Create the user with the determined role

@@ -49,7 +49,7 @@
                 <th>Nome Completo</th>
                 <th>E-mail</th>
                 <th>Perfil</th>
-                <th>CRM/Especialidade</th>
+                <th>Registro/Especialidade</th>
                 <th>Status</th>
                 <th>Criado em</th>
                 <th>Ações</th>
@@ -74,10 +74,10 @@
                     </span>
                   </td>
                   <td>
-                    @if (user.role === 'Doctor') {
+                    @if (isProfessionalUser(user)) {
                       <div class="doctor-info">
                         @if (user.professionalId) {
-                          <div class="professional-id">CRM: {{ user.professionalId }}</div>
+                          <div class="professional-id">{{ getProfessionalIdLabel(user.role) }}: {{ user.professionalId }}</div>
                         }
                         @if (user.specialty) {
                           <div class="specialty">{{ user.specialty }}</div>
@@ -278,16 +278,16 @@
             <!-- Doctor-specific fields -->
             @if (isDoctorRole()) {
               <div class="form-group">
-                <label for="professionalId">CRM/Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <label for="professionalId">Registro Profissional (CRM, CRP, CRN, CRO, etc.) {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
                 <input 
                   type="text" 
                   id="professionalId" 
                   formControlName="professionalId" 
                   class="form-control"
-                  placeholder="Ex: CRM-123456"
+                  placeholder="Ex: CRM-123456, CRP-789012, CRN-345678"
                 />
                 @if (createUserForm.get('professionalId')?.invalid && createUserForm.get('professionalId')?.touched) {
-                  <span class="error-text">CRM é obrigatório para médicos</span>
+                  <span class="error-text">Registro profissional é obrigatório</span>
                 }
               </div>
 
@@ -298,10 +298,10 @@
                   id="specialty" 
                   formControlName="specialty" 
                   class="form-control"
-                  placeholder="Ex: Clínico Geral"
+                  placeholder="Ex: Clínico Geral, Psicologia Clínica, Nutrição Esportiva"
                 />
                 @if (createUserForm.get('specialty')?.invalid && createUserForm.get('specialty')?.touched) {
-                  <span class="error-text">Especialidade é obrigatória para médicos</span>
+                  <span class="error-text">Especialidade é obrigatória</span>
                 }
               </div>
 
@@ -313,7 +313,7 @@
                   />
                   <span>Exibir no agendamento de consultas</span>
                 </label>
-                <small class="form-text">Se marcado, este profissional aparecerá na lista de médicos disponíveis para agendamento</small>
+                <small class="form-text">Se marcado, este profissional aparecerá na lista disponível para agendamento</small>
               </div>
             }
           </div>
@@ -381,16 +381,16 @@
               />
             </div>
 
-            <!-- Doctor-specific fields (only shown if user is a doctor) -->
+            <!-- Professional fields (shown for all professional roles) -->
             @if (isEditingDoctor()) {
               <div class="form-group">
-                <label for="edit-professionalId">CRM/Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <label for="edit-professionalId">Registro Profissional (CRM, CRP, CRN, CRO, etc.) {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
                 <input 
                   type="text" 
                   id="edit-professionalId" 
                   formControlName="professionalId" 
                   class="form-control"
-                  placeholder="Ex: CRM-123456"
+                  placeholder="Ex: CRM-123456, CRP-789012, CRN-345678"
                 />
               </div>
 
@@ -401,7 +401,7 @@
                   id="edit-specialty" 
                   formControlName="specialty" 
                   class="form-control"
-                  placeholder="Ex: Clínico Geral"
+                  placeholder="Ex: Clínico Geral, Psicologia Clínica, Nutrição Esportiva"
                 />
               </div>
 
@@ -413,7 +413,7 @@
                   />
                   <span>Exibir no agendamento de consultas</span>
                 </label>
-                <small class="form-text">Se marcado, este profissional aparecerá na lista de médicos disponíveis para agendamento</small>
+                <small class="form-text">Se marcado, este profissional aparecerá na lista disponível para agendamento</small>
               </div>
             }
           </div>
