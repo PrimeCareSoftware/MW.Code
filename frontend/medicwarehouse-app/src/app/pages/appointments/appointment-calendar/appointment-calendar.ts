@@ -199,16 +199,24 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     this.clinicAdminService.getClinicInfo().subscribe({
       next: (clinicInfo) => {
         // Parse opening and closing times from TimeSpan string format (HH:mm:ss)
-        if (clinicInfo.openingTime) {
+        if (clinicInfo.openingTime && this.isValidTimeFormat(clinicInfo.openingTime)) {
           const openingParts = clinicInfo.openingTime.split(':');
-          this.clinicOpeningHour = parseInt(openingParts[0], 10);
+          const parsedHour = parseInt(openingParts[0], 10);
+          if (!isNaN(parsedHour) && parsedHour >= 0 && parsedHour < 24) {
+            this.clinicOpeningHour = parsedHour;
+          }
         }
-        if (clinicInfo.closingTime) {
+        if (clinicInfo.closingTime && this.isValidTimeFormat(clinicInfo.closingTime)) {
           const closingParts = clinicInfo.closingTime.split(':');
-          this.clinicClosingHour = parseInt(closingParts[0], 10);
-          // If closing time has minutes, round up to next hour for display
-          if (parseInt(closingParts[1], 10) > 0) {
-            this.clinicClosingHour += 1;
+          const parsedHour = parseInt(closingParts[0], 10);
+          const parsedMinutes = parseInt(closingParts[1], 10);
+          if (!isNaN(parsedHour) && parsedHour >= 0 && parsedHour < 24) {
+            this.clinicClosingHour = parsedHour;
+            // If closing time has minutes (e.g., 17:30), include that hour in the calendar
+            // so slots like 17:00 and 17:30 are shown
+            if (!isNaN(parsedMinutes) && parsedMinutes > 0) {
+              this.clinicClosingHour += 1;
+            }
           }
         }
         // Generate time slots with loaded configuration
@@ -220,6 +228,12 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
         this.generateTimeSlots();
       }
     });
+  }
+
+  private isValidTimeFormat(time: string): boolean {
+    // Validate HH:mm:ss or HH:mm format
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+    return timeRegex.test(time);
   }
 
   generateTimeSlots(): void {
