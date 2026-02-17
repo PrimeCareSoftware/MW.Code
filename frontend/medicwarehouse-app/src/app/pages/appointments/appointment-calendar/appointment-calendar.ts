@@ -1,10 +1,10 @@
 import { Component, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels, RecurringDeleteScope, RecurringDeleteScopeLabels } from '../../../models/appointment.model';
@@ -108,11 +108,30 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       }
     });
     
+    // Listen for navigation events to reload data when returning to calendar
+    // This fixes the issue where new appointments don't appear without F5
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      filter((event: NavigationEnd) => event.url === '/appointments' || event.url === '/appointments/calendar')
+    ).subscribe(() => {
+      // Reload appointments when navigating back to calendar
+      this.loadWeekAppointments();
+    });
+    
     this.loadWeekAppointments();
   }
 
   ngOnDestroy(): void {
     this.filterChange$.complete();
+  }
+
+  /**
+   * Parse ISO date string (YYYY-MM-DD) as local date without timezone conversion.
+   * Fixes the d-1 bug where new Date('2024-01-15') interprets as UTC and converts to local timezone.
+   */
+  private parseLocalDate(dateString: string): Date {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
   }
 
   getWeekStart(date: Date): Date {
@@ -205,8 +224,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Distribute appointments to their respective days
       if (weekAgenda && weekAgenda.appointments) {
         weekAgenda.appointments.forEach(appointment => {
-          const appointmentDate = new Date(appointment.scheduledDate);
-          appointmentDate.setHours(0, 0, 0, 0);
+          // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
+          const appointmentDate = this.parseLocalDate(appointment.scheduledDate);
           const dayIndex = days.findIndex(d => {
             const dayDate = new Date(d.date);
             dayDate.setHours(0, 0, 0, 0);
@@ -222,8 +241,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Update day columns with blocked slots
       if (blockedSlots) {
         blockedSlots.forEach(block => {
-          const blockDate = new Date(block.date);
-          blockDate.setHours(0, 0, 0, 0);
+          // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
+          const blockDate = this.parseLocalDate(block.date);
           const dayIndex = days.findIndex(d => {
             const dayDate = new Date(d.date);
             dayDate.setHours(0, 0, 0, 0);
