@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DigitalPrescription, PRESCRIPTION_TYPES } from '../../models/prescriptions/digital-prescription.model';
+import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-digital-prescription-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Navbar],
   templateUrl: './digital-prescription-view.component.html',
   styleUrl: './digital-prescription-view.component.scss'})
 export class DigitalPrescriptionViewComponent implements OnInit {
