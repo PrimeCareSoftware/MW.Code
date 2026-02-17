@@ -338,6 +338,13 @@ export const routes: Routes = [
     canActivate: [authGuard, ownerGuard]
   },
   
+  // User Profile route
+  {
+    path: 'profile',
+    loadComponent: () => import('./pages/user-profile/user-profile.component').then(m => m.UserProfileComponent),
+    canActivate: [authGuard]
+  },
+  
   { 
     path: 'tiss/dashboards/glosas', 
     loadComponent: () => import('./pages/tiss/dashboards/glosas-dashboard').then(m => m.GlosasDashboard),
