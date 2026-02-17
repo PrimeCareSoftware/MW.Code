@@ -199,21 +199,22 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     this.clinicAdminService.getClinicInfo().subscribe({
       next: (clinicInfo) => {
         // Parse opening and closing times from TimeSpan string format (HH:mm:ss)
-        if (clinicInfo.openingTime && this.isValidTimeFormat(clinicInfo.openingTime)) {
-          const openingHour = this.parseHourFromTimeString(clinicInfo.openingTime);
-          if (openingHour !== null) {
-            this.clinicOpeningHour = openingHour;
-          }
+        const openingResult = this.parseTimeString(clinicInfo.openingTime);
+        if (openingResult !== null) {
+          this.clinicOpeningHour = openingResult.hour;
         }
-        if (clinicInfo.closingTime && this.isValidTimeFormat(clinicInfo.closingTime)) {
-          const closingHour = this.parseHourFromTimeString(clinicInfo.closingTime);
-          if (closingHour !== null) {
-            // For closing time, always round up to include the last hour
-            // E.g., 22:30 becomes 23 to show slots up to 22:30
-            // and 22:00 becomes 23 to show slots up to 22:00
-            this.clinicClosingHour = closingHour + 1;
-          }
+        
+        const closingResult = this.parseTimeString(clinicInfo.closingTime);
+        if (closingResult !== null) {
+          // For closing time, we want to show appointment slots up to the closing time
+          // The loop in generateTimeSlots() uses "hour < endHour", so we need to add 1
+          // to include the closing hour. E.g., if closing time is 22:00, we want to show
+          // slots 21:00 and 21:30, but also 22:00 (end of day), so endHour should be 23.
+          // For 22:30, we want 21:00, 21:30, 22:00, 22:30, so endHour should also be 23.
+          // Cap at 24 to prevent invalid hours.
+          this.clinicClosingHour = Math.min(closingResult.hour + 1, 24);
         }
+        
         // Generate time slots with loaded configuration
         this.generateTimeSlots();
       },
@@ -225,22 +226,29 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     });
   }
 
-  private parseHourFromTimeString(timeString: string): number | null {
-    const parts = timeString.split(':');
-    if (parts.length < 1) {
+  private parseTimeString(timeString: string | undefined): { hour: number; minute: number } | null {
+    if (!timeString) {
       return null;
     }
+    
+    // Validate HH:mm:ss or HH:mm format
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+    if (!timeRegex.test(timeString)) {
+      return null;
+    }
+    
+    const parts = timeString.split(':');
     const parsedHour = parseInt(parts[0], 10);
+    const parsedMinute = parts.length >= 2 ? parseInt(parts[1], 10) : 0;
+    
     if (isNaN(parsedHour) || parsedHour < 0 || parsedHour >= 24) {
       return null;
     }
-    return parsedHour;
-  }
-
-  private isValidTimeFormat(time: string): boolean {
-    // Validate HH:mm:ss or HH:mm format
-    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
-    return timeRegex.test(time);
+    if (isNaN(parsedMinute) || parsedMinute < 0 || parsedMinute >= 60) {
+      return null;
+    }
+    
+    return { hour: parsedHour, minute: parsedMinute };
   }
 
   generateTimeSlots(): void {
