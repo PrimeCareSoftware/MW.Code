@@ -273,6 +273,7 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
         weekAgenda.appointments.forEach(appointment => {
           // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
           const appointmentDate = this.parseLocalDate(appointment.scheduledDate);
+          appointmentDate.setHours(0, 0, 0, 0); // Ensure time is at midnight for comparison
           const dayIndex = days.findIndex(d => {
             const dayDate = new Date(d.date);
             dayDate.setHours(0, 0, 0, 0);
@@ -290,6 +291,7 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
         blockedSlots.forEach(block => {
           // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
           const blockDate = this.parseLocalDate(block.date);
+          blockDate.setHours(0, 0, 0, 0); // Ensure time is at midnight for comparison
           const dayIndex = days.findIndex(d => {
             const dayDate = new Date(d.date);
             dayDate.setHours(0, 0, 0, 0);
