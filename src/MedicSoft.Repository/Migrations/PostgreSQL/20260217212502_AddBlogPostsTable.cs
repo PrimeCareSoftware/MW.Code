@@ -4160,24 +4160,14 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsException",
-                table: "BlockedTimeSlots",
-                type: "boolean",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.Sql(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"IsException\" boolean NOT NULL DEFAULT false;");
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "OriginalOccurrenceDate",
-                table: "BlockedTimeSlots",
-                type: "timestamp without time zone",
-                nullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"OriginalOccurrenceDate\" timestamp without time zone NULL;");
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "RecurringSeriesId",
-                table: "BlockedTimeSlots",
-                type: "uuid",
-                nullable: true);
+            migrationBuilder.Sql(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"RecurringSeriesId\" uuid NULL;");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",

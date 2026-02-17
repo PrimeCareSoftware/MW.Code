@@ -26,38 +26,19 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Add new columns to BlockedTimeSlots table
-            migrationBuilder.AddColumn<Guid>(
-                name: "RecurringSeriesId",
-                table: "BlockedTimeSlots",
-                type: "uuid",
-                nullable: true);
+            // Add new columns to BlockedTimeSlots table (idempotent for partial migrations)
+            migrationBuilder.Sql(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"RecurringSeriesId\" uuid NULL;");
+            migrationBuilder.Sql(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"OriginalOccurrenceDate\" timestamp with time zone NULL;");
+            migrationBuilder.Sql(
+                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"IsException\" boolean NOT NULL DEFAULT false;");
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "OriginalOccurrenceDate",
-                table: "BlockedTimeSlots",
-                type: "timestamp with time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsException",
-                table: "BlockedTimeSlots",
-                type: "boolean",
-                nullable: false,
-                defaultValue: false);
-
-            // Add new columns to RecurringAppointmentPatterns table
-            migrationBuilder.AddColumn<DateTime>(
-                name: "EffectiveEndDate",
-                table: "RecurringAppointmentPatterns",
-                type: "timestamp with time zone",
-                nullable: true);
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "ParentPatternId",
-                table: "RecurringAppointmentPatterns",
-                type: "uuid",
-                nullable: true);
+            // Add new columns to RecurringAppointmentPatterns table (idempotent for partial migrations)
+            migrationBuilder.Sql(
+                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"EffectiveEndDate\" timestamp with time zone NULL;");
+            migrationBuilder.Sql(
+                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"ParentPatternId\" uuid NULL;");
 
             // Create RecurrenceExceptions table
             migrationBuilder.CreateTable(

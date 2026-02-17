@@ -780,10 +780,65 @@ if (applyMigrations)
     {
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
+        var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+        if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+            dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
+        {
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"GlobalDocumentTemplates\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"Name\" character varying(200) NOT NULL, " +
+                "\"Description\" character varying(500) NOT NULL, " +
+                "\"Type\" integer NOT NULL, " +
+                "\"Specialty\" integer NOT NULL, " +
+                "\"Content\" text NOT NULL, " +
+                "\"Variables\" text NOT NULL, " +
+                "\"IsActive\" boolean NOT NULL DEFAULT true, " +
+                "\"CreatedBy\" character varying(100) NOT NULL, " +
+                "\"TenantId\" character varying(100) NOT NULL, " +
+                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp with time zone NULL, " +
+                "CONSTRAINT \"PK_GlobalDocumentTemplates\" PRIMARY KEY (\"Id\")" +
+                ");");
+
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"CustomDashboards\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"Name\" character varying(200) NOT NULL, " +
+                "\"Description\" character varying(1000) NULL, " +
+                "\"Layout\" text NULL, " +
+                "\"IsDefault\" boolean NOT NULL DEFAULT false, " +
+                "\"IsPublic\" boolean NOT NULL DEFAULT false, " +
+                "\"CreatedBy\" character varying(450) NOT NULL, " +
+                "\"TenantId\" text NOT NULL DEFAULT '', " +
+                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp with time zone NULL, " +
+                "CONSTRAINT \"PK_CustomDashboards\" PRIMARY KEY (\"Id\")" +
+                ");");
+
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"DashboardWidgets\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"DashboardId\" uuid NOT NULL, " +
+                "\"Type\" character varying(50) NOT NULL, " +
+                "\"Title\" character varying(200) NOT NULL, " +
+                "\"Config\" text NULL, " +
+                "\"Query\" text NULL, " +
+                "\"RefreshInterval\" integer NOT NULL DEFAULT 0, " +
+                "\"GridX\" integer NOT NULL DEFAULT 0, " +
+                "\"GridY\" integer NOT NULL DEFAULT 0, " +
+                "\"GridWidth\" integer NOT NULL DEFAULT 4, " +
+                "\"GridHeight\" integer NOT NULL DEFAULT 3, " +
+                "\"TenantId\" text NOT NULL DEFAULT '', " +
+                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp with time zone NULL, " +
+                "CONSTRAINT \"PK_DashboardWidgets\" PRIMARY KEY (\"Id\"), " +
+                "CONSTRAINT \"FK_DashboardWidgets_CustomDashboards_DashboardId\" FOREIGN KEY (\"DashboardId\") REFERENCES \"CustomDashboards\" (\"Id\") ON DELETE CASCADE" +
+                ");");
+        }
         dbContext.Database.Migrate();
 
         // Defensive repair: ensure recurrence columns exist (some environments have partial migrations)
-        var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
         if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
             dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
         {
@@ -867,6 +922,41 @@ if (enableDefensiveRepair)
         if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
             dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
         {
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"CustomDashboards\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"Name\" character varying(200) NOT NULL, " +
+                "\"Description\" character varying(1000) NULL, " +
+                "\"Layout\" text NULL, " +
+                "\"IsDefault\" boolean NOT NULL DEFAULT false, " +
+                "\"IsPublic\" boolean NOT NULL DEFAULT false, " +
+                "\"CreatedBy\" character varying(450) NOT NULL, " +
+                "\"TenantId\" text NOT NULL DEFAULT '', " +
+                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp with time zone NULL, " +
+                "CONSTRAINT \"PK_CustomDashboards\" PRIMARY KEY (\"Id\")" +
+                ");");
+
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE TABLE IF NOT EXISTS \"DashboardWidgets\" (" +
+                "\"Id\" uuid NOT NULL, " +
+                "\"DashboardId\" uuid NOT NULL, " +
+                "\"Type\" character varying(50) NOT NULL, " +
+                "\"Title\" character varying(200) NOT NULL, " +
+                "\"Config\" text NULL, " +
+                "\"Query\" text NULL, " +
+                "\"RefreshInterval\" integer NOT NULL DEFAULT 0, " +
+                "\"GridX\" integer NOT NULL DEFAULT 0, " +
+                "\"GridY\" integer NOT NULL DEFAULT 0, " +
+                "\"GridWidth\" integer NOT NULL DEFAULT 4, " +
+                "\"GridHeight\" integer NOT NULL DEFAULT 3, " +
+                "\"TenantId\" text NOT NULL DEFAULT '', " +
+                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+                "\"UpdatedAt\" timestamp with time zone NULL, " +
+                "CONSTRAINT \"PK_DashboardWidgets\" PRIMARY KEY (\"Id\"), " +
+                "CONSTRAINT \"FK_DashboardWidgets_CustomDashboards_DashboardId\" FOREIGN KEY (\"DashboardId\") REFERENCES \"CustomDashboards\" (\"Id\") ON DELETE CASCADE" +
+                ");");
+
             dbContext.Database.ExecuteSqlRaw(
                 "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
             dbContext.Database.ExecuteSqlRaw(
