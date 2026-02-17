@@ -34,6 +34,9 @@ namespace MedicSoft.Domain.Entities
             PrimaryColor = "#2563eb"; // Blue
             SecondaryColor = "#7c3aed"; // Purple
             FontColor = "#1f2937"; // Dark gray
+
+            // Ensure UpdatedAt is populated for DB constraints
+            UpdateTimestamp();
         }
 
         public void UpdateColors(string? primaryColor, string? secondaryColor, string? fontColor)

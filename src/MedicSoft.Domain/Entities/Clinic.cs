@@ -46,7 +46,7 @@ namespace MedicSoft.Domain.Entities
 
         public Clinic(string name, string tradeName, string document, string phone,
             string email, string address, TimeSpan openingTime, TimeSpan closingTime,
-            string tenantId, int appointmentDurationMinutes = 30, DocumentType? documentType = null,
+            string tenantId, int appointmentDurationMinutes = 30, DocumentType documentType = default,
             Guid? companyId = null) : base(tenantId)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -77,7 +77,9 @@ namespace MedicSoft.Domain.Entities
             var cleanDocument = new string(document.Where(char.IsDigit).ToArray());
             
             // Determine document type if not provided
-            var docType = documentType ?? DetermineDocumentType(cleanDocument.Length);
+            var docType = documentType != default
+                ? documentType
+                : DetermineDocumentType(cleanDocument.Length);
             
             // Validate based on determined type
             if (docType == Enums.DocumentType.CNPJ)
