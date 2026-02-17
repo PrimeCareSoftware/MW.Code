@@ -47,10 +47,6 @@ public class FileUploadOperationFilter : IOperationFilter
 
         foreach (var parameter in parameters.Where(p => p.Source.Id == "Form" || p.Source.Id == "FormFile"))
         {
-            // Skip header parameters
-            if (parameter.Source.Id == "Header")
-                continue;
-
             if (parameter.Type == typeof(IFormFile))
             {
                 // Add file upload parameter
@@ -74,7 +70,9 @@ public class FileUploadOperationFilter : IOperationFilter
                 
                 foreach (var prop in typeProperties)
                 {
-                    var propName = char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1);
+                    var propName = prop.Name.Length > 1 
+                        ? char.ToLowerInvariant(prop.Name[0]) + prop.Name.Substring(1)
+                        : prop.Name.ToLowerInvariant();
                     var propSchema = CreateSchemaForType(prop.PropertyType);
                     schema.Properties.Add(propName, propSchema);
                     
