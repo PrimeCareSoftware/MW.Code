@@ -134,7 +134,6 @@ export class UserManagementComponent implements OnInit {
       next: (profiles) => {
         this.availableProfiles.set(profiles);
         this.isLoadingProfiles.set(false);
-        console.log('Loaded profiles:', profiles.length);
       },
       error: (error) => {
         console.error('Error loading access profiles:', error);

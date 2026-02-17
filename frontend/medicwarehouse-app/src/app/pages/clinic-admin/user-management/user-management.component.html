@@ -241,6 +241,8 @@
               <label for="role">Perfil *</label>
               @if (hasProfiles() && !isLoadingProfiles()) {
                 <!-- Show all available profiles dynamically loaded from API -->
+                <!-- Note: Using profile.name as value because current API (CreateUserRequest) expects Role string -->
+                <!-- Future enhancement: Update API to accept ProfileId for direct profile assignment -->
                 <select id="role" formControlName="role" class="form-control">
                   <optgroup label="Perfis Disponíveis">
                     @for (profile of availableProfiles(); track profile.id) {
