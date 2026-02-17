@@ -84,18 +84,38 @@ namespace MedicSoft.Domain.Entities
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Title cannot be empty", nameof(title));
 
-            // Basic slug generation - convert to lowercase, replace spaces with hyphens
-            var slug = title.ToLowerInvariant()
-                .Replace(" ", "-")
-                .Replace("á", "a").Replace("à", "a").Replace("â", "a").Replace("ã", "a")
-                .Replace("é", "e").Replace("ê", "e")
-                .Replace("í", "i")
-                .Replace("ó", "o").Replace("ô", "o").Replace("õ", "o")
-                .Replace("ú", "u").Replace("ü", "u")
-                .Replace("ç", "c");
+            // Convert to lowercase and normalize
+            var slug = title.ToLowerInvariant().Trim();
 
-            // Remove special characters except hyphens
-            return System.Text.RegularExpressions.Regex.Replace(slug, @"[^a-z0-9\-]", "");
+            // Replace common Portuguese accented characters
+            var accentMap = new Dictionary<string, string>
+            {
+                { "á", "a" }, { "à", "a" }, { "â", "a" }, { "ã", "a" }, { "ä", "a" },
+                { "é", "e" }, { "è", "e" }, { "ê", "e" }, { "ë", "e" },
+                { "í", "i" }, { "ì", "i" }, { "î", "i" }, { "ï", "i" },
+                { "ó", "o" }, { "ò", "o" }, { "ô", "o" }, { "õ", "o" }, { "ö", "o" },
+                { "ú", "u" }, { "ù", "u" }, { "û", "u" }, { "ü", "u" },
+                { "ç", "c" }, { "ñ", "n" }
+            };
+
+            foreach (var pair in accentMap)
+            {
+                slug = slug.Replace(pair.Key, pair.Value);
+            }
+
+            // Replace spaces and underscores with hyphens
+            slug = slug.Replace(" ", "-").Replace("_", "-");
+
+            // Remove all non-alphanumeric characters except hyphens
+            slug = System.Text.RegularExpressions.Regex.Replace(slug, @"[^a-z0-9\-]", "");
+
+            // Replace multiple consecutive hyphens with a single hyphen
+            slug = System.Text.RegularExpressions.Regex.Replace(slug, @"-+", "-");
+
+            // Remove leading and trailing hyphens
+            slug = slug.Trim('-');
+
+            return slug;
         }
     }
 }

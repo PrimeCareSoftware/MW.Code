@@ -148,18 +148,7 @@ namespace MedicSoft.Api.Controllers
             if (page < 1) page = 1;
             if (pageSize < 1 || pageSize > 100) pageSize = 10;
 
-            var skip = (page - 1) * pageSize;
-            var allPosts = await _blogPostRepository.GetAllAsync();
-            
-            if (publishedOnly)
-                allPosts = allPosts.Where(p => p.IsPublished);
-
-            var posts = allPosts
-                .OrderByDescending(p => p.PublishedAt ?? p.CreatedAt)
-                .Skip(skip)
-                .Take(pageSize)
-                .ToList();
-
+            var posts = await _blogPostRepository.GetAllPostsAsync(page, pageSize, publishedOnly);
             var totalCount = await _blogPostRepository.GetTotalCountAsync(publishedOnly);
 
             var response = new BlogPostsListResponse

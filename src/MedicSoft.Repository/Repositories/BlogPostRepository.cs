@@ -22,6 +22,21 @@ namespace MedicSoft.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<BlogPost>> GetAllPostsAsync(int page = 1, int pageSize = 10, bool publishedOnly = false)
+        {
+            var skip = (page - 1) * pageSize;
+            var query = _dbSet.AsQueryable();
+
+            if (publishedOnly)
+                query = query.Where(p => p.IsPublished);
+
+            return await query
+                .OrderByDescending(p => p.PublishedAt ?? p.CreatedAt)
+                .Skip(skip)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
         public async Task<BlogPost?> GetByIdAsync(Guid id)
         {
             return await _dbSet
