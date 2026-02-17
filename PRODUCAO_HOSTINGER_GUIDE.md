@@ -911,6 +911,8 @@ systemctl restart nginx
 
 ## 8. Configuração de Subdomínios na Hostinger
 
+> 📖 **Guia Detalhado**: Para instruções passo a passo com screenshots, veja o [**Guia de Subdomínios da Hostinger**](HOSTINGER_SUBDOMAINS_GUIDE.md)
+
 ### 8.1. Acessar Painel da Hostinger
 
 1. Entre em https://hpanel.hostinger.com
@@ -1013,6 +1015,8 @@ Você deve ver o **cadeado verde** 🔒 no navegador.
 ---
 
 ## 10. Segurança para Dados Sensíveis
+
+> 🔐 **Guia Completo de Segurança**: Para práticas detalhadas de segurança, conformidade LGPD e resposta a incidentes, veja o [**Guia de Segurança para Dados Sensíveis**](SECURITY_PRODUCTION_GUIDE.md)
 
 ### 10.1. Configurações Essenciais de Segurança
 
