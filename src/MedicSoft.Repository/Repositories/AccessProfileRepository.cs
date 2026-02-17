@@ -42,13 +42,28 @@ namespace MedicSoft.Repository.Repositories
             // Fisioterapeuta, Veterinarian, etc.) to their users, regardless of their clinic's primary specialty.
             // This supports multi-specialty clinics and expanding clinics.
             // Security: Tenant isolation is maintained via ap.TenantId == tenantId filter.
-            return await _context.AccessProfiles
+            
+            // Get all profiles: custom profiles for this clinic + all default profiles across tenant
+            var allProfiles = await _context.AccessProfiles
                 .Include(ap => ap.Permissions)
                 .Where(ap => ap.TenantId == tenantId && ap.IsActive && 
                             (ap.ClinicId == clinicId || ap.IsDefault))
                 .OrderByDescending(ap => ap.IsDefault)
                 .ThenBy(ap => ap.Name)
                 .ToListAsync();
+            
+            // For default profiles, return only one instance per profile name (deduplicate)
+            // This ensures all profile types are visible without duplication
+            var customProfiles = allProfiles.Where(p => !p.IsDefault).ToList();
+            var defaultProfiles = allProfiles
+                .Where(p => p.IsDefault)
+                .GroupBy(p => p.Name)
+                .Select(g => g.First()) // Take first profile for each name
+                .ToList();
+            
+            return customProfiles.Concat(defaultProfiles)
+                .OrderByDescending(ap => ap.IsDefault)
+                .ThenBy(ap => ap.Name);
         }
 
         public async Task<IEnumerable<AccessProfile>> GetDefaultProfilesAsync(string tenantId)
