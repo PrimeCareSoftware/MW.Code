@@ -52,16 +52,18 @@ namespace MedicSoft.Repository.Repositories
             
             // For default profiles, return only one instance per profile name (deduplicate)
             // This ensures all profile types are visible without duplication
-            var customProfiles = allProfiles.Where(p => !p.IsDefault);
+            var customProfiles = allProfiles
+                .Where(p => !p.IsDefault)
+                .OrderBy(p => p.Name);
+            
             var defaultProfiles = allProfiles
                 .Where(p => p.IsDefault)
                 .GroupBy(p => p.Name)
-                .Select(g => g.First()); // Take first profile for each name
+                .Select(g => g.First()) // Take first profile for each name
+                .OrderBy(p => p.Name);
             
-            return customProfiles.Concat(defaultProfiles)
-                .OrderByDescending(ap => ap.IsDefault)
-                .ThenBy(ap => ap.Name)
-                .ToList();
+            // Return default profiles first, then custom profiles (both sorted by name)
+            return defaultProfiles.Concat(customProfiles).ToList();
         }
 
         public async Task<IEnumerable<AccessProfile>> GetDefaultProfilesAsync(string tenantId)
