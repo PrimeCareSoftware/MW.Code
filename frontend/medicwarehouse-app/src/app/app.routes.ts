@@ -231,6 +231,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/prescriptions/sngpc-dashboard.component').then(m => m.SNGPCDashboardComponent),
     canActivate: [authGuard]
   },
+  { 
+    path: 'consultation-forms/custom-fields', 
+    loadComponent: () => import('./pages/consultation-forms/custom-fields-management.component').then(m => m.CustomFieldsManagementComponent),
+    canActivate: [authGuard]
+  },
   
   // TISS/TUSS routes
   { 
