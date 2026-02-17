@@ -93,8 +93,9 @@
 
           <mat-card-actions>
             <button mat-button 
-                    *ngIf="module.isEnabled && module.requiresConfiguration"
-                    (click)="openConfigDialog(module)">
+                    *ngIf="module.isEnabled && !module.isCore"
+                    (click)="openConfigDialog(module)"
+                    [class.highlight]="module.requiresConfiguration">
               <mat-icon>settings</mat-icon>
               Configurar
             </button>

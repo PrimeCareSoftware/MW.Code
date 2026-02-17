@@ -263,6 +263,16 @@
               mat-icon {
                 margin-right: 4px;
               }
+
+              &.highlight {
+                background-color: #fff3e0;
+                color: #f57c00;
+                font-weight: 500;
+
+                &:hover {
+                  background-color: #ffe0b2;
+                }
+              }
             }
           }
         }

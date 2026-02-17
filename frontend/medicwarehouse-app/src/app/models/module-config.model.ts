@@ -26,7 +26,7 @@ export interface ModuleConfig {
   requiredModules: string[];
   configuration?: string;
   updatedAt?: Date;
-  requiresConfiguration: boolean;
+  requiresConfiguration?: boolean;
   configurationType?: string;
   configurationExample?: string;
   configurationHelp?: string;
