@@ -252,7 +252,17 @@ Adicione:
 
 BACKUP_DIR="/var/backups/primecare"
 DATE=$(date +%Y%m%d_%H%M%S)
-ENCRYPTION_KEY="SuaChaveDeBackup123!"  # MUDAR ISSO!
+
+# IMPORTANTE: NUNCA deixe a chave no script!
+# Crie um arquivo protegido: /root/.backup_key
+# Exemplo: echo "MinhaChaveSuperSegura123!" > /root/.backup_key && chmod 600 /root/.backup_key
+if [ ! -f /root/.backup_key ]; then
+  echo "ERRO: Arquivo /root/.backup_key não encontrado!"
+  echo "Crie o arquivo com: echo 'SuaChaveForte' > /root/.backup_key && chmod 600 /root/.backup_key"
+  exit 1
+fi
+
+ENCRYPTION_KEY=$(cat /root/.backup_key)
 
 # Criar diretório
 mkdir -p $BACKUP_DIR
