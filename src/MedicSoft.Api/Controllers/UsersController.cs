@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Helpers;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
@@ -22,18 +23,24 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IClinicSelectionService _clinicSelectionService;
+        private readonly IAccessProfileService _accessProfileService;
+        private readonly ILogger<UsersController> _logger;
 
         public UsersController(
             ITenantContext tenantContext,
             IUserService userService,
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
-            IClinicSelectionService clinicSelectionService) : base(tenantContext)
+            IClinicSelectionService clinicSelectionService,
+            IAccessProfileService accessProfileService,
+            ILogger<UsersController> logger) : base(tenantContext)
         {
             _userService = userService;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _clinicSelectionService = clinicSelectionService;
+            _accessProfileService = accessProfileService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -96,6 +103,7 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Create new user (requires users.create permission)
         /// ClinicOwner can manage users in their clinic
+        /// Supports both role-based (legacy) and profile-based (new) user creation
         /// </summary>
         [HttpPost]
         [RequirePermissionKey(PermissionKeys.UsersCreate)]
@@ -121,9 +129,46 @@ namespace MedicSoft.Api.Controllers
                 if (currentUserCount >= plan.MaxUsers)
                     return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
 
-                // Parse role
-                if (!Enum.TryParse<UserRole>(request.Role, out var role))
-                    return BadRequest(new { message = "Invalid role" });
+                // Determine if using profile-based or role-based creation
+                UserRole role;
+                Guid? profileIdToAssign = null;
+
+                if (request.ProfileId.HasValue)
+                {
+                    // Profile-based creation (new system)
+                    var profile = await _accessProfileService.GetByIdAsync(request.ProfileId.Value, tenantId);
+                    if (profile == null)
+                    {
+                        return BadRequest(new { message = "Invalid profile ID" });
+                    }
+
+                    // Verify profile belongs to this clinic
+                    if (profile.ClinicId != clinicId)
+                    {
+                        return BadRequest(new { message = "Profile does not belong to this clinic" });
+                    }
+
+                    // Map profile name to a UserRole for backward compatibility
+                    role = ProfileMappingHelper.MapProfileNameToRole(profile.Name, _logger);
+                    profileIdToAssign = request.ProfileId.Value;
+                }
+                else
+                {
+                    // Role-based creation (legacy system)
+                    if (!Enum.TryParse<UserRole>(request.Role, true, out role))
+                    {
+                        var allowedRoles = ProfileMappingHelper.GetAllowedRolesForCreation();
+                        return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", allowedRoles)}" });
+                    }
+
+                    // Prevent creation of SystemAdmin through this endpoint
+                    if (role == UserRole.SystemAdmin)
+                    {
+                        return BadRequest(new { message = "SystemAdmin users cannot be created through this endpoint" });
+                    }
+
+                    _logger.LogInformation("Creating user with role-based system. Role: {Role}", role);
+                }
 
                 var user = await _userService.CreateUserAsync(
                     request.Username,
@@ -138,6 +183,12 @@ namespace MedicSoft.Api.Controllers
                     request.Specialty,
                     request.ShowInAppointmentScheduling
                 );
+
+                // If using profile-based creation, assign the profile to the user
+                if (profileIdToAssign.HasValue)
+                {
+                    await _accessProfileService.AssignProfileToUserAsync(user.Id, profileIdToAssign.Value, tenantId);
+                }
 
                 return CreatedAtAction(nameof(GetUser), new { id = user.Id }, new UserDto
                 {
@@ -529,9 +580,10 @@ namespace MedicSoft.Api.Controllers
         public string FullName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public string? ProfessionalId { get; set; }
+        public string? ProfessionalId { get; set; } // CRM, CRP, CRN, CRO, CREFITO, COREN, etc.
         public string? Specialty { get; set; }
         public bool ShowInAppointmentScheduling { get; set; } = true;
+        public Guid? ProfileId { get; set; } // Optional: New profile-based system
     }
 
     public class UpdateUserRequest

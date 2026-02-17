@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Helpers;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
@@ -28,6 +29,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<ClinicAdminController> _logger;
         private readonly BusinessConfigurationService _businessConfigService;
+        private readonly IAccessProfileService _accessProfileService;
 
         public ClinicAdminController(
             IClinicRepository clinicRepository,
@@ -39,7 +41,8 @@ namespace MedicSoft.Api.Controllers
             IPasswordHasher passwordHasher,
             ILogger<ClinicAdminController> logger,
             ITenantContext tenantContext,
-            BusinessConfigurationService businessConfigService)
+            BusinessConfigurationService businessConfigService,
+            IAccessProfileService accessProfileService)
             : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
@@ -51,6 +54,7 @@ namespace MedicSoft.Api.Controllers
             _passwordHasher = passwordHasher;
             _logger = logger;
             _businessConfigService = businessConfigService;
+            _accessProfileService = accessProfileService;
         }
 
         /// <summary>
@@ -339,6 +343,7 @@ namespace MedicSoft.Api.Controllers
         /// <summary>
         /// Create a new user in the clinic (owner only)
         /// Note: User is created for the clinic in the current tenant context
+        /// Supports both role-based (legacy) and profile-based (new) user creation
         /// </summary>
         [HttpPost("users")]
         [RequirePermissionKey(PermissionKeys.UsersCreate)]
@@ -382,12 +387,52 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { message = $"User limit reached. Current plan allows {plan.MaxUsers} users. Please upgrade your plan." });
                 }
 
-                // Parse role
-                if (!Enum.TryParse<UserRole>(request.Role, out var role))
+                // Determine if using profile-based or role-based creation
+                UserRole role;
+                Guid? profileIdToAssign = null;
+
+                if (request.ProfileId.HasValue)
                 {
-                    return BadRequest(new { message = "Invalid role" });
+                    // Profile-based creation (new system)
+                    var profile = await _accessProfileService.GetByIdAsync(request.ProfileId.Value, tenantId);
+                    if (profile == null)
+                    {
+                        return BadRequest(new { message = "Invalid profile ID" });
+                    }
+
+                    // Verify profile belongs to this clinic
+                    if (profile.ClinicId != clinicId)
+                    {
+                        return BadRequest(new { message = "Profile does not belong to this clinic" });
+                    }
+
+                    // Map profile name to a UserRole for backward compatibility
+                    // This ensures the user has a valid role enum value
+                    role = ProfileMappingHelper.MapProfileNameToRole(profile.Name, _logger);
+                    profileIdToAssign = request.ProfileId.Value;
+
+                    _logger.LogInformation("Creating user with profile-based system. Profile: {ProfileId}, MappedRole: {Role}", 
+                        request.ProfileId.Value, role);
+                }
+                else
+                {
+                    // Role-based creation (legacy system)
+                    if (!Enum.TryParse<UserRole>(request.Role, true, out role))
+                    {
+                        var allowedRoles = ProfileMappingHelper.GetAllowedRolesForCreation();
+                        return BadRequest(new { message = $"Invalid role: {request.Role}. Valid roles are: {string.Join(", ", allowedRoles)}" });
+                    }
+
+                    // Prevent creation of SystemAdmin through this endpoint
+                    if (role == UserRole.SystemAdmin)
+                    {
+                        return BadRequest(new { message = "SystemAdmin users cannot be created through this endpoint" });
+                    }
+
+                    _logger.LogInformation("Creating user with role-based system. Role: {Role}", role);
                 }
 
+                // Create the user with the determined role
                 var user = await _userService.CreateUserAsync(
                     request.Username,
                     request.Email,
@@ -396,8 +441,17 @@ namespace MedicSoft.Api.Controllers
                     request.Phone ?? "",
                     role,
                     tenantId,
-                    clinicId
+                    clinicId,
+                    request.ProfessionalId,
+                    request.Specialty
                 );
+
+                // If using profile-based creation, assign the profile to the user
+                if (profileIdToAssign.HasValue)
+                {
+                    await _accessProfileService.AssignProfileToUserAsync(user.Id, profileIdToAssign.Value, tenantId);
+                    _logger.LogInformation("Profile {ProfileId} assigned to user {UserId}", profileIdToAssign.Value, user.Id);
+                }
 
                 _logger.LogInformation("User created in clinic: {UserId} in {ClinicId}", user.Id, clinicId);
 
@@ -409,7 +463,10 @@ namespace MedicSoft.Api.Controllers
                     Email = user.Email,
                     Role = user.Role.ToString(),
                     IsActive = user.IsActive,
-                    CreatedAt = user.CreatedAt
+                    CreatedAt = user.CreatedAt,
+                    ProfessionalId = user.ProfessionalId,
+                    Specialty = user.Specialty,
+                    ProfileId = profileIdToAssign
                 });
             }
             catch (InvalidOperationException ex)
