@@ -5,6 +5,7 @@ using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.ValueObjects;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Application.Services
 {
@@ -12,13 +13,19 @@ namespace MedicSoft.Application.Services
     {
         private readonly IBusinessConfigurationRepository _repository;
         private readonly IClinicRepository _clinicRepository;
+        private readonly ILogger<BusinessConfigurationService> _logger;
+        
+        // Default number of rooms when MultiRoom is enabled
+        private const int DefaultMultiRoomCount = 2;
         
         public BusinessConfigurationService(
             IBusinessConfigurationRepository repository,
-            IClinicRepository clinicRepository)
+            IClinicRepository clinicRepository,
+            ILogger<BusinessConfigurationService> logger)
         {
             _repository = repository;
             _clinicRepository = clinicRepository;
+            _logger = logger;
         }
         
         public async Task<BusinessConfiguration?> GetByClinicIdAsync(Guid clinicId, string tenantId)
@@ -76,6 +83,39 @@ namespace MedicSoft.Application.Services
             
             config.UpdateFeature(featureName, enabled);
             await _repository.UpdateAsync(config);
+            
+            // Sync relevant features with Clinic entity
+            await SyncFeatureWithClinicAsync(config.ClinicId, featureName, enabled, tenantId);
+        }
+        
+        /// <summary>
+        /// Syncs specific business configuration features with corresponding Clinic properties
+        /// </summary>
+        private async Task SyncFeatureWithClinicAsync(Guid clinicId, string featureName, bool enabled, string tenantId)
+        {
+            var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+            if (clinic == null)
+            {
+                _logger.LogWarning("Cannot sync feature {FeatureName} to clinic {ClinicId}: Clinic not found", featureName, clinicId);
+                return;
+            }
+            
+            switch (featureName)
+            {
+                case "OnlineBooking":
+                    // Sync OnlineBooking with EnableOnlineAppointmentScheduling
+                    clinic.UpdateOnlineSchedulingSetting(enabled);
+                    await _clinicRepository.UpdateAsync(clinic);
+                    break;
+                    
+                case "MultiRoom":
+                    // Sync MultiRoom with NumberOfRooms
+                    // MultiRoom=true means multiple rooms (default to DefaultMultiRoomCount), false means 1 room
+                    var numberOfRooms = enabled ? Math.Max(DefaultMultiRoomCount, clinic.NumberOfRooms) : 1;
+                    clinic.UpdateNumberOfRooms(numberOfRooms);
+                    await _clinicRepository.UpdateAsync(clinic);
+                    break;
+            }
         }
         
         public async Task<bool> IsFeatureEnabledAsync(Guid clinicId, string featureName, string tenantId)
@@ -97,6 +137,42 @@ namespace MedicSoft.Application.Services
             }
             
             return TerminologyMap.For(config.PrimarySpecialty).ToDictionary();
+        }
+        
+        /// <summary>
+        /// Syncs Clinic properties to BusinessConfiguration
+        /// Called when clinic operational settings change
+        /// </summary>
+        public async Task SyncClinicPropertiesToBusinessConfigAsync(Guid clinicId, string tenantId)
+        {
+            var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
+            if (clinic == null)
+            {
+                _logger.LogWarning("Cannot sync clinic {ClinicId} properties to business config: Clinic not found", clinicId);
+                return;
+            }
+            
+            var config = await _repository.GetByClinicIdAsync(clinicId, tenantId);
+            if (config == null)
+            {
+                _logger.LogWarning("Cannot sync clinic {ClinicId} properties to business config: Business configuration not found", clinicId);
+                return;
+            }
+            
+            // Sync EnableOnlineAppointmentScheduling -> OnlineBooking
+            if (config.OnlineBooking != clinic.EnableOnlineAppointmentScheduling)
+            {
+                config.UpdateFeature("OnlineBooking", clinic.EnableOnlineAppointmentScheduling);
+            }
+            
+            // Sync NumberOfRooms -> MultiRoom (>1 rooms = true, 1 room = false)
+            var shouldHaveMultiRoom = clinic.NumberOfRooms > 1;
+            if (config.MultiRoom != shouldHaveMultiRoom)
+            {
+                config.UpdateFeature("MultiRoom", shouldHaveMultiRoom);
+            }
+            
+            await _repository.UpdateAsync(config);
         }
     }
 }

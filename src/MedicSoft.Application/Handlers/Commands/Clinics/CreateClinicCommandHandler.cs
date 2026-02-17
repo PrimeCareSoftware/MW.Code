@@ -2,9 +2,11 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.Clinics;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Enums;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Application.Handlers.Commands.Clinics
 {
@@ -15,7 +17,9 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
         private readonly IClinicSubscriptionRepository _subscriptionRepository;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
+        private readonly BusinessConfigurationService _businessConfigService;
         private readonly IMapper _mapper;
+        private readonly ILogger<CreateClinicCommandHandler> _logger;
 
         public CreateClinicCommandHandler(
             IClinicRepository clinicRepository,
@@ -23,14 +27,18 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
             IBusinessConfigurationRepository businessConfigurationRepository,
-            IMapper mapper)
+            BusinessConfigurationService businessConfigService,
+            IMapper mapper,
+            ILogger<CreateClinicCommandHandler> logger)
         {
             _clinicRepository = clinicRepository;
             _ownerClinicLinkRepository = ownerClinicLinkRepository;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _businessConfigurationRepository = businessConfigurationRepository;
+            _businessConfigService = businessConfigService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<ClinicDto> Handle(CreateClinicCommand request, CancellationToken cancellationToken)
@@ -100,7 +108,19 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
                 primarySpecialty,
                 request.TenantId
             );
+            
             await _businessConfigurationRepository.AddAsync(businessConfig);
+            
+            // Sync initial clinic properties to business configuration
+            try
+            {
+                await _businessConfigService.SyncClinicPropertiesToBusinessConfigAsync(createdClinic.Id, request.TenantId);
+            }
+            catch (Exception ex)
+            {
+                // Log but don't fail clinic creation if business config sync fails
+                _logger.LogWarning(ex, "Failed to sync initial clinic properties to business configuration for clinic {ClinicId}", createdClinic.Id);
+            }
 
             return _mapper.Map<ClinicDto>(createdClinic);
         }

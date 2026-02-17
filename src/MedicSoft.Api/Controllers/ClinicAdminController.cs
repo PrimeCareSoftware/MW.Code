@@ -27,6 +27,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IUserService _userService;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<ClinicAdminController> _logger;
+        private readonly BusinessConfigurationService _businessConfigService;
 
         public ClinicAdminController(
             IClinicRepository clinicRepository,
@@ -37,7 +38,8 @@ namespace MedicSoft.Api.Controllers
             IUserService userService,
             IPasswordHasher passwordHasher,
             ILogger<ClinicAdminController> logger,
-            ITenantContext tenantContext)
+            ITenantContext tenantContext,
+            BusinessConfigurationService businessConfigService)
             : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
@@ -48,6 +50,7 @@ namespace MedicSoft.Api.Controllers
             _userService = userService;
             _passwordHasher = passwordHasher;
             _logger = logger;
+            _businessConfigService = businessConfigService;
         }
 
         /// <summary>
@@ -166,6 +169,17 @@ namespace MedicSoft.Api.Controllers
                 }
 
                 await _clinicRepository.UpdateAsync(clinic);
+                
+                // Sync relevant properties with BusinessConfiguration
+                try
+                {
+                    await _businessConfigService.SyncClinicPropertiesToBusinessConfigAsync(clinicId, tenantId);
+                }
+                catch (Exception ex)
+                {
+                    // Log but don't fail the clinic update if business config sync fails
+                    _logger.LogWarning(ex, "Failed to sync clinic properties to business configuration for clinic {ClinicId}", clinicId);
+                }
 
                 _logger.LogInformation("Clinic information updated: {ClinicId}", clinic.Id);
 

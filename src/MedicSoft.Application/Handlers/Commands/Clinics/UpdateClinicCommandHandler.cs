@@ -2,7 +2,9 @@ using AutoMapper;
 using MediatR;
 using MedicSoft.Application.Commands.Clinics;
 using MedicSoft.Application.DTOs;
+using MedicSoft.Application.Services;
 using MedicSoft.Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Application.Handlers.Commands.Clinics
 {
@@ -10,11 +12,19 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
     {
         private readonly IClinicRepository _clinicRepository;
         private readonly IMapper _mapper;
+        private readonly BusinessConfigurationService _businessConfigService;
+        private readonly ILogger<UpdateClinicCommandHandler> _logger;
 
-        public UpdateClinicCommandHandler(IClinicRepository clinicRepository, IMapper mapper)
+        public UpdateClinicCommandHandler(
+            IClinicRepository clinicRepository, 
+            IMapper mapper,
+            BusinessConfigurationService businessConfigService,
+            ILogger<UpdateClinicCommandHandler> logger)
         {
             _clinicRepository = clinicRepository;
             _mapper = mapper;
+            _businessConfigService = businessConfigService;
+            _logger = logger;
         }
 
         public async Task<ClinicDto> Handle(UpdateClinicCommand request, CancellationToken cancellationToken)
@@ -53,6 +63,17 @@ namespace MedicSoft.Application.Handlers.Commands.Clinics
             }
 
             await _clinicRepository.UpdateAsync(clinic);
+            
+            // Sync relevant properties with BusinessConfiguration
+            try
+            {
+                await _businessConfigService.SyncClinicPropertiesToBusinessConfigAsync(request.ClinicId, request.TenantId);
+            }
+            catch (Exception ex)
+            {
+                // Log but don't fail the clinic update if business config sync fails
+                _logger.LogWarning(ex, "Failed to sync clinic properties to business configuration for clinic {ClinicId}", request.ClinicId);
+            }
 
             return _mapper.Map<ClinicDto>(clinic);
         }
