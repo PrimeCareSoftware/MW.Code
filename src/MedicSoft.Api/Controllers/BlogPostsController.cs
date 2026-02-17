@@ -12,6 +12,7 @@ namespace MedicSoft.Api.Controllers
     public class BlogPostsController : BaseController
     {
         private readonly IBlogPostRepository _blogPostRepository;
+        private const string SystemTenantId = "system";
 
         public BlogPostsController(IBlogPostRepository blogPostRepository, ITenantContext tenantContext)
             : base(tenantContext)
@@ -312,7 +313,7 @@ namespace MedicSoft.Api.Controllers
             if (blogPost == null)
                 return NotFound(new { message = "Post não encontrado" });
 
-            await _blogPostRepository.DeleteAsync(id, "system");
+            await _blogPostRepository.DeleteAsync(id, SystemTenantId);
             await _blogPostRepository.SaveChangesAsync();
 
             return Ok(new { message = "Post excluído com sucesso" });
