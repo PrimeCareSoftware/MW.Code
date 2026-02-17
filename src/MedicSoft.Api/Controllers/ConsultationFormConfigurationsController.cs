@@ -46,7 +46,7 @@ namespace MedicSoft.Api.Controllers
                 var hasAccess = await _userClinicLinkRepository.UserHasAccessToClinicAsync(userId, clinicId, GetTenantId());
                 if (!hasAccess)
                 {
-                    return Forbid("You do not have access to this clinic's consultation forms");
+                    return StatusCode(403, new { message = "You do not have access to this clinic's consultation forms" });
                 }
 
                 var configuration = await _formConfigService.GetActiveConfigurationByClinicIdAsync(clinicId, GetTenantId());
@@ -104,7 +104,7 @@ namespace MedicSoft.Api.Controllers
                 var hasAccess = await _userClinicLinkRepository.UserHasAccessToClinicAsync(userId, createDto.ClinicId, GetTenantId());
                 if (!hasAccess)
                 {
-                    return Forbid("You do not have access to create configurations for this clinic");
+                    return StatusCode(403, new { message = "You do not have access to create configurations for this clinic" });
                 }
 
                 var configuration = await _formConfigService.CreateConfigurationAsync(createDto, GetTenantId());
@@ -138,7 +138,7 @@ namespace MedicSoft.Api.Controllers
                 var hasAccess = await _userClinicLinkRepository.UserHasAccessToClinicAsync(userId, request.ClinicId, GetTenantId());
                 if (!hasAccess)
                 {
-                    return Forbid("You do not have access to create configurations for this clinic");
+                    return StatusCode(403, new { message = "You do not have access to create configurations for this clinic" });
                 }
 
                 var configuration = await _formConfigService.CreateConfigurationFromProfileAsync(

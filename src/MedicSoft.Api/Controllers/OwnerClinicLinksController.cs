@@ -221,7 +221,7 @@ namespace MedicSoft.Api.Controllers
 
                 // Verify current owner has access to clinic
                 if (!await _linkService.HasAccessToClinicAsync(currentOwnerId, clinicId))
-                    return Forbid("You don't have access to this clinic");
+                    return StatusCode(403, new { message = "You don't have access to this clinic" });
 
                 await _linkService.TransferPrimaryOwnershipAsync(clinicId, currentOwnerId, dto.NewPrimaryOwnerId);
                 return Ok(new { message = "Ownership transferred successfully" });
