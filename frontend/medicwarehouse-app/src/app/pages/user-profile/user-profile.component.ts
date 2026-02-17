@@ -204,4 +204,29 @@ export class UserProfileComponent implements OnInit {
       return { label: 'Forte', class: 'strong', width: '100%' };
     }
   }
+
+  hasMinLength(): boolean {
+    const password = this.passwordForm.get('newPassword')?.value || '';
+    return password.length >= 8;
+  }
+
+  hasUpperCase(): boolean {
+    const password = this.passwordForm.get('newPassword')?.value || '';
+    return /[A-Z]/.test(password);
+  }
+
+  hasLowerCase(): boolean {
+    const password = this.passwordForm.get('newPassword')?.value || '';
+    return /[a-z]/.test(password);
+  }
+
+  hasNumber(): boolean {
+    const password = this.passwordForm.get('newPassword')?.value || '';
+    return /[0-9]/.test(password);
+  }
+
+  hasSpecialChar(): boolean {
+    const password = this.passwordForm.get('newPassword')?.value || '';
+    return /[^a-zA-Z0-9]/.test(password);
+  }
 }
