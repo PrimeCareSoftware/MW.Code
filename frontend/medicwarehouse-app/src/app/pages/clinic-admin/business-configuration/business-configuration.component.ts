@@ -274,11 +274,11 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   private normalizeBusinessType(type: BusinessType | string): BusinessType {
-    return typeof type === 'string' ? (BusinessType[type as keyof typeof BusinessType] as BusinessType) : type;
+    return typeof type === 'string' ? (BusinessType[type as keyof typeof BusinessType] as BusinessType) ?? BusinessType.SmallClinic : type;
   }
 
   private normalizePrimarySpecialty(specialty: ProfessionalSpecialty | string): ProfessionalSpecialty {
-    return typeof specialty === 'string' ? (ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] as ProfessionalSpecialty) : specialty;
+    return typeof specialty === 'string' ? (ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] as ProfessionalSpecialty) ?? ProfessionalSpecialty.Medico : specialty;
   }
 
   /**
