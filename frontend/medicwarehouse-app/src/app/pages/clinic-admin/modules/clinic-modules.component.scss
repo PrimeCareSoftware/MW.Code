@@ -181,6 +181,24 @@
             }
           }
 
+          .config-required {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 8px;
+            background-color: #fff3e0;
+            border-radius: 4px;
+            font-size: 13px;
+
+            .info-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+              color: #f57c00;
+            }
+          }
+
           .status-indicators {
             margin-top: 12px;
             display: flex;
@@ -244,6 +262,16 @@
             button {
               mat-icon {
                 margin-right: 4px;
+              }
+
+              &.highlight {
+                background-color: #fff3e0;
+                color: #f57c00;
+                font-weight: 500;
+
+                &:hover {
+                  background-color: #ffe0b2;
+                }
               }
             }
           }

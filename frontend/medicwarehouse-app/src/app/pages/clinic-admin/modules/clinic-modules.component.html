@@ -71,6 +71,12 @@
               <span>Requer: {{ module.requiredModules.join(', ') }}</span>
             </div>
 
+            <!-- Configuration Required -->
+            <div *ngIf="module.requiresConfiguration && module.isEnabled" class="config-required">
+              <mat-icon class="info-icon">settings</mat-icon>
+              <span>Requer configuração adicional</span>
+            </div>
+
             <!-- Status Indicators -->
             <div class="status-indicators">
               <mat-chip *ngIf="module.isEnabled" class="status-chip enabled">
@@ -88,7 +94,8 @@
           <mat-card-actions>
             <button mat-button 
                     *ngIf="module.isEnabled && !module.isCore"
-                    (click)="openConfigDialog(module)">
+                    (click)="openConfigDialog(module)"
+                    [class.highlight]="module.requiresConfiguration">
               <mat-icon>settings</mat-icon>
               Configurar
             </button>
