@@ -105,17 +105,11 @@ export class BusinessConfigManagement implements OnInit {
   }
 
   private normalizeBusinessType(type: BusinessType | string): BusinessType {
-    if (typeof type === 'string') {
-      return (BusinessType[type as keyof typeof BusinessType] as BusinessType) ?? BusinessType.SmallClinic;
-    }
-    return type;
+    return typeof type === 'string' ? (BusinessType[type as keyof typeof BusinessType] as BusinessType) ?? BusinessType.SmallClinic : type;
   }
 
   private normalizePrimarySpecialty(specialty: ProfessionalSpecialty | string): ProfessionalSpecialty {
-    if (typeof specialty === 'string') {
-      return (ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] as ProfessionalSpecialty) ?? ProfessionalSpecialty.Medico;
-    }
-    return specialty;
+    return typeof specialty === 'string' ? (ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] as ProfessionalSpecialty) ?? ProfessionalSpecialty.Medico : specialty;
   }
 
   updateBusinessType(newType: BusinessType): void {
