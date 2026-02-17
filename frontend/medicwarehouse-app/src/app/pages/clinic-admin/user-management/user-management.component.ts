@@ -132,14 +132,41 @@ export class UserManagementComponent implements OnInit {
     this.isLoadingProfiles.set(true);
     this.accessProfileService.getProfiles().subscribe({
       next: (profiles) => {
+        console.log(`✅ Successfully loaded ${profiles.length} access profiles:`, profiles.map(p => p.name).join(', '));
         this.availableProfiles.set(profiles);
         this.isLoadingProfiles.set(false);
+        
+        // Show success message if we loaded profiles
+        if (profiles.length > 0) {
+          console.info(`📋 Available profiles for selection: ${profiles.length} (${profiles.filter(p => p.isDefault).length} default, ${profiles.filter(p => !p.isDefault).length} custom)`);
+        } else {
+          console.warn('⚠️ No profiles returned from API - this is unusual and may indicate a configuration issue');
+          this.errorMessage.set('Aviso: Nenhum perfil foi encontrado. Usando perfis básicos como alternativa.');
+        }
       },
       error: (error) => {
-        console.error('Error loading access profiles:', error);
+        console.error('❌ Error loading access profiles:', error);
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          url: error.url
+        });
         this.isLoadingProfiles.set(false);
+        
+        // Show user-friendly error message based on error type
+        if (error.status === 403) {
+          this.errorMessage.set('Erro: Você não tem permissão para visualizar os perfis. Apenas proprietários podem gerenciar perfis.');
+        } else if (error.status === 401) {
+          this.errorMessage.set('Erro: Sua sessão expirou. Por favor, faça login novamente.');
+        } else if (error.status === 0) {
+          this.errorMessage.set('Erro: Não foi possível conectar ao servidor. Verifique sua conexão com a internet.');
+        } else {
+          this.errorMessage.set(`Erro ao carregar perfis: ${error.error?.message || error.message || 'Erro desconhecido'}. Usando perfis básicos como alternativa.`);
+        }
+        
         // Fall back to legacy roles if profile loading fails
-        console.warn('Falling back to legacy role-based system');
+        console.warn('⚠️ Falling back to legacy role-based system due to error');
       }
     });
   }
