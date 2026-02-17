@@ -51,6 +51,18 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddHttpClient(); // Add HttpClient factory for microservice proxying
+builder.Services.AddHttpClient("Telemedicine")
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler();
+        var allowInvalidSsl = builder.Configuration.GetValue<bool>("Microservices:AllowInvalidSsl");
+        if (allowInvalidSsl && builder.Environment.IsDevelopment())
+        {
+            handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+        }
+
+        return handler;
+    });
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = builder.Environment.IsDevelopment();

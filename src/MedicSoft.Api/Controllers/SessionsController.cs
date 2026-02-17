@@ -70,7 +70,7 @@ namespace MedicSoft.Api.Controllers
             try
             {
                 var telemedicineUrl = GetTelemedicineUrl();
-                using var httpClient = _httpClientFactory.CreateClient();
+                using var httpClient = _httpClientFactory.CreateClient("Telemedicine");
                 ConfigureHttpClientHeaders(httpClient);
 
                 var url = $"{telemedicineUrl}{endpoint}";
