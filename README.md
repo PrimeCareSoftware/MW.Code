@@ -1527,6 +1527,15 @@ Para detalhes completos sobre segurança, autenticação e melhores práticas:
   - Arquitetura completa com subdomínios
   - R$ 40-75/mês
 
+- **[PRODUCAO_HOSTINGER_GUIDE.md](PRODUCAO_HOSTINGER_GUIDE.md)** - 🏭 **Deploy em Produção (SEM Portal do Paciente)** 🆕🔥
+  - Guia especializado para Hostinger KVM 2
+  - **EXCLUÍ Portal do Paciente** (API + Frontend)
+  - Configuração de subdomínios no painel Hostinger
+  - Segurança máxima para dados sensíveis (LGPD/HIPAA)
+  - Docker Compose específico para produção
+  - Checklist completo de segurança
+  - R$ 40/mês
+
 - **[MIGRACAO_POSTGRESQL.md](system-admin/infrastructure/MIGRACAO_POSTGRESQL.md)** - 🔄 **Economize 90%+ em Banco**
   - Migração SQL Server → PostgreSQL
   - Guia técnico completo
