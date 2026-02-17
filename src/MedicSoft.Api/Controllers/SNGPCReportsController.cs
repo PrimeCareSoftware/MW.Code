@@ -77,31 +77,40 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get report by ID
+        /// Get most recent report
         /// </summary>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SNGPCReportDto>> GetById(Guid id)
+        [HttpGet("latest")]
+        public async Task<ActionResult<SNGPCReportDto>> GetLatest()
         {
-            var report = await _reportRepository.GetByIdAsync(id, GetTenantId());
+            var report = await _reportRepository.GetMostRecentReportAsync(GetTenantId());
 
             if (report == null)
-                return NotFound($"Report {id} not found");
+                return NotFound("No reports found");
 
             return Ok(_mapper.Map<SNGPCReportDto>(report));
         }
 
         /// <summary>
-        /// Get report by month and year
+        /// Get overdue reports (not transmitted past deadline)
         /// </summary>
-        [HttpGet("{year}/{month}")]
-        public async Task<ActionResult<SNGPCReportDto>> GetByMonthYear(int year, int month)
+        [HttpGet("overdue")]
+        public async Task<ActionResult<IEnumerable<SNGPCReportDto>>> GetOverdue()
         {
-            var report = await _reportRepository.GetByMonthYearAsync(month, year, GetTenantId());
+            var reports = await _reportRepository.GetOverdueReportsAsync(GetTenantId());
+            return Ok(_mapper.Map<IEnumerable<SNGPCReportDto>>(reports));
+        }
 
-            if (report == null)
-                return NotFound($"Report for {month}/{year} not found");
+        /// <summary>
+        /// Get transmission history (last N reports)
+        /// </summary>
+        [HttpGet("history")]
+        public async Task<ActionResult<IEnumerable<SNGPCReportDto>>> GetHistory([FromQuery] int count = 12)
+        {
+            if (count <= 0 || count > 100)
+                return BadRequest("Count must be between 1 and 100");
 
-            return Ok(_mapper.Map<SNGPCReportDto>(report));
+            var reports = await _reportRepository.GetTransmissionHistoryAsync(count, GetTenantId());
+            return Ok(_mapper.Map<IEnumerable<SNGPCReportDto>>(reports));
         }
 
         /// <summary>
@@ -128,40 +137,31 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get overdue reports (not transmitted past deadline)
+        /// Get report by month and year
         /// </summary>
-        [HttpGet("overdue")]
-        public async Task<ActionResult<IEnumerable<SNGPCReportDto>>> GetOverdue()
+        [HttpGet("{year}/{month}")]
+        public async Task<ActionResult<SNGPCReportDto>> GetByMonthYear(int year, int month)
         {
-            var reports = await _reportRepository.GetOverdueReportsAsync(GetTenantId());
-            return Ok(_mapper.Map<IEnumerable<SNGPCReportDto>>(reports));
-        }
-
-        /// <summary>
-        /// Get most recent report
-        /// </summary>
-        [HttpGet("latest")]
-        public async Task<ActionResult<SNGPCReportDto>> GetLatest()
-        {
-            var report = await _reportRepository.GetMostRecentReportAsync(GetTenantId());
+            var report = await _reportRepository.GetByMonthYearAsync(month, year, GetTenantId());
 
             if (report == null)
-                return NotFound("No reports found");
+                return NotFound($"Report for {month}/{year} not found");
 
             return Ok(_mapper.Map<SNGPCReportDto>(report));
         }
 
         /// <summary>
-        /// Get transmission history (last N reports)
+        /// Get report by ID
         /// </summary>
-        [HttpGet("history")]
-        public async Task<ActionResult<IEnumerable<SNGPCReportDto>>> GetHistory([FromQuery] int count = 12)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SNGPCReportDto>> GetById(Guid id)
         {
-            if (count <= 0 || count > 100)
-                return BadRequest("Count must be between 1 and 100");
+            var report = await _reportRepository.GetByIdAsync(id, GetTenantId());
 
-            var reports = await _reportRepository.GetTransmissionHistoryAsync(count, GetTenantId());
-            return Ok(_mapper.Map<IEnumerable<SNGPCReportDto>>(reports));
+            if (report == null)
+                return NotFound($"Report {id} not found");
+
+            return Ok(_mapper.Map<SNGPCReportDto>(report));
         }
 
         /// <summary>
