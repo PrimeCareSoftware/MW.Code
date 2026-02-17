@@ -11,6 +11,8 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
     /// <summary>
     /// Handler para criar um agendamento público (sem autenticação).
     /// Cria ou encontra o paciente pelo CPF e agenda a consulta na clínica solicitada.
+    /// Note: IBusinessConfigurationRepository is required (not optional) for public appointments
+    /// to ensure business rules are always validated for unauthenticated users.
     /// </summary>
     public class CreatePublicAppointmentCommandHandler : IRequestHandler<CreatePublicAppointmentCommand, PublicAppointmentResponseDto>
     {
