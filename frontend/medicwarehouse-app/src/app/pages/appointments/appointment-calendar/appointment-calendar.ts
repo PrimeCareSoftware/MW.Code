@@ -1,10 +1,10 @@
 import { Component, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels, RecurringDeleteScope, RecurringDeleteScopeLabels } from '../../../models/appointment.model';
@@ -46,6 +46,9 @@ interface CalendarSlot {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentCalendar implements OnInit, OnDestroy {
+  // Route constants for calendar navigation
+  private readonly CALENDAR_ROUTES = ['/appointments', '/appointments/calendar'];
+  
   currentWeekStart = signal<Date>(this.getWeekStart(new Date()));
   weekDays = signal<DayColumn[]>([]);
   timeSlots = signal<TimeSlot[]>([]);
@@ -58,6 +61,12 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   
   // Subject for debounced filter changes
   private filterChange$ = new Subject<{ date?: Date; professionalId?: string | null }>();
+  
+  // Subscription for router events (for cleanup)
+  private routerSubscription?: Subscription;
+  
+  // Track if initial load has completed to avoid duplicate loading
+  private initialLoadComplete = false;
   
   // Clinic ID will be retrieved from authenticated user
   clinicId: string | null = null;
@@ -108,11 +117,68 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       }
     });
     
-    this.loadWeekAppointments();
+    // Listen for navigation events to reload data when returning to calendar
+    // This fixes the issue where new appointments don't appear without F5
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      filter((event: NavigationEnd) => this.CALENDAR_ROUTES.includes(event.url))
+    ).subscribe(() => {
+      // Skip reload on initial navigation (first load)
+      if (this.initialLoadComplete) {
+        this.loadWeekAppointments();
+      }
+    });
+    
+    this.loadWeekAppointments().then(() => {
+      this.initialLoadComplete = true;
+    });
   }
 
   ngOnDestroy(): void {
     this.filterChange$.complete();
+    // Cleanup router subscription to prevent memory leaks
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  /**
+   * Parse ISO date string (YYYY-MM-DD) as local date without timezone conversion.
+   * Fixes the d-1 bug where new Date('2024-01-15') interprets as UTC and converts to local timezone.
+   */
+  private parseLocalDate(dateString: string): Date {
+    // Validate date string format
+    if (!dateString || typeof dateString !== 'string') {
+      console.warn('Invalid date string provided to parseLocalDate:', dateString);
+      return new Date(); // Fallback to current date
+    }
+    
+    const parts = dateString.split('-');
+    if (parts.length !== 3) {
+      console.warn('Date string is not in YYYY-MM-DD format:', dateString);
+      return new Date(); // Fallback to current date
+    }
+    
+    const [year, month, day] = parts.map(Number);
+    
+    // Validate parsed values
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+      console.warn('Date string contains non-numeric values:', dateString);
+      return new Date(); // Fallback to current date
+    }
+    
+    return new Date(year, month - 1, day);
+  }
+
+  /**
+   * Format a Date object to YYYY-MM-DD string using local timezone.
+   * Avoids timezone conversion issues with toISOString().
+   */
+  private formatLocalDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   getWeekStart(date: Date): Date {
@@ -184,8 +250,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     
     try {
       // Use optimized week agenda endpoint instead of 7 separate daily requests
-      const startDateStr = weekStart.toISOString().split('T')[0];
-      const endDateStr = weekEnd.toISOString().split('T')[0];
+      const startDateStr = this.formatLocalDate(weekStart);
+      const endDateStr = this.formatLocalDate(weekEnd);
       
       const [weekAgenda, blockedSlots] = await Promise.all([
         this.appointmentService.getWeekAgenda(clinicId, startDateStr, endDateStr, doctorId || undefined).toPromise(),
@@ -205,8 +271,9 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Distribute appointments to their respective days
       if (weekAgenda && weekAgenda.appointments) {
         weekAgenda.appointments.forEach(appointment => {
-          const appointmentDate = new Date(appointment.scheduledDate);
-          appointmentDate.setHours(0, 0, 0, 0);
+          // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
+          const appointmentDate = this.parseLocalDate(appointment.scheduledDate);
+          appointmentDate.setHours(0, 0, 0, 0); // Ensure time is at midnight for comparison
           const dayIndex = days.findIndex(d => {
             const dayDate = new Date(d.date);
             dayDate.setHours(0, 0, 0, 0);
@@ -222,8 +289,9 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Update day columns with blocked slots
       if (blockedSlots) {
         blockedSlots.forEach(block => {
-          const blockDate = new Date(block.date);
-          blockDate.setHours(0, 0, 0, 0);
+          // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
+          const blockDate = this.parseLocalDate(block.date);
+          blockDate.setHours(0, 0, 0, 0); // Ensure time is at midnight for comparison
           const dayIndex = days.findIndex(d => {
             const dayDate = new Date(d.date);
             dayDate.setHours(0, 0, 0, 0);
@@ -334,7 +402,7 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     } else {
       // Show context menu or create new appointment
       // For now, just navigate to new appointment
-      const dateStr = slot.dayColumn.date.toISOString().split('T')[0];
+      const dateStr = this.formatLocalDate(slot.dayColumn.date);
       this.router.navigate(['/appointments/new'], {
         queryParams: {
           date: dateStr,

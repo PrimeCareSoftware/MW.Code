@@ -28,8 +28,8 @@ export class AppointmentService {
     return this.http.post<Appointment>(this.apiUrl, appointment)
       .pipe(
         tap(() => {
-          const dateStr = new Date(appointment.scheduledDate).toISOString().split('T')[0];
-          this.invalidateCache(appointment.clinicId, dateStr);
+          // scheduledDate is already in YYYY-MM-DD format, no need to convert
+          this.invalidateCache(appointment.clinicId, appointment.scheduledDate);
         })
       );
   }
