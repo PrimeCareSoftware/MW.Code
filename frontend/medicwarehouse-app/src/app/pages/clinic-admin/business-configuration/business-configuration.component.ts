@@ -85,6 +85,7 @@ export class BusinessConfigurationComponent implements OnInit {
     { value: ProfessionalSpecialty.Enfermeiro, label: 'Enfermeiro', icon: '💉' },
     { value: ProfessionalSpecialty.TerapeutaOcupacional, label: 'Terapeuta Ocupacional', icon: '🎨' },
     { value: ProfessionalSpecialty.Fonoaudiologo, label: 'Fonoaudiólogo', icon: '🗣️' },
+    { value: ProfessionalSpecialty.Veterinario, label: 'Veterinário', icon: '🐾' },
     { value: ProfessionalSpecialty.Outro, label: 'Outro', icon: '⚕️' }
   ];
 

@@ -20,6 +20,7 @@ namespace MedicSoft.Application.Services
             string tenantId, string? professionalId = null, string? specialty = null, bool? showInAppointmentScheduling = null);
         Task ChangeUserRoleAsync(Guid id, UserRole newRole, string tenantId);
         Task ChangeUserPasswordAsync(Guid id, string newPassword, string tenantId);
+        Task ChangePasswordAsync(Guid userId, string currentPassword, string newPassword, string tenantId);
         Task ActivateUserAsync(Guid id, string tenantId);
         Task DeactivateUserAsync(Guid id, string tenantId);
         Task<bool> UsernameExistsAsync(string username, string tenantId);
@@ -164,6 +165,27 @@ namespace MedicSoft.Application.Services
 
             var passwordHash = _passwordHasher.HashPassword(newPassword);
             user.UpdatePassword(passwordHash);
+            await _userRepository.UpdateAsync(user);
+        }
+
+        public async Task ChangePasswordAsync(Guid userId, string currentPassword, string newPassword, string tenantId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId, tenantId);
+            if (user == null)
+                throw new InvalidOperationException("Usuário não encontrado");
+
+            // Verify current password
+            if (!_passwordHasher.VerifyPassword(currentPassword, user.PasswordHash))
+                throw new UnauthorizedAccessException("Senha atual incorreta");
+
+            // Validate new password strength
+            var (isValid, errorMessage) = _passwordHasher.ValidatePasswordStrength(newPassword, 8);
+            if (!isValid)
+                throw new InvalidOperationException(errorMessage);
+
+            // Update password
+            var newPasswordHash = _passwordHasher.HashPassword(newPassword);
+            user.UpdatePassword(newPasswordHash);
             await _userRepository.UpdateAsync(user);
         }
 
