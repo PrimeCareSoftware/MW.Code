@@ -280,6 +280,20 @@ namespace MedicSoft.Application.Services
                 ClinicDetails = new List<ClinicBackfillDetail>()
             };
 
+            // Load all system consultation form profiles once to avoid repeated queries
+            var allSystemFormProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
+            
+            // Map profile names to their corresponding specialties for consultation form linking
+            var profileToSpecialtyMap = new Dictionary<string, ProfessionalSpecialty>
+            {
+                { "Médico", ProfessionalSpecialty.Medico },
+                { "Dentista", ProfessionalSpecialty.Dentista },
+                { "Nutricionista", ProfessionalSpecialty.Nutricionista },
+                { "Psicólogo", ProfessionalSpecialty.Psicologo },
+                { "Fisioterapeuta", ProfessionalSpecialty.Fisioterapeuta },
+                { "Veterinário", ProfessionalSpecialty.Veterinario }
+            };
+
             // Get all clinics in this tenant
             var clinics = await _clinicRepository.GetAllQueryable()
                 .Where(c => c.TenantId == tenantId && c.IsActive)
@@ -304,12 +318,10 @@ namespace MedicSoft.Application.Services
                     var existing = await _profileRepository.GetByNameAsync(profile.Name, clinic.Id, tenantId);
                     if (existing == null)
                     {
-                        // Link consultation form profile to professional profiles
-                        if (profile.IsProfessionalProfile())
+                        // Link consultation form profile to professional profiles based on the profile's specialty, not the clinic type
+                        if (profile.IsProfessionalProfile() && profileToSpecialtyMap.TryGetValue(profile.Name, out var specialty))
                         {
-                            var specialty = AccessProfile.GetProfessionalSpecialtyForClinicType(clinic.ClinicType);
-                            var allSystemProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
-                            var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty);
+                            var consultationFormProfile = allSystemFormProfiles.FirstOrDefault(p => p.Specialty == specialty);
                             
                             if (consultationFormProfile != null)
                             {
