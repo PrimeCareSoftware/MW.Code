@@ -460,7 +460,10 @@ namespace MedicSoft.Domain.Entities
         }
 
         /// <summary>
-        /// Gets the appropriate default profiles for a specific clinic type
+        /// Gets the appropriate default profiles for a specific clinic type.
+        /// Returns ALL professional profiles to support multi-specialty clinics and clinic expansion.
+        /// This allows clinics to assign appropriate profiles to any healthcare professional regardless of the clinic's primary type.
+        /// For example: A medical clinic can hire a nutritionist and assign the "Nutricionista" profile correctly.
         /// </summary>
         public static List<AccessProfile> GetDefaultProfilesForClinicType(string tenantId, Guid clinicId, ClinicType clinicType)
         {
@@ -469,36 +472,16 @@ namespace MedicSoft.Domain.Entities
                 // Common profiles for all clinic types
                 CreateDefaultOwnerProfile(tenantId, clinicId),
                 CreateDefaultReceptionProfile(tenantId, clinicId),
-                CreateDefaultFinancialProfile(tenantId, clinicId)
+                CreateDefaultFinancialProfile(tenantId, clinicId),
+                
+                // ALL professional profiles - clinics can hire professionals from any specialty
+                CreateDefaultMedicalProfile(tenantId, clinicId),
+                CreateDefaultDentistProfile(tenantId, clinicId),
+                CreateDefaultNutritionistProfile(tenantId, clinicId),
+                CreateDefaultPsychologistProfile(tenantId, clinicId),
+                CreateDefaultPhysicalTherapistProfile(tenantId, clinicId),
+                CreateDefaultVeterinarianProfile(tenantId, clinicId)
             };
-
-            // Add clinic-type-specific professional profile
-            switch (clinicType)
-            {
-                case ClinicType.Medical:
-                    profiles.Add(CreateDefaultMedicalProfile(tenantId, clinicId));
-                    break;
-                case ClinicType.Dental:
-                    profiles.Add(CreateDefaultDentistProfile(tenantId, clinicId));
-                    break;
-                case ClinicType.Nutritionist:
-                    profiles.Add(CreateDefaultNutritionistProfile(tenantId, clinicId));
-                    break;
-                case ClinicType.Psychology:
-                    profiles.Add(CreateDefaultPsychologistProfile(tenantId, clinicId));
-                    break;
-                case ClinicType.PhysicalTherapy:
-                    profiles.Add(CreateDefaultPhysicalTherapistProfile(tenantId, clinicId));
-                    break;
-                case ClinicType.Veterinary:
-                    profiles.Add(CreateDefaultVeterinarianProfile(tenantId, clinicId));
-                    break;
-                case ClinicType.Other:
-                default:
-                    // For "Other" or unknown types, default to medical profile
-                    profiles.Add(CreateDefaultMedicalProfile(tenantId, clinicId));
-                    break;
-            }
 
             return profiles;
         }

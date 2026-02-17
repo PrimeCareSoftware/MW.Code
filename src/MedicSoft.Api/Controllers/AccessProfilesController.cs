@@ -327,6 +327,31 @@ namespace MedicSoft.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Backfill missing default profiles for all clinics in the tenant (Owner only)
+        /// This ensures existing clinics have access to all professional profile types, not just their clinic type's profile.
+        /// This is useful after updating the system to support multi-specialty clinics.
+        /// </summary>
+        [HttpPost("backfill-missing-profiles")]
+        public async Task<ActionResult<BackfillProfilesResult>> BackfillMissingProfiles()
+        {
+            try
+            {
+                var tenantId = GetTenantId();
+
+                // Verify user is owner
+                if (!IsOwner())
+                    return Forbid();
+
+                var result = await _profileService.BackfillMissingProfilesForAllClinicsAsync(tenantId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;
