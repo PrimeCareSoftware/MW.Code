@@ -60,7 +60,9 @@ namespace MedicSoft.Repository.Repositories
             var defaultProfiles = allProfiles
                 .Where(p => p.IsDefault)
                 .GroupBy(p => p.Name)
-                .Select(g => g.OrderBy(p => p.Id).First()) // Take first profile for each name (ordered by Id for consistency)
+                // For duplicate default profiles with same name across clinics, select consistently by lowest ID
+                // This ensures deterministic behavior - the first created profile for each name is used
+                .Select(g => g.OrderBy(p => p.Id).First())
                 .OrderBy(p => p.Name)
                 .ToList();
             
