@@ -275,11 +275,32 @@ export class AppointmentActionsDialogComponent {
   ) {}
 
   formatDate(dateString: string): string {
+    // Validate input
+    if (!dateString || typeof dateString !== 'string') {
+      return dateString || '';
+    }
+    
     const parts = dateString.split('-');
     if (parts.length !== 3) return dateString;
     
     const [year, month, day] = parts.map(Number);
+    
+    // Validate parsed numbers
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+      return dateString;
+    }
+    
+    // Validate date ranges
+    if (month < 1 || month > 12 || day < 1 || day > 31) {
+      return dateString;
+    }
+    
     const date = new Date(year, month - 1, day);
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return dateString;
+    }
     
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -320,26 +341,40 @@ export class AppointmentActionsDialogComponent {
   }
 
   onStartAttendance(): void {
-    this.dialogRef.close({ action: 'start' } as AppointmentActionsDialogResult);
-    this.router.navigate(['/appointments', this.data.appointment.id, 'attendance']);
+    // Navigate first, then close dialog on successful navigation
+    this.router.navigate(['/appointments', this.data.appointment.id, 'attendance']).then(() => {
+      this.dialogRef.close({ action: 'start' } as AppointmentActionsDialogResult);
+    }).catch(error => {
+      console.error('Navigation error:', error);
+      // Keep dialog open on navigation error so user can try again
+    });
   }
 
   onReschedule(): void {
-    this.dialogRef.close({ action: 'reschedule' } as AppointmentActionsDialogResult);
-    // Navigate to appointment edit page or open reschedule dialog
-    this.router.navigate(['/appointments', this.data.appointment.id, 'edit']);
+    // Navigate first, then close dialog on successful navigation
+    this.router.navigate(['/appointments', this.data.appointment.id, 'edit']).then(() => {
+      this.dialogRef.close({ action: 'reschedule' } as AppointmentActionsDialogResult);
+    }).catch(error => {
+      console.error('Navigation error:', error);
+    });
   }
 
   onViewDetails(): void {
-    this.dialogRef.close({ action: 'details' } as AppointmentActionsDialogResult);
-    // Navigate to appointment details page
-    this.router.navigate(['/appointments', this.data.appointment.id]);
+    // Navigate first, then close dialog on successful navigation
+    this.router.navigate(['/appointments', this.data.appointment.id]).then(() => {
+      this.dialogRef.close({ action: 'details' } as AppointmentActionsDialogResult);
+    }).catch(error => {
+      console.error('Navigation error:', error);
+    });
   }
 
   onCancel(): void {
-    this.dialogRef.close({ action: 'cancel' } as AppointmentActionsDialogResult);
-    // Open cancel confirmation dialog or navigate to cancel page
-    this.router.navigate(['/appointments', this.data.appointment.id, 'cancel']);
+    // Navigate first, then close dialog on successful navigation
+    this.router.navigate(['/appointments', this.data.appointment.id, 'cancel']).then(() => {
+      this.dialogRef.close({ action: 'cancel' } as AppointmentActionsDialogResult);
+    }).catch(error => {
+      console.error('Navigation error:', error);
+    });
   }
 
   onClose(): void {

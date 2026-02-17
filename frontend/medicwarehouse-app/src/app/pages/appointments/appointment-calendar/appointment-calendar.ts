@@ -474,6 +474,9 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     }
   }
 
+  // Delay for calendar reload after appointment changes (in milliseconds)
+  private readonly CALENDAR_RELOAD_DELAY_MS = 1000;
+
   openAppointmentActionsDialog(appointment: Appointment): void {
     const dialogRef = this.dialog.open(AppointmentActionsDialogComponent, {
       width: '600px',
@@ -487,10 +490,10 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
         // Actions are handled by the dialog itself (navigation)
         // But we might want to reload the calendar after certain actions
         if (result.action === 'cancel' || result.action === 'reschedule') {
-          // Reload appointments to reflect any changes
+          // Reload appointments to reflect any changes after a short delay
           setTimeout(() => {
             this.loadWeekAppointments();
-          }, 1000);
+          }, this.CALENDAR_RELOAD_DELAY_MS);
         }
       }
     });
