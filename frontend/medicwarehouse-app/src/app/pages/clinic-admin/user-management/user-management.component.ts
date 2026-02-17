@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicUserDto, CreateClinicUserRequest, UpdateClinicUserRequest, DoctorFieldsConfigDto } from '../../../models/clinic-admin.model';
 import { Navbar } from '../../../shared/navbar/navbar';
+import { AccessProfileService } from '../../../services/access-profile.service';
+import { AccessProfile } from '../../../models/access-profile.model';
 
 @Component({
   selector: 'app-user-management',
@@ -19,6 +21,10 @@ export class UserManagementComponent implements OnInit {
   
   // Doctor fields configuration
   doctorFieldsConfig = signal<DoctorFieldsConfigDto>({ professionalIdRequired: false, specialtyRequired: false });
+  
+  // Access profiles loaded dynamically
+  availableProfiles = signal<AccessProfile[]>([]);
+  isLoadingProfiles = signal<boolean>(false);
   
   // Dialogs
   showCreateDialog = signal<boolean>(false);
@@ -36,10 +42,12 @@ export class UserManagementComponent implements OnInit {
   selectedUser = signal<ClinicUserDto | null>(null);
   isProcessing = signal<boolean>(false);
   
+  // Legacy roles kept for backward compatibility
   userRoles = ['Doctor', 'Nurse', 'Receptionist', 'Admin', 'Owner'];
 
   constructor(
     private clinicAdminService: ClinicAdminService,
+    private accessProfileService: AccessProfileService,
     private fb: FormBuilder
   ) {
     this.initializeForms();
@@ -48,6 +56,7 @@ export class UserManagementComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadDoctorFieldsConfig();
+    this.loadAccessProfiles();
   }
 
   private initializeForms(): void {
@@ -115,6 +124,23 @@ export class UserManagementComponent implements OnInit {
         this.errorMessage.set('Aviso: Não foi possível carregar as configurações de campos para médicos. Usando configuração padrão (campos opcionais).');
         // Use default configuration (both fields optional)
         this.doctorFieldsConfig.set({ professionalIdRequired: false, specialtyRequired: false });
+      }
+    });
+  }
+
+  loadAccessProfiles(): void {
+    this.isLoadingProfiles.set(true);
+    this.accessProfileService.getProfiles().subscribe({
+      next: (profiles) => {
+        this.availableProfiles.set(profiles);
+        this.isLoadingProfiles.set(false);
+        console.log('Loaded profiles:', profiles.length);
+      },
+      error: (error) => {
+        console.error('Error loading access profiles:', error);
+        this.isLoadingProfiles.set(false);
+        // Fall back to legacy roles if profile loading fails
+        console.warn('Falling back to legacy role-based system');
       }
     });
   }
@@ -363,8 +389,24 @@ export class UserManagementComponent implements OnInit {
       'Nurse': 'Enfermeiro',
       'Receptionist': 'Recepcionista',
       'Admin': 'Administrador',
-      'Owner': 'Proprietário'
+      'Owner': 'Proprietário',
+      'Dentist': 'Dentista',
+      'Nutritionist': 'Nutricionista',
+      'Psychologist': 'Psicólogo',
+      'PhysicalTherapist': 'Fisioterapeuta',
+      'Veterinarian': 'Veterinário'
     };
     return roleMap[role] || role;
+  }
+
+  // Check if we have profiles loaded
+  hasProfiles(): boolean {
+    return this.availableProfiles().length > 0;
+  }
+
+  // Get profile name by ID
+  getProfileName(profileId: string): string {
+    const profile = this.availableProfiles().find(p => p.id === profileId);
+    return profile?.name || 'Perfil não encontrado';
   }
 }

@@ -239,11 +239,38 @@
 
             <div class="form-group">
               <label for="role">Perfil *</label>
-              <select id="role" formControlName="role" class="form-control">
-                @for (role of userRoles; track role) {
-                  <option [value]="role">{{ getRoleText(role) }}</option>
-                }
-              </select>
+              @if (hasProfiles() && !isLoadingProfiles()) {
+                <!-- Show all available profiles dynamically loaded from API -->
+                <select id="role" formControlName="role" class="form-control">
+                  <optgroup label="Perfis Disponíveis">
+                    @for (profile of availableProfiles(); track profile.id) {
+                      <option [value]="profile.name">
+                        {{ profile.name }}
+                        @if (profile.isDefault) { (Padrão) }
+                      </option>
+                    }
+                  </optgroup>
+                </select>
+                <small class="form-text text-muted">
+                  Mostrando todos os perfis disponíveis ({{ availableProfiles().length }} perfis)
+                </small>
+              } @else if (isLoadingProfiles()) {
+                <select id="role" formControlName="role" class="form-control" disabled>
+                  <option>Carregando perfis...</option>
+                </select>
+              } @else {
+                <!-- Fallback to legacy roles if profiles fail to load -->
+                <select id="role" formControlName="role" class="form-control">
+                  <optgroup label="Perfis Básicos">
+                    @for (role of userRoles; track role) {
+                      <option [value]="role">{{ getRoleText(role) }}</option>
+                    }
+                  </optgroup>
+                </select>
+                <small class="form-text text-warning">
+                  Usando perfis básicos. Não foi possível carregar todos os perfis disponíveis.
+                </small>
+              }
             </div>
 
             <!-- Doctor-specific fields -->
