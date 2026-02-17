@@ -73,8 +73,17 @@ builder.Services.AddScoped<ITelemedicineConsentRepository, TelemedicineConsentRe
 builder.Services.AddScoped<IIdentityVerificationRepository, IdentityVerificationRepository>();
 builder.Services.AddScoped<ITelemedicineRecordingRepository, TelemedicineRecordingRepository>();
 
-// Register Infrastructure Services
-builder.Services.AddHttpClient<IVideoCallService, DailyCoVideoService>();
+// Register Video Call Service based on configuration
+var videoProvider = builder.Configuration["VideoProvider"] ?? "DailyCo";
+if (videoProvider.Equals("Twilio", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddScoped<IVideoCallService, TwilioVideoService>();
+}
+else
+{
+    builder.Services.AddHttpClient<IVideoCallService, DailyCoVideoService>();
+}
+
 builder.Services.AddHttpClient<ICfmValidationService, CfmValidationService>();
 
 // Configure CORS
