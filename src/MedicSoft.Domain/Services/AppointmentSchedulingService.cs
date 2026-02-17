@@ -100,10 +100,10 @@ namespace MedicSoft.Domain.Services
             // Check if time is within clinic working hours
             var endTime = scheduledTime.Add(TimeSpan.FromMinutes(durationMinutes));
             if (!clinic.IsWithinWorkingHours(scheduledTime))
-                return (false, $"Appointment start time {scheduledTime:hh\\:mm} is outside clinic working hours ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm})");
+                return (false, $"Appointment start time {scheduledTime:HH\\:mm} is outside clinic working hours ({clinic.OpeningTime:HH\\:mm} - {clinic.ClosingTime:HH\\:mm})");
             
             if (!clinic.IsWithinWorkingHours(endTime))
-                return (false, $"Appointment end time {endTime:hh\\:mm} is outside clinic working hours ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm})");
+                return (false, $"Appointment end time {endTime:HH\\:mm} is outside clinic working hours ({clinic.OpeningTime:HH\\:mm} - {clinic.ClosingTime:HH\\:mm})");
 
             // Check for conflicts with existing appointments
             var hasConflict = await _appointmentRepository.HasConflictingAppointmentAsync(
