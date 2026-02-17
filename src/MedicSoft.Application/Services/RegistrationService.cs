@@ -326,20 +326,23 @@ namespace MedicSoft.Application.Services
 
                 await _clinicSubscriptionRepository.AddWithoutSaveAsync(subscription);
 
-                // Step 6: Get the appropriate consultation form profile for this clinic type
-                var specialty = AccessProfile.GetProfessionalSpecialtyForClinicType(clinicType);
+                // Step 6: Load all system consultation form profiles once to avoid repeated queries
                 var allSystemProfiles = await _consultationFormProfileRepository.GetSystemDefaultProfilesAsync("system");
-                var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty);
 
                 // Step 7: Create default access profiles for the clinic based on clinic type
                 var defaultProfiles = AccessProfile.GetDefaultProfilesForClinicType(tenantId, clinic.Id, clinicType);
 
                 foreach (var profile in defaultProfiles)
                 {
-                    // Link consultation form profile to professional profiles only
-                    if (consultationFormProfile != null && profile.IsProfessionalProfile())
+                    // Link consultation form profile to professional profiles based on the profile's specialty, not the clinic type
+                    var specialty = AccessProfile.GetProfessionalSpecialtyForProfileName(profile.Name);
+                    if (specialty.HasValue)
                     {
-                        profile.SetConsultationFormProfile(consultationFormProfile.Id);
+                        var consultationFormProfile = allSystemProfiles.FirstOrDefault(p => p.Specialty == specialty.Value);
+                        if (consultationFormProfile != null)
+                        {
+                            profile.SetConsultationFormProfile(consultationFormProfile.Id);
+                        }
                     }
                     
                     await _accessProfileRepository.AddAsync(profile);
