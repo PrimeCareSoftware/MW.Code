@@ -809,6 +809,11 @@ if (applyMigrations)
                 "CREATE INDEX IF NOT EXISTS \"IX_Users_ProfessionalSpecialty\" ON \"Users\" (\"ProfessionalSpecialty\");");
 
             dbContext.Database.ExecuteSqlRaw(
+                "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
+            dbContext.Database.ExecuteSqlRaw(
+                "CREATE INDEX IF NOT EXISTS \"ix_documenttemplates_globaltemplateid\" ON \"DocumentTemplates\" (\"GlobalTemplateId\");");
+
+            dbContext.Database.ExecuteSqlRaw(
                 "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"EffectiveEndDate\" timestamp with time zone NULL;");
             dbContext.Database.ExecuteSqlRaw(
                 "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"ParentPatternId\" uuid NULL;");

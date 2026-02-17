@@ -187,8 +187,8 @@ export class CustomFieldsManagementComponent implements OnInit {
 
   removeOption(fieldIndex: number, optionIndex: number): void {
     const field = this.fields.at(fieldIndex);
-    const options = field.get('options')?.value || [];
-    field.patchValue({ options: options.filter((_, i) => i !== optionIndex) });
+    const options = (field.get('options')?.value || []) as string[];
+    field.patchValue({ options: options.filter((_value: string, i: number) => i !== optionIndex) });
   }
 
   updateOption(fieldIndex: number, optionIndex: number, value: string): void {
