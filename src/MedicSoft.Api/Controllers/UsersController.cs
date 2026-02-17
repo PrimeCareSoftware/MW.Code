@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Helpers;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.Domain.Common;
@@ -23,6 +24,7 @@ namespace MedicSoft.Api.Controllers
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly IClinicSelectionService _clinicSelectionService;
         private readonly IAccessProfileService _accessProfileService;
+        private readonly ILogger<UsersController> _logger;
 
         public UsersController(
             ITenantContext tenantContext,
@@ -30,13 +32,15 @@ namespace MedicSoft.Api.Controllers
             IClinicSubscriptionRepository subscriptionRepository,
             ISubscriptionPlanRepository planRepository,
             IClinicSelectionService clinicSelectionService,
-            IAccessProfileService accessProfileService) : base(tenantContext)
+            IAccessProfileService accessProfileService,
+            ILogger<UsersController> logger) : base(tenantContext)
         {
             _userService = userService;
             _subscriptionRepository = subscriptionRepository;
             _planRepository = planRepository;
             _clinicSelectionService = clinicSelectionService;
             _accessProfileService = accessProfileService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -145,7 +149,7 @@ namespace MedicSoft.Api.Controllers
                     }
 
                     // Map profile name to a UserRole for backward compatibility
-                    role = MapProfileNameToRole(profile.Name);
+                    role = ProfileMappingHelper.MapProfileNameToRole(profile.Name, _logger);
                     profileIdToAssign = request.ProfileId.Value;
                 }
                 else
@@ -195,44 +199,6 @@ namespace MedicSoft.Api.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-        }
-
-        /// <summary>
-        /// Maps an AccessProfile name to a UserRole enum for backward compatibility
-        /// </summary>
-        private static UserRole MapProfileNameToRole(string profileName)
-        {
-            // Try direct enum parsing first (case insensitive)
-            if (Enum.TryParse<UserRole>(profileName, true, out var directRole))
-            {
-                return directRole;
-            }
-
-            // Map Portuguese profile names to UserRole enum
-            var profileNameLower = profileName.ToLowerInvariant();
-            
-            return profileNameLower switch
-            {
-                "proprietário" or "proprietario" or "owner" => UserRole.ClinicOwner,
-                "médico" or "medico" or "doctor" => UserRole.Doctor,
-                "dentista" or "dentist" => UserRole.Dentist,
-                "enfermeiro" or "enfermeira" or "nurse" => UserRole.Nurse,
-                "recepção" or "recepcao" or "recepcionista" or "receptionist" => UserRole.Receptionist,
-                "secretaria" or "secretário" or "secretario" or "secretary" => UserRole.Secretary,
-                "recepção/secretaria" or "recepcao/secretaria" => UserRole.Secretary,
-                "financeiro" or "financial" => UserRole.Secretary,
-                
-                // Specialty-based profiles - map to appropriate role
-                "nutricionista" or "nutritionist" => UserRole.Doctor,
-                "psicólogo" or "psicologo" or "psychologist" => UserRole.Doctor,
-                "fisioterapeuta" or "physiotherapist" => UserRole.Doctor,
-                "terapeuta ocupacional" or "occupational therapist" => UserRole.Doctor,
-                "fonoaudiólogo" or "fonoaudiologo" or "speech therapist" => UserRole.Doctor,
-                "veterinário" or "veterinario" or "veterinarian" => UserRole.Doctor,
-                
-                // Default fallback
-                _ => UserRole.Receptionist
-            };
         }
 
         /// <summary>
