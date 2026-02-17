@@ -5,6 +5,7 @@ import { TerminologyService, TerminologyMap } from '../../../services/terminolog
 import { TerminologyPipe } from '../../../pipes/terminology.pipe';
 import { ClinicSelectionService } from '../../../services/clinic-selection.service';
 import { ProfessionalSpecialty } from '../../../services/business-configuration.service';
+import { Navbar } from '../../../shared/navbar/navbar';
 
 interface TemplatePreset {
   specialty: ProfessionalSpecialty;
@@ -19,7 +20,7 @@ interface TemplatePreset {
 @Component({
   selector: 'app-template-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, TerminologyPipe],
+  imports: [CommonModule, FormsModule, TerminologyPipe, Navbar],
   templateUrl: './template-editor.component.html',
   styleUrls: ['./template-editor.component.scss']
 })
