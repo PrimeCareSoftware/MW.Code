@@ -205,11 +205,11 @@
           <div class="password-requirements">
             <p>A senha deve conter:</p>
             <ul>
-              <li [class.met]="passwordForm.get('newPassword')?.value?.length >= 8">Pelo menos 8 caracteres</li>
-              <li [class.met]="/[A-Z]/.test(passwordForm.get('newPassword')?.value)">Letras maiúsculas</li>
-              <li [class.met]="/[a-z]/.test(passwordForm.get('newPassword')?.value)">Letras minúsculas</li>
-              <li [class.met]="/[0-9]/.test(passwordForm.get('newPassword')?.value)">Números</li>
-              <li [class.met]="/[^a-zA-Z0-9]/.test(passwordForm.get('newPassword')?.value)">Caracteres especiais</li>
+              <li [class.met]="hasMinLength()">Pelo menos 8 caracteres</li>
+              <li [class.met]="hasUpperCase()">Letras maiúsculas</li>
+              <li [class.met]="hasLowerCase()">Letras minúsculas</li>
+              <li [class.met]="hasNumber()">Números</li>
+              <li [class.met]="hasSpecialChar()">Caracteres especiais</li>
             </ul>
           </div>
         </div>

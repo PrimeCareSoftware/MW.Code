@@ -184,7 +184,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getPasswordStrength(): { label: string, class: string, width: string } {
-    const password = this.passwordForm.get('newPassword')?.value || '';
+    const password = this.currentPassword;
     if (password.length === 0) {
       return { label: '', class: '', width: '0%' };
     }
@@ -203,5 +203,29 @@ export class UserProfileComponent implements OnInit {
     } else {
       return { label: 'Forte', class: 'strong', width: '100%' };
     }
+  }
+
+  private get currentPassword(): string {
+    return this.passwordForm.get('newPassword')?.value || '';
+  }
+
+  hasMinLength(): boolean {
+    return this.currentPassword.length >= 8;
+  }
+
+  hasUpperCase(): boolean {
+    return /[A-Z]/.test(this.currentPassword);
+  }
+
+  hasLowerCase(): boolean {
+    return /[a-z]/.test(this.currentPassword);
+  }
+
+  hasNumber(): boolean {
+    return /[0-9]/.test(this.currentPassword);
+  }
+
+  hasSpecialChar(): boolean {
+    return /[^a-zA-Z0-9]/.test(this.currentPassword);
   }
 }
