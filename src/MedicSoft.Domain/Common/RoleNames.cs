@@ -12,6 +12,7 @@ namespace MedicSoft.Domain.Common
         public const string Nurse = "Nurse";
         public const string Receptionist = "Receptionist";
         public const string Secretary = "Secretary";
+        public const string Psychologist = "Psychologist";
         
         /// <summary>
         /// Legacy role name for clinic owners. Use ClinicOwner instead.

@@ -367,6 +367,15 @@ namespace MedicSoft.Domain.Entities
                     Permission.ManageAppointments,
                     Permission.ManagePayments
                 },
+                UserRole.Psychologist => new[]
+                {
+                    Permission.ViewPatients,
+                    Permission.ManagePatients,
+                    Permission.ViewAppointments,
+                    Permission.ManageAppointments,
+                    Permission.ViewMedicalRecords,
+                    Permission.ManageMedicalRecords
+                },
                 _ => Array.Empty<Permission>()
             };
         }
@@ -466,7 +475,8 @@ namespace MedicSoft.Domain.Entities
         Dentist,        // Dentist
         Nurse,          // Nurse
         Receptionist,   // Front desk / reception
-        Secretary       // Administrative secretary
+        Secretary,      // Administrative secretary
+        Psychologist    // Psychologist (Psicólogo)
     }
 
     public enum Permission
