@@ -61,7 +61,8 @@ namespace MedicSoft.Repository.Repositories
             
             return customProfiles.Concat(defaultProfiles)
                 .OrderByDescending(ap => ap.IsDefault)
-                .ThenBy(ap => ap.Name);
+                .ThenBy(ap => ap.Name)
+                .ToList();
         }
 
         public async Task<IEnumerable<AccessProfile>> GetDefaultProfilesAsync(string tenantId)
