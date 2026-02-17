@@ -46,6 +46,9 @@ interface CalendarSlot {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentCalendar implements OnInit, OnDestroy {
+  // Route constants for calendar navigation
+  private readonly CALENDAR_ROUTES = ['/appointments', '/appointments/calendar'];
+  
   currentWeekStart = signal<Date>(this.getWeekStart(new Date()));
   weekDays = signal<DayColumn[]>([]);
   timeSlots = signal<TimeSlot[]>([]);
@@ -118,7 +121,7 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     // This fixes the issue where new appointments don't appear without F5
     this.routerSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      filter((event: NavigationEnd) => event.url === '/appointments' || event.url === '/appointments/calendar')
+      filter((event: NavigationEnd) => this.CALENDAR_ROUTES.includes(event.url))
     ).subscribe(() => {
       // Skip reload on initial navigation (first load)
       if (this.initialLoadComplete) {
@@ -144,7 +147,26 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
    * Fixes the d-1 bug where new Date('2024-01-15') interprets as UTC and converts to local timezone.
    */
   private parseLocalDate(dateString: string): Date {
-    const [year, month, day] = dateString.split('-').map(Number);
+    // Validate date string format
+    if (!dateString || typeof dateString !== 'string') {
+      console.warn('Invalid date string provided to parseLocalDate:', dateString);
+      return new Date(); // Fallback to current date
+    }
+    
+    const parts = dateString.split('-');
+    if (parts.length !== 3) {
+      console.warn('Date string is not in YYYY-MM-DD format:', dateString);
+      return new Date(); // Fallback to current date
+    }
+    
+    const [year, month, day] = parts.map(Number);
+    
+    // Validate parsed values
+    if (isNaN(year) || isNaN(month) || isNaN(day)) {
+      console.warn('Date string contains non-numeric values:', dateString);
+      return new Date(); // Fallback to current date
+    }
+    
     return new Date(year, month - 1, day);
   }
 
