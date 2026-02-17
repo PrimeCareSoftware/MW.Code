@@ -41,6 +41,11 @@
         Selecione o porte da sua clínica. Isso ajustará automaticamente os recursos recomendados.
       </p>
       
+      <div class="current-value-display">
+        <span class="label">Configuração Atual:</span>
+        <span class="value">{{ getBusinessTypeLabel(configuration.businessType) }}</span>
+      </div>
+      
       <div class="business-type-grid">
         <div 
           *ngFor="let option of businessTypeOptions" 
@@ -60,6 +65,11 @@
       <p class="section-description">
         A especialidade define a terminologia e recursos adequados ao seu tipo de prática.
       </p>
+      
+      <div class="current-value-display">
+        <span class="label">Configuração Atual:</span>
+        <span class="value">{{ getSpecialtyLabel(configuration.primarySpecialty) }}</span>
+      </div>
       
       <div class="specialty-grid">
         <div 
