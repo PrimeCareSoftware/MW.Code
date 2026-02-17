@@ -122,9 +122,9 @@ namespace MedicSoft.Repository.Repositories
                 
                 // Explicitly mark reference navigations as unchanged to avoid tracking conflicts
                 // These navigation properties might already be tracked from previous queries
-                entry.Reference(nameof(user.Clinic)).IsModified = false;
-                entry.Reference(nameof(user.CurrentClinic)).IsModified = false;
-                entry.Reference(nameof(user.Profile)).IsModified = false;
+                entry.Reference(nameof(User.Clinic)).IsModified = false;
+                entry.Reference(nameof(User.CurrentClinic)).IsModified = false;
+                entry.Reference(nameof(User.Profile)).IsModified = false;
             }
             
             await _context.SaveChangesAsync();
