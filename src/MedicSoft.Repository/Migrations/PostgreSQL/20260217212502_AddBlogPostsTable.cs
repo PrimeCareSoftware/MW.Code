@@ -1471,7 +1471,8 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp with time zone",
                 oldNullable: true);
 
-            // ParentPatternId is already uuid type, no need to alter
+            // ParentPatternId already added by migration 20260210140000_AddRecurrenceSeriesAndExceptions
+            // as uuid type, no conversion needed
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
