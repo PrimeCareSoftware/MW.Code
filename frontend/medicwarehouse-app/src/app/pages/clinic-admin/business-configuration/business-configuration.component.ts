@@ -508,11 +508,15 @@ export class BusinessConfigurationComponent implements OnInit {
   }
 
   getBusinessTypeLabel(type: BusinessType): string {
-    return this.businessTypeOptions.find(opt => opt.value === type)?.label || 'Desconhecido';
+    // Handle both numeric enum values and string enum names from backend
+    const numericType = typeof type === 'string' ? BusinessType[type as keyof typeof BusinessType] : type;
+    return this.businessTypeOptions.find(opt => opt.value === numericType)?.label || 'Desconhecido';
   }
 
   getSpecialtyLabel(specialty: ProfessionalSpecialty): string {
-    return this.specialtyOptions.find(opt => opt.value === specialty)?.label || 'Desconhecido';
+    // Handle both numeric enum values and string enum names from backend
+    const numericSpecialty = typeof specialty === 'string' ? ProfessionalSpecialty[specialty as keyof typeof ProfessionalSpecialty] : specialty;
+    return this.specialtyOptions.find(opt => opt.value === numericSpecialty)?.label || 'Desconhecido';
   }
 
   private parseTimeSpan(timeSpan: string): string {
