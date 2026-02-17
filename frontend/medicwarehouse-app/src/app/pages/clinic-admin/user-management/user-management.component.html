@@ -275,10 +275,10 @@
               }
             </div>
 
-            <!-- Doctor-specific fields -->
-            @if (isDoctorRole()) {
+            <!-- Professional fields (shown for all healthcare professional roles) -->
+            @if (isCurrentRoleProfessional()) {
               <div class="form-group">
-                <label for="professionalId">Registro Profissional (CRM, CRP, CRN, CRO, etc.) {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <label for="professionalId">Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
                 <input 
                   type="text" 
                   id="professionalId" 
@@ -286,6 +286,9 @@
                   class="form-control"
                   placeholder="Ex: CRM-123456, CRP-789012, CRN-345678"
                 />
+                <small class="form-text text-muted">
+                  Digite o número de registro profissional apropriado para seu perfil (CRM, CRP, CRN, CRO, etc.)
+                </small>
                 @if (createUserForm.get('professionalId')?.invalid && createUserForm.get('professionalId')?.touched) {
                   <span class="error-text">Registro profissional é obrigatório</span>
                 }
@@ -382,9 +385,9 @@
             </div>
 
             <!-- Professional fields (shown for all professional roles) -->
-            @if (isEditingDoctor()) {
+            @if (isEditingProfessional()) {
               <div class="form-group">
-                <label for="edit-professionalId">Registro Profissional (CRM, CRP, CRN, CRO, etc.) {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <label for="edit-professionalId">Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
                 <input 
                   type="text" 
                   id="edit-professionalId" 
@@ -392,6 +395,9 @@
                   class="form-control"
                   placeholder="Ex: CRM-123456, CRP-789012, CRN-345678"
                 />
+                <small class="form-text text-muted">
+                  Digite o número de registro profissional apropriado para seu perfil (CRM, CRP, CRN, CRO, etc.)
+                </small>
               </div>
 
               <div class="form-group">

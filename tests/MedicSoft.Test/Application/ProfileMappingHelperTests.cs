@@ -64,8 +64,12 @@ namespace MedicSoft.Test.Application
         [InlineData("Veterinário", UserRole.Doctor)]
         [InlineData("veterinario", UserRole.Doctor)]
         [InlineData("Veterinarian", UserRole.Doctor)]
-        public void MapProfileNameToRole_WithOtherProfessionals_ReturnsDoctorRole(string profileName, UserRole expectedRole)
+        public void MapProfileNameToRole_WithOtherHealthcareProfessionals_MapsToDoctorRoleForPermissions(string profileName, UserRole expectedRole)
         {
+            // Note: These healthcare professionals map to Doctor role as it provides the appropriate
+            // clinical permissions (access to patient records, appointments, etc.).
+            // The specific professional type is differentiated via AccessProfile and ConsultationFormProfile.
+            
             // Act
             var result = ProfileMappingHelper.MapProfileNameToRole(profileName, _loggerMock.Object);
 

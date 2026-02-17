@@ -218,12 +218,12 @@ export class UserManagementComponent implements OnInit {
     return professionalRoles.some(pr => pr.toLowerCase() === role.toLowerCase());
   }
 
-  isDoctorRole(): boolean {
+  isCurrentRoleProfessional(): boolean {
     const role = this.createUserForm.get('role')?.value;
     return this.isProfessionalRole(role);
   }
 
-  isEditingDoctor(): boolean {
+  isEditingProfessional(): boolean {
     const role = this.selectedUser()?.role;
     return this.isProfessionalRole(role);
   }
