@@ -55,7 +55,7 @@ import { ModuleConfig } from '../../../../models/module-config.model';
           <textarea matInput 
                     formControlName="configuration" 
                     rows="10"
-                    [placeholder]="data.module.configurationExample || '{\"option1\": \"value1\", \"option2\": \"value2\"}'"></textarea>
+                    [placeholder]="getPlaceholder()"></textarea>
           <mat-hint>Configure opções específicas do módulo em formato JSON</mat-hint>
           <mat-error *ngIf="configForm.get('configuration')?.hasError('invalidJson')">
             JSON inválido. Por favor, corrija a sintaxe.
@@ -217,6 +217,13 @@ export class ModuleConfigDialogComponent {
         [this.jsonValidator]
       ]
     });
+  }
+
+  /**
+   * Get placeholder text for configuration textarea
+   */
+  getPlaceholder(): string {
+    return this.data.module.configurationExample || '{"option1": "value1", "option2": "value2"}';
   }
 
   /**
