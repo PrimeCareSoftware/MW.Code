@@ -12,6 +12,7 @@ import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
 import { RecurrenceActionDialogComponent, RecurrenceActionDialogResult } from '../recurrence-action-dialog/recurrence-action-dialog.component';
+import { AppointmentActionsDialogComponent } from '../appointment-actions-dialog/appointment-actions-dialog.component';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 
 interface TimeSlot {
@@ -458,10 +459,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Open dialog to view/edit blocked slot
       this.openBlockingDialog(slot.dayColumn.date, slot.timeSlot, slot.blockedSlot);
     } else if (slot.appointment) {
-      // Navigate to appointment details or attendance
-      if (slot.appointment.status === 'Scheduled' || slot.appointment.status === 'Confirmed') {
-        this.router.navigate(['/appointments', slot.appointment.id, 'attendance']);
-      }
+      // Open appointment actions dialog
+      this.openAppointmentActionsDialog(slot.appointment);
     } else {
       // Show context menu or create new appointment
       // For now, just navigate to new appointment
@@ -473,6 +472,28 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  openAppointmentActionsDialog(appointment: Appointment): void {
+    const dialogRef = this.dialog.open(AppointmentActionsDialogComponent, {
+      width: '600px',
+      data: {
+        appointment: appointment
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Actions are handled by the dialog itself (navigation)
+        // But we might want to reload the calendar after certain actions
+        if (result.action === 'cancel' || result.action === 'reschedule') {
+          // Reload appointments to reflect any changes
+          setTimeout(() => {
+            this.loadWeekAppointments();
+          }, 1000);
+        }
+      }
+    });
   }
 
   openBlockingDialog(date?: Date, timeSlot?: TimeSlot, existingBlock?: BlockedTimeSlot): void {
