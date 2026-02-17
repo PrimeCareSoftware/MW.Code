@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } fr
 import { RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { HelpButtonComponent } from '../../shared/help-button/help-button';
-import { ConsultationFormConfigurationService } from '../../services/consultation-form-configuration.service';
-import { ConsultationFormConfigurationDto, CustomFieldDto, CustomFieldType } from '../../models/consultation-form-configuration.model';
+import { ConsultationFormProfileService, ConsultationFormProfileDto, CustomFieldDto, CustomFieldType } from '../../services/consultation-form-profile.service';
+import { Auth } from '../../services/auth';
 import { ProfessionalSpecialty } from '../../models/appointment.model';
 
 interface SpecialtyOption {
@@ -23,7 +23,8 @@ interface SpecialtyOption {
 })
 export class CustomFieldsManagementComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly configService = inject(ConsultationFormConfigurationService);
+  private readonly profileService = inject(ConsultationFormProfileService);
+  private readonly auth = inject(Auth);
 
   specialties = signal<SpecialtyOption[]>([
     { value: ProfessionalSpecialty.Medico, label: 'Médico', description: 'Consultas médicas gerais' },
@@ -38,7 +39,7 @@ export class CustomFieldsManagementComponent implements OnInit {
   ]);
 
   selectedSpecialty = signal<ProfessionalSpecialty | null>(null);
-  configuration = signal<ConsultationFormConfigurationDto | null>(null);
+  selectedProfile = signal<ConsultationFormProfileDto | null>(null);
   customFieldsForm!: FormGroup;
   
   isLoading = signal<boolean>(false);
@@ -79,10 +80,53 @@ export class CustomFieldsManagementComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set('');
     
-    // TODO: Implement loading configuration by specialty
-    // For now, we'll initialize with empty fields
+    this.profileService.getProfilesBySpecialty(specialty).subscribe({
+      next: (profiles) => {
+        // Get the system default or first profile for this specialty
+        const profile = profiles.find(p => p.isSystemDefault) || profiles[0];
+        
+        if (profile) {
+          this.selectedProfile.set(profile);
+          this.populateForm(profile);
+        } else {
+          // No profile exists, initialize empty form
+          this.initializeForm();
+        }
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading profiles:', error);
+        this.errorMessage.set('Erro ao carregar configuração. Por favor, tente novamente.');
+        this.isLoading.set(false);
+        this.initializeForm();
+      }
+    });
+  }
+
+  populateForm(profile: ConsultationFormProfileDto): void {
     this.initializeForm();
-    this.isLoading.set(false);
+    
+    if (profile.customFields && profile.customFields.length > 0) {
+      profile.customFields
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .forEach(field => {
+          this.fields.push(this.createFieldFormGroup(field));
+        });
+    }
+  }
+
+  createFieldFormGroup(field: CustomFieldDto): FormGroup {
+    return this.fb.group({
+      fieldKey: [field.fieldKey, Validators.required],
+      label: [field.label, Validators.required],
+      fieldType: [field.fieldType, Validators.required],
+      isRequired: [field.isRequired],
+      displayOrder: [field.displayOrder],
+      placeholder: [field.placeholder || ''],
+      defaultValue: [field.defaultValue || ''],
+      helpText: [field.helpText || ''],
+      options: [field.options || []]
+    });
   }
 
   addField(): void {
@@ -166,17 +210,93 @@ export class CustomFieldsManagementComponent implements OnInit {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    // TODO: Implement save configuration
-    console.log('Saving configuration:', this.customFieldsForm.value);
-    
-    setTimeout(() => {
-      this.isLoading.set(false);
-      this.successMessage.set('Configuração salva com sucesso!');
-      
-      setTimeout(() => {
-        this.successMessage.set('');
-      }, 3000);
-    }, 1000);
+    const customFields: CustomFieldDto[] = this.fields.controls.map((control, index) => ({
+      fieldKey: control.get('fieldKey')?.value,
+      label: control.get('label')?.value,
+      fieldType: control.get('fieldType')?.value,
+      isRequired: control.get('isRequired')?.value,
+      displayOrder: index + 1,
+      placeholder: control.get('placeholder')?.value,
+      defaultValue: control.get('defaultValue')?.value,
+      helpText: control.get('helpText')?.value,
+      options: control.get('options')?.value
+    }));
+
+    const profile = this.selectedProfile();
+    if (profile) {
+      // Update existing profile
+      const updateDto = {
+        name: profile.name,
+        description: profile.description,
+        showChiefComplaint: profile.showChiefComplaint,
+        showHistoryOfPresentIllness: profile.showHistoryOfPresentIllness,
+        showPastMedicalHistory: profile.showPastMedicalHistory,
+        showFamilyHistory: profile.showFamilyHistory,
+        showLifestyleHabits: profile.showLifestyleHabits,
+        showCurrentMedications: profile.showCurrentMedications,
+        requireChiefComplaint: profile.requireChiefComplaint,
+        requireHistoryOfPresentIllness: profile.requireHistoryOfPresentIllness,
+        requirePastMedicalHistory: profile.requirePastMedicalHistory,
+        requireFamilyHistory: profile.requireFamilyHistory,
+        requireLifestyleHabits: profile.requireLifestyleHabits,
+        requireCurrentMedications: profile.requireCurrentMedications,
+        requireClinicalExamination: profile.requireClinicalExamination,
+        requireDiagnosticHypothesis: profile.requireDiagnosticHypothesis,
+        requireInformedConsent: profile.requireInformedConsent,
+        requireTherapeuticPlan: profile.requireTherapeuticPlan,
+        customFields
+      };
+
+      this.profileService.updateProfile(profile.id, updateDto).subscribe({
+        next: (updatedProfile) => {
+          this.selectedProfile.set(updatedProfile);
+          this.isLoading.set(false);
+          this.successMessage.set('Configuração salva com sucesso!');
+          
+          setTimeout(() => {
+            this.successMessage.set('');
+          }, 3000);
+        },
+        error: (error) => {
+          console.error('Error saving profile:', error);
+          this.errorMessage.set('Erro ao salvar configuração. Por favor, tente novamente.');
+          this.isLoading.set(false);
+        }
+      });
+    } else {
+      // Create new profile
+      const specialty = this.selectedSpecialty();
+      if (specialty === null) {
+        this.errorMessage.set('Especialidade não selecionada.');
+        this.isLoading.set(false);
+        return;
+      }
+
+      const specialtyLabel = this.specialties().find(s => s.value === specialty)?.label || 'Perfil';
+      const createDto = {
+        name: `Perfil ${specialtyLabel}`,
+        description: `Configuração de campos personalizados para ${specialtyLabel}`,
+        specialty,
+        customFields
+      };
+
+      this.profileService.createProfile(createDto).subscribe({
+        next: (newProfile) => {
+          this.selectedProfile.set(newProfile);
+          this.isLoading.set(false);
+          this.successMessage.set('Configuração criada com sucesso!');
+          
+          setTimeout(() => {
+            this.successMessage.set('');
+          }, 3000);
+        },
+        error: (error) => {
+          console.error('Error creating profile:', error);
+          this.errorMessage.set('Erro ao criar configuração. Por favor, tente novamente.');
+          this.isLoading.set(false);
+        }
+      });
+    }
   }
 
   getFieldTypeName(type: CustomFieldType): string {
@@ -186,7 +306,7 @@ export class CustomFieldsManagementComponent implements OnInit {
 
   backToSpecialtySelection(): void {
     this.selectedSpecialty.set(null);
-    this.configuration.set(null);
+    this.selectedProfile.set(null);
     this.initializeForm();
   }
 }

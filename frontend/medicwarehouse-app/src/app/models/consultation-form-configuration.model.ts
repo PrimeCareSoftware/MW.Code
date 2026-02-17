@@ -30,6 +30,62 @@ export interface ConsultationFormConfigurationDto {
   updatedAt?: string;
 }
 
+export interface CreateConsultationFormConfigurationDto {
+  clinicId: string;
+  profileId?: string;
+  configurationName: string;
+  isActive: boolean;
+  
+  // Field visibility
+  showChiefComplaint: boolean;
+  showHistoryOfPresentIllness: boolean;
+  showPastMedicalHistory: boolean;
+  showFamilyHistory: boolean;
+  showLifestyleHabits: boolean;
+  showCurrentMedications: boolean;
+  
+  // Field required controls
+  requireChiefComplaint: boolean;
+  requireHistoryOfPresentIllness: boolean;
+  requirePastMedicalHistory: boolean;
+  requireFamilyHistory: boolean;
+  requireLifestyleHabits: boolean;
+  requireCurrentMedications: boolean;
+  requireClinicalExamination: boolean;
+  requireDiagnosticHypothesis: boolean;
+  requireInformedConsent: boolean;
+  requireTherapeuticPlan: boolean;
+  
+  customFields?: CustomFieldDto[];
+}
+
+export interface UpdateConsultationFormConfigurationDto {
+  configurationName?: string;
+  isActive?: boolean;
+  
+  // Field visibility
+  showChiefComplaint?: boolean;
+  showHistoryOfPresentIllness?: boolean;
+  showPastMedicalHistory?: boolean;
+  showFamilyHistory?: boolean;
+  showLifestyleHabits?: boolean;
+  showCurrentMedications?: boolean;
+  
+  // Field required controls
+  requireChiefComplaint?: boolean;
+  requireHistoryOfPresentIllness?: boolean;
+  requirePastMedicalHistory?: boolean;
+  requireFamilyHistory?: boolean;
+  requireLifestyleHabits?: boolean;
+  requireCurrentMedications?: boolean;
+  requireClinicalExamination?: boolean;
+  requireDiagnosticHypothesis?: boolean;
+  requireInformedConsent?: boolean;
+  requireTherapeuticPlan?: boolean;
+  
+  customFields?: CustomFieldDto[];
+}
+
 export interface CustomFieldDto {
   fieldKey: string;
   label: string;
