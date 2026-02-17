@@ -182,22 +182,26 @@ export class CustomFieldsManagementComponent implements OnInit {
   addOption(fieldIndex: number): void {
     const field = this.fields.at(fieldIndex);
     const options = field.get('options')?.value || [];
-    options.push('');
-    field.patchValue({ options });
+    field.patchValue({ options: [...options, ''] });
   }
 
   removeOption(fieldIndex: number, optionIndex: number): void {
     const field = this.fields.at(fieldIndex);
     const options = field.get('options')?.value || [];
-    options.splice(optionIndex, 1);
-    field.patchValue({ options });
+    field.patchValue({ options: options.filter((_, i) => i !== optionIndex) });
   }
 
   updateOption(fieldIndex: number, optionIndex: number, value: string): void {
     const field = this.fields.at(fieldIndex);
     const options = field.get('options')?.value || [];
-    options[optionIndex] = value;
-    field.patchValue({ options });
+    const updatedOptions = [...options];
+    updatedOptions[optionIndex] = value;
+    field.patchValue({ options: updatedOptions });
+  }
+
+  onOptionInput(fieldIndex: number, optionIndex: number, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.updateOption(fieldIndex, optionIndex, input.value);
   }
 
   saveConfiguration(): void {

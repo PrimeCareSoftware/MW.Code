@@ -226,7 +226,7 @@
                           type="text"
                           class="form-control"
                           [value]="option"
-                          (input)="updateOption(i, optIndex, $any($event.target).value)"
+                          (input)="onOptionInput(i, optIndex, $event)"
                           placeholder="Digite a opção">
                         <button 
                           type="button"
