@@ -13,15 +13,18 @@ namespace MedicSoft.Domain.Services
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IClinicRepository _clinicRepository;
         private readonly IBlockedTimeSlotRepository? _blockedTimeSlotRepository;
+        private readonly IBusinessConfigurationRepository? _businessConfigurationRepository;
 
         public AppointmentSchedulingService(
             IAppointmentRepository appointmentRepository,
             IClinicRepository clinicRepository,
-            IBlockedTimeSlotRepository? blockedTimeSlotRepository = null)
+            IBlockedTimeSlotRepository? blockedTimeSlotRepository = null,
+            IBusinessConfigurationRepository? businessConfigurationRepository = null)
         {
             _appointmentRepository = appointmentRepository;
             _clinicRepository = clinicRepository;
             _blockedTimeSlotRepository = blockedTimeSlotRepository;
+            _businessConfigurationRepository = businessConfigurationRepository;
         }
 
         public async Task<IEnumerable<TimeSpan>> GetAvailableSlotsAsync(
@@ -80,19 +83,30 @@ namespace MedicSoft.Domain.Services
 
         public async Task<(bool IsValid, string? ErrorReason)> CanScheduleAppointmentWithReasonAsync(
             DateTime scheduledDate, TimeSpan scheduledTime, int durationMinutes, 
-            Guid clinicId, string tenantId, Guid? professionalId = null, Guid? excludeAppointmentId = null)
+            Guid clinicId, string tenantId, Guid? professionalId = null, Guid? excludeAppointmentId = null, bool isPublicBooking = false)
         {
             var clinic = await _clinicRepository.GetByIdAsync(clinicId, tenantId);
             if (clinic == null)
                 return (false, "Clinic not found");
 
+            // Check if online booking is enabled (only for public bookings)
+            // Note: businessConfigurationRepository is optional for backward compatibility
+            // If not provided, the business configuration check is skipped
+            if (isPublicBooking && _businessConfigurationRepository != null)
+            {
+                var businessConfig = await _businessConfigurationRepository.GetByClinicIdAsync(clinicId, tenantId);
+                // If business configuration exists and online booking is disabled, reject
+                if (businessConfig != null && !businessConfig.OnlineBooking)
+                    return (false, "Online booking is disabled for this clinic");
+            }
+
             // Check if time is within clinic working hours
             var endTime = scheduledTime.Add(TimeSpan.FromMinutes(durationMinutes));
             if (!clinic.IsWithinWorkingHours(scheduledTime))
-                return (false, $"Appointment start time {scheduledTime:hh\\:mm} is outside clinic working hours ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm})");
+                return (false, $"Appointment start time {scheduledTime:HH\\:mm} is outside clinic working hours ({clinic.OpeningTime:HH\\:mm} - {clinic.ClosingTime:HH\\:mm})");
             
             if (!clinic.IsWithinWorkingHours(endTime))
-                return (false, $"Appointment end time {endTime:hh\\:mm} is outside clinic working hours ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm})");
+                return (false, $"Appointment end time {endTime:HH\\:mm} is outside clinic working hours ({clinic.OpeningTime:HH\\:mm} - {clinic.ClosingTime:HH\\:mm})");
 
             // Check for conflicts with existing appointments
             var hasConflict = await _appointmentRepository.HasConflictingAppointmentAsync(
@@ -116,9 +130,9 @@ namespace MedicSoft.Domain.Services
 
         public async Task<bool> CanScheduleAppointmentAsync(
             DateTime scheduledDate, TimeSpan scheduledTime, int durationMinutes, 
-            Guid clinicId, string tenantId, Guid? professionalId = null, Guid? excludeAppointmentId = null)
+            Guid clinicId, string tenantId, Guid? professionalId = null, Guid? excludeAppointmentId = null, bool isPublicBooking = false)
         {
-            var (isValid, _) = await CanScheduleAppointmentWithReasonAsync(scheduledDate, scheduledTime, durationMinutes, clinicId, tenantId, professionalId, excludeAppointmentId);
+            var (isValid, _) = await CanScheduleAppointmentWithReasonAsync(scheduledDate, scheduledTime, durationMinutes, clinicId, tenantId, professionalId, excludeAppointmentId, isPublicBooking);
             return isValid;
         }
 

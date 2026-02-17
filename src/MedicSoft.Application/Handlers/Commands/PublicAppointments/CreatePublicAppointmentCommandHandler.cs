@@ -11,6 +11,8 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
     /// <summary>
     /// Handler para criar um agendamento público (sem autenticação).
     /// Cria ou encontra o paciente pelo CPF e agenda a consulta na clínica solicitada.
+    /// Note: IBusinessConfigurationRepository is required (not optional) for public appointments
+    /// to ensure business rules are always validated for unauthenticated users.
     /// </summary>
     public class CreatePublicAppointmentCommandHandler : IRequestHandler<CreatePublicAppointmentCommand, PublicAppointmentResponseDto>
     {
@@ -18,17 +20,20 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
         private readonly IPatientRepository _patientRepository;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IPatientClinicLinkRepository _patientClinicLinkRepository;
+        private readonly IBusinessConfigurationRepository _businessConfigurationRepository;
 
         public CreatePublicAppointmentCommandHandler(
             IClinicRepository clinicRepository,
             IPatientRepository patientRepository,
             IAppointmentRepository appointmentRepository,
-            IPatientClinicLinkRepository patientClinicLinkRepository)
+            IPatientClinicLinkRepository patientClinicLinkRepository,
+            IBusinessConfigurationRepository businessConfigurationRepository)
         {
             _clinicRepository = clinicRepository;
             _patientRepository = patientRepository;
             _appointmentRepository = appointmentRepository;
             _patientClinicLinkRepository = patientClinicLinkRepository;
+            _businessConfigurationRepository = businessConfigurationRepository;
         }
 
         public async Task<PublicAppointmentResponseDto> Handle(CreatePublicAppointmentCommand request, CancellationToken cancellationToken)
@@ -58,6 +63,26 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
 
             if (!clinic.IsActive)
                 throw new InvalidOperationException("Esta clínica não está aceitando agendamentos no momento.");
+
+            // Check if online booking is enabled for this clinic
+            var businessConfig = await _businessConfigurationRepository.GetByClinicIdAsync(dto.ClinicId, clinic.TenantId);
+            
+            // If business configuration doesn't exist yet, assume online booking should be allowed
+            // This handles the case of newly created clinics that haven't set up their configuration
+            if (businessConfig != null && !businessConfig.OnlineBooking)
+                throw new InvalidOperationException("Agendamento online não está disponível para esta clínica.");
+            
+            // Check if the clinic has online scheduling enabled (clinic-level setting)
+            if (!clinic.EnableOnlineAppointmentScheduling)
+                throw new InvalidOperationException("Agendamento online não está ativo para esta clínica.");
+
+            // Validate appointment time is within clinic working hours
+            if (!clinic.IsWithinWorkingHours(dto.ScheduledTime))
+                throw new InvalidOperationException($"O horário {dto.ScheduledTime:HH\\:mm} está fora do horário de funcionamento da clínica ({clinic.OpeningTime:HH\\:mm} - {clinic.ClosingTime:HH\\:mm}).");
+            
+            var endTime = dto.ScheduledTime.Add(TimeSpan.FromMinutes(dto.DurationMinutes));
+            if (!clinic.IsWithinWorkingHours(endTime))
+                throw new InvalidOperationException($"O término do atendimento ({endTime:HH\\:mm}) ultrapassa o horário de fechamento da clínica ({clinic.ClosingTime:HH\\:mm}).");
 
             // Verifica se existe conflito de horário
             var hasConflict = await _appointmentRepository.HasConflictingAppointmentAsync(
