@@ -503,5 +503,23 @@ namespace MedicSoft.Domain.Entities
                 _ => ProfessionalSpecialty.Medico // Default to medical
             };
         }
+
+        /// <summary>
+        /// Maps a profile name to its corresponding ProfessionalSpecialty
+        /// Returns null for non-professional profiles (Owner, Reception, Financial)
+        /// </summary>
+        public static ProfessionalSpecialty? GetProfessionalSpecialtyForProfileName(string profileName)
+        {
+            return profileName switch
+            {
+                "Médico" => ProfessionalSpecialty.Medico,
+                "Dentista" => ProfessionalSpecialty.Dentista,
+                "Nutricionista" => ProfessionalSpecialty.Nutricionista,
+                "Psicólogo" => ProfessionalSpecialty.Psicologo,
+                "Fisioterapeuta" => ProfessionalSpecialty.Fisioterapeuta,
+                "Veterinário" => ProfessionalSpecialty.Veterinario,
+                _ => null // Non-professional profiles (Owner, Reception, Financial)
+            };
+        }
     }
 }
