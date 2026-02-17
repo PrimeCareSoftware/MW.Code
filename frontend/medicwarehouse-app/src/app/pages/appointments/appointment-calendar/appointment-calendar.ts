@@ -12,6 +12,7 @@ import { Auth } from '../../../services/auth';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { ScheduleBlockingDialogComponent } from '../schedule-blocking-dialog/schedule-blocking-dialog.component';
 import { RecurrenceActionDialogComponent, RecurrenceActionDialogResult } from '../recurrence-action-dialog/recurrence-action-dialog.component';
+import { ClinicAdminService } from '../../../services/clinic-admin.service';
 
 interface TimeSlot {
   time: string;
@@ -70,6 +71,10 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   
   // Clinic ID will be retrieved from authenticated user
   clinicId: string | null = null;
+  
+  // Clinic hours loaded from configuration
+  private clinicOpeningHour: number = 8;  // Default fallback
+  private clinicClosingHour: number = 18; // Default fallback
 
   constructor(
     private appointmentService: AppointmentService,
@@ -77,7 +82,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     private auth: Auth,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private clinicAdminService: ClinicAdminService
   ) {}
 
   ngOnInit(): void {
@@ -89,7 +95,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       return;
     }
     
-    this.generateTimeSlots();
+    // Load clinic configuration to get opening/closing hours
+    this.loadClinicConfiguration();
     this.generateWeekDays();
     this.loadProfessionals();
     
@@ -188,10 +195,66 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     return new Date(d.setDate(diff));
   }
 
+  loadClinicConfiguration(): void {
+    this.clinicAdminService.getClinicInfo().subscribe({
+      next: (clinicInfo) => {
+        // Parse opening and closing times from TimeSpan string format (HH:mm:ss)
+        const openingResult = this.parseTimeString(clinicInfo.openingTime);
+        if (openingResult !== null) {
+          this.clinicOpeningHour = openingResult.hour;
+        }
+        
+        const closingResult = this.parseTimeString(clinicInfo.closingTime);
+        if (closingResult !== null) {
+          // For closing time, we want to show appointment slots up to the closing time
+          // The loop in generateTimeSlots() uses "hour < endHour", so we need to add 1
+          // to include the closing hour. E.g., if closing time is 22:00, we want to show
+          // slots 21:00 and 21:30, but also 22:00 (end of day), so endHour should be 23.
+          // For 22:30, we want 21:00, 21:30, 22:00, 22:30, so endHour should also be 23.
+          // Cap at 24 to prevent invalid hours.
+          this.clinicClosingHour = Math.min(closingResult.hour + 1, 24);
+        }
+        
+        // Generate time slots with loaded configuration
+        this.generateTimeSlots();
+      },
+      error: (error) => {
+        console.error('Error loading clinic configuration, using default hours:', error);
+        // Use default hours (8-18) on error
+        this.generateTimeSlots();
+      }
+    });
+  }
+
+  private parseTimeString(timeString: string | undefined): { hour: number; minute: number } | null {
+    if (!timeString) {
+      return null;
+    }
+    
+    // Validate HH:mm:ss or HH:mm format
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+    if (!timeRegex.test(timeString)) {
+      return null;
+    }
+    
+    const parts = timeString.split(':');
+    const parsedHour = parseInt(parts[0], 10);
+    const parsedMinute = parts.length >= 2 ? parseInt(parts[1], 10) : 0;
+    
+    if (isNaN(parsedHour) || parsedHour < 0 || parsedHour >= 24) {
+      return null;
+    }
+    if (isNaN(parsedMinute) || parsedMinute < 0 || parsedMinute >= 60) {
+      return null;
+    }
+    
+    return { hour: parsedHour, minute: parsedMinute };
+  }
+
   generateTimeSlots(): void {
     const slots: TimeSlot[] = [];
-    const startHour = 8; // 8 AM
-    const endHour = 18; // 6 PM
+    const startHour = this.clinicOpeningHour;
+    const endHour = this.clinicClosingHour;
     
     for (let hour = startHour; hour < endHour; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
