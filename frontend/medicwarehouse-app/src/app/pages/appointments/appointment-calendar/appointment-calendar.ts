@@ -200,23 +200,18 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       next: (clinicInfo) => {
         // Parse opening and closing times from TimeSpan string format (HH:mm:ss)
         if (clinicInfo.openingTime && this.isValidTimeFormat(clinicInfo.openingTime)) {
-          const openingParts = clinicInfo.openingTime.split(':');
-          const parsedHour = parseInt(openingParts[0], 10);
-          if (!isNaN(parsedHour) && parsedHour >= 0 && parsedHour < 24) {
-            this.clinicOpeningHour = parsedHour;
+          const openingHour = this.parseHourFromTimeString(clinicInfo.openingTime);
+          if (openingHour !== null) {
+            this.clinicOpeningHour = openingHour;
           }
         }
         if (clinicInfo.closingTime && this.isValidTimeFormat(clinicInfo.closingTime)) {
-          const closingParts = clinicInfo.closingTime.split(':');
-          const parsedHour = parseInt(closingParts[0], 10);
-          const parsedMinutes = parseInt(closingParts[1], 10);
-          if (!isNaN(parsedHour) && parsedHour >= 0 && parsedHour < 24) {
-            this.clinicClosingHour = parsedHour;
-            // If closing time has minutes (e.g., 17:30), include that hour in the calendar
-            // so slots like 17:00 and 17:30 are shown
-            if (!isNaN(parsedMinutes) && parsedMinutes > 0) {
-              this.clinicClosingHour += 1;
-            }
+          const closingHour = this.parseHourFromTimeString(clinicInfo.closingTime);
+          if (closingHour !== null) {
+            // For closing time, always round up to include the last hour
+            // E.g., 22:30 becomes 23 to show slots up to 22:30
+            // and 22:00 becomes 23 to show slots up to 22:00
+            this.clinicClosingHour = closingHour + 1;
           }
         }
         // Generate time slots with loaded configuration
@@ -228,6 +223,18 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
         this.generateTimeSlots();
       }
     });
+  }
+
+  private parseHourFromTimeString(timeString: string): number | null {
+    const parts = timeString.split(':');
+    if (parts.length < 1) {
+      return null;
+    }
+    const parsedHour = parseInt(parts[0], 10);
+    if (isNaN(parsedHour) || parsedHour < 0 || parsedHour >= 24) {
+      return null;
+    }
+    return parsedHour;
   }
 
   private isValidTimeFormat(time: string): boolean {
