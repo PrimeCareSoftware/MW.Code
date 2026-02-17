@@ -236,6 +236,9 @@ namespace MedicSoft.Repository.Context
         public DbSet<MessageReadReceipt> MessageReadReceipts { get; set; } = null!;
         public DbSet<UserPresence> UserPresences { get; set; } = null!;
 
+        // Blog System
+        public DbSet<BlogPost> BlogPosts { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -419,6 +422,9 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new ChatMessageConfiguration());
             modelBuilder.ApplyConfiguration(new ChatParticipantConfiguration());
             modelBuilder.ApplyConfiguration(new MessageReadReceiptConfiguration());
+
+            // Blog System
+            modelBuilder.ApplyConfiguration(new BlogPostConfiguration());
 
             // NOTE: Global query filters are disabled for now since GetTenantId() returns a hardcoded value.
             // All repositories explicitly filter by tenantId parameter, ensuring proper tenant isolation.

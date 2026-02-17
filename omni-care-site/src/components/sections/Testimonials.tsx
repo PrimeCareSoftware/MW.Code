@@ -28,6 +28,9 @@ const testimonials = [
 ];
 
 export const Testimonials = () => {
+  // Temporarily hidden - no clients yet
+  return null;
+  
   return (
     <section className="section-padding">
       <div className="container-custom">

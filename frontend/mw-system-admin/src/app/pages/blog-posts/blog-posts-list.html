@@ -1,0 +1,121 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <h1>Gerenciar Posts do Blog</h1>
+    <button class="btn btn-primary" (click)="createPost()">
+      <i class="icon-plus"></i> Novo Post
+    </button>
+  </div>
+
+  <div class="filters">
+    <label class="filter-checkbox">
+      <input type="checkbox" [(ngModel)]="showPublishedOnly" (change)="toggleFilter()">
+      <span>Mostrar apenas publicados</span>
+    </label>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando posts...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-message">
+      <p>{{ error() }}</p>
+      <button class="btn btn-secondary" (click)="loadPosts()">Tentar novamente</button>
+    </div>
+  } @else {
+    @if (posts().length === 0) {
+      <div class="empty-state">
+        <p>Nenhum post encontrado.</p>
+        <button class="btn btn-primary" (click)="createPost()">Criar primeiro post</button>
+      </div>
+    } @else {
+      <div class="posts-table-container">
+        <table class="posts-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Autor</th>
+              <th>Status</th>
+              <th>Data de Publicação</th>
+              <th>Tempo de Leitura</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (post of posts(); track post.id) {
+              <tr>
+                <td>
+                  <div class="post-title">
+                    <strong>{{ post.title }}</strong>
+                    <small class="post-excerpt">{{ post.excerpt | slice:0:100 }}{{ post.excerpt.length > 100 ? '...' : '' }}</small>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge">{{ post.category }}</span>
+                </td>
+                <td>{{ post.authorName }}</td>
+                <td>
+                  <span [class.status-published]="post.isPublished" 
+                        [class.status-draft]="!post.isPublished"
+                        class="status-badge">
+                    {{ post.isPublished ? 'Publicado' : 'Rascunho' }}
+                  </span>
+                </td>
+                <td>{{ formatDate(post.publishedAt) }}</td>
+                <td>{{ post.readTimeMinutes }} min</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn-icon" (click)="editPost(post.id)" title="Editar">
+                      <i class="icon-edit"></i>
+                    </button>
+                    <button class="btn-icon" (click)="publishPost(post)" 
+                            [title]="post.isPublished ? 'Despublicar' : 'Publicar'">
+                      <i [class.icon-eye-off]="post.isPublished" 
+                         [class.icon-eye]="!post.isPublished"></i>
+                    </button>
+                    <button class="btn-icon btn-danger" (click)="deletePost(post)" title="Excluir">
+                      <i class="icon-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="btn btn-secondary" 
+                  [disabled]="currentPage === 1" 
+                  (click)="goToPage(currentPage - 1)">
+            Anterior
+          </button>
+          
+          @for (page of getPageNumbers(); track page) {
+            <button class="btn" 
+                    [class.btn-primary]="page === currentPage"
+                    [class.btn-secondary]="page !== currentPage"
+                    (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          }
+          
+          <button class="btn btn-secondary" 
+                  [disabled]="currentPage === totalPages" 
+                  (click)="goToPage(currentPage + 1)">
+            Próxima
+          </button>
+          
+          <span class="pagination-info">
+            Página {{ currentPage }} de {{ totalPages }} ({{ totalCount }} posts)
+          </span>
+        </div>
+      }
+    }
+  }
+</div>

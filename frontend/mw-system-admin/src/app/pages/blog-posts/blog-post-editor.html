@@ -1,0 +1,157 @@
+<app-navbar></app-navbar>
+
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Editar Post' : 'Novo Post' }}</h1>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+      <button class="btn btn-primary" (click)="save()" [disabled]="saving()">
+        {{ saving() ? 'Salvando...' : 'Salvar' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Carregando post...</p>
+    </div>
+  } @else {
+    @if (error()) {
+      <div class="error-message">
+        {{ error() }}
+      </div>
+    }
+
+    <div class="editor-container">
+      <div class="form-section">
+        <label class="form-label">
+          Título *
+          <input 
+            type="text" 
+            class="form-input" 
+            [(ngModel)]="formData.title"
+            placeholder="Digite o título do post"
+            maxlength="500"
+          >
+        </label>
+
+        <label class="form-label">
+          Categoria *
+          <input 
+            type="text" 
+            class="form-input" 
+            [(ngModel)]="formData.category"
+            placeholder="Ex: Telemedicina, Gestão, Tecnologia"
+            maxlength="100"
+          >
+        </label>
+
+        <div class="form-row">
+          <label class="form-label">
+            Tempo de Leitura (minutos) *
+            <input 
+              type="number" 
+              class="form-input" 
+              [(ngModel)]="formData.readTimeMinutes"
+              min="1"
+              max="60"
+            >
+          </label>
+
+          <label class="form-label">
+            Imagem Destacada (URL)
+            <input 
+              type="text" 
+              class="form-input" 
+              [(ngModel)]="formData.featuredImage"
+              placeholder="https://exemplo.com/imagem.jpg"
+            >
+          </label>
+        </div>
+
+        <label class="form-label">
+          Resumo *
+          <textarea 
+            class="form-textarea" 
+            [(ngModel)]="formData.excerpt"
+            placeholder="Escreva um breve resumo do post (máximo 1000 caracteres)"
+            rows="3"
+            maxlength="1000"
+          ></textarea>
+          <small class="char-count">{{ formData.excerpt.length }}/1000</small>
+        </label>
+
+        <label class="form-label">
+          Conteúdo *
+          <div class="editor-toolbar">
+            <button type="button" class="toolbar-btn" (click)="formatText('bold')" title="Negrito">
+              <strong>B</strong>
+            </button>
+            <button type="button" class="toolbar-btn" (click)="formatText('italic')" title="Itálico">
+              <em>I</em>
+            </button>
+            <span class="toolbar-separator"></span>
+            <button type="button" class="toolbar-btn" (click)="formatText('heading2')" title="Título">
+              H2
+            </button>
+            <button type="button" class="toolbar-btn" (click)="formatText('heading3')" title="Subtítulo">
+              H3
+            </button>
+            <span class="toolbar-separator"></span>
+            <button type="button" class="toolbar-btn" (click)="formatText('list')" title="Lista">
+              ≡
+            </button>
+            <button type="button" class="toolbar-btn" (click)="formatText('link')" title="Link">
+              🔗
+            </button>
+            <button type="button" class="toolbar-btn" (click)="formatText('image')" title="Imagem">
+              🖼️
+            </button>
+          </div>
+          <textarea 
+            id="content-editor"
+            class="form-textarea content-editor" 
+            [(ngModel)]="formData.content"
+            placeholder="Escreva o conteúdo do post... Use Markdown ou HTML básico"
+            rows="20"
+          ></textarea>
+          <div class="editor-help">
+            <p><strong>Dica:</strong> Use Markdown para formatação:</p>
+            <ul>
+              <li>**negrito** para <strong>negrito</strong></li>
+              <li>*itálico* para <em>itálico</em></li>
+              <li>## Título para títulos</li>
+              <li>- item para listas</li>
+              <li>[texto](url) para links</li>
+              <li>![alt](url) para imagens</li>
+            </ul>
+          </div>
+        </label>
+      </div>
+
+      <div class="preview-section">
+        <h3>Pré-visualização</h3>
+        <div class="preview-card">
+          @if (formData.title) {
+            <h2 class="preview-title">{{ formData.title }}</h2>
+          }
+          @if (formData.category) {
+            <span class="preview-category">{{ formData.category }}</span>
+          }
+          @if (formData.excerpt) {
+            <p class="preview-excerpt">{{ formData.excerpt }}</p>
+          }
+          @if (formData.content) {
+            <div class="preview-content">
+              <p>{{ formData.content | slice:0:300 }}...</p>
+            </div>
+          }
+          @if (formData.readTimeMinutes) {
+            <small class="preview-meta">⏱️ {{ formData.readTimeMinutes }} min de leitura</small>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

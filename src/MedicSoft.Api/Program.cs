@@ -485,6 +485,9 @@ builder.Services.AddScoped<IDocumentTemplateRepository, DocumentTemplateReposito
 builder.Services.AddScoped<IGlobalDocumentTemplateRepository, GlobalDocumentTemplateRepository>();
 builder.Services.AddScoped<IExternalServiceConfigurationRepository, ExternalServiceConfigurationRepository>();
 
+// Blog System
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+
 // Register application services
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
