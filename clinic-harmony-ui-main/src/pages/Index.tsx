@@ -9,6 +9,8 @@ import {
   UserCircle,
   Settings
 } from "lucide-react";
+import { Benefits } from "@/components/sections/Benefits";
+import { WhyChoose } from "@/components/sections/WhyChoose";
 
 const systems = [
   {
@@ -144,6 +146,12 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Benefits Section */}
+      <Benefits />
+
+      {/* Why Choose Section */}
+      <WhyChoose />
 
       {/* Features Section */}
       <section id="features" className="py-20">
