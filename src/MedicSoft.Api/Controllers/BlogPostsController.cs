@@ -12,6 +12,7 @@ namespace MedicSoft.Api.Controllers
     public class BlogPostsController : BaseController
     {
         private readonly IBlogPostRepository _blogPostRepository;
+        private const string SystemTenantId = "system";
 
         public BlogPostsController(IBlogPostRepository blogPostRepository, ITenantContext tenantContext)
             : base(tenantContext)
@@ -312,7 +313,7 @@ namespace MedicSoft.Api.Controllers
             if (blogPost == null)
                 return NotFound(new { message = "Post não encontrado" });
 
-            await _blogPostRepository.DeleteAsync(blogPost);
+            await _blogPostRepository.DeleteAsync(id, SystemTenantId);
             await _blogPostRepository.SaveChangesAsync();
 
             return Ok(new { message = "Post excluído com sucesso" });
@@ -343,6 +344,30 @@ namespace MedicSoft.Api.Controllers
             }).ToList();
 
             return Ok(dtos);
+        }
+
+        // Helper methods
+        private Guid? GetUserIdFromClaims()
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier) ?? User.FindFirst("sub");
+            if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out var userId))
+                return userId;
+            return null;
+        }
+
+        private string? GetUsername()
+        {
+            return User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value ?? User.FindFirst("name")?.Value;
+        }
+
+        private bool IsSystemOwner()
+        {
+            var isSystemOwnerClaim = User.FindFirst("is_system_owner");
+            if (isSystemOwnerClaim != null && bool.TryParse(isSystemOwnerClaim.Value, out var isSystemOwner))
+            {
+                return isSystemOwner;
+            }
+            return false;
         }
     }
 }
