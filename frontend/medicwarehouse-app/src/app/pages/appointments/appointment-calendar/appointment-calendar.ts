@@ -134,6 +134,17 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     return new Date(year, month - 1, day);
   }
 
+  /**
+   * Format a Date object to YYYY-MM-DD string using local timezone.
+   * Avoids timezone conversion issues with toISOString().
+   */
+  private formatLocalDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   getWeekStart(date: Date): Date {
     const d = new Date(date);
     const day = d.getDay();
@@ -203,8 +214,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     
     try {
       // Use optimized week agenda endpoint instead of 7 separate daily requests
-      const startDateStr = weekStart.toISOString().split('T')[0];
-      const endDateStr = weekEnd.toISOString().split('T')[0];
+      const startDateStr = this.formatLocalDate(weekStart);
+      const endDateStr = this.formatLocalDate(weekEnd);
       
       const [weekAgenda, blockedSlots] = await Promise.all([
         this.appointmentService.getWeekAgenda(clinicId, startDateStr, endDateStr, doctorId || undefined).toPromise(),
@@ -353,7 +364,7 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     } else {
       // Show context menu or create new appointment
       // For now, just navigate to new appointment
-      const dateStr = slot.dayColumn.date.toISOString().split('T')[0];
+      const dateStr = this.formatLocalDate(slot.dayColumn.date);
       this.router.navigate(['/appointments/new'], {
         queryParams: {
           date: dateStr,
