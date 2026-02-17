@@ -64,10 +64,13 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
 
             // Check if online booking is enabled for this clinic
             var businessConfig = await _businessConfigurationRepository.GetByClinicIdAsync(dto.ClinicId, clinic.TenantId);
+            
+            // If business configuration doesn't exist yet, assume online booking should be allowed
+            // This handles the case of newly created clinics that haven't set up their configuration
             if (businessConfig != null && !businessConfig.OnlineBooking)
                 throw new InvalidOperationException("Agendamento online não está disponível para esta clínica.");
             
-            // Check if the clinic has online scheduling enabled
+            // Check if the clinic has online scheduling enabled (clinic-level setting)
             if (!clinic.EnableOnlineAppointmentScheduling)
                 throw new InvalidOperationException("Agendamento online não está ativo para esta clínica.");
 

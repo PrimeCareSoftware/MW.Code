@@ -90,9 +90,12 @@ namespace MedicSoft.Domain.Services
                 return (false, "Clinic not found");
 
             // Check if online booking is enabled (only for public bookings)
+            // Note: businessConfigurationRepository is optional for backward compatibility
+            // If not provided, the business configuration check is skipped
             if (isPublicBooking && _businessConfigurationRepository != null)
             {
                 var businessConfig = await _businessConfigurationRepository.GetByClinicIdAsync(clinicId, tenantId);
+                // If business configuration exists and online booking is disabled, reject
                 if (businessConfig != null && !businessConfig.OnlineBooking)
                     return (false, "Online booking is disabled for this clinic");
             }
