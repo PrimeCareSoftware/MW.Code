@@ -518,6 +518,106 @@ namespace MedicSoft.Domain.Entities
             return profile;
         }
 
+        public static AccessProfile CreateDefaultNurseProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Enfermeiro",
+                "Acesso enfermeiro - atendimento, procedimentos e acompanhamento",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var nursePermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view and perform)
+                "procedures.view", "procedures.create",
+                // Medications (view only)
+                "medications.view",
+                // Exams
+                "exams.view",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view", "waiting-queue.manage"
+            };
+
+            profile.SetPermissions(nursePermissions);
+            return profile;
+        }
+
+        public static AccessProfile CreateDefaultOccupationalTherapistProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Terapeuta Ocupacional",
+                "Acesso terapeuta ocupacional - atendimento e avaliação funcional",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var occupationalTherapistPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view and perform)
+                "procedures.view",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(occupationalTherapistPermissions);
+            return profile;
+        }
+
+        public static AccessProfile CreateDefaultSpeechTherapistProfile(string tenantId, Guid clinicId)
+        {
+            var profile = new AccessProfile(
+                "Fonoaudiólogo",
+                "Acesso fonoaudiólogo - atendimento e avaliação fonoaudiológica",
+                tenantId,
+                clinicId,
+                isDefault: true
+            );
+
+            var speechTherapistPermissions = new[]
+            {
+                // Patients (view and basic management)
+                "patients.view", "patients.create", "patients.edit",
+                // Appointments
+                "appointments.view", "appointments.create", "appointments.edit",
+                // Medical records (full access)
+                "medical-records.view", "medical-records.create", "medical-records.edit",
+                // Attendance
+                "attendance.view", "attendance.perform",
+                // Procedures (view and perform)
+                "procedures.view",
+                // Notifications
+                "notifications.view",
+                // Waiting queue
+                "waiting-queue.view"
+            };
+
+            profile.SetPermissions(speechTherapistPermissions);
+            return profile;
+        }
+
         /// <summary>
         /// Gets the appropriate default profiles for a specific clinic type.
         /// Returns ALL professional profiles to support multi-specialty clinics and clinic expansion.
@@ -539,7 +639,10 @@ namespace MedicSoft.Domain.Entities
                 CreateDefaultNutritionistProfile(tenantId, clinicId),
                 CreateDefaultPsychologistProfile(tenantId, clinicId),
                 CreateDefaultPhysicalTherapistProfile(tenantId, clinicId),
-                CreateDefaultVeterinarianProfile(tenantId, clinicId)
+                CreateDefaultVeterinarianProfile(tenantId, clinicId),
+                CreateDefaultNurseProfile(tenantId, clinicId),
+                CreateDefaultOccupationalTherapistProfile(tenantId, clinicId),
+                CreateDefaultSpeechTherapistProfile(tenantId, clinicId)
             };
 
             return profiles;
@@ -577,6 +680,9 @@ namespace MedicSoft.Domain.Entities
                 "Psicólogo" => ProfessionalSpecialty.Psicologo,
                 "Fisioterapeuta" => ProfessionalSpecialty.Fisioterapeuta,
                 "Veterinário" => ProfessionalSpecialty.Veterinario,
+                "Enfermeiro" => ProfessionalSpecialty.Enfermeiro,
+                "Terapeuta Ocupacional" => ProfessionalSpecialty.TerapeutaOcupacional,
+                "Fonoaudiólogo" => ProfessionalSpecialty.Fonoaudiologo,
                 _ => null // Non-professional profiles (Owner, Reception, Financial)
             };
         }
