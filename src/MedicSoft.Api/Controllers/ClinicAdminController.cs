@@ -776,10 +776,27 @@ namespace MedicSoft.Api.Controllers
                     return Forbid();
                 }
 
-                // Parse role
-                if (!Enum.TryParse<UserRole>(request.NewRole, true, out var newRole))
+                // Parse role - use ProfileMappingHelper for consistent role mapping
+                // Try direct enum parsing first
+                UserRole newRole;
+                if (!Enum.TryParse<UserRole>(request.NewRole, true, out newRole))
                 {
-                    return BadRequest(new { message = "Invalid role" });
+                    // If direct parsing fails, try mapping from profile names
+                    newRole = ProfileMappingHelper.MapProfileNameToRole(request.NewRole, _logger);
+                    
+                    // Check if the mapped role is Receptionist (default fallback)
+                    // If the original input wasn't a recognized profile name, this is an error
+                    if (newRole == UserRole.Receptionist && !ProfileMappingHelper.IsRecognizedProfile(request.NewRole))
+                    {
+                        var allowedRoles = ProfileMappingHelper.GetAllowedRolesForCreation();
+                        return BadRequest(new { message = $"Invalid role: {request.NewRole}. Valid roles are: {string.Join(", ", allowedRoles)}" });
+                    }
+                }
+
+                // Prevent changing to SystemAdmin role through this endpoint
+                if (newRole == UserRole.SystemAdmin)
+                {
+                    return BadRequest(new { message = "Cannot change user to SystemAdmin role through this endpoint" });
                 }
 
                 await _userService.ChangeUserRoleAsync(id, newRole, tenantId);
