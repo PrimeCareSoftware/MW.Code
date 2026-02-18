@@ -224,5 +224,210 @@ namespace MedicSoft.Test.Services
             
             Assert.Equal("Cannot modify default profiles without a clinic context", exception.Message);
         }
+
+        [Fact]
+        public async Task UpdateAsync_WithConcurrencyException_RetriesSuccessfully()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var profileId = Guid.NewGuid();
+            
+            var customProfile = new AccessProfile(
+                "Perfil Personalizado",
+                "Um perfil customizado",
+                tenantId,
+                clinicId,
+                isDefault: false
+            );
+            
+            var updateDto = new UpdateAccessProfileDto
+            {
+                Name = "Perfil Atualizado",
+                Description = "Descrição atualizada",
+                Permissions = new List<string> { "patients.view" }
+            };
+
+            var callCount = 0;
+            _mockProfileRepository.Setup(r => r.GetByIdAsync(profileId, tenantId))
+                .ReturnsAsync(customProfile);
+
+            _mockProfileRepository.Setup(r => r.UpdateAsync(It.IsAny<AccessProfile>()))
+                .Returns(() =>
+                {
+                    callCount++;
+                    if (callCount == 1)
+                    {
+                        // First attempt fails with concurrency exception
+                        throw new Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException("Concurrency conflict");
+                    }
+                    // Second attempt succeeds
+                    return Task.CompletedTask;
+                });
+
+            // Act
+            var result = await _profileService.UpdateAsync(profileId, updateDto, tenantId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(updateDto.Name, result.Name);
+            
+            // Verify that UpdateAsync was called twice (first failed, second succeeded)
+            _mockProfileRepository.Verify(r => r.UpdateAsync(It.IsAny<AccessProfile>()), Times.Exactly(2));
+            
+            // Verify that GetByIdAsync was called twice (initial load + retry)
+            _mockProfileRepository.Verify(r => r.GetByIdAsync(profileId, tenantId), Times.Exactly(2));
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithConcurrencyException_FailsAfterMaxRetries()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var profileId = Guid.NewGuid();
+            
+            var customProfile = new AccessProfile(
+                "Perfil Personalizado",
+                "Um perfil customizado",
+                tenantId,
+                clinicId,
+                isDefault: false
+            );
+            
+            var updateDto = new UpdateAccessProfileDto
+            {
+                Name = "Perfil Atualizado",
+                Description = "Descrição atualizada",
+                Permissions = new List<string> { "patients.view" }
+            };
+
+            _mockProfileRepository.Setup(r => r.GetByIdAsync(profileId, tenantId))
+                .ReturnsAsync(customProfile);
+
+            // Always throw concurrency exception
+            _mockProfileRepository.Setup(r => r.UpdateAsync(It.IsAny<AccessProfile>()))
+                .ThrowsAsync(new Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException("Concurrency conflict"));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _profileService.UpdateAsync(profileId, updateDto, tenantId)
+            );
+            
+            Assert.Contains("Unable to save profile changes", exception.Message);
+            Assert.Contains("modified by another user", exception.Message);
+            
+            // Verify that UpdateAsync was called 3 times (max retries)
+            _mockProfileRepository.Verify(r => r.UpdateAsync(It.IsAny<AccessProfile>()), Times.Exactly(3));
+            
+            // Verify that GetByIdAsync was called 3 times (initial + 2 retries)
+            _mockProfileRepository.Verify(r => r.GetByIdAsync(profileId, tenantId), Times.Exactly(3));
+        }
+
+        [Fact]
+        public async Task SetConsultationFormProfileAsync_WithConcurrencyException_RetriesSuccessfully()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var profileId = Guid.NewGuid();
+            var consultationFormProfileId = Guid.NewGuid();
+            
+            var customProfile = new AccessProfile(
+                "Perfil Personalizado",
+                "Um perfil customizado",
+                tenantId,
+                clinicId,
+                isDefault: false
+            );
+
+            var formProfile = new ConsultationFormProfile(
+                "Form Profile",
+                "Test form profile",
+                Domain.Enums.ProfessionalSpecialty.Medico,
+                "system"
+            );
+
+            var callCount = 0;
+            _mockProfileRepository.Setup(r => r.GetByIdAsync(profileId, tenantId))
+                .ReturnsAsync(customProfile);
+
+            _mockConsultationFormProfileRepository
+                .Setup(r => r.GetAllQueryable())
+                .Returns(new[] { formProfile }.AsQueryable());
+
+            _mockProfileRepository.Setup(r => r.UpdateAsync(It.IsAny<AccessProfile>()))
+                .Returns(() =>
+                {
+                    callCount++;
+                    if (callCount == 1)
+                    {
+                        // First attempt fails with concurrency exception
+                        throw new Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException("Concurrency conflict");
+                    }
+                    // Second attempt succeeds
+                    return Task.CompletedTask;
+                });
+
+            // Act
+            var result = await _profileService.SetConsultationFormProfileAsync(profileId, consultationFormProfileId, tenantId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(consultationFormProfileId, result.ConsultationFormProfileId);
+            
+            // Verify that UpdateAsync was called twice (first failed, second succeeded)
+            _mockProfileRepository.Verify(r => r.UpdateAsync(It.IsAny<AccessProfile>()), Times.Exactly(2));
+            
+            // Verify that GetByIdAsync was called twice (initial load + retry)
+            _mockProfileRepository.Verify(r => r.GetByIdAsync(profileId, tenantId), Times.Exactly(2));
+        }
+
+        [Fact]
+        public async Task SetConsultationFormProfileAsync_WithConcurrencyException_FailsAfterMaxRetries()
+        {
+            // Arrange
+            var tenantId = "test-tenant";
+            var clinicId = Guid.NewGuid();
+            var profileId = Guid.NewGuid();
+            var consultationFormProfileId = Guid.NewGuid();
+            
+            var customProfile = new AccessProfile(
+                "Perfil Personalizado",
+                "Um perfil customizado",
+                tenantId,
+                clinicId,
+                isDefault: false
+            );
+
+            var formProfile = new ConsultationFormProfile(
+                "Form Profile",
+                "Test form profile",
+                Domain.Enums.ProfessionalSpecialty.Medico,
+                "system"
+            );
+
+            _mockProfileRepository.Setup(r => r.GetByIdAsync(profileId, tenantId))
+                .ReturnsAsync(customProfile);
+
+            _mockConsultationFormProfileRepository
+                .Setup(r => r.GetAllQueryable())
+                .Returns(new[] { formProfile }.AsQueryable());
+
+            // Always throw concurrency exception
+            _mockProfileRepository.Setup(r => r.UpdateAsync(It.IsAny<AccessProfile>()))
+                .ThrowsAsync(new Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException("Concurrency conflict"));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _profileService.SetConsultationFormProfileAsync(profileId, consultationFormProfileId, tenantId)
+            );
+            
+            Assert.Contains("Unable to save profile changes", exception.Message);
+            Assert.Contains("modified by another user", exception.Message);
+            
+            // Verify that UpdateAsync was called 3 times (max retries)
+            _mockProfileRepository.Verify(r => r.UpdateAsync(It.IsAny<AccessProfile>()), Times.Exactly(3));
+        }
     }
 }
