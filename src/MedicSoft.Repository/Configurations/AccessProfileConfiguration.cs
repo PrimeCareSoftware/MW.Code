@@ -40,6 +40,14 @@ namespace MedicSoft.Repository.Configurations
             builder.Property(ap => ap.UpdatedAt)
                 .IsRequired(false);
 
+            // Concurrency control using PostgreSQL's xmin system column
+            builder.Property(ap => ap.RowVersion)
+                .HasColumnName("xmin")
+                .HasColumnType("xid")
+                .IsRowVersion()
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
+
             // Relationships
             builder.HasOne(ap => ap.Clinic)
                 .WithMany()

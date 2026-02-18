@@ -18,6 +18,9 @@ namespace MedicSoft.Domain.Entities
         public bool IsActive { get; private set; }
         public Guid? ClinicId { get; private set; }
         public Guid? ConsultationFormProfileId { get; private set; }
+        
+        // Concurrency control - using uint for PostgreSQL xmin
+        public uint RowVersion { get; private set; }
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }

@@ -34,6 +34,8 @@ namespace MedicSoft.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IConsultationFormProfileRepository _consultationFormProfileRepository;
         private readonly IClinicRepository _clinicRepository;
+        
+        private const int MaxUpdateRetries = 3;
 
         public AccessProfileService(
             IAccessProfileRepository profileRepository,
@@ -97,51 +99,68 @@ namespace MedicSoft.Application.Services
 
         public async Task<AccessProfileDto> UpdateAsync(Guid id, UpdateAccessProfileDto dto, string tenantId)
         {
-            var profile = await _profileRepository.GetByIdAsync(id, tenantId);
-            if (profile == null)
-                throw new InvalidOperationException("Profile not found");
-
-            // If trying to edit a default profile, create a clinic-specific copy instead
-            if (profile.IsDefault)
+            // Retry loop to handle optimistic concurrency exceptions
+            for (int attempt = 1; attempt <= MaxUpdateRetries; attempt++)
             {
-                if (!profile.ClinicId.HasValue)
-                    throw new InvalidOperationException("Cannot modify default profiles without a clinic context");
-
-                // Create a clinic-specific copy of the default profile
-                var clinicSpecificProfile = new AccessProfile(
-                    dto.Name, 
-                    dto.Description, 
-                    tenantId, 
-                    profile.ClinicId.Value, 
-                    isDefault: false,
-                    consultationFormProfileId: profile.ConsultationFormProfileId
-                );
-
-                // Copy permissions from the original or use the provided ones
-                if (dto.Permissions != null && dto.Permissions.Any())
+                try
                 {
-                    clinicSpecificProfile.SetPermissions(dto.Permissions);
-                }
-                else
-                {
-                    // Copy permissions from the default profile
-                    clinicSpecificProfile.SetPermissions(profile.GetPermissionKeys());
-                }
+                    var profile = await _profileRepository.GetByIdAsync(id, tenantId);
+                    if (profile == null)
+                        throw new InvalidOperationException("Profile not found");
 
-                await _profileRepository.AddAsync(clinicSpecificProfile);
-                return MapToDto(clinicSpecificProfile);
+                    // If trying to edit a default profile, create a clinic-specific copy instead
+                    if (profile.IsDefault)
+                    {
+                        if (!profile.ClinicId.HasValue)
+                            throw new InvalidOperationException("Cannot modify default profiles without a clinic context");
+
+                        // Create a clinic-specific copy of the default profile
+                        var clinicSpecificProfile = new AccessProfile(
+                            dto.Name, 
+                            dto.Description, 
+                            tenantId, 
+                            profile.ClinicId.Value, 
+                            isDefault: false,
+                            consultationFormProfileId: profile.ConsultationFormProfileId
+                        );
+
+                        // Copy permissions from the original or use the provided ones
+                        if (dto.Permissions != null && dto.Permissions.Any())
+                        {
+                            clinicSpecificProfile.SetPermissions(dto.Permissions);
+                        }
+                        else
+                        {
+                            // Copy permissions from the default profile
+                            clinicSpecificProfile.SetPermissions(profile.GetPermissionKeys());
+                        }
+
+                        await _profileRepository.AddAsync(clinicSpecificProfile);
+                        return MapToDto(clinicSpecificProfile);
+                    }
+
+                    profile.Update(dto.Name, dto.Description);
+                    
+                    // Update permissions
+                    if (dto.Permissions != null)
+                    {
+                        profile.SetPermissions(dto.Permissions);
+                    }
+
+                    await _profileRepository.UpdateAsync(profile);
+                    return MapToDto(profile);
+                }
+                catch (DbUpdateConcurrencyException) when (attempt < MaxUpdateRetries)
+                {
+                    // Profile was modified by another user, reload and retry
+                    await Task.Delay(100 * attempt); // Exponential backoff: 100ms, 200ms, 300ms
+                    // Loop will retry with fresh data
+                }
             }
-
-            profile.Update(dto.Name, dto.Description);
             
-            // Update permissions
-            if (dto.Permissions != null)
-            {
-                profile.SetPermissions(dto.Permissions);
-            }
-
-            await _profileRepository.UpdateAsync(profile);
-            return MapToDto(profile);
+            // All retries exhausted
+            throw new InvalidOperationException(
+                "Unable to save profile changes. The profile may have been modified by another user. Please reload and try again.");
         }
 
         public async Task DeleteAsync(Guid id, string tenantId)
@@ -274,28 +293,45 @@ namespace MedicSoft.Application.Services
 
         public async Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId)
         {
-            var profile = await _profileRepository.GetByIdAsync(profileId, tenantId);
-            if (profile == null)
-                throw new InvalidOperationException("Profile not found");
-
-            // Validate consultation form profile exists if provided
-            if (consultationFormProfileId.HasValue)
+            // Retry loop to handle optimistic concurrency exceptions
+            for (int attempt = 1; attempt <= MaxUpdateRetries; attempt++)
             {
-                // Check both system and clinic-specific profiles in a single query
-                var formProfile = await _consultationFormProfileRepository
-                    .GetAllQueryable()
-                    .Where(p => p.Id == consultationFormProfileId.Value && 
-                               (p.TenantId == "system" || p.TenantId == tenantId))
-                    .FirstOrDefaultAsync();
-                
-                if (formProfile == null)
-                    throw new InvalidOperationException("Consultation form profile not found");
+                try
+                {
+                    var profile = await _profileRepository.GetByIdAsync(profileId, tenantId);
+                    if (profile == null)
+                        throw new InvalidOperationException("Profile not found");
+
+                    // Validate consultation form profile exists if provided
+                    if (consultationFormProfileId.HasValue)
+                    {
+                        // Check both system and clinic-specific profiles in a single query
+                        var formProfile = await _consultationFormProfileRepository
+                            .GetAllQueryable()
+                            .Where(p => p.Id == consultationFormProfileId.Value && 
+                                       (p.TenantId == "system" || p.TenantId == tenantId))
+                            .FirstOrDefaultAsync();
+                        
+                        if (formProfile == null)
+                            throw new InvalidOperationException("Consultation form profile not found");
+                    }
+
+                    profile.SetConsultationFormProfile(consultationFormProfileId);
+                    await _profileRepository.UpdateAsync(profile);
+
+                    return MapToDto(profile);
+                }
+                catch (DbUpdateConcurrencyException) when (attempt < MaxUpdateRetries)
+                {
+                    // Profile was modified by another user, reload and retry
+                    await Task.Delay(100 * attempt); // Exponential backoff: 100ms, 200ms, 300ms
+                    // Loop will retry with fresh data
+                }
             }
-
-            profile.SetConsultationFormProfile(consultationFormProfileId);
-            await _profileRepository.UpdateAsync(profile);
-
-            return MapToDto(profile);
+            
+            // All retries exhausted
+            throw new InvalidOperationException(
+                "Unable to save profile changes. The profile may have been modified by another user. Please reload and try again.");
         }
 
         /// <summary>
@@ -437,15 +473,50 @@ namespace MedicSoft.Application.Services
 
                 if (missingPermissions.Any())
                 {
-                    // Add missing permissions
-                    foreach (var permission in missingPermissions)
+                    // Add missing permissions with retry logic for concurrency
+                    bool updated = false;
+                    for (int attempt = 1; attempt <= MaxUpdateRetries && !updated; attempt++)
                     {
-                        profile.AddPermission(permission);
-                        detail.PermissionsAdded.Add(permission);
-                    }
+                        try
+                        {
+                            // Always reload profile to get latest version for each attempt
+                            var currentProfile = await _profileRepository.GetByIdAsync(profile.Id, tenantId);
+                            if (currentProfile == null)
+                            {
+                                detail.Skipped = true;
+                                detail.SkipReason = "Profile was deleted during sync";
+                                result.ProfilesSkipped++;
+                                break;
+                            }
+                            
+                            // Add missing permissions
+                            foreach (var permission in missingPermissions)
+                            {
+                                currentProfile.AddPermission(permission);
+                                if (!detail.PermissionsAdded.Contains(permission))
+                                {
+                                    detail.PermissionsAdded.Add(permission);
+                                }
+                            }
 
-                    await _profileRepository.UpdateAsync(profile);
-                    result.ProfilesUpdated++;
+                            await _profileRepository.UpdateAsync(currentProfile);
+                            result.ProfilesUpdated++;
+                            updated = true;
+                        }
+                        catch (DbUpdateConcurrencyException) when (attempt < MaxUpdateRetries)
+                        {
+                            // Profile was modified by another operation, retry
+                            await Task.Delay(100 * attempt); // Exponential backoff
+                            // Loop will retry with fresh data
+                        }
+                    }
+                    
+                    if (!updated && !detail.Skipped)
+                    {
+                        detail.Skipped = true;
+                        detail.SkipReason = "Failed to update after retries due to concurrent modifications";
+                        result.ProfilesSkipped++;
+                    }
                 }
                 else
                 {
