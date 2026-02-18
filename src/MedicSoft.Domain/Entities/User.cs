@@ -514,6 +514,26 @@ namespace MedicSoft.Domain.Entities
             MfaGracePeriodEndsAt = null;
             UpdateTimestamp();
         }
+
+        /// <summary>
+        /// Determines if this user is a healthcare professional (can perform appointments)
+        /// Excludes administrative roles like SystemAdmin, ClinicOwner, Receptionist, and Secretary
+        /// </summary>
+        public bool IsProfessional()
+        {
+            return Role switch
+            {
+                UserRole.Doctor => true,
+                UserRole.Dentist => true,
+                UserRole.Nurse => true,
+                UserRole.Psychologist => true,
+                UserRole.SystemAdmin => false,
+                UserRole.ClinicOwner => false,
+                UserRole.Receptionist => false,
+                UserRole.Secretary => false,
+                _ => false
+            };
+        }
     }
 
     public enum UserRole

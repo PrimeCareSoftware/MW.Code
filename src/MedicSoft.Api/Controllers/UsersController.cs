@@ -459,7 +459,9 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
-        /// Get professionals (doctors) for the current clinic (requires appointments.view permission for secretary to see doctors)
+        /// Get professionals for the current clinic (requires appointments.view permission)
+        /// Returns all healthcare professionals (doctors, dentists, nurses, psychologists, etc.) 
+        /// who are marked to show in appointment scheduling
         /// </summary>
         [HttpGet("professionals")]
         [RequirePermissionKey(PermissionKeys.AppointmentsView)]
@@ -471,11 +473,11 @@ namespace MedicSoft.Api.Controllers
             if (clinicId == Guid.Empty)
                 return BadRequest(new { message = "Clinic ID is required" });
 
-            // Get users with professional roles (Doctor, Dentist, etc.)
+            // Get users with professional roles (Doctor, Dentist, Nurse, Psychologist, etc.)
             var users = await _userService.GetUsersByClinicIdAsync(clinicId, tenantId);
             
             var professionals = users
-                .Where(u => (u.Role == UserRole.Doctor || u.Role == UserRole.Dentist) && u.ShowInAppointmentScheduling)
+                .Where(u => u.IsProfessional() && u.ShowInAppointmentScheduling)
                 .Select(u => new ProfessionalDto
                 {
                     Id = u.Id,
