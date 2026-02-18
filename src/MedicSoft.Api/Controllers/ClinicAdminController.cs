@@ -232,9 +232,13 @@ namespace MedicSoft.Api.Controllers
                     Username = u.Username,
                     Name = u.FullName,
                     Email = u.Email,
+                    Phone = u.Phone,
                     Role = u.Role.ToString(),
                     IsActive = u.IsActive,
-                    CreatedAt = u.CreatedAt
+                    CreatedAt = u.CreatedAt,
+                    ProfessionalId = u.ProfessionalId,
+                    Specialty = u.Specialty,
+                    ShowInAppointmentScheduling = u.ShowInAppointmentScheduling
                 }));
             }
             catch (Exception ex)
@@ -531,7 +535,10 @@ namespace MedicSoft.Api.Controllers
                     request.Email ?? user.Email,
                     request.Name ?? user.FullName,
                     request.Phone ?? user.Phone,
-                    tenantId
+                    tenantId,
+                    request.ProfessionalId ?? user.ProfessionalId,
+                    request.Specialty ?? user.Specialty,
+                    request.ShowInAppointmentScheduling ?? user.ShowInAppointmentScheduling
                 );
 
                 // Handle activation/deactivation

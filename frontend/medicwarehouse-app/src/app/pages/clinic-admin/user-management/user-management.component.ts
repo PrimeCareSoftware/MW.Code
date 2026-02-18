@@ -6,10 +6,11 @@ import { ClinicUserDto, CreateClinicUserRequest, UpdateClinicUserRequest, Doctor
 import { Navbar } from '../../../shared/navbar/navbar';
 import { AccessProfileService } from '../../../services/access-profile.service';
 import { AccessProfile } from '../../../models/access-profile.model';
+import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
 
 @Component({
   selector: 'app-user-management',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, Navbar, PhoneMaskDirective],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss'
 })
@@ -269,7 +270,7 @@ export class UserManagementComponent implements OnInit {
     this.editUserForm.patchValue({
       email: user.email,
       name: user.name,
-      phone: '', // Phone is not returned from backend, so keep empty
+      phone: user.phone || '',
       professionalId: user.professionalId || '',
       specialty: user.specialty || '',
       showInAppointmentScheduling: user.showInAppointmentScheduling
@@ -291,7 +292,14 @@ export class UserManagementComponent implements OnInit {
     this.isProcessing.set(true);
     this.errorMessage.set('');
 
-    const request: UpdateClinicUserRequest = this.editUserForm.value;
+    const request: UpdateClinicUserRequest = {
+      email: this.editUserForm.value.email,
+      name: this.editUserForm.value.name,
+      phone: this.editUserForm.value.phone,
+      professionalId: this.editUserForm.value.professionalId,
+      specialty: this.editUserForm.value.specialty,
+      showInAppointmentScheduling: this.editUserForm.value.showInAppointmentScheduling
+    };
 
     this.clinicAdminService.updateUser(this.selectedUser()!.id, request).subscribe({
       next: () => {
