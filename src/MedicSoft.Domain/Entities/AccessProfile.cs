@@ -157,6 +157,8 @@ namespace MedicSoft.Domain.Entities
             {
                 // Clinic management
                 "clinic.view", "clinic.manage",
+                // Company
+                "company.view", "company.edit",
                 // Users and profiles
                 "users.view", "users.create", "users.edit", "users.delete",
                 "profiles.view", "profiles.create", "profiles.edit", "profiles.delete",
@@ -165,19 +167,47 @@ namespace MedicSoft.Domain.Entities
                 // Appointments
                 "appointments.view", "appointments.create", "appointments.edit", "appointments.delete",
                 // Medical records
-                "medical-records.view", "medical-records.create", "medical-records.edit",
+                "medical-records.view", "medical-records.create", "medical-records.edit", "medical-records.delete",
                 // Attendance
                 "attendance.view", "attendance.perform",
                 // Procedures
-                "procedures.view", "procedures.create", "procedures.edit", "procedures.delete",
-                // Financial
+                "procedures.view", "procedures.create", "procedures.edit", "procedures.delete", "procedures.manage",
+                // Financial - Payments and Invoices
                 "payments.view", "payments.manage", "invoices.view", "invoices.manage",
+                // Financial - Expenses
                 "expenses.view", "expenses.create", "expenses.edit", "expenses.delete",
+                // Financial - Accounts Receivable and Payable
+                "accounts-receivable.view", "accounts-receivable.manage",
+                "accounts-payable.view", "accounts-payable.manage",
+                // Financial - Suppliers
+                "suppliers.view", "suppliers.manage",
+                // Financial - Cash Flow and Closure
+                "cash-flow.view", "cash-flow.manage",
+                "financial-closure.view", "financial-closure.manage",
+                // Reports
                 "reports.financial", "reports.operational",
                 // Medications and prescriptions
                 "medications.view", "prescriptions.create",
                 // Exams
                 "exams.view", "exams.request",
+                // Health Insurance
+                "health-insurance.view", "health-insurance.create", "health-insurance.edit", "health-insurance.delete",
+                // TISS/TUSS
+                "tiss.view", "tiss.create", "tiss.edit", "tiss.delete",
+                "tuss.view", "tuss.create", "tuss.edit", "tuss.delete",
+                // Authorizations
+                "authorizations.view", "authorizations.create", "authorizations.edit", "authorizations.delete",
+                // Form Configuration
+                "form-configuration.view", "form-configuration.manage",
+                // CRM - Complaints
+                "complaints.view", "complaints.create", "complaints.edit", "complaints.delete", "complaints.manage",
+                // CRM - Surveys
+                "surveys.view", "surveys.create", "surveys.edit", "surveys.delete", "surveys.manage",
+                // CRM - Patient Journey
+                "patient-journey.view", "patient-journey.manage",
+                // CRM - Marketing Automation
+                "marketing-automation.view", "marketing-automation.create", "marketing-automation.edit", 
+                "marketing-automation.delete", "marketing-automation.manage",
                 // Notifications
                 "notifications.view", "notifications.manage",
                 // Waiting queue
@@ -208,12 +238,19 @@ namespace MedicSoft.Domain.Entities
                 "medical-records.view", "medical-records.create", "medical-records.edit",
                 // Attendance
                 "attendance.view", "attendance.perform",
-                // Procedures (view only)
+                // Procedures (view and perform)
                 "procedures.view",
                 // Medications and prescriptions
                 "medications.view", "prescriptions.create",
                 // Exams
                 "exams.view", "exams.request",
+                // Health Insurance (view only)
+                "health-insurance.view",
+                // TISS/TUSS (view and create guides)
+                "tiss.view", "tiss.create", "tiss.edit",
+                "tuss.view",
+                // Authorizations (view and request)
+                "authorizations.view", "authorizations.create",
                 // Notifications
                 "notifications.view",
                 // Waiting queue
@@ -244,8 +281,16 @@ namespace MedicSoft.Domain.Entities
                 "medical-records.view",
                 // Procedures (view only)
                 "procedures.view",
-                // Financial (basic)
+                // Financial (basic payments)
                 "payments.view", "payments.manage",
+                "accounts-receivable.view",
+                // Health Insurance (view and manage)
+                "health-insurance.view", "health-insurance.create", "health-insurance.edit",
+                // TISS/TUSS (view and manage)
+                "tiss.view", "tiss.create", "tiss.edit",
+                "tuss.view",
+                // Authorizations (view and manage)
+                "authorizations.view", "authorizations.create", "authorizations.edit",
                 // Notifications
                 "notifications.view", "notifications.manage",
                 // Waiting queue
@@ -274,11 +319,25 @@ namespace MedicSoft.Domain.Entities
                 "appointments.view",
                 // Procedures (view only)
                 "procedures.view",
-                // Financial (full access)
+                // Financial - Payments and Invoices
                 "payments.view", "payments.manage",
                 "invoices.view", "invoices.manage",
+                // Financial - Expenses
                 "expenses.view", "expenses.create", "expenses.edit", "expenses.delete",
-                "reports.financial",
+                // Financial - Accounts Receivable and Payable
+                "accounts-receivable.view", "accounts-receivable.manage",
+                "accounts-payable.view", "accounts-payable.manage",
+                // Financial - Suppliers
+                "suppliers.view", "suppliers.manage",
+                // Financial - Cash Flow and Closure
+                "cash-flow.view", "cash-flow.manage",
+                "financial-closure.view", "financial-closure.manage",
+                // Reports
+                "reports.financial", "reports.operational",
+                // Health Insurance (view for billing)
+                "health-insurance.view",
+                // TISS (view for billing)
+                "tiss.view",
                 // Notifications
                 "notifications.view"
             };
