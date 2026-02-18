@@ -352,6 +352,35 @@ namespace MedicSoft.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Sync default profile permissions with latest definitions (System Admin only)
+        /// This endpoint updates existing default profiles with any missing permissions
+        /// </summary>
+        [HttpPost("sync-permissions")]
+        public async Task<ActionResult<SyncProfilePermissionsResult>> SyncDefaultProfilePermissions()
+        {
+            try
+            {
+                // Only system admins can run this operation
+                var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+                if (roleClaim != RoleNames.SystemAdmin)
+                    return Forbid();
+
+                var tenantId = GetTenantId();
+                var result = await _profileService.SyncDefaultProfilePermissionsAsync(tenantId);
+                
+                return Ok(new
+                {
+                    message = $"Sync completed. {result.ProfilesUpdated} profiles updated, {result.ProfilesSkipped} skipped.",
+                    data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         private Guid GetClinicIdFromToken()
         {
             var clinicIdClaim = User.FindFirst("clinic_id")?.Value;

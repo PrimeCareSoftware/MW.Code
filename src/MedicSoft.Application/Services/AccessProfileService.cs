@@ -25,6 +25,7 @@ namespace MedicSoft.Application.Services
         Task<IEnumerable<AccessProfileDto>> CreateDefaultProfilesForClinicTypeAsync(Guid clinicId, string tenantId, ClinicType clinicType);
         Task<AccessProfileDto> SetConsultationFormProfileAsync(Guid profileId, Guid? consultationFormProfileId, string tenantId);
         Task<BackfillProfilesResult> BackfillMissingProfilesForAllClinicsAsync(string tenantId);
+        Task<SyncProfilePermissionsResult> SyncDefaultProfilePermissionsAsync(string tenantId);
     }
 
     public class AccessProfileService : IAccessProfileService
@@ -363,6 +364,97 @@ namespace MedicSoft.Application.Services
 
                 result.ClinicDetails.Add(clinicDetail);
                 result.ClinicsProcessed++;
+            }
+
+            return result;
+        }
+
+        public async Task<SyncProfilePermissionsResult> SyncDefaultProfilePermissionsAsync(string tenantId)
+        {
+            var result = new SyncProfilePermissionsResult
+            {
+                ProfilesUpdated = 0,
+                ProfilesSkipped = 0,
+                ProfileDetails = new List<ProfileSyncDetail>()
+            };
+
+            // Get all default profiles for this tenant
+            var allProfiles = await _profileRepository.GetAllAsync(tenantId);
+            var defaultProfiles = allProfiles.Where(p => p.IsDefault && p.IsActive).ToList();
+
+            foreach (var profile in defaultProfiles)
+            {
+                var detail = new ProfileSyncDetail
+                {
+                    ProfileId = profile.Id,
+                    ProfileName = profile.Name,
+                    ClinicId = profile.ClinicId,
+                    PermissionsAdded = new List<string>()
+                };
+
+                // Get the expected permissions based on profile name
+                string[] expectedPermissions;
+                if (profile.Name.Contains("Proprietário") || profile.Name.Contains("Owner"))
+                {
+                    var templateProfile = AccessProfile.CreateDefaultOwnerProfile(tenantId, profile.ClinicId ?? Guid.Empty);
+                    expectedPermissions = templateProfile.GetPermissionKeys().ToArray();
+                }
+                else if (profile.Name.Contains("Médico") || profile.Name.Contains("Doctor") || profile.Name.Contains("Medical"))
+                {
+                    var templateProfile = AccessProfile.CreateDefaultMedicalProfile(tenantId, profile.ClinicId ?? Guid.Empty);
+                    expectedPermissions = templateProfile.GetPermissionKeys().ToArray();
+                }
+                else if (profile.Name.Contains("Recepção") || profile.Name.Contains("Secretaria") || profile.Name.Contains("Reception"))
+                {
+                    var templateProfile = AccessProfile.CreateDefaultReceptionProfile(tenantId, profile.ClinicId ?? Guid.Empty);
+                    expectedPermissions = templateProfile.GetPermissionKeys().ToArray();
+                }
+                else if (profile.Name.Contains("Financeiro") || profile.Name.Contains("Financial"))
+                {
+                    var templateProfile = AccessProfile.CreateDefaultFinancialProfile(tenantId, profile.ClinicId ?? Guid.Empty);
+                    expectedPermissions = templateProfile.GetPermissionKeys().ToArray();
+                }
+                else if (profile.Name.Contains("Dentista") || profile.Name.Contains("Dentist"))
+                {
+                    var templateProfile = AccessProfile.CreateDefaultDentistProfile(tenantId, profile.ClinicId ?? Guid.Empty);
+                    expectedPermissions = templateProfile.GetPermissionKeys().ToArray();
+                }
+                else
+                {
+                    // Skip unrecognized profiles
+                    detail.Skipped = true;
+                    detail.SkipReason = "Unrecognized profile type";
+                    result.ProfileDetails.Add(detail);
+                    result.ProfilesSkipped++;
+                    continue;
+                }
+
+                // Get current permissions
+                var currentPermissions = profile.GetPermissionKeys().ToHashSet();
+                
+                // Find missing permissions
+                var missingPermissions = expectedPermissions.Where(p => !currentPermissions.Contains(p)).ToList();
+
+                if (missingPermissions.Any())
+                {
+                    // Add missing permissions
+                    foreach (var permission in missingPermissions)
+                    {
+                        profile.AddPermission(permission);
+                        detail.PermissionsAdded.Add(permission);
+                    }
+
+                    await _profileRepository.UpdateAsync(profile);
+                    result.ProfilesUpdated++;
+                }
+                else
+                {
+                    detail.Skipped = true;
+                    detail.SkipReason = "Profile already up to date";
+                    result.ProfilesSkipped++;
+                }
+
+                result.ProfileDetails.Add(detail);
             }
 
             return result;
