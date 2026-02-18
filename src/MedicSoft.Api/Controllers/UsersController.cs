@@ -260,7 +260,7 @@ namespace MedicSoft.Api.Controllers
             {
                 var tenantId = GetTenantId();
 
-                if (!Enum.TryParse<UserRole>(request.NewRole, out var newRole))
+                if (!Enum.TryParse<UserRole>(request.NewRole, true, out var newRole))
                     return BadRequest(new { message = "Invalid role" });
 
                 await _userService.ChangeUserRoleAsync(id, newRole, tenantId);
