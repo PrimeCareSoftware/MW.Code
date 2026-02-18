@@ -180,6 +180,50 @@ namespace MedicSoft.Domain.Entities
                     PatientReviews = true;
                     break;
                     
+                case ProfessionalSpecialty.Enfermeiro:
+                    ElectronicPrescription = false;
+                    LabIntegration = true;
+                    VaccineControl = true;
+                    Telemedicine = true;
+                    HomeVisit = true;
+                    GroupSessions = false;
+                    HealthInsurance = true;
+                    PatientReviews = true;
+                    break;
+                    
+                case ProfessionalSpecialty.TerapeutaOcupacional:
+                    ElectronicPrescription = false;
+                    LabIntegration = false;
+                    VaccineControl = false;
+                    Telemedicine = true;
+                    HomeVisit = true;
+                    GroupSessions = true;
+                    HealthInsurance = true;
+                    PatientReviews = true;
+                    break;
+                    
+                case ProfessionalSpecialty.Fonoaudiologo:
+                    ElectronicPrescription = false;
+                    LabIntegration = false;
+                    VaccineControl = false;
+                    Telemedicine = true;
+                    HomeVisit = false;
+                    GroupSessions = true;
+                    HealthInsurance = true;
+                    PatientReviews = true;
+                    break;
+                    
+                case ProfessionalSpecialty.Veterinario:
+                    ElectronicPrescription = true;
+                    LabIntegration = true;
+                    VaccineControl = true;
+                    Telemedicine = false;
+                    HomeVisit = true;
+                    GroupSessions = false;
+                    HealthInsurance = false;
+                    PatientReviews = true;
+                    break;
+                    
                 default:
                     // Generic defaults for other specialties
                     ElectronicPrescription = true;

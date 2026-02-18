@@ -17,6 +17,9 @@ namespace MedicSoft.Test.Entities
         [InlineData("Psicólogo", ProfessionalSpecialty.Psicologo)]
         [InlineData("Fisioterapeuta", ProfessionalSpecialty.Fisioterapeuta)]
         [InlineData("Veterinário", ProfessionalSpecialty.Veterinario)]
+        [InlineData("Enfermeiro", ProfessionalSpecialty.Enfermeiro)]
+        [InlineData("Terapeuta Ocupacional", ProfessionalSpecialty.TerapeutaOcupacional)]
+        [InlineData("Fonoaudiólogo", ProfessionalSpecialty.Fonoaudiologo)]
         public void GetProfessionalSpecialtyForProfileName_WithProfessionalProfile_ReturnsCorrectSpecialty(
             string profileName, ProfessionalSpecialty expectedSpecialty)
         {
@@ -44,7 +47,7 @@ namespace MedicSoft.Test.Entities
         }
 
         [Fact]
-        public void GetDefaultProfilesForClinicType_ReturnsAllNineProfiles()
+        public void GetDefaultProfilesForClinicType_ReturnsAllTwelveProfiles()
         {
             // Arrange
             var clinicType = ClinicType.Medical;
@@ -53,7 +56,7 @@ namespace MedicSoft.Test.Entities
             var profiles = AccessProfile.GetDefaultProfilesForClinicType(_tenantId, _clinicId, clinicType);
 
             // Assert
-            Assert.Equal(9, profiles.Count);
+            Assert.Equal(12, profiles.Count);
             
             // Verify common profiles
             Assert.Contains(profiles, p => p.Name == "Proprietário");
@@ -67,6 +70,9 @@ namespace MedicSoft.Test.Entities
             Assert.Contains(profiles, p => p.Name == "Psicólogo");
             Assert.Contains(profiles, p => p.Name == "Fisioterapeuta");
             Assert.Contains(profiles, p => p.Name == "Veterinário");
+            Assert.Contains(profiles, p => p.Name == "Enfermeiro");
+            Assert.Contains(profiles, p => p.Name == "Terapeuta Ocupacional");
+            Assert.Contains(profiles, p => p.Name == "Fonoaudiólogo");
         }
 
         [Fact]
