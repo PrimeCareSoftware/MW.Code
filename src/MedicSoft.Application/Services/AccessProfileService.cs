@@ -475,29 +475,28 @@ namespace MedicSoft.Application.Services
                 {
                     // Add missing permissions with retry logic for concurrency
                     bool updated = false;
-                    AccessProfile? currentProfile = profile;
                     for (int attempt = 1; attempt <= MaxUpdateRetries && !updated; attempt++)
                     {
                         try
                         {
-                            // Reload profile to get latest version
-                            if (attempt > 1)
+                            // Always reload profile to get latest version for each attempt
+                            var currentProfile = await _profileRepository.GetByIdAsync(profile.Id, tenantId);
+                            if (currentProfile == null)
                             {
-                                currentProfile = await _profileRepository.GetByIdAsync(profile.Id, tenantId);
-                                if (currentProfile == null)
-                                {
-                                    detail.Skipped = true;
-                                    detail.SkipReason = "Profile was deleted during sync";
-                                    result.ProfilesSkipped++;
-                                    break;
-                                }
+                                detail.Skipped = true;
+                                detail.SkipReason = "Profile was deleted during sync";
+                                result.ProfilesSkipped++;
+                                break;
                             }
                             
                             // Add missing permissions
                             foreach (var permission in missingPermissions)
                             {
                                 currentProfile.AddPermission(permission);
-                                detail.PermissionsAdded.Add(permission);
+                                if (!detail.PermissionsAdded.Contains(permission))
+                                {
+                                    detail.PermissionsAdded.Add(permission);
+                                }
                             }
 
                             await _profileRepository.UpdateAsync(currentProfile);
@@ -508,7 +507,7 @@ namespace MedicSoft.Application.Services
                         {
                             // Profile was modified by another operation, retry
                             await Task.Delay(100 * attempt); // Exponential backoff
-                            detail.PermissionsAdded.Clear(); // Reset for retry
+                            // Loop will retry with fresh data
                         }
                     }
                     
