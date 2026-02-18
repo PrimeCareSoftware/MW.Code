@@ -44,11 +44,13 @@ namespace MedicSoft.Application.DTOs
         public string Username { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string? Phone { get; set; }
         public string Role { get; set; } = string.Empty;
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? ProfessionalId { get; set; } // CRM, CRP, CRN, CRO, etc.
         public string? Specialty { get; set; } // Professional specialty
+        public bool ShowInAppointmentScheduling { get; set; }
         public Guid? ProfileId { get; set; } // Access profile ID
     }
 
@@ -72,5 +74,8 @@ namespace MedicSoft.Application.DTOs
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public bool? IsActive { get; set; }
+        public string? ProfessionalId { get; set; }
+        public string? Specialty { get; set; }
+        public bool? ShowInAppointmentScheduling { get; set; }
     }
 }
