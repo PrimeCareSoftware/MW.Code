@@ -103,8 +103,29 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task UpdateAsync(AccessProfile profile)
         {
-            _context.AccessProfiles.Update(profile);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.AccessProfiles.Update(profile);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Reload latest version and reapply changes (client wins) to resolve concurrency
+                var databaseProfile = await _context.AccessProfiles
+                    .Include(ap => ap.Permissions)
+                    .FirstOrDefaultAsync(ap => ap.Id == profile.Id && ap.TenantId == profile.TenantId);
+
+                if (databaseProfile == null)
+                {
+                    throw;
+                }
+
+                databaseProfile.Update(profile.Name, profile.Description);
+                databaseProfile.SetPermissions(profile.GetPermissionKeys());
+                databaseProfile.SetConsultationFormProfile(profile.ConsultationFormProfileId);
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(Guid id, string tenantId)

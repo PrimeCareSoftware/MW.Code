@@ -22,8 +22,23 @@ namespace MedicSoft.Repository.Repositories
 
         public async Task AddAsync(AuditLog auditLog)
         {
-            await _context.AuditLogs.AddAsync(auditLog);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (_context.ChangeTracker.HasChanges())
+                {
+                    _context.ChangeTracker.Clear();
+                }
+
+                await _context.AuditLogs.AddAsync(auditLog);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Clear stale tracked entities and retry once to avoid breaking the request pipeline
+                _context.ChangeTracker.Clear();
+                await _context.AuditLogs.AddAsync(auditLog);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<AuditLog>> QueryAsync(AuditFilter filter)

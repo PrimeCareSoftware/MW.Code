@@ -58,6 +58,12 @@ body.theme-high-contrast .header {
     height: 32px;
     transition: transform 0.3s ease;
   }
+
+  .site-logo {
+    max-width: 45%;
+    height: auto;
+    display: block;
+  }
   
   &:hover .logo-icon {
     transform: rotate(5deg);

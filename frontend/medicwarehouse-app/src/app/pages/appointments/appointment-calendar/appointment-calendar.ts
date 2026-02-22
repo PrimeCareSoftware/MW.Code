@@ -151,7 +151,8 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
   }
 
   /**
-   * Parse ISO date string (YYYY-MM-DD) as local date without timezone conversion.
+   * Parse date string (supports YYYY-MM-DD or ISO 8601 with timezone like YYYY-MM-DDTHH:mm:ss±HH:mm).
+   * Always extracts the date portion and creates a local date without timezone conversion.
    * Fixes the d-1 bug where new Date('2024-01-15') interprets as UTC and converts to local timezone.
    */
   private parseLocalDate(dateString: string): Date {
@@ -161,7 +162,11 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       return new Date(); // Fallback to current date
     }
     
-    const parts = dateString.split('-');
+    // Extract the date portion (YYYY-MM-DD) from ISO 8601 strings like "2026-02-19T21:00:00-03:00"
+    // If the string contains 'T', it's ISO format with time component - extract only the date part
+    const dateOnlyStr = dateString.includes('T') ? dateString.split('T')[0] : dateString;
+    
+    const parts = dateOnlyStr.split('-');
     if (parts.length !== 3) {
       console.warn('Date string is not in YYYY-MM-DD format:', dateString);
       return new Date(); // Fallback to current date
@@ -176,6 +181,25 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
     }
     
     return new Date(year, month - 1, day);
+  }
+
+  /**
+   * Safely compare two date strings in local timezone without any timezone conversion.
+   * This ensures consistent date matching regardless of server/client timezone differences.
+   */
+  private isSameDateLocal(dateStr1: string, date2: Date): boolean {
+    const date1 = this.parseLocalDate(dateStr1);
+    return this.isSameDay(date1, date2);
+  }
+
+  /**
+   * Check if two Date objects represent the same calendar day.
+   * Safely handles timezone differences by comparing year, month, day components only.
+   */
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
   }
 
   /**
@@ -335,14 +359,10 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Distribute appointments to their respective days
       if (weekAgenda && weekAgenda.appointments) {
         weekAgenda.appointments.forEach(appointment => {
-          // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
-          const appointmentDate = this.parseLocalDate(appointment.scheduledDate);
-          appointmentDate.setHours(0, 0, 0, 0); // Ensure time is at midnight for comparison
-          const dayIndex = days.findIndex(d => {
-            const dayDate = new Date(d.date);
-            dayDate.setHours(0, 0, 0, 0);
-            return dayDate.getTime() === appointmentDate.getTime();
-          });
+          // Use safe date comparison helper instead of parsing + comparing timestamps
+          const dayIndex = days.findIndex(d => 
+            this.isSameDateLocal(appointment.scheduledDate, d.date)
+          );
           
           if (dayIndex >= 0) {
             days[dayIndex].appointments.push(appointment);
@@ -353,14 +373,10 @@ export class AppointmentCalendar implements OnInit, OnDestroy {
       // Update day columns with blocked slots
       if (blockedSlots) {
         blockedSlots.forEach(block => {
-          // Parse date string as local date to avoid timezone conversion issues (d-1 bug)
-          const blockDate = this.parseLocalDate(block.date);
-          blockDate.setHours(0, 0, 0, 0); // Ensure time is at midnight for comparison
-          const dayIndex = days.findIndex(d => {
-            const dayDate = new Date(d.date);
-            dayDate.setHours(0, 0, 0, 0);
-            return dayDate.getTime() === blockDate.getTime();
-          });
+          // Use safe date comparison helper instead of parsing + comparing timestamps
+          const dayIndex = days.findIndex(d => 
+            this.isSameDateLocal(block.date, d.date)
+          );
           
           if (dayIndex >= 0) {
             // Filter by professional if doctor filter is active

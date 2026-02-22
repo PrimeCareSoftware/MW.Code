@@ -46,7 +46,7 @@ export class SeoService {
     title: 'Omni Care Software - Sistema de Gestão para Clínicas Médicas',
     description: 'Software completo para gestão de consultórios e clínicas. Agenda, prontuário eletrônico, telemedicina e mais. Experimente grátis por 15 dias.',
     keywords: ['software médico', 'gestão clínica', 'prontuário eletrônico', 'agenda médica', 'telemedicina'],
-    image: 'https://omnicare.com.br/assets/og-image.jpg',
+    image: '/assets/og-image.jpg',
     type: 'website',
     locale: 'pt_BR'
   };
@@ -210,7 +210,7 @@ export class SeoService {
         'name': 'Omni Care Software',
         'logo': {
           '@type': 'ImageObject',
-          'url': 'https://omnicare.com.br/assets/logo.png'
+          'url': '/logo.png'
         }
       },
       'datePublished': article.publishedAt.toISOString(),
@@ -293,7 +293,7 @@ export class SeoService {
       '@type': 'Organization',
       'name': 'Omni Care Software',
       'url': 'https://omnicare.com.br',
-      'logo': 'https://omnicare.com.br/assets/logo.png',
+      'logo': '/logo.png',
       'description': 'Software completo para gestão de consultórios e clínicas médicas',
       'contactPoint': {
         '@type': 'ContactPoint',

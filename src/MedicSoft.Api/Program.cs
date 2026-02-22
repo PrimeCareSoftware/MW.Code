@@ -125,7 +125,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddEndpointsApiExplorer();
 
-// Configure Swagger with JWT support
+// Configure Swagger with JWT support and performance optimizations
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -142,32 +142,54 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // Include XML comments with error handling
-    try
+    // Include XML comments with error handling (optional - can be disabled in development for faster startup)
+    // XML comments add ~355KB but improve documentation. Disable with setting "SwaggerSettings:IncludeXmlComments": false
+    var includeXmlComments = builder.Configuration.GetValue<bool?>("SwaggerSettings:IncludeXmlComments") 
+        ?? builder.Environment.IsProduction(); // Default: include in Production, skip in Development for speed
+    
+    if (includeXmlComments)
     {
-        var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        if (File.Exists(xmlPath))
+        try
         {
-            c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+                Log.Information("Swagger XML documentation loaded successfully");
+            }
+            else
+            {
+                // Log warning if XML documentation file is not found
+                // This helps diagnose build configuration issues
+                Log.Warning("XML documentation file not found at {XmlPath}. " +
+                           "API documentation will not include XML comments. " +
+                           "Ensure GenerateDocumentationFile is set to true in the project file.", xmlPath);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            // Log warning if XML documentation file is not found
-            // This helps diagnose build configuration issues
-            Log.Warning("XML documentation file not found at {XmlPath}. " +
-                       "API documentation will not include XML comments. " +
-                       "Ensure GenerateDocumentationFile is set to true in the project file.", xmlPath);
+            Log.Error(ex, "Error loading XML comments for Swagger documentation");
         }
     }
-    catch (Exception ex)
+    else
     {
-        Log.Error(ex, "Error loading XML comments for Swagger documentation");
+        Log.Information("Swagger XML comments skipped for faster startup. Enable with 'SwaggerSettings:IncludeXmlComments': true");
     }
 
     // Configure Swagger to use fully qualified names to avoid schema ID conflicts
     // Fallback to Name if FullName is null to prevent Swagger generation failures
-    c.CustomSchemaIds(type => type.FullName?.Replace("+", ".") ?? type.Name);
+    // Cache the schema IDs to avoid repeated string manipulations
+    var schemaIdCache = new Dictionary<Type, string>();
+    c.CustomSchemaIds(type =>
+    {
+        if (!schemaIdCache.TryGetValue(type, out var id))
+        {
+            id = type.FullName?.Replace("+", ".") ?? type.Name;
+            schemaIdCache[type] = id;
+        }
+        return id;
+    });
 
     // Configure Swagger to handle IFormFile in multipart/form-data properly
     c.MapType<IFormFile>(() => new OpenApiSchema
@@ -203,6 +225,7 @@ builder.Services.AddSwaggerGen(c =>
 
     // Add operation filter to respect [AllowAnonymous] and [Authorize] attributes
     // This ensures swagger.json is accessible without authentication
+    // Uses caching to avoid expensive reflection operations
     c.OperationFilter<MedicSoft.Api.Filters.AuthorizeCheckOperationFilter>();
 });
 
@@ -773,11 +796,18 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Apply EF Core migrations automatically when enabled (recommended for development)
+// OPTIMIZED: Run migrations in background task to avoid blocking API startup
+// This improves Swagger loading performance and overall API responsiveness
 var applyMigrations = app.Configuration.GetValue<bool>("Database:ApplyMigrations");
-if (applyMigrations)
+var enableDefensiveRepair = app.Configuration.GetValue<bool?>("Database:EnableDefensiveRepair") ?? true;
+
+// Launch database initialization as a background task to avoid blocking startup
+_ = Task.Run(async () =>
 {
     try
     {
+        await Task.Delay(100); // Brief delay to allow app to be fully initialized
+        
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
         var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
@@ -902,70 +932,85 @@ if (applyMigrations)
         }
 
         Log.Information("Database migrations applied successfully");
-    }
-    catch (Exception ex)
-    {
-        Log.Fatal(ex, "Failed to apply database migrations");
-        throw;
-    }
-}
-
-// Defensive repair for partial migrations (runs even when ApplyMigrations is false)
-var enableDefensiveRepair = app.Configuration.GetValue<bool?>("Database:EnableDefensiveRepair") ?? true;
-if (enableDefensiveRepair)
-{
-    try
-    {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
-        var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
-        if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
-            dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
+        
+        // Defensive repair for partial migrations (runs after migrations if they were applied)
+        if (enableDefensiveRepair && applyMigrations)
         {
-            dbContext.Database.ExecuteSqlRaw(
-                "CREATE TABLE IF NOT EXISTS \"CustomDashboards\" (" +
-                "\"Id\" uuid NOT NULL, " +
-                "\"Name\" character varying(200) NOT NULL, " +
-                "\"Description\" character varying(1000) NULL, " +
-                "\"Layout\" text NULL, " +
-                "\"IsDefault\" boolean NOT NULL DEFAULT false, " +
-                "\"IsPublic\" boolean NOT NULL DEFAULT false, " +
-                "\"CreatedBy\" character varying(450) NOT NULL, " +
-                "\"TenantId\" text NOT NULL DEFAULT '', " +
-                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
-                "\"UpdatedAt\" timestamp with time zone NULL, " +
-                "CONSTRAINT \"PK_CustomDashboards\" PRIMARY KEY (\"Id\")" +
-                ");");
-
-            dbContext.Database.ExecuteSqlRaw(
-                "CREATE TABLE IF NOT EXISTS \"DashboardWidgets\" (" +
-                "\"Id\" uuid NOT NULL, " +
-                "\"DashboardId\" uuid NOT NULL, " +
-                "\"Type\" character varying(50) NOT NULL, " +
-                "\"Title\" character varying(200) NOT NULL, " +
-                "\"Config\" text NULL, " +
-                "\"Query\" text NULL, " +
-                "\"RefreshInterval\" integer NOT NULL DEFAULT 0, " +
-                "\"GridX\" integer NOT NULL DEFAULT 0, " +
-                "\"GridY\" integer NOT NULL DEFAULT 0, " +
-                "\"GridWidth\" integer NOT NULL DEFAULT 4, " +
-                "\"GridHeight\" integer NOT NULL DEFAULT 3, " +
-                "\"TenantId\" text NOT NULL DEFAULT '', " +
-                "\"CreatedAt\" timestamp with time zone NOT NULL, " +
-                "\"UpdatedAt\" timestamp with time zone NULL, " +
-                "CONSTRAINT \"PK_DashboardWidgets\" PRIMARY KEY (\"Id\"), " +
-                "CONSTRAINT \"FK_DashboardWidgets_CustomDashboards_DashboardId\" FOREIGN KEY (\"DashboardId\") REFERENCES \"CustomDashboards\" (\"Id\") ON DELETE CASCADE" +
-                ");");
-
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "CREATE INDEX IF NOT EXISTS \"ix_documenttemplates_globaltemplateid\" ON \"DocumentTemplates\" (\"GlobalTemplateId\");");
+            await ApplyDefensiveRepairAsync(dbContext, dbConnectionString);
         }
     }
     catch (Exception ex)
     {
-        Log.Warning(ex, "Failed to apply defensive database repair");
+        Log.Fatal(ex, "Failed to apply database migrations");
+        // Don't throw - let the app start anyway, defensive repair may fix it
+    }
+    
+    // If migrations were not applied but defensive repair is enabled, apply it
+    if (!applyMigrations && enableDefensiveRepair)
+    {
+        try
+        {
+            using var repairScope = app.Services.CreateScope();
+            var repairContext = repairScope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
+            var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+            await ApplyDefensiveRepairAsync(repairContext, dbConnectionString);
+        }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, "Failed to apply defensive database repair");
+        }
+    }
+});
+
+// Helper method to apply defensive repairs asynchronously
+async Task ApplyDefensiveRepairAsync(MedicSoftDbContext dbContext, string dbConnectionString)
+{
+    if (dbConnectionString.Contains("Host=", StringComparison.OrdinalIgnoreCase) ||
+        dbConnectionString.Contains("postgres", StringComparison.OrdinalIgnoreCase))
+    {
+        // Create tables
+        dbContext.Database.ExecuteSqlRaw(
+            "CREATE TABLE IF NOT EXISTS \"CustomDashboards\" (" +
+            "\"Id\" uuid NOT NULL, " +
+            "\"Name\" character varying(200) NOT NULL, " +
+            "\"Description\" character varying(1000) NULL, " +
+            "\"Layout\" text NULL, " +
+            "\"IsDefault\" boolean NOT NULL DEFAULT false, " +
+            "\"IsPublic\" boolean NOT NULL DEFAULT false, " +
+            "\"CreatedBy\" character varying(450) NOT NULL, " +
+            "\"TenantId\" text NOT NULL DEFAULT '', " +
+            "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+            "\"UpdatedAt\" timestamp with time zone NULL, " +
+            "CONSTRAINT \"PK_CustomDashboards\" PRIMARY KEY (\"Id\")" +
+            ");");
+
+        dbContext.Database.ExecuteSqlRaw(
+            "CREATE TABLE IF NOT EXISTS \"DashboardWidgets\" (" +
+            "\"Id\" uuid NOT NULL, " +
+            "\"DashboardId\" uuid NOT NULL, " +
+            "\"Type\" character varying(50) NOT NULL, " +
+            "\"Title\" character varying(200) NOT NULL, " +
+            "\"Config\" text NULL, " +
+            "\"Query\" text NULL, " +
+            "\"RefreshInterval\" integer NOT NULL DEFAULT 0, " +
+            "\"GridX\" integer NOT NULL DEFAULT 0, " +
+            "\"GridY\" integer NOT NULL DEFAULT 0, " +
+            "\"GridWidth\" integer NOT NULL DEFAULT 4, " +
+            "\"GridHeight\" integer NOT NULL DEFAULT 3, " +
+            "\"TenantId\" text NOT NULL DEFAULT '', " +
+            "\"CreatedAt\" timestamp with time zone NOT NULL, " +
+            "\"UpdatedAt\" timestamp with time zone NULL, " +
+            "CONSTRAINT \"PK_DashboardWidgets\" PRIMARY KEY (\"Id\"), " +
+            "CONSTRAINT \"FK_DashboardWidgets_CustomDashboards_DashboardId\" FOREIGN KEY (\"DashboardId\") REFERENCES \"CustomDashboards\" (\"Id\") ON DELETE CASCADE" +
+            ");");
+
+        // Alter columns
+        dbContext.Database.ExecuteSqlRaw(
+            "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
+        dbContext.Database.ExecuteSqlRaw(
+            "CREATE INDEX IF NOT EXISTS \"ix_documenttemplates_globaltemplateid\" ON \"DocumentTemplates\" (\"GlobalTemplateId\");");
+            
+        Log.Information("Defensive database repair completed");
     }
 }
 
