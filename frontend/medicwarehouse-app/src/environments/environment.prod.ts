@@ -18,11 +18,11 @@ export const environment = {
   useMicroservices: false, // Set to true when ready to use microservices in production
   
   // Company contact information (for marketing site)
-  whatsappNumber: '5511999999999',
-  companyEmail: 'contato@omnicare.com',
-  companyPhone: '(11) 99999-9999',
-  companyAddress: 'Av. Paulista, 1000',
-  companyAddressDetails: 'São Paulo - SP, 01310-100',
+  whatsappNumber: '5521982295287',
+  companyEmail: 'contato@omnicaretech.com.br',
+  companyPhone: '(21) 98229-5287',
+  companyAddress: '',
+  companyAddressDetails: '',
   
   enableDebug: false,
   useMockData: false, // Enable to use mocked data instead of real API calls

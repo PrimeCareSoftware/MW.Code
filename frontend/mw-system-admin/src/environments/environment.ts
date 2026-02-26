@@ -7,9 +7,9 @@ export const environment = {
   appUrl: 'http://localhost:4200',
   
   // Company contact information (for marketing site)
-  whatsappNumber: '5511999999999',
-  companyEmail: 'contato@omnicare.com',
-  companyPhone: '(11) 99999-9999',
+  whatsappNumber: '5521982295287',
+  companyEmail: 'contato@omnicaretech.com.br',
+  companyPhone: '(21) 98229-5287',
   
   // Microservices URLs
   microservices: {
