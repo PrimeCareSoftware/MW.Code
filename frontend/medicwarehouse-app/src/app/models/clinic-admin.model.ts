@@ -68,6 +68,7 @@ export interface UpdateClinicUserRequest {
   professionalId?: string;
   specialty?: string;
   showInAppointmentScheduling?: boolean;
+  password?: string;
 }
 
 export interface ChangeUserPasswordRequest {

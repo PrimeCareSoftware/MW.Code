@@ -72,7 +72,8 @@ export class UserManagementComponent implements OnInit {
       role: ['Doctor', Validators.required],
       professionalId: [''],
       specialty: [''],
-      showInAppointmentScheduling: [true]
+      canAttendAppointments: [false],
+      showInAppointmentScheduling: [false]
     });
 
     this.editUserForm = this.fb.group({
@@ -81,7 +82,9 @@ export class UserManagementComponent implements OnInit {
       phone: [''],
       professionalId: [''],
       specialty: [''],
-      showInAppointmentScheduling: [true]
+      password: [''],
+      canAttendAppointments: [false],
+      showInAppointmentScheduling: [false]
     });
 
     this.passwordForm = this.fb.group({
@@ -92,9 +95,19 @@ export class UserManagementComponent implements OnInit {
       newRole: ['', Validators.required]
     });
 
-    // Subscribe to role changes to update validation
+    // Subscribe to role and attendance changes to update validation
     this.createUserForm.get('role')?.valueChanges.subscribe(() => {
       this.updateDoctorFieldValidation();
+    });
+
+    this.createUserForm.get('canAttendAppointments')?.valueChanges.subscribe((canAttend) => {
+      this.createUserForm.patchValue({ showInAppointmentScheduling: !!canAttend }, { emitEvent: false });
+      this.updateDoctorFieldValidation();
+    });
+
+    this.editUserForm.get('canAttendAppointments')?.valueChanges.subscribe((canAttend) => {
+      this.editUserForm.patchValue({ showInAppointmentScheduling: !!canAttend }, { emitEvent: false });
+      this.updateEditProfessionalFieldValidation();
     });
   }
 
@@ -182,16 +195,12 @@ export class UserManagementComponent implements OnInit {
 
   updateDoctorFieldValidation(): void {
     const role = this.createUserForm.get('role')?.value;
+    const canAttend = !!this.createUserForm.get('canAttendAppointments')?.value;
     const professionalIdControl = this.createUserForm.get('professionalId');
     const specialtyControl = this.createUserForm.get('specialty');
 
-    if (this.isProfessionalRole(role)) {
-      // Apply validation based on configuration for all professional roles
-      if (this.doctorFieldsConfig().professionalIdRequired) {
-        professionalIdControl?.setValidators([Validators.required]);
-      } else {
-        professionalIdControl?.clearValidators();
-      }
+    if (this.isProfessionalRole(role) && canAttend) {
+      professionalIdControl?.setValidators([Validators.required]);
 
       if (this.doctorFieldsConfig().specialtyRequired) {
         specialtyControl?.setValidators([Validators.required]);
@@ -231,9 +240,32 @@ export class UserManagementComponent implements OnInit {
     return this.isProfessionalRole(role);
   }
 
+  updateEditProfessionalFieldValidation(): void {
+    const role = this.selectedUser()?.role;
+    const canAttend = !!this.editUserForm.get('canAttendAppointments')?.value;
+    const professionalIdControl = this.editUserForm.get('professionalId');
+
+    if (this.isProfessionalRole(role) && canAttend) {
+      professionalIdControl?.setValidators([Validators.required]);
+    } else {
+      professionalIdControl?.clearValidators();
+    }
+
+    professionalIdControl?.updateValueAndValidity();
+  }
+
+  canCurrentRoleAttend(): boolean {
+    return this.isCurrentRoleProfessional() && !!this.createUserForm.get('canAttendAppointments')?.value;
+  }
+
+  canEditingRoleAttend(): boolean {
+    return this.isEditingProfessional() && !!this.editUserForm.get('canAttendAppointments')?.value;
+  }
+
   // Create User
   openCreateDialog(): void {
-    this.createUserForm.reset({ role: 'Doctor' });
+    this.createUserForm.reset({ role: 'Doctor', canAttendAppointments: false, showInAppointmentScheduling: false });
+    this.updateDoctorFieldValidation();
     this.showCreateDialog.set(true);
   }
 
@@ -250,7 +282,10 @@ export class UserManagementComponent implements OnInit {
     this.isProcessing.set(true);
     this.errorMessage.set('');
 
-    const request: CreateClinicUserRequest = this.createUserForm.value;
+    const request: CreateClinicUserRequest = {
+      ...this.createUserForm.value,
+      showInAppointmentScheduling: this.createUserForm.value.canAttendAppointments
+    };
 
     this.clinicAdminService.createUser(request).subscribe({
       next: () => {
@@ -275,8 +310,11 @@ export class UserManagementComponent implements OnInit {
       phone: user.phone || '',
       professionalId: user.professionalId || '',
       specialty: user.specialty || '',
+      canAttendAppointments: user.showInAppointmentScheduling,
+      password: '',
       showInAppointmentScheduling: user.showInAppointmentScheduling
     });
+    this.updateEditProfessionalFieldValidation();
     this.showEditDialog.set(true);
   }
 
@@ -300,7 +338,8 @@ export class UserManagementComponent implements OnInit {
       phone: this.editUserForm.value.phone,
       professionalId: this.editUserForm.value.professionalId,
       specialty: this.editUserForm.value.specialty,
-      showInAppointmentScheduling: this.editUserForm.value.showInAppointmentScheduling
+      showInAppointmentScheduling: this.editUserForm.value.canAttendAppointments,
+      password: this.editUserForm.value.password || undefined
     };
 
     this.clinicAdminService.updateUser(this.selectedUser()!.id, request).subscribe({

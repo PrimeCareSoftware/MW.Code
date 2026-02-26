@@ -477,7 +477,8 @@ namespace MedicSoft.Api.Controllers
                     tenantId,
                     clinicId,
                     request.ProfessionalId,
-                    request.Specialty
+                    request.Specialty,
+                    request.ShowInAppointmentScheduling
                 );
 
                 // If using profile-based creation, assign the profile to the user
@@ -500,6 +501,7 @@ namespace MedicSoft.Api.Controllers
                     CreatedAt = user.CreatedAt,
                     ProfessionalId = user.ProfessionalId,
                     Specialty = user.Specialty,
+                    ShowInAppointmentScheduling = user.ShowInAppointmentScheduling,
                     ProfileId = profileIdToAssign
                 });
             }
@@ -561,6 +563,18 @@ namespace MedicSoft.Api.Controllers
                     request.Specialty ?? user.Specialty,
                     request.ShowInAppointmentScheduling ?? user.ShowInAppointmentScheduling
                 );
+
+                if (!string.IsNullOrWhiteSpace(request.Password))
+                {
+                    var minPasswordLength = 8;
+                    var (isValid, errorMessage) = _passwordHasher.ValidatePasswordStrength(request.Password, minPasswordLength);
+                    if (!isValid)
+                    {
+                        return BadRequest(new { message = errorMessage });
+                    }
+
+                    await _userService.ChangeUserPasswordAsync(id, request.Password, tenantId);
+                }
 
                 // Handle activation/deactivation
                 if (request.IsActive.HasValue)
