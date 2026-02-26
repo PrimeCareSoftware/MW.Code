@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
 import { ownerGuard } from './guards/owner-guard';
+import { careFeatureGuard } from './guards/care-feature-guard';
 import { CLINIC_ADMIN_ROUTES } from './pages/clinic-admin/clinic-admin.routes';
 
 export const routes: Routes = [
@@ -106,7 +107,7 @@ export const routes: Routes = [
   { 
     path: 'referral', 
     loadComponent: () => import('./pages/referral/referral-dashboard.component').then(m => m.ReferralDashboardComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'patients', 
@@ -131,32 +132,32 @@ export const routes: Routes = [
   { 
     path: 'appointments/list', 
     loadComponent: () => import('./pages/appointments/appointment-list/appointment-list').then(m => m.AppointmentList),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'appointments/calendar', 
     loadComponent: () => import('./pages/appointments/appointment-calendar/appointment-calendar').then(m => m.AppointmentCalendar),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'appointments/new', 
     loadComponent: () => import('./pages/appointments/appointment-form/appointment-form').then(m => m.AppointmentForm),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'appointments/:id/edit', 
     loadComponent: () => import('./pages/appointments/appointment-form/appointment-form').then(m => m.AppointmentForm),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'appointments/:appointmentId/attendance', 
     loadComponent: () => import('./pages/attendance/attendance').then(m => m.Attendance),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'waiting-queue', 
     loadComponent: () => import('./pages/waiting-queue/queue-management/queue-management').then(m => m.QueueManagementComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'tickets', 
@@ -318,17 +319,17 @@ export const routes: Routes = [
   { 
     path: 'procedures', 
     loadComponent: () => import('./pages/procedures/procedure-list').then(m => m.ProcedureList),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'procedures/new', 
     loadComponent: () => import('./pages/procedures/procedure-form').then(m => m.ProcedureForm),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'procedures/edit/:id', 
     loadComponent: () => import('./pages/procedures/procedure-form').then(m => m.ProcedureForm),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'procedures/owner-management', 
@@ -501,66 +502,66 @@ export const routes: Routes = [
   { 
     path: 'telemedicine', 
     loadComponent: () => import('./pages/telemedicine/session-list/session-list').then(m => m.SessionList),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'telemedicine/new', 
     loadComponent: () => import('./pages/telemedicine/session-form/session-form').then(m => m.SessionForm),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'telemedicine/room/:id', 
     loadComponent: () => import('./pages/telemedicine/video-room/video-room').then(m => m.VideoRoom),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'telemedicine/details/:id', 
     loadComponent: () => import('./pages/telemedicine/session-details/session-details').then(m => m.SessionDetails),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'telemedicine/consent', 
     loadComponent: () => import('./pages/telemedicine/consent-form/consent-form').then(m => m.ConsentForm),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   
   // SOAP Records routes
   { 
     path: 'soap-records', 
     loadChildren: () => import('./pages/soap-records/soap-records.routes').then(m => m.SOAP_ROUTES),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   
   // Anamnesis routes
   { 
     path: 'anamnesis/templates', 
     loadComponent: () => import('./pages/anamnesis/template-selector/template-selector').then(m => m.TemplateSelectorComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'anamnesis/templates/manage', 
     loadComponent: () => import('./pages/anamnesis/template-management/template-management').then(m => m.TemplateManagementComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'anamnesis/templates/new', 
     loadComponent: () => import('./pages/anamnesis/template-form/template-form').then(m => m.TemplateFormComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'anamnesis/templates/edit/:id', 
     loadComponent: () => import('./pages/anamnesis/template-form/template-form').then(m => m.TemplateFormComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'anamnesis/questionnaire/:appointmentId', 
     loadComponent: () => import('./pages/anamnesis/questionnaire/questionnaire').then(m => m.QuestionnaireComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   { 
     path: 'anamnesis/history/:patientId', 
     loadComponent: () => import('./pages/anamnesis/history/history').then(m => m.AnamnesisHistoryComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, careFeatureGuard]
   },
   
   // Audit Logs route

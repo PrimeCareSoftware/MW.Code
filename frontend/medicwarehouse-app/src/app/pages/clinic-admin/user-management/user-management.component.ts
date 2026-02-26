@@ -7,6 +7,7 @@ import { Navbar } from '../../../shared/navbar/navbar';
 import { AccessProfileService } from '../../../services/access-profile.service';
 import { AccessProfile } from '../../../models/access-profile.model';
 import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
+import { RolePermissionService } from '../../../services/role-permission.service';
 
 @Component({
   selector: 'app-user-management',
@@ -43,12 +44,13 @@ export class UserManagementComponent implements OnInit {
   selectedUser = signal<ClinicUserDto | null>(null);
   isProcessing = signal<boolean>(false);
   
-  // Legacy roles kept for backward compatibility
-  userRoles = ['Doctor', 'Nurse', 'Receptionist', 'Admin', 'Owner'];
+  // Legacy fallback roles aligned with MVP
+  userRoles = ['Doctor', 'Nutritionist', 'Psychologist', 'Receptionist', 'Admin', 'Financial', 'Owner'];
 
   constructor(
     private clinicAdminService: ClinicAdminService,
     private accessProfileService: AccessProfileService,
+    private rolePermissionService: RolePermissionService,
     private fb: FormBuilder
   ) {
     this.initializeForms();
@@ -133,19 +135,20 @@ export class UserManagementComponent implements OnInit {
     this.isLoadingProfiles.set(true);
     this.accessProfileService.getProfiles().subscribe({
       next: (profiles) => {
-        const defaultCount = profiles.filter(p => p.isDefault).length;
-        const customCount = profiles.length - defaultCount;
+        const filteredProfiles = profiles.filter(profile => this.isSelectableProfile(profile.name));
+        const defaultCount = filteredProfiles.filter(p => p.isDefault).length;
+        const customCount = filteredProfiles.length - defaultCount;
         
         console.log(`✅ Successfully loaded ${profiles.length} access profiles`);
-        this.availableProfiles.set(profiles);
+        this.availableProfiles.set(filteredProfiles);
         this.isLoadingProfiles.set(false);
         
         // Show success message if we loaded profiles
-        if (profiles.length > 0) {
-          console.info(`📋 Available profiles for selection: ${profiles.length} (${defaultCount} default, ${customCount} custom)`);
+        if (filteredProfiles.length > 0) {
+          console.info(`📋 Available profiles for selection: ${filteredProfiles.length} (${defaultCount} default, ${customCount} custom)`);
         } else {
-          console.warn('⚠️ No profiles returned from API - this is unusual and may indicate a configuration issue');
-          this.errorMessage.set('Aviso: Nenhum perfil foi encontrado. Usando perfis básicos como alternativa.');
+          console.warn('⚠️ No selectable profiles returned from API - this may indicate a configuration issue');
+          this.errorMessage.set('Aviso: Nenhum perfil MVP/administrativo foi encontrado. Usando perfis básicos como alternativa.');
         }
       },
       error: (error) => {
@@ -170,6 +173,11 @@ export class UserManagementComponent implements OnInit {
         console.warn('⚠️ Falling back to legacy role-based system due to error');
       }
     });
+  }
+
+
+  isSelectableProfile(roleName: string): boolean {
+    return this.rolePermissionService.isSelectableUserProfile(roleName);
   }
 
   updateDoctorFieldValidation(): void {
@@ -206,14 +214,8 @@ export class UserManagementComponent implements OnInit {
     // Check if it's a professional role (healthcare provider)
     const professionalRoles = [
       'Doctor', 'Médico',
-      'Dentist', 'Dentista', 
       'Psychologist', 'Psicólogo',
-      'Nutritionist', 'Nutricionista',
-      'PhysicalTherapist', 'Fisioterapeuta',
-      'Veterinarian', 'Veterinário',
-      'Nurse', 'Enfermeiro', 'Enfermeira',
-      'OccupationalTherapist', 'Terapeuta Ocupacional',
-      'SpeechTherapist', 'Fonoaudiólogo'
+      'Nutritionist', 'Nutricionista'
     ];
     
     return professionalRoles.some(pr => pr.toLowerCase() === role.toLowerCase());
@@ -449,7 +451,11 @@ export class UserManagementComponent implements OnInit {
       'Nutritionist': 'Nutricionista',
       'Psychologist': 'Psicólogo',
       'PhysicalTherapist': 'Fisioterapeuta',
-      'Veterinarian': 'Veterinário'
+      'Veterinarian': 'Veterinário',
+      'Financial': 'Financeiro',
+      'Financeiro': 'Financeiro',
+      'Secretary': 'Secretária',
+      'Secretaria': 'Secretária'
     };
     return roleMap[role] || role;
   }

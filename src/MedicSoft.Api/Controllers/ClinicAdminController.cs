@@ -9,6 +9,8 @@ using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Common;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
+using System.Globalization;
+using System.Text;
 
 namespace MedicSoft.Api.Controllers
 {
@@ -20,6 +22,15 @@ namespace MedicSoft.Api.Controllers
     [Authorize]
     public class ClinicAdminController : BaseController
     {
+        private static readonly HashSet<string> Sprint1AllowedProfileAliases = new(StringComparer.OrdinalIgnoreCase)
+        {
+            // MVP clinical
+            "doctor", "medico", "médico", "nutritionist", "nutricionista", "psychologist", "psicologo", "psicólogo",
+            // Administrative
+            "owner", "proprietario", "proprietário", "receptionist", "recepcionista", "recepcao", "recepção",
+            "secretary", "secretaria", "secretário", "admin", "administrador", "financial", "financeiro"
+        };
+
         private readonly IClinicRepository _clinicRepository;
         private readonly IUserRepository _userRepository;
         private readonly IOwnerClinicLinkRepository _ownerClinicLinkRepository;
@@ -410,6 +421,11 @@ namespace MedicSoft.Api.Controllers
                         return BadRequest(new { message = "Profile does not belong to this clinic" });
                     }
 
+                    if (!IsRoleAllowedBySprint1(profile.Name))
+                    {
+                        return BadRequest(new { message = $"Profile '{profile.Name}' is not allowed in Sprint 1 (MVP)." });
+                    }
+
                     // Map profile name to a UserRole for backward compatibility
                     // This ensures the user has a valid role enum value
                     role = ProfileMappingHelper.MapProfileNameToRole(profile.Name, _logger);
@@ -421,6 +437,11 @@ namespace MedicSoft.Api.Controllers
                 else
                 {
                     // Role-based creation (legacy system)
+                    if (!IsRoleAllowedBySprint1(request.Role))
+                    {
+                        return BadRequest(new { message = $"Role '{request.Role}' is not allowed in Sprint 1 (MVP)." });
+                    }
+
                     // Try direct enum parsing first
                     if (!Enum.TryParse<UserRole>(request.Role, true, out role))
                     {
@@ -774,6 +795,11 @@ namespace MedicSoft.Api.Controllers
                 if (user.ClinicId != clinicId)
                 {
                     return Forbid();
+                }
+
+                if (!IsRoleAllowedBySprint1(request.NewRole))
+                {
+                    return BadRequest(new { message = $"Role '{request.NewRole}' is not allowed in Sprint 1 (MVP)." });
                 }
 
                 // Parse role - use ProfileMappingHelper for consistent role mapping
@@ -1163,6 +1189,28 @@ namespace MedicSoft.Api.Controllers
                 NotifyPrimaryDoctorOnOtherDoctorAppointment = clinic.NotifyPrimaryDoctorOnOtherDoctorAppointment,
                 EnableOnlineAppointmentScheduling = clinic.EnableOnlineAppointmentScheduling
             };
+        }
+
+
+        private static bool IsRoleAllowedBySprint1(string roleOrProfileName)
+        {
+            if (string.IsNullOrWhiteSpace(roleOrProfileName))
+                return false;
+
+            var normalized = RemoveDiacritics(roleOrProfileName).ToLowerInvariant().Trim();
+            return Sprint1AllowedProfileAliases.Contains(normalized);
+        }
+
+        private static string RemoveDiacritics(string input)
+        {
+            var normalized = input.Normalize(NormalizationForm.FormD);
+            var builder = new StringBuilder();
+            foreach (var c in normalized)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                    builder.Append(c);
+            }
+            return builder.ToString().Normalize(NormalizationForm.FormC);
         }
 
         /// <summary>

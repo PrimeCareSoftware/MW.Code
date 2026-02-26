@@ -623,9 +623,8 @@ namespace MedicSoft.Domain.Entities
 
         /// <summary>
         /// Gets the appropriate default profiles for a specific clinic type.
-        /// Returns ALL professional profiles to support multi-specialty clinics and clinic expansion.
-        /// This allows clinics to assign appropriate profiles to any healthcare professional regardless of the clinic's primary type.
-        /// For example: A medical clinic can hire a nutritionist and assign the "Nutricionista" profile correctly.
+        /// Returns Sprint 1 MVP professional profiles plus administrative profiles.
+        /// This keeps default profile generation aligned with the current MVP rollout scope.
         /// </summary>
         public static List<AccessProfile> GetDefaultProfilesForClinicType(string tenantId, Guid clinicId, ClinicType clinicType)
         {
@@ -636,16 +635,10 @@ namespace MedicSoft.Domain.Entities
                 CreateDefaultReceptionProfile(tenantId, clinicId),
                 CreateDefaultFinancialProfile(tenantId, clinicId),
                 
-                // ALL professional profiles - clinics can hire professionals from any specialty
+                // Sprint 1 MVP professional profiles
                 CreateDefaultMedicalProfile(tenantId, clinicId),
-                CreateDefaultDentistProfile(tenantId, clinicId),
                 CreateDefaultNutritionistProfile(tenantId, clinicId),
-                CreateDefaultPsychologistProfile(tenantId, clinicId),
-                CreateDefaultPhysicalTherapistProfile(tenantId, clinicId),
-                CreateDefaultVeterinarianProfile(tenantId, clinicId),
-                CreateDefaultNurseProfile(tenantId, clinicId),
-                CreateDefaultOccupationalTherapistProfile(tenantId, clinicId),
-                CreateDefaultSpeechTherapistProfile(tenantId, clinicId)
+                CreateDefaultPsychologistProfile(tenantId, clinicId)
             };
 
             return profiles;

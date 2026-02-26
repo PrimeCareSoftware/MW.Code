@@ -6,6 +6,18 @@
 
 ## Problema Resolvido
 
+
+## 🔄 Atualização Sprint 1 (Revisão de Perfis e Permissões)
+
+A partir desta sprint, o dropdown de perfis no cadastro/edição de usuários foi **restringido para o MVP de atendimento**:
+
+- Perfis clínicos de atendimento exibidos: **Médico (Doctor), Nutricionista (Nutritionist), Psicólogo (Psychologist)**.
+- Perfis administrativos continuam disponíveis para cadastro (ex.: Proprietário, Financeiro, Secretaria/Recepção, Administrador), porém **sem acesso aos menus/telas de atendimento e telemedicina**.
+- Perfis clínicos não-MVP (ex.: Dentista, Fisioterapeuta, Veterinário) foram removidos da seleção padrão de cadastro nesta etapa.
+
+Também foi adicionada validação de navegação no frontend com guard dedicado para bloquear acesso direto por URL aos módulos clínicos/telemedicina quando o perfil não possui permissão.
+
+
 O cadastro de usuário e a listagem de perfis não estavam exibindo todos os perfis disponíveis no sistema. Apenas os perfis relacionados ao tipo de clínica eram mostrados:
 - Clínica médica → via apenas perfis de médicos
 - Clínica odontológica → via apenas perfis de dentistas
