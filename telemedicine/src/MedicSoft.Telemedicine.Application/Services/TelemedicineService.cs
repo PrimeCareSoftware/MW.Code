@@ -87,9 +87,15 @@ public class TelemedicineService : ITelemedicineService
 
         return new JoinSessionResponse
         {
+            Provider = "Twilio",
+            RoomName = session.RoomId,
             RoomUrl = session.RoomUrl,
             AccessToken = token,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(120)
+            ExpiresAt = DateTime.UtcNow.AddMinutes(120),
+            WaitingRoomEnabled = true,
+            RecordingAvailable = true,
+            ScreenSharingAvailable = true,
+            ChatAvailable = true
         };
     }
 

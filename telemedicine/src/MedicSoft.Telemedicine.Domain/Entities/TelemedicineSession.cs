@@ -15,7 +15,7 @@ public class TelemedicineSession
     public Guid ClinicId { get; private set; }
     
     /// <summary>
-    /// External room ID from video service provider (e.g., Daily.co room name)
+    /// External room ID from video service provider (Twilio room name)
     /// </summary>
     public string RoomId { get; private set; }
     

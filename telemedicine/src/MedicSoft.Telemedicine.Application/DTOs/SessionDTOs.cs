@@ -32,9 +32,17 @@ public class JoinSessionRequest
 
 public class JoinSessionResponse
 {
+    public string Provider { get; set; } = "Twilio";
+    public string RoomName { get; set; } = string.Empty;
     public string RoomUrl { get; set; } = string.Empty;
     public string AccessToken { get; set; } = string.Empty;
     public DateTime ExpiresAt { get; set; }
+
+    // Frontend feature flags
+    public bool WaitingRoomEnabled { get; set; } = true;
+    public bool RecordingAvailable { get; set; } = true;
+    public bool ScreenSharingAvailable { get; set; } = true;
+    public bool ChatAvailable { get; set; } = true;
 }
 
 public class CompleteSessionRequest

@@ -56,10 +56,10 @@ Implements the `IVideoCallService` interface with full Twilio Video API integrat
   - Documented as TODO for future enhancement
 
 #### 2. Dynamic Provider Selection
-The system now supports choosing between Daily.co and Twilio Video at runtime:
+The system now uses Twilio Video as the exclusive provider in this sprint:
 
 ```csharp
-var videoProvider = builder.Configuration["VideoProvider"] ?? "DailyCo";
+var videoProvider = builder.Configuration["VideoProvider"] ?? "Twilio";
 if (videoProvider.Equals("Twilio", StringComparison.OrdinalIgnoreCase))
 {
     builder.Services.AddScoped<IVideoCallService, TwilioVideoService>();

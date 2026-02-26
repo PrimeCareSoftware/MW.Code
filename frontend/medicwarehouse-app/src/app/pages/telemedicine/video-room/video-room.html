@@ -30,6 +30,13 @@
             </svg>
             {{ elapsedTime() }}
           </div>
+          @if (joinInfo()) {
+            <div class="timer">{{ joinInfo()?.provider }}</div>
+            <div class="timer">Espera: {{ joinInfo()?.waitingRoomEnabled ? 'On' : 'Off' }}</div>
+            <div class="timer">Gravação: {{ joinInfo()?.recordingAvailable ? 'On' : 'Off' }}</div>
+            <div class="timer">Chat: {{ joinInfo()?.chatAvailable ? 'On' : 'Off' }}</div>
+            <div class="timer">Tela: {{ joinInfo()?.screenSharingAvailable ? 'On' : 'Off' }}</div>
+          }
         }
       </div>
       
