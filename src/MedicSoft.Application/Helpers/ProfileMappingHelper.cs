@@ -22,8 +22,10 @@ namespace MedicSoft.Application.Helpers
             "médico", "medico", "doctor",
             
             // Dentist/Dentista
+            "dentista", "dentist",
             
             // Nurse/Enfermeiro
+            "enfermeiro", "enfermeira", "nurse",
             
             // Receptionist/Recepção
             "recepção", "recepcao", "recepcionista", "receptionist",
@@ -41,6 +43,8 @@ namespace MedicSoft.Application.Helpers
             // Healthcare Specialties
             "nutricionista", "nutritionist",
             "psicólogo", "psicologo", "psychologist",
+            "fisioterapeuta", "physiotherapist", "physicaltherapist",
+            "veterinário", "veterinario", "veterinarian",
         };
 
         /// <summary>
@@ -74,6 +78,12 @@ namespace MedicSoft.Application.Helpers
                 
                 // Medical Doctor/Médico
                 "médico" or "medico" or "doctor" => UserRole.Doctor,
+
+                // Dentist/Dentista
+                "dentista" or "dentist" => UserRole.Dentist,
+
+                // Nurse/Enfermeiro
+                "enfermeiro" or "enfermeira" or "nurse" => UserRole.Nurse,
                 
                 // Receptionist/Recepção
                 "recepção" or "recepcao" or "recepcionista" or "receptionist" => UserRole.Receptionist,
@@ -94,6 +104,8 @@ namespace MedicSoft.Application.Helpers
                 // The granular permission system (AccessProfile) provides specialty-specific access control
                 "nutricionista" or "nutritionist" => UserRole.Doctor,
                 "psicólogo" or "psicologo" or "psychologist" => UserRole.Psychologist,
+                "fisioterapeuta" or "physiotherapist" or "physicaltherapist" => UserRole.Doctor,
+                "veterinário" or "veterinario" or "veterinarian" => UserRole.Doctor,
                 
                 // Default fallback - log warning for unrecognized profiles
                 _ => UserRole.Receptionist
@@ -119,8 +131,8 @@ namespace MedicSoft.Application.Helpers
         {
             return new[]
             {
-                "ClinicOwner", "Doctor", "Psychologist", "Receptionist", "Secretary",
-                "Owner", "Médico", "Nutricionista", "Psicólogo", "Recepcionista", "Secretaria", "Financeiro", "Admin", "Administrador"
+                "ClinicOwner", "Doctor", "Psychologist", "Dentist", "Nurse", "Receptionist", "Secretary",
+                "Owner", "Médico", "Dentista", "Enfermeiro", "Nutricionista", "Psicólogo", "Recepcionista", "Secretaria", "Financeiro", "Admin", "Administrador"
             };
         }
 

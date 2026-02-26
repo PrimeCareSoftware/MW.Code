@@ -359,3 +359,103 @@ this.http.get(`${environment.apiUrl}/api/module-config/info`)
 - [ASP.NET Core Routing](https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/routing)
 - [System.Text.Json Enum Conversion](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/customize-properties#enums-as-strings)
 - Project Swagger Documentation: `http://localhost:5293/swagger`
+
+---
+
+## Clinic Admin Endpoints (Usuários, Permissões e Campos Profissionais)
+
+### Base Route: `/api/ClinicAdmin`
+
+**Authorization**: usuário autenticado com permissões de clínica (owner/admin conforme política de autorização).
+
+### Usuários da clínica
+
+#### Listar usuários
+```http
+GET /api/ClinicAdmin/users
+```
+
+#### Criar usuário
+```http
+POST /api/ClinicAdmin/users
+Content-Type: application/json
+
+{
+  "username": "dr.joao",
+  "password": "SenhaForte123!",
+  "name": "Dr. João Silva",
+  "email": "joao@clinicax.com",
+  "role": "Dentista",
+  "phone": "(11) 99999-0000",
+  "professionalId": "CRO-12345",
+  "specialty": "Ortodontia",
+  "showInAppointmentScheduling": true
+}
+```
+
+**Observações**:
+- `role` aceita aliases em português e inglês para perfis clínicos e administrativos.
+- Para profissionais com atendimento habilitado (`showInAppointmentScheduling = true`), o backend pode exigir `professionalId` conforme configuração da clínica.
+
+#### Atualizar usuário
+```http
+PUT /api/ClinicAdmin/users/{id}
+Content-Type: application/json
+
+{
+  "name": "Dra. Maria Souza",
+  "email": "maria@clinicax.com",
+  "professionalId": "CRM-54321",
+  "specialty": "Cardiologia",
+  "showInAppointmentScheduling": true,
+  "isActive": true
+}
+```
+
+#### Alterar senha
+```http
+PUT /api/ClinicAdmin/users/{id}/password
+Content-Type: application/json
+
+{
+  "newPassword": "SenhaNova123!"
+}
+```
+
+#### Alterar perfil/função
+```http
+PUT /api/ClinicAdmin/users/{id}/role
+Content-Type: application/json
+
+{
+  "newRole": "Recepcionista"
+}
+```
+
+### Configuração dinâmica de campos profissionais
+
+#### Obter configuração
+```http
+GET /api/ClinicAdmin/doctor-fields-config
+```
+
+**Response Example**:
+```json
+{
+  "professionalIdRequired": true,
+  "specialtyRequired": false
+}
+```
+
+#### Atualizar configuração
+```http
+PUT /api/ClinicAdmin/doctor-fields-config
+Content-Type: application/json
+
+{
+  "professionalIdRequired": true,
+  "specialtyRequired": true
+}
+```
+
+Esses endpoints suportam o comportamento dinâmico do frontend no cadastro/edição de profissionais de saúde.
