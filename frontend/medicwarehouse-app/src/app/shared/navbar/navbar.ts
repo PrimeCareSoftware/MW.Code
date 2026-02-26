@@ -5,6 +5,8 @@ import { Auth } from '../../services/auth';
 import { NotificationPanel } from '../notification-panel/notification-panel';
 import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { ClinicSelectorComponent } from '../clinic-selector/clinic-selector';
+import { RolePermissionService } from '../../services/role-permission.service';
+import { BusinessConfigurationService } from '../../services/business-configuration.service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,6 +22,10 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
   private boundSaveScrollPosition: (() => void) | null = null;
   
   // Menu group states - all start closed except the one containing the active route
+
+  canAccessCareMenu = signal<boolean>(true);
+  canAccessTelemedicineMenu = signal<boolean>(true);
+
   menuGroups: { [key: string]: boolean } = {
     core: false,
     analytics: false,
@@ -34,7 +40,12 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
     help: false
   };
   
-  constructor(public authService: Auth, private elementRef: ElementRef) {
+  constructor(
+    public authService: Auth,
+    private elementRef: ElementRef,
+    private rolePermissionService: RolePermissionService,
+    private businessConfigurationService: BusinessConfigurationService
+  ) {
     // Check localStorage for sidebar state (only in browser environment)
     if (typeof localStorage !== 'undefined') {
       try {
@@ -58,6 +69,7 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
       document.body.classList.add('has-navbar', 'has-sidebar');
     }
     this.updateBodyClass();
+    this.updateMenuPermissions();
   }
 
   ngAfterViewInit(): void {
@@ -127,6 +139,7 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     this.updateBodyClass();
+    this.updateMenuPermissions();
   }
 
   updateBodyClass(): void {
@@ -154,9 +167,36 @@ export class Navbar implements OnInit, OnDestroy, AfterViewInit {
         }
       }
       this.updateBodyClass();
+      this.updateMenuPermissions();
     }
   }
   
+  private updateMenuPermissions(): void {
+    const user = this.authService.currentUser();
+    const canAccessCareFeatures = this.rolePermissionService.canAccessCareFeatures(user?.role, !!user?.isSystemOwner);
+
+    this.canAccessCareMenu.set(canAccessCareFeatures);
+    this.canAccessTelemedicineMenu.set(canAccessCareFeatures);
+
+    if (!user || !this.rolePermissionService.isOwnerRole(user.role)) {
+      return;
+    }
+
+    const clinicId = user.currentClinicId || user.clinicId;
+    if (!clinicId) {
+      return;
+    }
+
+    this.businessConfigurationService.isFeatureEnabled(clinicId, 'telemedicine').subscribe({
+      next: (response) => {
+        this.canAccessTelemedicineMenu.set(canAccessCareFeatures && response.enabled);
+      },
+      error: () => {
+        this.canAccessTelemedicineMenu.set(false);
+      }
+    });
+  }
+
   isOwner(): boolean {
     const user = this.authService.currentUser();
     return user ? (user.role === 'Owner' || user.role === 'ClinicOwner' || !!user.isSystemOwner) : false;

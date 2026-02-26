@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
+using System.Text;
 using System.Threading.Tasks;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Domain.Common;
@@ -37,6 +39,13 @@ namespace MedicSoft.Application.Services
         
         private const int MaxUpdateRetries = 3;
 
+        private static readonly HashSet<string> Sprint1AllowedProfiles = new(StringComparer.OrdinalIgnoreCase)
+        {
+            "doctor", "medico", "médico", "nutritionist", "nutricionista", "psychologist", "psicologo", "psicólogo",
+            "owner", "proprietario", "proprietário", "receptionist", "recepcionista", "recepcao", "recepção",
+            "secretary", "secretaria", "secretário", "admin", "administrador", "financial", "financeiro"
+        };
+
         public AccessProfileService(
             IAccessProfileRepository profileRepository,
             IUserRepository userRepository,
@@ -65,6 +74,8 @@ namespace MedicSoft.Application.Services
         {
             var profiles = await _profileRepository.GetByClinicIdAsync(clinicId, tenantId);
             var profileDtos = new List<AccessProfileDto>();
+
+            profiles = profiles.Where(p => IsSprint1AllowedProfile(p.Name));
 
             foreach (var profile in profiles)
             {
@@ -529,6 +540,25 @@ namespace MedicSoft.Application.Services
             }
 
             return result;
+        }
+
+
+        private static bool IsSprint1AllowedProfile(string profileName)
+        {
+            var normalized = RemoveDiacritics(profileName).ToLowerInvariant().Trim();
+            return Sprint1AllowedProfiles.Contains(normalized);
+        }
+
+        private static string RemoveDiacritics(string input)
+        {
+            var normalized = input.Normalize(NormalizationForm.FormD);
+            var builder = new StringBuilder();
+            foreach (var c in normalized)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                    builder.Append(c);
+            }
+            return builder.ToString().Normalize(NormalizationForm.FormC);
         }
 
         private AccessProfileDto MapToDto(AccessProfile profile)

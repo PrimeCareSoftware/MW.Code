@@ -22,10 +22,8 @@ namespace MedicSoft.Application.Helpers
             "médico", "medico", "doctor",
             
             // Dentist/Dentista
-            "dentista", "dentist",
             
             // Nurse/Enfermeiro
-            "enfermeiro", "enfermeira", "nurse",
             
             // Receptionist/Recepção
             "recepção", "recepcao", "recepcionista", "receptionist",
@@ -36,14 +34,13 @@ namespace MedicSoft.Application.Helpers
             
             // Financial
             "financeiro", "financial",
+
+            // Admin
+            "admin", "administrador",
             
             // Healthcare Specialties
             "nutricionista", "nutritionist",
             "psicólogo", "psicologo", "psychologist",
-            "fisioterapeuta", "physiotherapist",
-            "terapeuta ocupacional", "occupational therapist",
-            "fonoaudiólogo", "fonoaudiologo", "speech therapist",
-            "veterinário", "veterinario", "veterinarian"
         };
 
         /// <summary>
@@ -78,12 +75,6 @@ namespace MedicSoft.Application.Helpers
                 // Medical Doctor/Médico
                 "médico" or "medico" or "doctor" => UserRole.Doctor,
                 
-                // Dentist/Dentista
-                "dentista" or "dentist" => UserRole.Dentist,
-                
-                // Nurse/Enfermeiro
-                "enfermeiro" or "enfermeira" or "nurse" => UserRole.Nurse,
-                
                 // Receptionist/Recepção
                 "recepção" or "recepcao" or "recepcionista" or "receptionist" => UserRole.Receptionist,
                 
@@ -91,9 +82,10 @@ namespace MedicSoft.Application.Helpers
                 "secretaria" or "secretário" or "secretario" or "secretary" => UserRole.Secretary,
                 "recepção/secretaria" or "recepcao/secretaria" => UserRole.Secretary,
                 
-                // Financial - Maps to Secretary as there's no dedicated Financial role yet
-                // This allows financial staff to have secretary-level permissions for managing payments
+                // Financial/Admin - Maps to Secretary as there's no dedicated Financial/Admin role yet
+                // This keeps administrative users out of clinical-only role mappings
                 "financeiro" or "financial" => UserRole.Secretary,
+                "admin" or "administrador" => UserRole.Secretary,
                 
                 // Healthcare Specialties
                 // Note: These specialties currently map to the Doctor role or their own specific role
@@ -102,10 +94,6 @@ namespace MedicSoft.Application.Helpers
                 // The granular permission system (AccessProfile) provides specialty-specific access control
                 "nutricionista" or "nutritionist" => UserRole.Doctor,
                 "psicólogo" or "psicologo" or "psychologist" => UserRole.Psychologist,
-                "fisioterapeuta" or "physiotherapist" => UserRole.Doctor,
-                "terapeuta ocupacional" or "occupational therapist" => UserRole.Doctor,
-                "fonoaudiólogo" or "fonoaudiologo" or "speech therapist" => UserRole.Doctor,
-                "veterinário" or "veterinario" or "veterinarian" => UserRole.Doctor,
                 
                 // Default fallback - log warning for unrecognized profiles
                 _ => UserRole.Receptionist
@@ -129,8 +117,11 @@ namespace MedicSoft.Application.Helpers
         /// </summary>
         public static IEnumerable<string> GetAllowedRolesForCreation()
         {
-            return Enum.GetNames(typeof(UserRole))
-                .Where(r => r != nameof(UserRole.SystemAdmin));
+            return new[]
+            {
+                "ClinicOwner", "Doctor", "Psychologist", "Receptionist", "Secretary",
+                "Owner", "Médico", "Nutricionista", "Psicólogo", "Recepcionista", "Secretaria", "Financeiro", "Admin", "Administrador"
+            };
         }
 
         /// <summary>

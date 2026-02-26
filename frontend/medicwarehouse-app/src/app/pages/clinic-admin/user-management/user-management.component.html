@@ -241,9 +241,7 @@
             <div class="form-group">
               <label for="role">Perfil *</label>
               @if (hasProfiles() && !isLoadingProfiles()) {
-                <!-- Show all available profiles dynamically loaded from API -->
-                <!-- Note: Using profile.name as value because current API (CreateUserRequest) expects Role string -->
-                <!-- Future enhancement: Update API to accept ProfileId for direct profile assignment -->
+                <!-- Show only MVP clinical profiles + administrative profiles -->
                 <select id="role" formControlName="role" class="form-control">
                   <optgroup label="Perfis Disponíveis">
                     @for (profile of availableProfiles(); track profile.id) {
@@ -255,7 +253,7 @@
                   </optgroup>
                 </select>
                 <small class="form-text text-muted">
-                  Mostrando todos os perfis disponíveis ({{ availableProfiles().length }} perfis)
+                  Mostrando perfis MVP de atendimento e perfis administrativos ({{ availableProfiles().length }} perfis)
                 </small>
               } @else if (isLoadingProfiles()) {
                 <select id="role" formControlName="role" class="form-control" [disabled]="true">
@@ -271,7 +269,7 @@
                   </optgroup>
                 </select>
                 <small class="form-text text-warning">
-                  Usando perfis básicos. Não foi possível carregar todos os perfis disponíveis.
+                  Usando perfis básicos MVP/administrativos. Não foi possível carregar os perfis da API.
                 </small>
               }
             </div>
@@ -510,7 +508,7 @@
             <div class="form-group">
               <label for="new-role">Novo Perfil *</label>
               @if (hasProfiles() && !isLoadingProfiles()) {
-                <!-- Show all available profiles dynamically loaded from API -->
+                <!-- Show only MVP clinical profiles + administrative profiles -->
                 <select id="new-role" formControlName="newRole" class="form-control">
                   <optgroup label="Perfis Disponíveis">
                     @for (profile of availableProfiles(); track profile.id) {
@@ -522,7 +520,7 @@
                   </optgroup>
                 </select>
                 <small class="form-text text-muted">
-                  Mostrando todos os perfis disponíveis ({{ availableProfiles().length }} perfis)
+                  Mostrando perfis MVP de atendimento e perfis administrativos ({{ availableProfiles().length }} perfis)
                 </small>
               } @else if (isLoadingProfiles()) {
                 <select id="new-role" formControlName="newRole" class="form-control" [disabled]="true">
@@ -538,7 +536,7 @@
                   </optgroup>
                 </select>
                 <small class="form-text text-warning">
-                  Usando perfis básicos. Não foi possível carregar todos os perfis disponíveis.
+                  Usando perfis básicos MVP/administrativos. Não foi possível carregar os perfis da API.
                 </small>
               }
             </div>

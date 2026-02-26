@@ -12,6 +12,16 @@ Este documento descreve TODAS as funcionalidades implementadas no sistema Omni C
 
 ---
 
+
+## 🔄 Atualização de Perfis e Permissões (Sprint 1 - Fev/2026)
+
+- ✅ Seleção de perfis em cadastro/edição de usuários alinhada ao MVP clínico: **Doctor, Nutritionist, Psychologist**.
+- ✅ Perfis administrativos mantidos para cadastro (Owner/Financeiro/Secretaria/Admin), com restrição de acesso a telas de atendimento e telemedicina.
+- ✅ Menus laterais e navegação com exibição dinâmica por role no frontend, incluindo bloqueio por guard para acesso direto por URL aos módulos clínicos.
+- ✅ Validação de plano para telemedicina no contexto de proprietários via verificação de feature no backend/API.
+
+---
+
 ## 1. ✅ Gerenciamento de Agenda - IMPLEMENTADO
 
 ### Agendamento Online
