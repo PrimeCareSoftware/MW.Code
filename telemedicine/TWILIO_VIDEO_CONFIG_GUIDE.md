@@ -2,17 +2,11 @@
 
 ## Overview
 
-The telemedicine microservice now supports Twilio Video as an alternative video provider to Daily.co. You can choose which provider to use by setting the `VIDEO_PROVIDER` environment variable.
+The telemedicine microservice now supports Twilio Video as the standard video provider for this sprint.
 
 ## Choosing a Video Provider
 
-### Option 1: Daily.co (Default)
-```bash
-VIDEO_PROVIDER=DailyCo
-DAILYCO_API_KEY=your-daily-co-api-key
-```
-
-### Option 2: Twilio Video
+### Provider padrão: Twilio Video
 ```bash
 VIDEO_PROVIDER=Twilio
 TWILIO_ACCOUNT_SID=your-account-sid

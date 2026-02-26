@@ -2,7 +2,7 @@ namespace MedicSoft.Telemedicine.Domain.Interfaces;
 
 /// <summary>
 /// Interface for video call service provider integration
-/// Abstracts the external video service (Daily.co, Twilio, etc.)
+/// Abstracts the external video service provider (Twilio).
 /// </summary>
 public interface IVideoCallService
 {

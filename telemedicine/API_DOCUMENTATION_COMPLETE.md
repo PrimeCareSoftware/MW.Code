@@ -1,3 +1,5 @@
+> Provider de vídeo: **Twilio Video** (Daily removido nesta sprint).
+
 # 📡 Telemedicine API Complete Documentation
 
 ## 🎯 Overview
@@ -312,7 +314,7 @@ POST /api/telemedicine/sessions
   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "appointmentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "roomId": "session-abc123",
-  "roomUrl": "https://medicsoft.daily.co/session-abc123",
+  "roomUrl": "twilio-room:session-abc123",
   "status": "Scheduled",
   "scheduledStartTime": "2026-01-30T14:00:00Z",
   "createdAt": "2026-01-29T10:30:00Z"
@@ -341,7 +343,7 @@ POST /api/telemedicine/sessions/{id}/join
 
 ```json
 {
-  "roomUrl": "https://medicsoft.daily.co/session-abc123",
+  "roomUrl": "twilio-room:session-abc123",
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
   "expiresAt": "2026-01-30T16:00:00Z",
   "iceServers": [

@@ -2,10 +2,14 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TelemedicineService } from '../../../services/telemedicine.service';
-import { TelemedicineSession, ParticipantRole } from '../../../models/telemedicine.model';
+import { JoinSessionResponse, ParticipantRole, TelemedicineSession } from '../../../models/telemedicine.model';
 import { Auth } from '../../../services/auth';
 
-declare var DailyIframe: any;
+declare global {
+  interface Window {
+    Twilio?: any;
+  }
+}
 
 @Component({
   selector: 'app-video-room',
@@ -15,10 +19,11 @@ declare var DailyIframe: any;
 })
 export class VideoRoom implements OnInit, OnDestroy {
   session = signal<TelemedicineSession | null>(null);
+  joinInfo = signal<JoinSessionResponse | null>(null);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string>('');
-  sessionId: string = '';
-  callFrame: any = null;
+  sessionId = '';
+  room: any = null;
   isAudioMuted = signal<boolean>(false);
   isVideoOff = signal<boolean>(false);
   sessionStartTime: Date | null = null;
@@ -34,13 +39,13 @@ export class VideoRoom implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sessionId = this.route.snapshot.paramMap.get('id') || '';
-    
+
     if (!this.sessionId) {
       this.errorMessage.set('ID da sessão inválido');
       this.isLoading.set(false);
       return;
     }
-    
+
     this.loadSessionAndJoin();
   }
 
@@ -76,12 +81,13 @@ export class VideoRoom implements OnInit, OnDestroy {
     const joinRequest = {
       userId: user.username,
       userName: user.username,
-      role: ParticipantRole.Provider // TODO: Determine role based on user type
+      role: ParticipantRole.Provider
     };
 
     this.telemedicineService.joinSession(this.sessionId, joinRequest).subscribe({
       next: (response) => {
-        this.initializeVideoCall(response.roomUrl, response.accessToken);
+        this.joinInfo.set(response);
+        this.initializeVideoCall(response);
         this.startTimer();
       },
       error: (error) => {
@@ -92,15 +98,18 @@ export class VideoRoom implements OnInit, OnDestroy {
     });
   }
 
-  initializeVideoCall(roomUrl: string, token: string): void {
+  initializeVideoCall(response: JoinSessionResponse): void {
     try {
-      // Check if Daily.co script is loaded
-      if (typeof DailyIframe === 'undefined') {
-        this.loadDailyScript().then(() => {
-          this.createCallFrame(roomUrl, token);
-        });
+      if (response.provider?.toLowerCase() !== 'twilio') {
+        this.errorMessage.set('Provedor de videochamada não suportado para esta sprint.');
+        this.isLoading.set(false);
+        return;
+      }
+
+      if (!window.Twilio) {
+        this.loadTwilioScript().then(() => this.connectTwilioRoom(response));
       } else {
-        this.createCallFrame(roomUrl, token);
+        this.connectTwilioRoom(response);
       }
     } catch (error) {
       this.errorMessage.set('Erro ao inicializar videochamada');
@@ -109,91 +118,133 @@ export class VideoRoom implements OnInit, OnDestroy {
     }
   }
 
-  loadDailyScript(): Promise<void> {
+  loadTwilioScript(): Promise<void> {
     return new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-provider="twilio-video"]');
+      if (existing) {
+        resolve();
+        return;
+      }
+
       const script = document.createElement('script');
-      script.src = 'https://unpkg.com/@daily-co/daily-js';
+      script.src = 'https://sdk.twilio.com/js/video/releases/2.30.0/twilio-video.min.js';
+      script.async = true;
+      script.dataset['provider'] = 'twilio-video';
       script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load Daily.co script'));
+      script.onerror = () => reject(new Error('Failed to load Twilio Video script'));
       document.head.appendChild(script);
     });
   }
 
-  createCallFrame(roomUrl: string, token: string): void {
+  connectTwilioRoom(response: JoinSessionResponse): void {
     const container = document.getElementById('video-container');
-    
     if (!container) {
       this.errorMessage.set('Contêiner de vídeo não encontrado');
       this.isLoading.set(false);
       return;
     }
 
-    this.callFrame = DailyIframe.createFrame(container, {
-      showLeaveButton: false,
-      iframeStyle: {
-        width: '100%',
-        height: '100%',
-        border: '0',
-        borderRadius: '8px'
-      }
-    });
-
-    this.callFrame.join({ url: roomUrl, token: token })
-      .then(() => {
+    window.Twilio.Video.connect(response.accessToken, {
+      name: response.roomName,
+      audio: true,
+      video: true
+    })
+      .then((room: any) => {
+        this.room = room;
+        this.attachParticipants(container, room);
+        this.setupTwilioEvents(room, container);
         this.isLoading.set(false);
-        this.setupEventListeners();
       })
       .catch((error: any) => {
         this.errorMessage.set('Erro ao entrar na sala');
         this.isLoading.set(false);
-        console.error('Error joining call:', error);
+        console.error('Error joining Twilio room:', error);
       });
   }
 
-  setupEventListeners(): void {
-    if (!this.callFrame) return;
+  attachParticipants(container: HTMLElement, room: any): void {
+    container.innerHTML = '';
 
-    this.callFrame.on('left-meeting', () => {
-      this.handleEndSession();
+    room.localParticipant.videoTracks.forEach((publication: any) => {
+      if (publication.track) {
+        container.appendChild(publication.track.attach());
+      }
     });
 
-    this.callFrame.on('error', (error: any) => {
-      console.error('Call error:', error);
+    room.participants.forEach((participant: any) => {
+      this.attachParticipantTracks(participant, container);
+    });
+  }
+
+  attachParticipantTracks(participant: any, container: HTMLElement): void {
+    participant.tracks.forEach((publication: any) => {
+      if (publication.track) {
+        container.appendChild(publication.track.attach());
+      }
+    });
+
+    participant.on('trackSubscribed', (track: any) => {
+      container.appendChild(track.attach());
+    });
+  }
+
+  setupTwilioEvents(room: any, container: HTMLElement): void {
+    room.on('participantConnected', (participant: any) => {
+      this.attachParticipantTracks(participant, container);
+    });
+
+    room.on('participantDisconnected', (participant: any) => {
+      participant.tracks.forEach((publication: any) => {
+        if (publication.track) {
+          publication.track.detach().forEach((el: HTMLElement) => el.remove());
+        }
+      });
+    });
+
+    room.on('disconnected', () => {
+      this.handleEndSession();
     });
   }
 
   toggleAudio(): void {
-    if (!this.callFrame) return;
-    
+    if (!this.room) return;
     const muted = !this.isAudioMuted();
-    this.callFrame.setLocalAudio(!muted);
+    this.room.localParticipant.audioTracks.forEach((publication: any) => {
+      if (muted) {
+        publication.track.disable();
+      } else {
+        publication.track.enable();
+      }
+    });
     this.isAudioMuted.set(muted);
   }
 
   toggleVideo(): void {
-    if (!this.callFrame) return;
-    
-    const videoOff = !this.isVideoOff();
-    this.callFrame.setLocalVideo(!videoOff);
-    this.isVideoOff.set(videoOff);
+    if (!this.room) return;
+    const off = !this.isVideoOff();
+    this.room.localParticipant.videoTracks.forEach((publication: any) => {
+      if (off) {
+        publication.track.disable();
+      } else {
+        publication.track.enable();
+      }
+    });
+    this.isVideoOff.set(off);
   }
 
   leaveCall(): void {
-    if (this.callFrame) {
-      this.callFrame.leave();
-      this.callFrame.destroy();
-      this.callFrame = null;
+    if (this.room) {
+      this.room.disconnect();
+      this.room = null;
     }
   }
 
   endSession(): void {
     if (confirm('Tem certeza que deseja encerrar a sessão?')) {
       this.leaveCall();
-      
+
       this.telemedicineService.completeSession(this.sessionId).subscribe({
-        next: () => {
-          this.router.navigate(['/telemedicine']);
-        },
+        next: () => this.router.navigate(['/telemedicine']),
         error: (error) => {
           console.error('Error completing session:', error);
           this.router.navigate(['/telemedicine']);
@@ -211,15 +262,13 @@ export class VideoRoom implements OnInit, OnDestroy {
 
   startTimer(): void {
     this.sessionStartTime = new Date();
-    
+
     this.timerInterval = setInterval(() => {
       if (this.sessionStartTime) {
         const elapsed = Math.floor((Date.now() - this.sessionStartTime.getTime()) / 1000);
         const minutes = Math.floor(elapsed / 60);
         const seconds = elapsed % 60;
-        this.elapsedTime.set(
-          `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-        );
+        this.elapsedTime.set(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
       }
     }, 1000);
   }

@@ -27,7 +27,7 @@ Microserviço de telemedicina conforme **CFM 2.314/2022** para o sistema MedicWa
    - **Componente Angular IdentityVerificationUpload** ✨
 
 3. **Sessões de Videochamada**
-   - Integração com Daily.co (WebRTC)
+   - Integração com Twilio Video (WebRTC)
    - Qualidade de conexão monitorada
    - Validação de conformidade pré-sessão
    - **Componente Angular VideoRoom** ✨
@@ -452,7 +452,7 @@ Proprietary - Omni Care Software © 2026
 ## 🎉 Agradecimentos
 
 - Conselho Federal de Medicina (CFM) pelas diretrizes
-- Daily.co pela plataforma de vídeo
+- Twilio Video pela plataforma de vídeo
 - Comunidade .NET
 
 ---

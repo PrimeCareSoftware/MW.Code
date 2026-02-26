@@ -44,9 +44,15 @@ export interface JoinSessionRequest {
  * Response when joining a session (contains access info)
  */
 export interface JoinSessionResponse {
+  provider: 'Twilio' | string;
+  roomName: string;
   roomUrl: string;
   accessToken: string;
   expiresAt: string;
+  waitingRoomEnabled: boolean;
+  recordingAvailable: boolean;
+  screenSharingAvailable: boolean;
+  chatAvailable: boolean;
 }
 
 /**

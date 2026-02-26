@@ -74,15 +74,13 @@ builder.Services.AddScoped<IIdentityVerificationRepository, IdentityVerification
 builder.Services.AddScoped<ITelemedicineRecordingRepository, TelemedicineRecordingRepository>();
 
 // Register Video Call Service based on configuration
-var videoProvider = builder.Configuration["VideoProvider"] ?? "DailyCo";
-if (videoProvider.Equals("Twilio", StringComparison.OrdinalIgnoreCase))
+var videoProvider = builder.Configuration["VideoProvider"] ?? "Twilio";
+if (!videoProvider.Equals("Twilio", StringComparison.OrdinalIgnoreCase))
 {
-    builder.Services.AddScoped<IVideoCallService, TwilioVideoService>();
+    throw new InvalidOperationException("Only Twilio provider is supported in this sprint.");
 }
-else
-{
-    builder.Services.AddHttpClient<IVideoCallService, DailyCoVideoService>();
-}
+
+builder.Services.AddScoped<IVideoCallService, TwilioVideoService>();
 
 builder.Services.AddHttpClient<ICfmValidationService, CfmValidationService>();
 
