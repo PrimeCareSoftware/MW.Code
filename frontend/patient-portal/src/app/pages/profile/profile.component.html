@@ -30,27 +30,27 @@
             Informações Pessoais
           </h3>
           <div class="info-grid" role="list">
-            <div class="info-item" role="listitem">
+            <div class="info-item" role="listitem" *ngIf="hasVisibleField('fullName')">
               <label>Nome Completo</label>
               <p>{{ currentUser.fullName }}</p>
             </div>
             
-            <div class="info-item" role="listitem">
+            <div class="info-item" role="listitem" *ngIf="hasVisibleField('email')">
               <label>Email</label>
               <p>{{ currentUser.email }}</p>
             </div>
             
-            <div class="info-item" role="listitem">
+            <div class="info-item" role="listitem" *ngIf="hasVisibleField('cpf')">
               <label>CPF</label>
               <p>{{ formatCPF(currentUser.cpf) }}</p>
             </div>
             
-            <div class="info-item" role="listitem">
+            <div class="info-item" role="listitem" *ngIf="hasVisibleField('phoneNumber')">
               <label>Telefone</label>
               <p>{{ formatPhone(currentUser.phoneNumber) }}</p>
             </div>
             
-            <div class="info-item" role="listitem">
+            <div class="info-item" role="listitem" *ngIf="hasVisibleField('dateOfBirth')">
               <label>Data de Nascimento</label>
               <p>{{ formatDate(currentUser.dateOfBirth) }}</p>
             </div>
@@ -59,7 +59,7 @@
 
         <mat-divider class="section-divider"></mat-divider>
 
-        <section class="info-section" aria-labelledby="security-heading">
+        <section class="info-section" aria-labelledby="security-heading" *ngIf="hasVisibleField('twoFactorEnabled')">
           <h3 id="security-heading">
             <mat-icon aria-hidden="true">security</mat-icon>
             Segurança
@@ -80,7 +80,7 @@
     </mat-card>
 
     <!-- Change Password Card -->
-    <mat-card class="password-card">
+    <mat-card class="password-card" *ngIf="hasPermission('profile:update')">
       <mat-card-header>
         <mat-card-title>
           <mat-icon aria-hidden="true">lock</mat-icon>

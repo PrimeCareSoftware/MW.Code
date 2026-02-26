@@ -7,6 +7,8 @@ export interface User {
   dateOfBirth: Date;
   clinicId?: string; // Optional clinic ID for multi-tenant support
   twoFactorEnabled: boolean;
+  permissions?: string[];
+  visibleFields?: string[];
 }
 
 export interface LoginRequest {
@@ -29,6 +31,7 @@ export interface RegisterRequest {
   dateOfBirth: Date;
   password: string;
   confirmPassword: string;
+  acceptTerms: boolean;
 }
 
 export interface RefreshTokenRequest {

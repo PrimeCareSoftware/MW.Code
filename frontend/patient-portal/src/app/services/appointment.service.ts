@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { 
   Appointment, 
@@ -59,7 +59,17 @@ export class AppointmentService {
     if (specialty) {
       params = params.set('specialty', specialty);
     }
-    return this.http.get<Doctor[]>(`${this.apiUrl}/doctors`, { params });
+
+    return this.http.get<any[]>(`${this.apiUrl}/doctors`, { params }).pipe(
+      map((doctors) => (doctors || []).map((doctor) => ({
+        id: doctor.id,
+        name: doctor.name ?? doctor.fullName ?? '',
+        specialty: doctor.specialty ?? '',
+        crm: doctor.crm ?? doctor.professionalId ?? '',
+        availableForOnlineBooking: doctor.availableForOnlineBooking ?? doctor.isMvpProfile ?? true,
+        isMvpProfile: doctor.isMvpProfile ?? true
+      } as Doctor)))
+    );
   }
 
   getAvailableSlots(clinicId: string, doctorId: string, date: string): Observable<AvailableSlotsResponse> {

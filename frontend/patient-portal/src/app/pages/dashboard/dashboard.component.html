@@ -113,6 +113,12 @@
             </mat-chip>
             <mat-chip class="status-chip" [attr.aria-label]="'Status: ' + appointment.status">{{ appointment.status }}</mat-chip>
           </div>
+          <div class="appointment-actions" *ngIf="appointment.isTelehealth && appointment.telehealthLink">
+            <a mat-stroked-button color="primary" [href]="appointment.telehealthLink" target="_blank" rel="noopener noreferrer">
+              <mat-icon aria-hidden="true">video_call</mat-icon>
+              Entrar na Teleconsulta (Twilio)
+            </a>
+          </div>
         </app-animated-card>
       </div>
 

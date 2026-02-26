@@ -78,9 +78,16 @@
               </button>
             </div>
 
+            <mat-form-field appearance="outline" class="full-width" *ngIf="!loadingDoctors && !doctorsError && doctors.length > 0">
+              <mat-label>Buscar profissional</mat-label>
+              <input matInput [(ngModel)]="doctorSearchTerm" (input)="onDoctorSearch()" [ngModelOptions]="{standalone: true}" placeholder="Digite nome, especialidade ou CRM">
+              <mat-icon matPrefix>search</mat-icon>
+              <mat-hint>Exibindo apenas perfis MVP habilitados para agendamento</mat-hint>
+            </mat-form-field>
+
             <div class="doctors-grid" *ngIf="!loadingDoctors && !doctorsError && doctors.length > 0">
               <mat-card 
-                *ngFor="let doctor of doctors" 
+                *ngFor="let doctor of filteredDoctors" 
                 class="doctor-card"
                 [class.selected]="doctorFormGroup.get('doctor')?.value === doctor.id"
                 (click)="doctorFormGroup.patchValue({doctor: doctor.id}); onDoctorSelected()">
@@ -104,7 +111,7 @@
               </mat-card>
             </div>
 
-            <div class="empty-state" *ngIf="!loadingDoctors && !doctorsError && doctors.length === 0">
+            <div class="empty-state" *ngIf="!loadingDoctors && !doctorsError && filteredDoctors.length === 0">
               <mat-icon>person_off</mat-icon>
               <p>Nenhum médico disponível para esta especialidade</p>
             </div>

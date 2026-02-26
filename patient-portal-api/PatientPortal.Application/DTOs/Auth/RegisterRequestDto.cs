@@ -36,4 +36,7 @@ public class RegisterRequestDto
     [Required(ErrorMessage = "Confirmação de senha é obrigatória")]
     [Compare("Password", ErrorMessage = "As senhas não conferem")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    [Range(typeof(bool), "true", "true", ErrorMessage = "É necessário aceitar os termos para continuar")]
+    public bool AcceptTerms { get; set; }
 }
