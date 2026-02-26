@@ -33,3 +33,5 @@ export * from './alert';
 // - Toast
 // - Sidebar
 // - Layout components
+
+export * from './table/table.component';

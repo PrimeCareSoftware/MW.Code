@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Navbar } from '../../shared/navbar/navbar';
 import { Loading } from '../../shared/loading/loading';
 import { Auth } from '../../services/auth';
 import { NotificationService } from '../../services/notification.service';
@@ -55,7 +54,7 @@ interface AlertItem {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, Navbar, Loading],
+  imports: [CommonModule, RouterLink, Loading],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })

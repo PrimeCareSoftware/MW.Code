@@ -1,0 +1,14 @@
+.page-shell {
+  padding: var(--space-4);
+}
+
+.page-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .page-shell { padding: var(--space-3); }
+}

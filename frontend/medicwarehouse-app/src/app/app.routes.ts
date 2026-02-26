@@ -3,6 +3,7 @@ import { authGuard } from './guards/auth-guard';
 import { ownerGuard } from './guards/owner-guard';
 import { careFeatureGuard } from './guards/care-feature-guard';
 import { CLINIC_ADMIN_ROUTES } from './pages/clinic-admin/clinic-admin.routes';
+import { CoreLayoutComponent } from './layout/core-layout/core-layout.component';
 
 export const routes: Routes = [
   // Public site routes (marketing, registration) - no authentication required
@@ -98,12 +99,35 @@ export const routes: Routes = [
   // Homepage - redirect to site
   { path: '', redirectTo: '/site', pathMatch: 'full' },
 
-  // Main application routes - require authentication
-  { 
-    path: 'dashboard', 
-    loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard),
-    canActivate: [authGuard]
+  {
+    path: '',
+    component: CoreLayoutComponent,
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'admin/profiles',
+        loadComponent: () => import('./pages/admin/profiles/profile-list.component').then(m => m.ProfileListComponent),
+        canActivate: [authGuard, ownerGuard]
+      },
+      {
+        path: 'admin/profiles/new',
+        loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
+        canActivate: [authGuard, ownerGuard]
+      },
+      {
+        path: 'admin/profiles/edit/:id',
+        loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
+        canActivate: [authGuard, ownerGuard]
+      },
+      ...CLINIC_ADMIN_ROUTES
+    ]
   },
+
+  // Main application routes - require authentication
   { 
     path: 'referral', 
     loadComponent: () => import('./pages/referral/referral-dashboard.component').then(m => m.ReferralDashboardComponent),
@@ -187,21 +211,6 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
-  { 
-    path: 'admin/profiles', 
-    loadComponent: () => import('./pages/admin/profiles/profile-list.component').then(m => m.ProfileListComponent),
-    canActivate: [authGuard, ownerGuard]
-  },
-  { 
-    path: 'admin/profiles/new', 
-    loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
-    canActivate: [authGuard, ownerGuard]
-  },
-  { 
-    path: 'admin/profiles/edit/:id', 
-    loadComponent: () => import('./pages/admin/profiles/profile-form.component').then(m => m.ProfileFormComponent),
-    canActivate: [authGuard, ownerGuard]
-  },
   { 
     path: 'analytics', 
     loadComponent: () => import('./pages/analytics/analytics-dashboard').then(m => m.AnalyticsDashboard),
@@ -596,7 +605,6 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
-  ...CLINIC_ADMIN_ROUTES,
 
   // Wildcard route - redirect to 404 page for unknown routes
   { path: '**', redirectTo: '/404' }

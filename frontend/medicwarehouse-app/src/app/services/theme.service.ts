@@ -34,9 +34,8 @@ export class ThemeService {
   private applyTheme(theme: Theme): void {
     // Remove all theme classes
     document.body.classList.remove('theme-light', 'theme-dark', 'theme-high-contrast');
-    
-    // Add current theme class
     document.body.classList.add(`theme-${theme}`);
+    document.body.setAttribute('data-theme', theme);
     
     // Store preference
     localStorage.setItem(this.THEME_KEY, theme);

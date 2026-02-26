@@ -1,0 +1,14 @@
+.app-btn {
+  height: var(--control-height);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  padding: 0 var(--space-3);
+  font-weight: 600;
+}
+
+.app-btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+
+  &:hover { background: var(--color-primary-hover); }
+}
