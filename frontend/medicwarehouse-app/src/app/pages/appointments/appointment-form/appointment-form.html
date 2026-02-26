@@ -43,15 +43,68 @@
       </div>
       
       <div class="form-group">
-        <label for="patientId">Paciente <span class="required">*</span></label>
-        <select id="patientId" formControlName="patientId" class="form-control" [attr.disabled]="isEditMode() ? '' : null">
-          <option value="">Selecione um paciente</option>
-          @for (patient of patients(); track patient.id) {
-            <option [value]="patient.id">{{ patient.name }}</option>
-          }
-        </select>
-        @if (isEditMode()) {
+        <label for="patientSearch">Paciente <span class="required">*</span></label>
+
+        @if (isEditMode() && selectedPatient()) {
+          <div class="selected-patient readonly">
+            <div class="patient-info">
+              <strong>{{ selectedPatient()!.name }}</strong>
+              <span>CPF: {{ selectedPatient()!.document }} · Tel: {{ selectedPatient()!.phone }}</span>
+            </div>
+          </div>
           <small class="form-text">O paciente não pode ser alterado após o agendamento</small>
+        } @else {
+          <div class="search-input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="text"
+              id="patientSearch"
+              [(ngModel)]="patientSearchTerm"
+              [ngModelOptions]="{standalone: true}"
+              (input)="searchPatients()"
+              placeholder="Digite nome, CPF ou telefone"
+              class="form-control"
+              autocomplete="off"
+            />
+          </div>
+
+          @if (isSearchingPatients()) {
+            <small class="form-text">Buscando pacientes...</small>
+          } @else {
+            <small class="form-text">{{ patientSearchMessage() }}</small>
+          }
+
+          @if (patientSearchResults().length > 0) {
+            <div class="search-results">
+              @for (patient of patientSearchResults(); track patient.id) {
+                <button type="button" class="search-result-item" (click)="selectPatient(patient)">
+                  <div class="result-avatar">{{ patient.name.charAt(0) }}</div>
+                  <div class="result-info">
+                    <strong>{{ patient.name }}</strong>
+                    <span>CPF: {{ patient.document }} · Tel: {{ patient.phone }}</span>
+                  </div>
+                </button>
+              }
+            </div>
+          }
+
+          @if (selectedPatient()) {
+            <div class="selected-patient">
+              <div class="patient-info">
+                <strong>{{ selectedPatient()!.name }}</strong>
+                <span>CPF: {{ selectedPatient()!.document }} · Tel: {{ selectedPatient()!.phone }}</span>
+              </div>
+              <button type="button" class="btn-remove" (click)="clearSelectedPatient()" aria-label="Limpar paciente selecionado">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+          }
         }
       </div>
 

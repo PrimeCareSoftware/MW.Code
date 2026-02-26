@@ -27,6 +27,8 @@ Este documento descreve TODAS as funcionalidades implementadas no sistema Omni C
 ### Agendamento Online
 - ✅ Sistema completo de agendamentos via API REST
 - ✅ Interface frontend para criar e gerenciar agendamentos
+- ✅ Busca inteligente de pacientes no agendamento com autocomplete (nome, CPF e telefone)
+- ✅ Consulta incremental via `GET /api/patients/search?searchTerm={termo}` com debounce para escalar em bases grandes
 - ✅ Validação de disponibilidade de horários
 - ✅ Suporte a múltiplos tipos de consulta (Regular, Emergência, Retorno, Consulta)
 - ✅ Duração configurável (múltiplos de 15 minutos)
@@ -96,6 +98,7 @@ Este documento descreve TODAS as funcionalidades implementadas no sistema Omni C
 - `PUT /api/patients/{id}` - Atualizar paciente
 - `GET /api/patients` - Listar pacientes
 - `GET /api/patients/search?searchTerm={termo}` - Buscar por CPF, Nome ou Telefone
+- ℹ️ **Uso recomendado no frontend**: busca incremental com mínimo de 3 caracteres, debounce de 300ms e seleção por autocomplete para evitar carregamento de listas completas.
 - `POST /api/patients/{childId}/link-guardian/{guardianId}` - Vincular criança a responsável
 
 ### Histórico de Atendimentos
