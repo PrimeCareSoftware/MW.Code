@@ -275,21 +275,31 @@
             </div>
 
             <!-- Professional fields (shown for all healthcare professional roles) -->
-            @if (isCurrentRoleProfessional()) {
+            <div class="form-group">
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    formControlName="canAttendAppointments"
+                  />
+                  <span>Pode efetuar atendimento</span>
+                </label>
+              </div>
+
+            @if (canCurrentRoleAttend()) {
               <div class="form-group">
-                <label for="professionalId">Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <label for="professionalId">{{ getProfessionalIdLabel(createUserForm.get('role')?.value) }} *</label>
                 <input 
                   type="text" 
                   id="professionalId" 
                   formControlName="professionalId" 
                   class="form-control"
-                  placeholder="Ex: CRM-123456, CRP-789012, CRN-345678"
+                  placeholder="Informe o registro profissional"
                 />
                 <small class="form-text text-muted">
-                  Digite o número de registro profissional apropriado para seu perfil (CRM, CRP, CRN, CRO, etc.)
+                  Campo obrigatório quando o usuário pode efetuar atendimento.
                 </small>
                 @if (createUserForm.get('professionalId')?.invalid && createUserForm.get('professionalId')?.touched) {
-                  <span class="error-text">Registro profissional é obrigatório</span>
+                  <span class="error-text">{{ getProfessionalIdLabel(createUserForm.get('role')?.value) }} é obrigatório</span>
                 }
               </div>
 
@@ -307,17 +317,8 @@
                 }
               </div>
 
-              <div class="form-group">
-                <label class="checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    formControlName="showInAppointmentScheduling"
-                  />
-                  <span>Exibir no agendamento de consultas</span>
-                </label>
-                <small class="form-text">Se marcado, este profissional aparecerá na lista disponível para agendamento</small>
-              </div>
             }
+
           </div>
 
           <div class="modal-footer">
@@ -385,18 +386,28 @@
             </div>
 
             <!-- Professional fields (shown for all professional roles) -->
-            @if (isEditingProfessional()) {
+            <div class="form-group">
+                <label class="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    formControlName="canAttendAppointments"
+                  />
+                  <span>Pode efetuar atendimento</span>
+                </label>
+              </div>
+
+            @if (canEditingRoleAttend()) {
               <div class="form-group">
-                <label for="edit-professionalId">Registro Profissional {{ doctorFieldsConfig().professionalIdRequired ? '*' : '' }}</label>
+                <label for="edit-professionalId">{{ getProfessionalIdLabel(selectedUser()!.role) }} *</label>
                 <input 
                   type="text" 
                   id="edit-professionalId" 
                   formControlName="professionalId" 
                   class="form-control"
-                  placeholder="Ex: CRM-123456, CRP-789012, CRN-345678"
+                  placeholder="Informe o registro profissional"
                 />
                 <small class="form-text text-muted">
-                  Digite o número de registro profissional apropriado para seu perfil (CRM, CRP, CRN, CRO, etc.)
+                  Campo obrigatório quando o usuário pode efetuar atendimento.
                 </small>
               </div>
 
@@ -411,17 +422,18 @@
                 />
               </div>
 
-              <div class="form-group">
-                <label class="checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    formControlName="showInAppointmentScheduling"
-                  />
-                  <span>Exibir no agendamento de consultas</span>
-                </label>
-                <small class="form-text">Se marcado, este profissional aparecerá na lista disponível para agendamento</small>
-              </div>
             }
+
+            <div class="form-group">
+              <label for="edit-password">Nova senha</label>
+              <input 
+                type="password" 
+                id="edit-password" 
+                formControlName="password" 
+                class="form-control"
+                placeholder="Deixe em branco para manter a senha atual"
+              />
+            </div>
           </div>
 
           <div class="modal-footer">

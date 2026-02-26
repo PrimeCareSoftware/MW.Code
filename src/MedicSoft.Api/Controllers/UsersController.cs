@@ -240,6 +240,11 @@ namespace MedicSoft.Api.Controllers
                     request.ShowInAppointmentScheduling
                 );
 
+                if (!string.IsNullOrWhiteSpace(request.Password))
+                {
+                    await _userService.ChangeUserPasswordAsync(id, request.Password, tenantId);
+                }
+
                 return Ok(new { message = "User updated successfully" });
             }
             catch (InvalidOperationException ex)
@@ -605,6 +610,7 @@ namespace MedicSoft.Api.Controllers
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
         public bool? ShowInAppointmentScheduling { get; set; }
+        public string? Password { get; set; }
     }
 
     public class ChangeRoleRequest

@@ -64,16 +64,16 @@ namespace MedicSoft.Application.Services
             if (existingUser != null)
                 throw new InvalidOperationException("Username already exists");
 
-            // Validate doctor-specific fields if role is Doctor
-            if (role == UserRole.Doctor && clinicId.HasValue)
+            // Validate professional fields for attending clinical roles
+            if (IsAttendingClinicalRole(role) && clinicId.HasValue)
             {
                 var doctorConfig = await GetDoctorFieldsConfigurationAsync(clinicId.Value, tenantId);
-                
+
                 if (doctorConfig.ProfessionalIdRequired && string.IsNullOrWhiteSpace(professionalId))
-                    throw new InvalidOperationException("Professional ID (CRM) is required for doctors in this clinic");
-                
+                    throw new InvalidOperationException("Professional registration is required for attending professionals in this clinic");
+
                 if (doctorConfig.SpecialtyRequired && string.IsNullOrWhiteSpace(specialty))
-                    throw new InvalidOperationException("Specialty is required for doctors in this clinic");
+                    throw new InvalidOperationException("Specialty is required for attending professionals in this clinic");
             }
 
             var passwordHash = _passwordHasher.HashPassword(password);
@@ -111,16 +111,16 @@ namespace MedicSoft.Application.Services
             if (user == null)
                 throw new InvalidOperationException("User not found");
 
-            // Validate doctor-specific fields if user is a Doctor
-            if (user.Role == UserRole.Doctor && user.ClinicId.HasValue)
+            // Validate professional fields for attending clinical roles
+            if (IsAttendingClinicalRole(user.Role) && user.ClinicId.HasValue)
             {
                 var doctorConfig = await GetDoctorFieldsConfigurationAsync(user.ClinicId.Value, tenantId);
-                
+
                 if (doctorConfig.ProfessionalIdRequired && string.IsNullOrWhiteSpace(professionalId))
-                    throw new InvalidOperationException("Professional ID (CRM) is required for doctors in this clinic");
-                
+                    throw new InvalidOperationException("Professional registration is required for attending professionals in this clinic");
+
                 if (doctorConfig.SpecialtyRequired && string.IsNullOrWhiteSpace(specialty))
-                    throw new InvalidOperationException("Specialty is required for doctors in this clinic");
+                    throw new InvalidOperationException("Specialty is required for attending professionals in this clinic");
             }
 
             user.UpdateProfile(email, fullName, phone, professionalId, specialty, showInAppointmentScheduling);
@@ -385,6 +385,12 @@ namespace MedicSoft.Application.Services
             // Set new preferred clinic
             targetLink.SetAsPreferred();
             await _userClinicLinkRepository.UpdateAsync(targetLink);
+        }
+
+
+        private static bool IsAttendingClinicalRole(UserRole role)
+        {
+            return role == UserRole.Doctor || role == UserRole.Nutritionist || role == UserRole.Psychologist;
         }
     }
 }

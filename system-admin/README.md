@@ -86,3 +86,18 @@ Esta estrutura foi criada em Janeiro de 2026 para consolidar toda a documentaç�
 - `/docs` (260+ arquivos)
 - `/telemedicine` (documentação específica)
 - Outras localizações diversas
+
+## ✅ Sprint 2 - Cadastro e Alteração de Usuários (Clinic Admin)
+
+Foi implementado o fluxo de **cadastro/edição com atendimento profissional**:
+
+- Modal de criação/edição com campos básicos: nome, e-mail, telefone e senha.
+- Checkbox **"Pode efetuar atendimento"** para definir se o usuário pode atender.
+- Quando habilitado para perfis de atendimento (Médico, Nutricionista, Psicólogo), o sistema exige `professionalId` (CRM/CRN/CRP).
+- Os endpoints `POST /api/ClinicAdmin/users`, `PUT /api/ClinicAdmin/users/{id}`, `POST /api/users` e `PUT /api/users/{id}` foram atualizados para trafegar os campos:
+  - `showInAppointmentScheduling`
+  - `professionalId`
+  - `specialty`
+  - `password` (edição)
+
+Consulte detalhes completos em [guias/CLINIC_ADMIN_GUIDE.md](./guias/CLINIC_ADMIN_GUIDE.md).

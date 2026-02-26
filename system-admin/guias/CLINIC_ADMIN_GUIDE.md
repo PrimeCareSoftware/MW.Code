@@ -74,7 +74,7 @@ GET /api/ClinicAdmin/users
 POST /api/ClinicAdmin/users
 ```
 
-**Request Body:**
+**Request Body (Sprint 2 - cadastro com atendimento):**
 ```json
 {
   "username": "maria.santos",
@@ -82,9 +82,15 @@ POST /api/ClinicAdmin/users
   "password": "SenhaSegura123!",
   "name": "Maria Santos",
   "phone": "(11) 98765-4321",
-  "role": "Nurse"
+  "role": "Doctor",
+  "showInAppointmentScheduling": true,
+  "professionalId": "CRM-SP 123456",
+  "specialty": "Clínico Geral"
 }
 ```
+
+> `showInAppointmentScheduling` representa o checkbox **"Pode efetuar atendimento"** no modal.
+> Quando `true` e o perfil for de atendimento (Médico/Nutricionista/Psicólogo), o campo `professionalId` passa a ser obrigatório.
 
 **Response:**
 ```json
@@ -104,18 +110,23 @@ POST /api/ClinicAdmin/users
 - Valida força da senha (mínimo 8 caracteres)
 - Verifica se username já existe
 - Requer assinatura ativa
+- Se `showInAppointmentScheduling=true` para perfis de atendimento, exige registro profissional (CRM/CRN/CRP)
 
 #### 3. Atualizar Usuário
 ```http
 PUT /api/ClinicAdmin/users/{id}
 ```
 
-**Request Body:**
+**Request Body (Sprint 2 - alteração com senha opcional):**
 ```json
 {
   "email": "novo.email@clinica.com",
   "name": "Maria Santos Silva",
   "phone": "(11) 99999-8888",
+  "password": "NovaSenhaOpcional123!",
+  "showInAppointmentScheduling": true,
+  "professionalId": "CRM-SP 123456",
+  "specialty": "Clínico Geral",
   "isActive": true
 }
 ```
@@ -518,3 +529,16 @@ Para dúvidas, problemas ou sugestões relacionadas à área de administração 
 
 **Última Atualização:** Janeiro 2026  
 **Versão:** 1.0
+
+
+### Compatibilidade com API geral de usuários (`/api/users`)
+Os mesmos campos de atendimento profissional foram aplicados nos endpoints gerais:
+
+- `POST /api/users`
+- `PUT /api/users/{id}`
+
+Campos suportados (quando aplicável):
+- `showInAppointmentScheduling` (checkbox "Pode efetuar atendimento")
+- `professionalId` (CRM/CRN/CRP conforme perfil)
+- `specialty`
+- `password` (no `PUT`, opcional)

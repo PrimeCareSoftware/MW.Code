@@ -66,6 +66,7 @@ namespace MedicSoft.Application.DTOs
         public Guid? ProfileId { get; set; } // Optional: New profile-based system
         public string? ProfessionalId { get; set; } // CRM, CRP, CRN, CRO, etc.
         public string? Specialty { get; set; } // Professional specialty
+        public bool ShowInAppointmentScheduling { get; set; } = false; // "Pode efetuar atendimento"
     }
 
     public class UpdateClinicUserRequest
@@ -77,5 +78,6 @@ namespace MedicSoft.Application.DTOs
         public string? ProfessionalId { get; set; }
         public string? Specialty { get; set; }
         public bool? ShowInAppointmentScheduling { get; set; }
+        public string? Password { get; set; } // Optional password update in edit modal
     }
 }
