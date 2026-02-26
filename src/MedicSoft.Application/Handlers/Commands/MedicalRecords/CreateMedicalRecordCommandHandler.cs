@@ -60,6 +60,29 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 await _appointmentRepository.UpdateAsync(appointment);
 
                 // Create medical record with CFM 1.821 fields
+                var aggregatedNotes = request.MedicalRecordDto.Notes;
+                if (!string.IsNullOrWhiteSpace(request.MedicalRecordDto.NutritionalPlan))
+                {
+                    aggregatedNotes = $"{aggregatedNotes}
+
+[Plano Alimentar]
+{request.MedicalRecordDto.NutritionalPlan}".Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(request.MedicalRecordDto.NutritionalEvolution))
+                {
+                    aggregatedNotes = $"{aggregatedNotes}
+
+[Evolução Nutricional]
+{request.MedicalRecordDto.NutritionalEvolution}".Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(request.MedicalRecordDto.TherapeuticEvolution))
+                {
+                    aggregatedNotes = $"{aggregatedNotes}
+
+[Evolução Terapêutica]
+{request.MedicalRecordDto.TherapeuticEvolution}".Trim();
+                }
+
                 var medicalRecord = new MedicalRecord(
                     request.MedicalRecordDto.AppointmentId,
                     request.MedicalRecordDto.PatientId,
@@ -69,7 +92,7 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                     historyOfPresentIllness: request.MedicalRecordDto.HistoryOfPresentIllness,
                     request.MedicalRecordDto.Diagnosis,
                     request.MedicalRecordDto.Prescription,
-                    request.MedicalRecordDto.Notes,
+                    aggregatedNotes,
                     request.MedicalRecordDto.PastMedicalHistory,
                     request.MedicalRecordDto.FamilyHistory,
                     request.MedicalRecordDto.LifestyleHabits,

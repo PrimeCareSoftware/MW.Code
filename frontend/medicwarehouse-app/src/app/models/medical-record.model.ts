@@ -18,6 +18,9 @@ export interface MedicalRecord {
   familyHistory?: string;
   lifestyleHabits?: string;
   currentMedications?: string;
+  nutritionalPlan?: string;
+  nutritionalEvolution?: string;
+  therapeuticEvolution?: string;
   // Control fields
   isClosed: boolean;
   closedAt?: string;
@@ -43,6 +46,9 @@ export interface CreateMedicalRecord {
   familyHistory?: string;
   lifestyleHabits?: string;
   currentMedications?: string;
+  nutritionalPlan?: string;
+  nutritionalEvolution?: string;
+  therapeuticEvolution?: string;
   // Legacy fields (optional for backward compatibility)
   diagnosis?: string;
   prescription?: string;
@@ -57,6 +63,9 @@ export interface UpdateMedicalRecord {
   familyHistory?: string;
   lifestyleHabits?: string;
   currentMedications?: string;
+  nutritionalPlan?: string;
+  nutritionalEvolution?: string;
+  therapeuticEvolution?: string;
   // Legacy fields
   diagnosis?: string;
   prescription?: string;
@@ -68,6 +77,9 @@ export interface CompleteMedicalRecord {
   diagnosis?: string;
   prescription?: string;
   notes?: string;
+  nutritionalPlan?: string;
+  nutritionalEvolution?: string;
+  therapeuticEvolution?: string;
 }
 
 // CFM 1.821 Validation
@@ -261,4 +273,3 @@ export interface MedicalRecordAccessLog {
 export interface ReopenMedicalRecordRequest {
   reason: string;
 }
-

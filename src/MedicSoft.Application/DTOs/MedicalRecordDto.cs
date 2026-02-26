@@ -37,6 +37,15 @@ namespace MedicSoft.Application.DTOs
         
         [StringLength(3000, ErrorMessage = "Medicamentos atuais devem ter no máximo 3000 caracteres")]
         public string? CurrentMedications { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Plano alimentar deve ter no máximo 5000 caracteres")]
+        public string? NutritionalPlan { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução nutricional deve ter no máximo 5000 caracteres")]
+        public string? NutritionalEvolution { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução terapêutica deve ter no máximo 5000 caracteres")]
+        public string? TherapeuticEvolution { get; set; }
         
         // Legacy fields (DEPRECATED - use related entities)
         [StringLength(5000, ErrorMessage = "Diagnóstico deve ter no máximo 5000 caracteres")]
@@ -109,6 +118,15 @@ namespace MedicSoft.Application.DTOs
         
         [StringLength(5000, ErrorMessage = "Notas devem ter no máximo 5000 caracteres")]
         public string? Notes { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Plano alimentar deve ter no máximo 5000 caracteres")]
+        public string? NutritionalPlan { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução nutricional deve ter no máximo 5000 caracteres")]
+        public string? NutritionalEvolution { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução terapêutica deve ter no máximo 5000 caracteres")]
+        public string? TherapeuticEvolution { get; set; }
     }
 
     public class UpdateMedicalRecordDto
@@ -131,6 +149,15 @@ namespace MedicSoft.Application.DTOs
         
         [StringLength(3000, ErrorMessage = "Medicamentos atuais devem ter no máximo 3000 caracteres")]
         public string? CurrentMedications { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Plano alimentar deve ter no máximo 5000 caracteres")]
+        public string? NutritionalPlan { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução nutricional deve ter no máximo 5000 caracteres")]
+        public string? NutritionalEvolution { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução terapêutica deve ter no máximo 5000 caracteres")]
+        public string? TherapeuticEvolution { get; set; }
         
         // Legacy fields
         [StringLength(5000, ErrorMessage = "Diagnóstico deve ter no máximo 5000 caracteres")]
@@ -156,5 +183,14 @@ namespace MedicSoft.Application.DTOs
         
         [StringLength(5000, ErrorMessage = "Notas devem ter no máximo 5000 caracteres")]
         public string? Notes { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Plano alimentar deve ter no máximo 5000 caracteres")]
+        public string? NutritionalPlan { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução nutricional deve ter no máximo 5000 caracteres")]
+        public string? NutritionalEvolution { get; set; }
+
+        [StringLength(5000, ErrorMessage = "Evolução terapêutica deve ter no máximo 5000 caracteres")]
+        public string? TherapeuticEvolution { get; set; }
     }
 }

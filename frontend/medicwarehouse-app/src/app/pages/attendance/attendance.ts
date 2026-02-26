@@ -25,6 +25,7 @@ import { InformedConsentService } from '../../services/informed-consent.service'
 import { ConsultationFormConfigurationService } from '../../services/consultation-form-configuration.service';
 import { TerminologyService, TerminologyMap } from '../../services/terminology.service';
 import { Appointment, ProfessionalSpecialty, professionalSpecialtyToString } from '../../models/appointment.model';
+import { Auth } from '../../services/auth';
 import { MedicalRecord, ClinicalExamination, DiagnosticHypothesis, TherapeuticPlan, InformedConsent, DiagnosisType, DiagnosisTypeLabels } from '../../models/medical-record.model';
 import { Patient } from '../../models/patient.model';
 import { Procedure, AppointmentProcedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
@@ -34,6 +35,7 @@ import { ExamAutocomplete } from '../../models/exam-catalog.model';
 import type { CallNextPatientNotification } from '../../models/notification.model';
 import { NotificationType } from '../../models/notification.model';
 import { ConsultationFormConfigurationDto } from '../../models/consultation-form-configuration.model';
+import { RolePermissionService } from '../../services/role-permission.service';
 
 // Constants
 const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
@@ -129,6 +131,37 @@ export class Attendance implements OnInit, OnDestroy {
   // Services
   private consultationFormConfigService = inject(ConsultationFormConfigurationService);
   private terminologyService = inject(TerminologyService);
+  private authService = inject(Auth);
+  private rolePermissionService = inject(RolePermissionService);
+
+  readonly professionalProfile = signal<'doctor' | 'nutritionist' | 'psychologist' | 'unknown'>('unknown');
+  readonly canAccessAttendance = signal<boolean>(true);
+
+  isDoctorProfile(): boolean {
+    return this.professionalProfile() === 'doctor';
+  }
+
+  isNutritionistProfile(): boolean {
+    return this.professionalProfile() === 'nutritionist';
+  }
+
+  isPsychologistProfile(): boolean {
+    return this.professionalProfile() === 'psychologist';
+  }
+
+  private resolveProfessionalProfile(role?: string | null): 'doctor' | 'nutritionist' | 'psychologist' | 'unknown' {
+    const normalizedRole = (role ?? '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .trim();
+
+    if (['doctor', 'medico', 'medica', 'medico(a)'].includes(normalizedRole)) return 'doctor';
+    if (['nutritionist', 'nutricionista'].includes(normalizedRole)) return 'nutritionist';
+    if (['psychologist', 'psicologo', 'psicologa'].includes(normalizedRole)) return 'psychologist';
+
+    return 'unknown';
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -153,6 +186,9 @@ export class Attendance implements OnInit, OnDestroy {
       familyHistory: [''],
       lifestyleHabits: [''],
       currentMedications: [''],
+      nutritionalPlan: [''],
+      nutritionalEvolution: [''],
+      therapeuticEvolution: [''],
       // Legacy fields (optional)
       diagnosis: [''],
       prescription: [''],
@@ -175,6 +211,20 @@ export class Attendance implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const currentUser = this.authService.currentUser();
+    const profile = this.resolveProfessionalProfile(currentUser?.role);
+    this.professionalProfile.set(profile);
+
+    const canAccess = this.rolePermissionService.canAccessCareFeatures(currentUser?.role, !!currentUser?.isSystemOwner)
+      && profile !== 'unknown';
+
+    this.canAccessAttendance.set(canAccess);
+    if (!canAccess) {
+      this.errorMessage.set('Perfil sem permissão para visualizar ou registrar atendimentos.');
+      this.router.navigate(['/403']);
+      return;
+    }
+
     const id = this.route.snapshot.paramMap.get('appointmentId');
     if (id) {
       this.appointmentId.set(id);
@@ -362,6 +412,9 @@ export class Attendance implements OnInit, OnDestroy {
           familyHistory: record.familyHistory,
           lifestyleHabits: record.lifestyleHabits,
           currentMedications: record.currentMedications,
+          nutritionalPlan: record.nutritionalPlan,
+          nutritionalEvolution: record.nutritionalEvolution,
+          therapeuticEvolution: record.therapeuticEvolution,
           diagnosis: record.diagnosis,
           prescription: record.prescription,
           notes: record.notes
@@ -499,6 +552,9 @@ export class Attendance implements OnInit, OnDestroy {
       familyHistory: formValue.familyHistory,
       lifestyleHabits: formValue.lifestyleHabits,
       currentMedications: formValue.currentMedications,
+      nutritionalPlan: formValue.nutritionalPlan,
+      nutritionalEvolution: formValue.nutritionalEvolution,
+      therapeuticEvolution: formValue.therapeuticEvolution,
       diagnosis: formValue.diagnosis,
       prescription: formValue.prescription,
       notes: formValue.notes,
@@ -555,6 +611,9 @@ export class Attendance implements OnInit, OnDestroy {
       familyHistory: formValue.familyHistory,
       lifestyleHabits: formValue.lifestyleHabits,
       currentMedications: formValue.currentMedications,
+      nutritionalPlan: formValue.nutritionalPlan,
+      nutritionalEvolution: formValue.nutritionalEvolution,
+      therapeuticEvolution: formValue.therapeuticEvolution,
       diagnosis: formValue.diagnosis,
       prescription: formValue.prescription,
       notes: formValue.notes,
@@ -602,7 +661,10 @@ export class Attendance implements OnInit, OnDestroy {
     this.medicalRecordService.complete(this.medicalRecord()!.id, {
       diagnosis: formValue.diagnosis,
       prescription: formValue.prescription,
-      notes: formValue.notes
+      notes: formValue.notes,
+      nutritionalPlan: formValue.nutritionalPlan,
+      nutritionalEvolution: formValue.nutritionalEvolution,
+      therapeuticEvolution: formValue.therapeuticEvolution
     }).subscribe({
       next: () => {
         // Then complete the appointment (check-out)

@@ -79,6 +79,34 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 medicalRecord.UpdateNotes(request.UpdateDto.Notes);
             }
 
+            if (request.UpdateDto.TherapeuticEvolution != null || request.UpdateDto.NutritionalPlan != null || request.UpdateDto.NutritionalEvolution != null)
+            {
+                var notesBuilder = medicalRecord.Notes ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(request.UpdateDto.NutritionalPlan))
+                {
+                    notesBuilder = $"{notesBuilder}
+
+[Plano Alimentar]
+{request.UpdateDto.NutritionalPlan}".Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(request.UpdateDto.NutritionalEvolution))
+                {
+                    notesBuilder = $"{notesBuilder}
+
+[Evolução Nutricional]
+{request.UpdateDto.NutritionalEvolution}".Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(request.UpdateDto.TherapeuticEvolution))
+                {
+                    notesBuilder = $"{notesBuilder}
+
+[Evolução Terapêutica]
+{request.UpdateDto.TherapeuticEvolution}".Trim();
+                }
+
+                medicalRecord.UpdateNotes(notesBuilder);
+            }
+
             if (request.UpdateDto.ConsultationDurationMinutes.HasValue)
             {
                 medicalRecord.UpdateConsultationTime(request.UpdateDto.ConsultationDurationMinutes.Value);

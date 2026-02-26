@@ -50,10 +50,33 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 }
 
                 // Complete the medical record
+                var completionNotes = request.CompleteDto.Notes;
+                if (!string.IsNullOrWhiteSpace(request.CompleteDto.NutritionalPlan))
+                {
+                    completionNotes = $"{completionNotes}
+
+[Plano Alimentar]
+{request.CompleteDto.NutritionalPlan}".Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(request.CompleteDto.NutritionalEvolution))
+                {
+                    completionNotes = $"{completionNotes}
+
+[Evolução Nutricional]
+{request.CompleteDto.NutritionalEvolution}".Trim();
+                }
+                if (!string.IsNullOrWhiteSpace(request.CompleteDto.TherapeuticEvolution))
+                {
+                    completionNotes = $"{completionNotes}
+
+[Evolução Terapêutica]
+{request.CompleteDto.TherapeuticEvolution}".Trim();
+                }
+
                 medicalRecord.CompleteConsultation(
                     request.CompleteDto.Diagnosis,
                     request.CompleteDto.Prescription,
-                    request.CompleteDto.Notes
+                    completionNotes
                 );
 
                 await _medicalRecordRepository.UpdateAsync(medicalRecord);
