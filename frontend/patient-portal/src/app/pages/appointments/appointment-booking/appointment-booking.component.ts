@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,6 +29,7 @@ import { environment } from '../../../../environments/environment';
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
+    FormsModule,
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
@@ -59,6 +60,8 @@ export class AppointmentBookingComponent implements OnInit {
   // Data
   specialties: Specialty[] = [];
   doctors: Doctor[] = [];
+  filteredDoctors: Doctor[] = [];
+  doctorSearchTerm = '';
   availableSlots: TimeSlot[] = [];
   selectedSpecialty: Specialty | null = null;
   selectedDoctor: Doctor | null = null;
@@ -153,14 +156,17 @@ export class AppointmentBookingComponent implements OnInit {
     this.loadingDoctors = true;
     this.doctorsError = false;
     this.doctors = [];
+    this.filteredDoctors = [];
+    this.doctorSearchTerm = '';
     this.doctorFormGroup.reset();
 
     this.appointmentService.getDoctors(this.clinicId, specialty).subscribe({
       next: (doctors) => {
-        // Add null safety checks - simplified boolean check
-        this.doctors = (doctors || []).filter(d => d && d.availableForOnlineBooking);
+        // Exibir somente perfis MVP habilitados para agendamento online
+        this.doctors = (doctors || []).filter(d => d && d.availableForOnlineBooking && (d.isMvpProfile ?? true));
+        this.filteredDoctors = [...this.doctors];
         this.loadingDoctors = false;
-        
+
         if (this.doctors.length === 0) {
           this.notificationService.warning('Nenhum médico disponível para esta especialidade no momento');
         }
@@ -174,9 +180,23 @@ export class AppointmentBookingComponent implements OnInit {
     });
   }
 
+
+  onDoctorSearch(): void {
+    const search = this.doctorSearchTerm.trim().toLowerCase();
+    this.filteredDoctors = this.doctors.filter(doctor => {
+      if (!search) {
+        return true;
+      }
+
+      return doctor.name.toLowerCase().includes(search)
+        || (doctor.specialty || '').toLowerCase().includes(search)
+        || (doctor.crm || '').toLowerCase().includes(search);
+    });
+  }
+
   onDoctorSelected(): void {
     const doctorId = this.doctorFormGroup.get('doctor')?.value;
-    this.selectedDoctor = this.doctors.find(d => d.id === doctorId) || null;
+    this.selectedDoctor = this.filteredDoctors.find(d => d.id === doctorId) || this.doctors.find(d => d.id === doctorId) || null;
     
     // Reset date and time selection
     this.dateTimeFormGroup.patchValue({ date: null, timeSlot: null });

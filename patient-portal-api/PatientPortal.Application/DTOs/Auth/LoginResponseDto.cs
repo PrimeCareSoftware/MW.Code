@@ -20,4 +20,6 @@ public class PatientUserDto
     public string PhoneNumber { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
     public bool TwoFactorEnabled { get; set; }
+    public List<string> Permissions { get; set; } = new();
+    public List<string> VisibleFields { get; set; } = new();
 }

@@ -104,7 +104,8 @@ describe('AuthService', () => {
         fullName: 'New User',
         cpf: '98765432109',
         phoneNumber: '+5511987654321',
-        dateOfBirth: new Date('1990-01-15')
+        dateOfBirth: new Date('1990-01-15'),
+        acceptTerms: true
       };
 
       service.register(registerRequest).subscribe(response => {

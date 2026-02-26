@@ -40,6 +40,7 @@ export interface Doctor {
   photoUrl?: string;
   rating?: number;
   availableForOnlineBooking: boolean;
+  isMvpProfile?: boolean;
 }
 
 export interface TimeSlot {

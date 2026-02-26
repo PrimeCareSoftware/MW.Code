@@ -515,7 +515,26 @@ public class AuthService : IAuthService
             CPF = user.CPF,
             PhoneNumber = user.PhoneNumber,
             DateOfBirth = user.DateOfBirth,
-            TwoFactorEnabled = user.TwoFactorEnabled
+            TwoFactorEnabled = user.TwoFactorEnabled,
+            Permissions = new List<string>
+            {
+                "appointments:view",
+                "appointments:book",
+                "appointments:manage",
+                "documents:view",
+                "documents:download",
+                "profile:view",
+                "profile:update"
+            },
+            VisibleFields = new List<string>
+            {
+                "fullName",
+                "email",
+                "cpf",
+                "phoneNumber",
+                "dateOfBirth",
+                "twoFactorEnabled"
+            }
         };
     }
 }

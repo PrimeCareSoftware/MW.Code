@@ -99,6 +99,12 @@
                     <mat-icon aria-hidden="true">cancel</mat-icon>
                     Cancelar
                   </button>
+                  <a mat-stroked-button color="primary" *ngIf="appointment.isTelehealth && appointment.telehealthLink"
+                     [href]="appointment.telehealthLink" target="_blank" rel="noopener noreferrer"
+                     [attr.aria-label]="'Entrar na teleconsulta com ' + appointment.doctorName">
+                    <mat-icon aria-hidden="true">video_call</mat-icon>
+                    Entrar na Teleconsulta (Twilio)
+                  </a>
                 </div>
               </div>
 

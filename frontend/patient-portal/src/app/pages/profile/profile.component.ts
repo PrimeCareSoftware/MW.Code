@@ -112,6 +112,14 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+
+  hasVisibleField(field: string): boolean {
+    return this.currentUser?.visibleFields?.includes(field) ?? true;
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.currentUser?.permissions?.includes(permission) ?? true;
+  }
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
