@@ -198,6 +198,108 @@
             </div>
           </div>
 
+
+          <!-- Perfil profissional: módulos específicos -->
+          @if (isDoctorProfile()) {
+            <div class="card">
+              <h3>Módulo Médico</h3>
+              <p class="info-text">Diagnóstico, histórico, prescrição e emissão de receitas/exames.</p>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="diagnosis"
+                  id="diagnosis-profile"
+                  label="Diagnóstico"
+                  placeholder="Registre hipóteses e diagnóstico final"
+                  [rows]="3"
+                  [enableMedicationAutocomplete]="false"
+                  [enableExamAutocomplete]="false"
+                ></app-rich-text-editor>
+              </div>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="prescription"
+                  id="prescription-profile"
+                  label="Prescrição"
+                  placeholder="Use @@ para medicações"
+                  [rows]="4"
+                  [enableMedicationAutocomplete]="true"
+                  [enableExamAutocomplete]="false"
+                  (medicationSelected)="onMedicationSelected($event)"
+                ></app-rich-text-editor>
+              </div>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="notes"
+                  id="doctor-notes-profile"
+                  label="Solicitações de Exames e Condutas"
+                  placeholder="Use ## para exames"
+                  [rows]="3"
+                  [enableMedicationAutocomplete]="false"
+                  [enableExamAutocomplete]="true"
+                  (examSelected)="onExamSelected($event)"
+                ></app-rich-text-editor>
+              </div>
+            </div>
+          }
+
+          @if (isNutritionistProfile()) {
+            <div class="card">
+              <h3>Módulo Nutricionista</h3>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="nutritionalPlan"
+                  id="nutritionalPlan"
+                  label="Plano Alimentar"
+                  placeholder="Descreva o plano alimentar com orientações detalhadas"
+                  [rows]="4"
+                  [enableMedicationAutocomplete]="true"
+                  [enableExamAutocomplete]="true"
+                  (medicationSelected)="onMedicationSelected($event)"
+                  (examSelected)="onExamSelected($event)"
+                ></app-rich-text-editor>
+              </div>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="nutritionalEvolution"
+                  id="nutritionalEvolution"
+                  label="Evolução Nutricional"
+                  placeholder="Registre evolução, adesão e metas"
+                  [rows]="3"
+                  [enableMedicationAutocomplete]="false"
+                  [enableExamAutocomplete]="false"
+                ></app-rich-text-editor>
+              </div>
+            </div>
+          }
+
+          @if (isPsychologistProfile()) {
+            <div class="card">
+              <h3>Módulo Psicólogo</h3>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="notes"
+                  id="therapeuticPlanPsychologist"
+                  label="Plano Terapêutico"
+                  placeholder="Defina estratégias e objetivos terapêuticos"
+                  [rows]="4"
+                  [enableMedicationAutocomplete]="false"
+                  [enableExamAutocomplete]="false"
+                ></app-rich-text-editor>
+              </div>
+              <div class="form-group">
+                <app-rich-text-editor
+                  formControlName="therapeuticEvolution"
+                  id="therapeuticEvolution"
+                  label="Evolução"
+                  placeholder="Registre evolução clínica e resposta às intervenções"
+                  [rows]="3"
+                  [enableMedicationAutocomplete]="false"
+                  [enableExamAutocomplete]="false"
+                ></app-rich-text-editor>
+              </div>
+            </div>
+          }
+
           <!-- Specialty-Specific Custom Fields -->
           @if (formConfig()?.customFields && formConfig()!.customFields!.length > 0) {
             <app-custom-fields-renderer
@@ -282,6 +384,7 @@
           </div>
 
           <!-- Legacy Fields (Optional - kept for backward compatibility) -->
+          @if (isDoctorProfile()) {
           <div class="card legacy-fields">
             <h3>Campos Adicionais (Opcional)</h3>
             <p class="info-text">Estes campos são mantidos para compatibilidade, mas os campos CFM 1.821 acima são obrigatórios.</p>
@@ -333,6 +436,7 @@
               ></app-rich-text-editor>
             </div>
           </div>
+          }
 
           <!-- Procedures Section -->
           <div class="card">
