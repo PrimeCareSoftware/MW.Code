@@ -99,6 +99,7 @@ Os cenários de testes estão organizados por módulo do sistema:
 - **[Testes Analytics](CenariosTestesQA/07-Testes-Analytics.md)** - Dashboards e relatórios
 - **[Testes de Acessibilidade](CenariosTestesQA/08-Testes-Acessibilidade.md)** - WCAG 2.1 AA
 - **[Cenário Completo de Setup](CenariosTestesQA/09-Cenario-Completo-Setup-Clinica.md)** ⭐ - Teste end-to-end completo
+- **[Sprint 7 - Documentação, QA e Checklist Final](../docs/SPRINT7_DOCUMENTACAO_TESTES_CHECKLIST.md)** ⭐ - Fluxos de cadastro/edição/busca/atendimento/teleconsulta, permissões, Twilio e checklist de release
 
 ## 🎯 Público-Alvo
 
