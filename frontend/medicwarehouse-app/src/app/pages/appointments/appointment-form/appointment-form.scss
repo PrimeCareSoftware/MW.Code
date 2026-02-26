@@ -207,3 +207,131 @@
     transform: translateY(0);
   }
 }
+
+
+.search-input-wrapper {
+  position: relative;
+
+  svg {
+    position: absolute;
+    left: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: var(--gray-400);
+    pointer-events: none;
+  }
+
+  .form-control {
+    padding-left: calc(var(--spacing-8) + var(--spacing-2));
+  }
+}
+
+.search-results {
+  margin-top: var(--spacing-3);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  max-height: 280px;
+  overflow-y: auto;
+  background: white;
+}
+
+.search-result-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: var(--spacing-3) var(--spacing-4);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--gray-50);
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .result-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-full);
+    background: var(--primary-100);
+    color: var(--primary-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-semibold);
+  }
+
+  .result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong {
+      color: var(--gray-800);
+      font-size: var(--font-size-sm);
+    }
+
+    span {
+      color: var(--gray-500);
+      font-size: var(--font-size-xs);
+    }
+  }
+}
+
+.selected-patient {
+  margin-top: var(--spacing-3);
+  border: 1px solid var(--primary-200);
+  background: var(--primary-50);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-3) var(--spacing-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+
+  &.readonly {
+    margin-top: 0;
+    background: var(--gray-50);
+    border-color: var(--gray-200);
+  }
+
+  .patient-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong {
+      color: var(--gray-900);
+      font-size: var(--font-size-sm);
+    }
+
+    span {
+      color: var(--gray-600);
+      font-size: var(--font-size-xs);
+    }
+  }
+
+  .btn-remove {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-300);
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
