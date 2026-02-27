@@ -2,7 +2,7 @@
   <!-- Loading State -->
   @if (loading) {
     <div class="loading-state">
-      <mat-spinner diameter="50"></mat-spinner>
+      <div class="spinner"></div>
       <p>Carregando artigo...</p>
     </div>
   }
@@ -10,11 +10,11 @@
   <!-- Not Found State -->
   @else if (notFound) {
     <div class="not-found-state">
-      <mat-icon>article</mat-icon>
+      <span class="icon-lg" aria-hidden="true">📄</span>
       <h2>Artigo não encontrado</h2>
       <p>O artigo que você está procurando não existe ou foi removido.</p>
-      <button mat-raised-button color="primary" (click)="onBackToBlog()">
-        <mat-icon>arrow_back</mat-icon>
+      <button class="btn btn-primary" (click)="onBackToBlog()">
+        <span aria-hidden="true">←</span>
         Voltar ao Blog
       </button>
     </div>
@@ -35,7 +35,7 @@
       <!-- Article Header -->
       <header class="article-header">
         <div class="category-badge">
-          <mat-chip-option [selected]="true">{{ article.category }}</mat-chip-option>
+          <span class="chip chip-selected">{{ article.category }}</span>
         </div>
         
         <h1 class="article-title">{{ article.title }}</h1>
@@ -53,15 +53,15 @@
           
           <div class="article-stats">
             <span class="stat">
-              <mat-icon>schedule</mat-icon>
+              <span class="stat-icon" aria-hidden="true">⏱</span>
               {{ article.readTime }} min de leitura
             </span>
             <span class="stat">
-              <mat-icon>visibility</mat-icon>
+              <span class="stat-icon" aria-hidden="true">👁</span>
               {{ article.views }} visualizações
             </span>
             <span class="stat">
-              <mat-icon>favorite</mat-icon>
+              <span class="stat-icon" aria-hidden="true">❤</span>
               {{ article.likes }} curtidas
             </span>
           </div>
@@ -84,35 +84,27 @@
       @if (article.tags && article.tags.length > 0) {
         <div class="article-tags">
           <h3>Tags:</h3>
-          <mat-chip-listbox aria-label="Article tags">
+          <div class="chips" aria-label="Article tags">
             @for (tag of article.tags; track tag) {
-              <mat-chip-option>{{ tag }}</mat-chip-option>
+              <span class="chip">{{ tag }}</span>
             }
-          </mat-chip-listbox>
+          </div>
         </div>
       }
 
       <!-- Action Buttons -->
       <div class="article-actions">
-        <button mat-raised-button color="accent" (click)="onLikeArticle()">
-          <mat-icon>favorite</mat-icon>
+        <button class="btn btn-accent" (click)="onLikeArticle()">
+          <span aria-hidden="true">❤</span>
           Curtir ({{ article.likes }})
         </button>
         
         <div class="share-buttons">
           <span class="share-label">Compartilhar:</span>
-          <button mat-icon-button (click)="onShareArticle('twitter')" aria-label="Compartilhar no Twitter">
-            <mat-icon>share</mat-icon>
-          </button>
-          <button mat-icon-button (click)="onShareArticle('linkedin')" aria-label="Compartilhar no LinkedIn">
-            <mat-icon>share</mat-icon>
-          </button>
-          <button mat-icon-button (click)="onShareArticle('facebook')" aria-label="Compartilhar no Facebook">
-            <mat-icon>share</mat-icon>
-          </button>
-          <button mat-icon-button (click)="onShareArticle('whatsapp')" aria-label="Compartilhar no WhatsApp">
-            <mat-icon>share</mat-icon>
-          </button>
+          <button class="icon-btn" (click)="onShareArticle('twitter')" aria-label="Compartilhar no Twitter">X</button>
+          <button class="icon-btn" (click)="onShareArticle('linkedin')" aria-label="Compartilhar no LinkedIn">Li</button>
+          <button class="icon-btn" (click)="onShareArticle('facebook')" aria-label="Compartilhar no Facebook">Fb</button>
+          <button class="icon-btn" (click)="onShareArticle('whatsapp')" aria-label="Compartilhar no WhatsApp">Wp</button>
         </div>
       </div>
 
@@ -145,8 +137,8 @@
                   <h3>{{ relatedArticle.title }}</h3>
                   <p class="related-excerpt">{{ relatedArticle.excerpt }}</p>
                   <div class="related-meta">
-                    <span><mat-icon>schedule</mat-icon> {{ relatedArticle.readTime }} min</span>
-                    <span><mat-icon>visibility</mat-icon> {{ relatedArticle.views }}</span>
+                    <span><span class="stat-icon" aria-hidden="true">⏱</span> {{ relatedArticle.readTime }} min</span>
+                    <span><span class="stat-icon" aria-hidden="true">👁</span> {{ relatedArticle.views }}</span>
                   </div>
                 </div>
               </article>
@@ -157,8 +149,8 @@
 
       <!-- Back to Blog Button -->
       <div class="back-to-blog">
-        <button mat-raised-button color="primary" (click)="onBackToBlog()">
-          <mat-icon>arrow_back</mat-icon>
+        <button class="btn btn-primary" (click)="onBackToBlog()">
+          <span aria-hidden="true">←</span>
           Voltar ao Blog
         </button>
       </div>

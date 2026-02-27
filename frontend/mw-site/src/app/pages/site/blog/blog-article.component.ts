@@ -1,10 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject, takeUntil } from 'rxjs';
 import { BlogService, BlogArticle } from '../../../services/blog/blog.service';
 import { SeoService } from '../../../services/seo/seo.service';
@@ -15,11 +11,7 @@ import { WebsiteAnalyticsService } from '../../../services/analytics/website-ana
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    MatButtonModule,
-    MatChipsModule,
-    MatIconModule,
-    MatProgressSpinnerModule
+    RouterModule
   ],
   templateUrl: './blog-article.component.html',
   styleUrls: ['./blog-article.component.scss']
