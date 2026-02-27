@@ -326,6 +326,18 @@
         <!-- Step 4: Owner Info - HIDDEN for PF without company -->
         <div class="step-content" *ngIf="currentStep === 4 && !(clinicDocumentType === 'CPF' && !enableCompanyFields)">
           <h2>Dados do Responsável</h2>
+          <!-- Quick-fill from company data -->
+          <div class="form-group checkbox-group same-contact-checkbox">
+            <label>
+              <input 
+                type="checkbox" 
+                [(ngModel)]="sameAsCompanyContact" 
+                name="sameAsCompanyContact"
+                (change)="onSameAsCompanyContactChange()"
+              />
+              <span>Usar o mesmo telefone e e-mail da empresa</span>
+            </label>
+          </div>
           <div class="form-group">
             <label>Nome Completo *</label>
             <input type="text" [(ngModel)]="model.ownerName" name="ownerName" required />
