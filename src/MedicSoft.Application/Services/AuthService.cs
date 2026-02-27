@@ -18,6 +18,8 @@ namespace MedicSoft.Application.Services
         Task<bool> ValidateOwnerSessionAsync(Guid ownerId, string sessionId, string tenantId);
         Task<Owner?> GetSystemOwnerAsync(string tenantId);
         Task<Owner> CreateSystemOwnerAsync(string username, string password, string email, string fullName, string phone, string tenantId);
+        Task<bool> ChangeUserPasswordAsync(Guid userId, string newPassword, string tenantId);
+        Task<bool> ChangeOwnerPasswordAsync(Guid ownerId, string newPassword, string tenantId);
     }
 
     public class AuthService : IAuthService
@@ -192,6 +194,30 @@ namespace MedicSoft.Application.Services
 
             await _ownerRepository.AddAsync(systemOwner);
             return systemOwner;
+        }
+
+        public async Task<bool> ChangeUserPasswordAsync(Guid userId, string newPassword, string tenantId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId, tenantId);
+            if (user == null)
+                return false;
+
+            var newPasswordHash = _passwordHasher.HashPassword(newPassword);
+            user.UpdatePassword(newPasswordHash);
+            await _userRepository.UpdateAsync(user);
+            return true;
+        }
+
+        public async Task<bool> ChangeOwnerPasswordAsync(Guid ownerId, string newPassword, string tenantId)
+        {
+            var owner = await _ownerRepository.GetByIdAsync(ownerId, tenantId);
+            if (owner == null)
+                return false;
+
+            var newPasswordHash = _passwordHasher.HashPassword(newPassword);
+            owner.UpdatePassword(newPasswordHash);
+            await _ownerRepository.UpdateAsync(owner);
+            return true;
         }
     }
 }

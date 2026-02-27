@@ -45,6 +45,10 @@ export class Auth {
     return this.http.post<AuthResponse>(`${this.apiUrl}${endpoint}`, credentials)
       .pipe(
         tap(response => {
+          // Don't store tokens if additional action is required
+          if (response.requiresPasswordChange || response.requiresTwoFactor) {
+            return;
+          }
           // Ensure clinicId is converted to string if it exists
           const clinicId = response.clinicId ? String(response.clinicId) : undefined;
           
@@ -59,6 +63,64 @@ export class Auth {
           this.isAuthenticated.set(true);
           this.currentUser.set({ 
             username: response.username, 
+            tenantId: response.tenantId,
+            clinicId: clinicId,
+            role: response.role,
+            isSystemOwner: response.isSystemOwner
+          });
+          this.startSessionValidation();
+        })
+      );
+  }
+
+  verify2faEmail(tempToken: string, code: string, isOwner: boolean = false): Observable<AuthResponse> {
+    const endpoint = isOwner ? '/auth/owner-verify-2fa-email' : '/auth/verify-2fa-email';
+    return this.http.post<AuthResponse>(`${this.apiUrl}${endpoint}`, { tempToken, code })
+      .pipe(
+        tap(response => {
+          const clinicId = response.clinicId ? String(response.clinicId) : undefined;
+          this.setToken(response.token);
+          this.setUserInfo({
+            username: response.username,
+            tenantId: response.tenantId,
+            clinicId: clinicId,
+            role: response.role,
+            isSystemOwner: response.isSystemOwner
+          });
+          this.isAuthenticated.set(true);
+          this.currentUser.set({
+            username: response.username,
+            tenantId: response.tenantId,
+            clinicId: clinicId,
+            role: response.role,
+            isSystemOwner: response.isSystemOwner
+          });
+          this.startSessionValidation();
+        })
+      );
+  }
+
+  resend2faEmail(tempToken: string, isOwner: boolean = false): Observable<any> {
+    const endpoint = isOwner ? '/auth/owner-resend-2fa-email' : '/auth/resend-2fa-email';
+    return this.http.post<any>(`${this.apiUrl}${endpoint}`, { tempToken });
+  }
+
+  completePasswordChange(tempToken: string, newPassword: string, confirmPassword: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/complete-password-change`, { tempToken, newPassword, confirmPassword })
+      .pipe(
+        tap(response => {
+          const clinicId = response.clinicId ? String(response.clinicId) : undefined;
+          this.setToken(response.token);
+          this.setUserInfo({
+            username: response.username,
+            tenantId: response.tenantId,
+            clinicId: clinicId,
+            role: response.role,
+            isSystemOwner: response.isSystemOwner
+          });
+          this.isAuthenticated.set(true);
+          this.currentUser.set({
+            username: response.username,
             tenantId: response.tenantId,
             clinicId: clinicId,
             role: response.role,

@@ -69,7 +69,7 @@
         }
       </div>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [hidden]="step() !== 'credentials'">
         @if (errorMessage()) {
           <div class="alert alert-error">
             {{ errorMessage() }}
@@ -197,6 +197,146 @@
           <p>Não tem uma conta? <a routerLink="/register">Cadastre-se gratuitamente</a></p>
         </div>
       </form>
+
+      <!-- Step 2: 2FA Verification -->
+      @if (step() === 'twoFactor') {
+        <form [formGroup]="twoFactorForm" (ngSubmit)="onVerify2fa()">
+          @if (errorMessage()) {
+            <div class="alert alert-error">{{ errorMessage() }}</div>
+          }
+          @if (infoMessage()) {
+            <div class="alert alert-warning">{{ infoMessage() }}</div>
+          }
+
+          <div class="step-info">
+            <p>Um código de verificação foi enviado para seu e-mail. Digite o código abaixo para continuar.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="twoFactorCode">Código de Verificação</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input 
+                type="text" 
+                id="twoFactorCode" 
+                formControlName="code"
+                placeholder="Digite o código de 6 dígitos"
+                class="form-control"
+                maxlength="6"
+                autocomplete="one-time-code"
+              />
+            </div>
+            @if (twoFactorForm.get('code')?.invalid && twoFactorForm.get('code')?.touched) {
+              <span class="error-text">Código inválido</span>
+            }
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-login" 
+            [disabled]="twoFactorForm.invalid || isLoading()"
+          >
+            @if (isLoading()) {
+              <span class="spinner"></span>
+              <span>Verificando...</span>
+            } @else {
+              <span>Verificar</span>
+            }
+          </button>
+
+          <div class="secondary-actions">
+            <button type="button" class="btn-link-action" (click)="onResend2fa()" [disabled]="isLoading()">
+              Reenviar código
+            </button>
+            <button type="button" class="btn-link-action" (click)="backToLogin()">
+              Voltar ao login
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- Step 3: Change Password -->
+      @if (step() === 'changePassword') {
+        <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePassword()">
+          @if (errorMessage()) {
+            <div class="alert alert-error">{{ errorMessage() }}</div>
+          }
+          @if (infoMessage()) {
+            <div class="alert alert-warning">{{ infoMessage() }}</div>
+          }
+
+          <div class="step-info">
+            <p>Por segurança, você precisa definir uma nova senha antes de continuar.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">Nova Senha</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input 
+                type="password" 
+                id="newPassword" 
+                formControlName="newPassword"
+                placeholder="Mínimo 8 caracteres"
+                class="form-control"
+                autocomplete="new-password"
+              />
+            </div>
+            @if (changePasswordForm.get('newPassword')?.errors?.['minlength'] && changePasswordForm.get('newPassword')?.touched) {
+              <span class="error-text">A senha deve ter pelo menos 8 caracteres</span>
+            }
+            @if (changePasswordForm.get('newPassword')?.errors?.['required'] && changePasswordForm.get('newPassword')?.touched) {
+              <span class="error-text">Nova senha é obrigatória</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar Nova Senha</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input 
+                type="password" 
+                id="confirmPassword" 
+                formControlName="confirmPassword"
+                placeholder="Repita a nova senha"
+                class="form-control"
+                autocomplete="new-password"
+              />
+            </div>
+            @if (changePasswordForm.get('confirmPassword')?.invalid && changePasswordForm.get('confirmPassword')?.touched) {
+              <span class="error-text">Confirmação de senha é obrigatória</span>
+            }
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-login" 
+            [disabled]="changePasswordForm.invalid || isLoading()"
+          >
+            @if (isLoading()) {
+              <span class="spinner"></span>
+              <span>Alterando senha...</span>
+            } @else {
+              <span>Alterar Senha e Entrar</span>
+            }
+          </button>
+
+          <div class="secondary-actions">
+            <button type="button" class="btn-link-action" (click)="backToLogin()">
+              Voltar ao login
+            </button>
+          </div>
+        </form>
+      }
     </div>
   </div>
 </div>

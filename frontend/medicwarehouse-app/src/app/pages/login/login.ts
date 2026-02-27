@@ -7,6 +7,8 @@ import { TenantResolverService } from '../../services/tenant-resolver.service';
 import { ClinicCustomizationService } from '../../services/clinic-customization.service';
 import { ClinicCustomizationPublicDto } from '../../models/clinic-customization.model';
 
+type LoginStep = 'credentials' | 'twoFactor' | 'changePassword';
+
 @Component({
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
@@ -15,6 +17,8 @@ import { ClinicCustomizationPublicDto } from '../../models/clinic-customization.
 })
 export class Login implements OnInit {
   loginForm: FormGroup;
+  twoFactorForm: FormGroup;
+  changePasswordForm: FormGroup;
   errorMessage = signal<string>('');
   infoMessage = signal<string>('');
   isLoading = signal<boolean>(false);
@@ -22,6 +26,9 @@ export class Login implements OnInit {
   clinicName = signal<string | null>(null);
   customization = signal<ClinicCustomizationPublicDto | null>(null);
   isOwnerLogin = signal<boolean>(false);
+  step = signal<LoginStep>('credentials');
+  tempToken = signal<string | null>(null);
+  twoFactorMethod = signal<string>('Email');
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +42,15 @@ export class Login implements OnInit {
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
       tenantId: [''] // Optional, will be auto-filled from URL
+    });
+
+    this.twoFactorForm = this.fb.group({
+      code: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
+    });
+
+    this.changePasswordForm = this.fb.group({
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required]
     });
   }
 
@@ -131,8 +147,24 @@ export class Login implements OnInit {
         : this.authService.login(this.loginForm.value, false);
 
       loginMethod.subscribe({
-        next: () => {
+        next: (response) => {
           this.isLoading.set(false);
+
+          if (response.requiresPasswordChange && response.tempToken) {
+            this.tempToken.set(response.tempToken);
+            this.step.set('changePassword');
+            this.infoMessage.set('Por segurança, você precisa alterar sua senha antes de continuar.');
+            return;
+          }
+
+          if (response.requiresTwoFactor && response.tempToken) {
+            this.tempToken.set(response.tempToken);
+            this.twoFactorMethod.set(response.method || 'Email');
+            this.step.set('twoFactor');
+            this.infoMessage.set(response.message || 'Código de verificação enviado para seu e-mail.');
+            return;
+          }
+
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
@@ -157,5 +189,99 @@ export class Login implements OnInit {
         }
       });
     }
+  }
+
+  onVerify2fa(): void {
+    if (this.twoFactorForm.invalid) {
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    const token = this.tempToken();
+    if (!token) {
+      this.errorMessage.set('Sessão expirada. Por favor, faça login novamente.');
+      this.step.set('credentials');
+      this.isLoading.set(false);
+      return;
+    }
+
+    this.authService.verify2faEmail(token, this.twoFactorForm.value.code, this.isOwnerLogin()).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.errorMessage.set(err.error?.message || 'Código inválido ou expirado. Tente novamente.');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  onResend2fa(): void {
+    const token = this.tempToken();
+    if (!token) return;
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    this.authService.resend2faEmail(token, this.isOwnerLogin()).subscribe({
+      next: (response) => {
+        if (response.tempToken) {
+          this.tempToken.set(response.tempToken);
+        }
+        this.infoMessage.set('Novo código enviado para seu e-mail.');
+        this.twoFactorForm.reset();
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.errorMessage.set(err.error?.message || 'Erro ao reenviar código. Tente novamente.');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  onChangePassword(): void {
+    if (this.changePasswordForm.invalid) {
+      return;
+    }
+
+    const { newPassword, confirmPassword } = this.changePasswordForm.value;
+    if (newPassword !== confirmPassword) {
+      this.errorMessage.set('As senhas não conferem.');
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
+    const token = this.tempToken();
+    if (!token) {
+      this.errorMessage.set('Sessão expirada. Por favor, faça login novamente.');
+      this.step.set('credentials');
+      this.isLoading.set(false);
+      return;
+    }
+
+    this.authService.completePasswordChange(token, newPassword, confirmPassword).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.errorMessage.set(err.error?.message || 'Erro ao alterar senha. Tente novamente.');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  backToLogin(): void {
+    this.step.set('credentials');
+    this.tempToken.set(null);
+    this.errorMessage.set('');
+    this.infoMessage.set('');
+    this.twoFactorForm.reset();
+    this.changePasswordForm.reset();
   }
 }
