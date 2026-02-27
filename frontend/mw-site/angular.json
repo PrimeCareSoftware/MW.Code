@@ -2,12 +2,11 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm",
-    "analytics": "4ee5923c-a779-4488-81a7-9d23976028cb"
+    "packageManager": "npm"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "primecare-frontend": {
+    "mw-site": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -37,18 +36,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "manifest.json",
-                "input": "public",
-                "output": "/"
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/quill/dist/quill.snow.css"
-            ],
-            "serviceWorker": false
+              "src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -65,7 +57,6 @@
                 }
               ],
               "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json",
               "optimization": {
                 "fonts": false
               }
@@ -81,15 +72,15 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "port": 4200,
+            "port": 4202,
             "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "buildTarget": "primecare-frontend:build:production"
+              "buildTarget": "mw-site:build:production"
             },
             "development": {
-              "buildTarget": "primecare-frontend:build:development"
+              "buildTarget": "mw-site:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -106,12 +97,6 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "..",
-                "."
-              ]
-            },
             "assets": [
               {
                 "glob": "**/*",

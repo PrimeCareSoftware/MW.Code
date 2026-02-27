@@ -4,74 +4,9 @@ import { ownerGuard } from './guards/owner-guard';
 import { careFeatureGuard } from './guards/care-feature-guard';
 import { adminGuard } from './guards/admin.guard';
 import { CLINIC_ADMIN_ROUTES } from './pages/clinic-admin/clinic-admin.routes';
-import { SiteLayoutComponent } from './layout/site-layout/site-layout';
 import { CoreLayoutComponent } from './layout/core-layout/core-layout';
 
 export const routes: Routes = [
-  // Public site routes (marketing, registration) - SiteLayout
-  { 
-    path: 'site', 
-    component: SiteLayoutComponent,
-    children: [
-      { 
-        path: '', 
-        loadComponent: () => import('./pages/site/home/home').then(m => m.HomeComponent)
-      },
-      {
-        path: 'login',
-        loadComponent: () => import('./pages/login/login').then(m => m.Login)
-      },
-      {
-        path: 'clinics',
-        loadComponent: () => import('./pages/site/clinics/clinic-search').then(m => m.ClinicSearchComponent)
-      },
-      {
-        path: 'clinics/:id/schedule',
-        loadComponent: () => import('./pages/site/appointment-booking/appointment-booking.component').then(m => m.AppointmentBookingComponent)
-      },
-      { 
-        path: 'pricing', 
-        loadComponent: () => import('./pages/site/pricing/pricing').then(m => m.PricingComponent)
-      },
-      { 
-        path: 'contact', 
-        loadComponent: () => import('./pages/site/contact/contact').then(m => m.ContactComponent)
-      },
-      { 
-        path: 'testimonials', 
-        loadComponent: () => import('./pages/site/testimonials/testimonials').then(m => m.TestimonialsComponent)
-      },
-      { 
-        path: 'register', 
-        loadComponent: () => import('./pages/site/register/register').then(m => m.RegisterComponent)
-      },
-      { 
-        path: 'cart', 
-        loadComponent: () => import('./pages/site/cart/cart').then(m => m.CartComponent)
-      },
-      { 
-        path: 'checkout', 
-        loadComponent: () => import('./pages/site/checkout/checkout').then(m => m.CheckoutComponent)
-      },
-      { 
-        path: 'privacy', 
-        loadComponent: () => import('./pages/site/privacy/privacy').then(m => m.PrivacyComponent)
-      },
-      { 
-        path: 'terms', 
-        loadComponent: () => import('./pages/site/terms/terms').then(m => m.TermsComponent)
-      },
-      { 
-        path: 'blog', 
-        loadComponent: () => import('./pages/site/blog/blog.component').then(m => m.BlogComponent)
-      },
-      { 
-        path: 'blog/:slug', 
-        loadComponent: () => import('./pages/site/blog/blog-article.component').then(m => m.BlogArticleComponent)
-      }
-    ]
-  },
-
   // Error pages - no authentication required
   { 
     path: '401', 
@@ -86,20 +21,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/errors/not-found').then(m => m.NotFound)
   },
 
-  // Legacy login route redirect
+  // Login route
   { 
     path: 'login', 
-    redirectTo: '/site/login',
-    pathMatch: 'full'
-  },
-  { 
-    path: 'register', 
-    redirectTo: '/site/register',
-    pathMatch: 'full'
+    loadComponent: () => import('./pages/login/login').then(m => m.Login)
   },
 
-  // Homepage - redirect to site
-  { path: '', redirectTo: '/site', pathMatch: 'full' },
+  // Homepage - redirect to login
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   // Onboarding wizard - requires authentication (standalone, no core layout)
   { 
