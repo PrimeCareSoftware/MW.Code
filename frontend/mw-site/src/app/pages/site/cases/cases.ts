@@ -33,7 +33,7 @@ export class CasesComponent {
 
   ngOnInit(): void {
     // Track page view
-    this.analytics.trackPageView('/site/cases', 'Cases de Sucesso - Omni Care');
+    this.analytics.trackPageView('/cases', 'Cases de Sucesso - Omni Care');
   }
 
   onCaseView(caseItem: SuccessCase): void {

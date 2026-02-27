@@ -22,7 +22,7 @@ export class CartComponent {
   proceedToCheckout(): void {
     const cart = this.cartService.getCart()();
     if (cart.items.length > 0) {
-      this.router.navigate(['/site/register'], { 
+      this.router.navigate(['/register'], { 
         queryParams: { plan: cart.items[0].plan.id } 
       });
     }

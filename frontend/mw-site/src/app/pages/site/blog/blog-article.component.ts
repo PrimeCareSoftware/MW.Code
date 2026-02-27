@@ -178,11 +178,11 @@ export class BlogArticleComponent implements OnInit, OnDestroy {
   }
 
   onBackToBlog(): void {
-    this.router.navigate(['/site/blog']);
+    this.router.navigate(['/blog']);
   }
 
   onRelatedArticleClick(article: BlogArticle): void {
-    this.router.navigate(['/site/blog', article.slug]);
+    this.router.navigate(['/blog', article.slug]);
     this.analytics.trackButtonClick('related_article', `/blog/${article.slug}`);
   }
 }

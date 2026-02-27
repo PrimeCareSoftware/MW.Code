@@ -46,7 +46,6 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/styles/omni-care-site.scss",
               "node_modules/quill/dist/quill.snow.css"
             ],
             "serviceWorker": false

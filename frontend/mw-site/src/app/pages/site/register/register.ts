@@ -380,7 +380,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         // Clear sales funnel tracking session
         this.salesFunnelTracking.clearSession();
         
-        this.router.navigate(['/site/checkout'], { 
+        this.router.navigate(['/checkout'], { 
           queryParams: { 
             success: true,
             clinicId: response.clinicId,

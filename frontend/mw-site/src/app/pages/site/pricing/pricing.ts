@@ -27,7 +27,7 @@ export class PricingComponent {
 
   ngOnInit(): void {
     // Track page view
-    this.analytics.trackPageView('/site/pricing', 'Planos e Preços - Omni Care');
+    this.analytics.trackPageView('/pricing', 'Planos e Preços - Omni Care');
 
     this.subscriptionService.getPlans().subscribe({
       next: (plans) => {
@@ -73,7 +73,7 @@ export class PricingComponent {
     } else {
       this.cartService.addToCart(plan);
       this.analytics.trackConversion('trial_signup');
-      this.router.navigate(['/site/register'], { queryParams: { plan: plan.id } });
+      this.router.navigate(['/register'], { queryParams: { plan: plan.id } });
     }
   }
 

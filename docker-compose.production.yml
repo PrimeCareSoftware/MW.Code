@@ -158,6 +158,33 @@ services:
           memory: 64M
           cpus: '0.1'
 
+  # Corporate Site Frontend (Build de produção otimizado)
+  site:
+    build:
+      context: ./frontend/mw-site
+      dockerfile: Dockerfile
+      args:
+        API_URL: ${API_URL:-http://api:8080}
+    container_name: omnicare-site
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "4202:80"
+    depends_on:
+      - api
+    networks:
+      - omnicare-network
+    # Limites de recursos
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
+
   # Nginx Reverse Proxy (Opcional - Comentado por padrão)
   # Descomente se quiser servir tudo em uma única porta
   # nginx:

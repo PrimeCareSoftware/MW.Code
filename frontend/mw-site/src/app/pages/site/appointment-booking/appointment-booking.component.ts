@@ -243,7 +243,7 @@ export class AppointmentBookingComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/site/clinics']);
+    this.router.navigate(['/clinics']);
   }
 
   bookAnother(): void {

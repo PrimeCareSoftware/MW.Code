@@ -101,7 +101,7 @@ export class ClinicSearchComponent implements OnInit {
   }
 
   scheduleAppointment(clinic: PublicClinicDto): void {
-    this.router.navigate(['/site/clinics', clinic.id, 'schedule']);
+    this.router.navigate(['/clinics', clinic.id, 'schedule']);
   }
 
   formatTime(time: string): string {
