@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -109,8 +110,7 @@ namespace MedicSoft.Api.Controllers
                 if (user.MustChangePassword)
                 {
                     _logger.LogInformation("User {UserId} must change password on next login", user.Id);
-                    var changePasswordTempToken = Convert.ToBase64String(
-                        Encoding.UTF8.GetBytes($"{user.Id}:{tenantId}:user:password_change"));
+                    var changePasswordTempToken = GeneratePasswordChangeTempToken(user.Id.ToString(), tenantId, "user");
                     return Ok(new LoginResponse
                     {
                         RequiresPasswordChange = true,
@@ -318,8 +318,7 @@ namespace MedicSoft.Api.Controllers
                 if (owner.MustChangePassword)
                 {
                     _logger.LogInformation("Owner {OwnerId} must change password on next login", owner.Id);
-                    var changePasswordTempToken = Convert.ToBase64String(
-                        Encoding.UTF8.GetBytes($"{owner.Id}:{tenantId}:owner:password_change"));
+                    var changePasswordTempToken = GeneratePasswordChangeTempToken(owner.Id.ToString(), tenantId, "owner");
                     return Ok(new LoginResponse
                     {
                         RequiresPasswordChange = true,
@@ -996,27 +995,12 @@ namespace MedicSoft.Api.Controllers
                     return BadRequest(new { message = "A senha deve ter pelo menos 8 caracteres." });
                 }
 
-                // Decode temp token: {userId}:{tenantId}:{type}:password_change
-                string decodedString;
-                try
+                // Validate temp token using HMAC-signed token
+                var (entityId, tenantId, entityType, tokenIsValid) = ValidatePasswordChangeTempToken(request.TempToken);
+                if (!tokenIsValid)
                 {
-                    var decodedBytes = Convert.FromBase64String(request.TempToken);
-                    decodedString = Encoding.UTF8.GetString(decodedBytes);
+                    return BadRequest(new { message = "Token temporário inválido ou expirado." });
                 }
-                catch
-                {
-                    return BadRequest(new { message = "Token temporário inválido." });
-                }
-
-                var parts = decodedString.Split(':');
-                if (parts.Length != 4 || parts[3] != "password_change")
-                {
-                    return BadRequest(new { message = "Token temporário inválido." });
-                }
-
-                var entityId = parts[0];
-                var tenantId = parts[1];
-                var entityType = parts[2]; // "user" or "owner"
 
                 if (!Guid.TryParse(entityId, out var entityGuid))
                 {
@@ -1205,6 +1189,60 @@ namespace MedicSoft.Api.Controllers
             {
                 _logger.LogError(ex, "Unexpected error during system owner registration");
                 return StatusCode(500, new { message = "Erro ao criar administrador do sistema. Por favor, tente novamente." });
+            }
+        }
+
+        private string GeneratePasswordChangeTempToken(string entityId, string tenantId, string entityType)
+        {
+            var secretKey = _configuration["JwtSettings:SecretKey"] ?? "fallback-secret-key";
+            var expiryUnixTs = DateTimeOffset.UtcNow.AddMinutes(15).ToUnixTimeSeconds();
+            var payload = $"{entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}";
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
+            var signature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(payload)));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{payload}:{signature}"));
+        }
+
+        private (string entityId, string tenantId, string entityType, bool isValid) ValidatePasswordChangeTempToken(string tempToken)
+        {
+            try
+            {
+                var secretKey = _configuration["JwtSettings:SecretKey"] ?? "fallback-secret-key";
+                var decodedBytes = Convert.FromBase64String(tempToken);
+                var decodedString = Encoding.UTF8.GetString(decodedBytes);
+                // Format: {entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}:{signature}
+                var lastColon = decodedString.LastIndexOf(':');
+                if (lastColon < 0) return (string.Empty, string.Empty, string.Empty, false);
+
+                var signature = decodedString[(lastColon + 1)..];
+                var payload = decodedString[..lastColon];
+
+                // Verify HMAC signature
+                using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
+                var expectedSignature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(payload)));
+                if (!CryptographicOperations.FixedTimeEquals(
+                        Encoding.UTF8.GetBytes(signature),
+                        Encoding.UTF8.GetBytes(expectedSignature)))
+                {
+                    return (string.Empty, string.Empty, string.Empty, false);
+                }
+
+                // Parse payload parts: {entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}
+                var parts = payload.Split(':');
+                if (parts.Length != 5 || parts[3] != "password_change")
+                    return (string.Empty, string.Empty, string.Empty, false);
+
+                // Validate expiry
+                if (!long.TryParse(parts[4], out var expiryUnixTs))
+                    return (string.Empty, string.Empty, string.Empty, false);
+
+                if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() > expiryUnixTs)
+                    return (string.Empty, string.Empty, string.Empty, false);
+
+                return (parts[0], parts[1], parts[2], true);
+            }
+            catch
+            {
+                return (string.Empty, string.Empty, string.Empty, false);
             }
         }
     }
