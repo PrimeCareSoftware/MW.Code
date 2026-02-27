@@ -8,6 +8,7 @@ using MedicSoft.CrossCutting.Security;
 using MedicSoft.Domain.Entities;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Application.Services.CRM;
+using MedicSoft.Application.Services.EmailTemplates;
 using Microsoft.Extensions.Logging;
 
 namespace MedicSoft.Api.Controllers
@@ -107,7 +108,7 @@ namespace MedicSoft.Api.Controllers
                 try
                 {
                     var emailSubject = "Código de Recuperação de Senha - Omni Care";
-                    var emailBody = GeneratePasswordResetEmailBody(user.FullName, verificationCode);
+                    var emailBody = EmailTemplateHelper.GeneratePasswordResetEmail(user.FullName, verificationCode);
                     await _emailService.SendEmailAsync(user.Email, emailSubject, emailBody);
                     _logger.LogInformation("Password reset code sent to {Email} for user {UserId}", user.Email, user.Id);
                 }
@@ -256,7 +257,7 @@ namespace MedicSoft.Api.Controllers
                 try
                 {
                     var emailSubject = "Código de Recuperação de Senha - Omni Care (Reenvio)";
-                    var emailBody = GeneratePasswordResetEmailBody("Usuário", resetToken.VerificationCode);
+                    var emailBody = EmailTemplateHelper.GeneratePasswordResetEmail("Usuário", resetToken.VerificationCode);
                     await _emailService.SendEmailAsync(resetToken.Destination, emailSubject, emailBody);
                     _logger.LogInformation("Password reset code resent to {Email}", resetToken.Destination);
                 }
@@ -302,55 +303,6 @@ namespace MedicSoft.Api.Controllers
                 var code = (randomNumber % 900000) + 100000;
                 return code.ToString();
             }
-        }
-
-        private string GeneratePasswordResetEmailBody(string userName, string verificationCode)
-        {
-            // HTML-encode user inputs to prevent XSS
-            var encodedUserName = System.Net.WebUtility.HtmlEncode(userName);
-            var encodedCode = System.Net.WebUtility.HtmlEncode(verificationCode);
-
-            return $@"
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset=""UTF-8"">
-    <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-        .header {{ background-color: #007bff; color: white; padding: 20px; text-align: center; }}
-        .content {{ background-color: #f9f9f9; padding: 30px; border-radius: 5px; margin-top: 20px; }}
-        .code {{ font-size: 32px; font-weight: bold; color: #007bff; text-align: center; 
-                 padding: 20px; background-color: white; border-radius: 5px; margin: 20px 0; 
-                 letter-spacing: 5px; }}
-        .warning {{ background-color: #fff3cd; padding: 15px; border-radius: 5px; margin-top: 20px; 
-                    border-left: 4px solid #ffc107; }}
-        .footer {{ text-align: center; margin-top: 30px; font-size: 12px; color: #666; }}
-    </style>
-</head>
-<body>
-    <div class=""container"">
-        <div class=""header"">
-            <h1>Recuperação de Senha</h1>
-        </div>
-        <div class=""content"">
-            <p>Olá, <strong>{encodedUserName}</strong>,</p>
-            <p>Você solicitou a recuperação de senha da sua conta Omni Care.</p>
-            <p>Use o código de verificação abaixo para continuar:</p>
-            <div class=""code"">{encodedCode}</div>
-            <p><strong>Este código é válido por 15 minutos.</strong></p>
-            <div class=""warning"">
-                <strong>⚠️ Atenção:</strong> Se você não solicitou esta recuperação de senha, 
-                ignore este e-mail. Sua conta permanece segura.
-            </div>
-        </div>
-        <div class=""footer"">
-            <p>© 2026 Omni Care Software. Todos os direitos reservados.</p>
-            <p>Este é um e-mail automático. Por favor, não responda.</p>
-        </div>
-    </div>
-</body>
-</html>";
         }
     }
 

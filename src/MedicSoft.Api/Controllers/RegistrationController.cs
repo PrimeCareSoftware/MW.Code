@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using MedicSoft.Application.DTOs;
 using MedicSoft.Application.DTOs.Registration;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Services.CRM;
+using MedicSoft.Application.Services.EmailTemplates;
 using MedicSoft.Domain.Interfaces;
 using MedicSoft.Domain.Entities;
 
@@ -15,20 +17,28 @@ namespace MedicSoft.Api.Controllers
     [Route("api/[controller]")]
     public class RegistrationController : ControllerBase
     {
+        private const string DefaultAppUrl = "https://app.omnicaresoftware.com";
+
         private readonly IRegistrationService _registrationService;
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly ISalesFunnelService _salesFunnelService;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<RegistrationController> _logger;
 
         public RegistrationController(
             IRegistrationService registrationService,
             ISubscriptionPlanRepository planRepository,
             ISalesFunnelService salesFunnelService,
+            IEmailService emailService,
+            IConfiguration configuration,
             ILogger<RegistrationController> logger)
         {
             _registrationService = registrationService;
             _planRepository = planRepository;
             _salesFunnelService = salesFunnelService;
+            _emailService = emailService;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -71,6 +81,33 @@ namespace MedicSoft.Api.Controllers
                     {
                         // Log error but don't fail registration
                         _logger.LogError(ex, "Failed to track conversion for SessionId: {SessionId}", request.SessionId);
+                    }
+                }
+
+                // Send welcome email to the registered owner - do not fail registration if email fails
+                if (!string.IsNullOrWhiteSpace(result.OwnerEmail))
+                {
+                    try
+                    {
+                        var appUrl = _configuration.GetValue<string>("AppUrl") ?? DefaultAppUrl;
+                        var emailBody = EmailTemplateHelper.GenerateClinicWelcomeEmail(
+                            result.OwnerName ?? string.Empty,
+                            result.ClinicName ?? string.Empty,
+                            result.TenantId ?? string.Empty,
+                            result.Username ?? string.Empty,
+                            appUrl);
+
+                        await _emailService.SendEmailAsync(
+                            result.OwnerEmail,
+                            "Bem-vindo ao Omni Care Software - Cadastro Realizado com Sucesso!",
+                            emailBody);
+
+                        _logger.LogInformation("Welcome email sent to {Email} for clinic {ClinicId}", result.OwnerEmail, result.ClinicId);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log error but don't fail registration - email is informational
+                        _logger.LogError(ex, "Failed to send welcome email to {Email} for clinic {ClinicId}", result.OwnerEmail, result.ClinicId);
                     }
                 }
 

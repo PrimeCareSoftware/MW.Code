@@ -8,6 +8,12 @@
         Parabéns! Sua clínica foi cadastrada e seu período de teste gratuito de 15 dias começou agora.
       </p>
 
+      <!-- Email confirmation notice -->
+      <div class="email-notice" *ngIf="ownerEmail">
+        <span class="email-icon">📧</span>
+        <p>Um e-mail de confirmação foi enviado para <strong>{{ ownerEmail }}</strong> com os dados do seu cadastro e as instruções de acesso.</p>
+      </div>
+
       <!-- Registration Data Display -->
       <div class="registration-data" *ngIf="tenantId && clinicName">
         <h2>📋 Dados do Cadastro</h2>
