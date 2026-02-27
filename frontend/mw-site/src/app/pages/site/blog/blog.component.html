@@ -1,0 +1,91 @@
+<app-header></app-header>
+
+<main class="omni-care-site">
+  <section class="section-padding">
+    <div class="container-custom">
+      <!-- Header -->
+      <div class="blog-header">
+        <span class="section-badge">Blog</span>
+        <h1 class="section-title">
+          Insights para <span class="text-gradient">profissionais da saúde</span>
+        </h1>
+        <p class="section-description">
+          Dicas, tendências e novidades sobre gestão de clínicas, tecnologia em saúde e muito mais.
+        </p>
+      </div>
+
+      <!-- Featured Post -->
+      <div *ngIf="featuredPost" class="featured-post card-elevated animate-fade-in-up">
+        <div class="featured-post-grid">
+          <div class="featured-post-image">
+            <div class="featured-post-logo hero-gradient">
+              <span class="logo-text">OC</span>
+            </div>
+          </div>
+          <div class="featured-post-content">
+            <div class="post-meta">
+              <span class="post-category">{{ featuredPost.category }}</span>
+              <span class="post-read-time">
+                <span class="material-icons">schedule</span>
+                {{ featuredPost.readTime }}
+              </span>
+            </div>
+            <h2 class="featured-post-title">{{ featuredPost.title }}</h2>
+            <p class="featured-post-excerpt">{{ featuredPost.excerpt }}</p>
+            <div class="featured-post-footer">
+              <span class="post-date">
+                <span class="material-icons">event</span>
+                {{ formatDate(featuredPost.date) }}
+              </span>
+              <a [routerLink]="['/blog', featuredPost.id]" class="read-more-link">
+                Leia mais
+                <span class="material-icons">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Posts Grid -->
+      <div class="blog-grid">
+        <article 
+          *ngFor="let post of remainingPosts; let i = index" 
+          class="blog-card card-elevated animate-fade-in-up"
+          [style.animation-delay]="(i * 0.05) + 's'"
+        >
+          <!-- Image -->
+          <div class="blog-card-image">
+            <div class="blog-card-icon">
+              <span class="material-icons">label</span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="blog-card-content">
+            <div class="post-meta">
+              <span class="post-category">{{ post.category }}</span>
+              <span class="post-read-time">
+                <span class="material-icons">schedule</span>
+                {{ post.readTime }}
+              </span>
+            </div>
+
+            <h3 class="blog-card-title">{{ post.title }}</h3>
+
+            <p class="blog-card-excerpt">{{ post.excerpt }}</p>
+
+            <div class="blog-card-footer">
+              <span class="post-date">{{ formatDate(post.date) }}</span>
+              <a [routerLink]="['/blog', post.id]" class="read-more-link">
+                Leia mais
+                <span class="material-icons">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

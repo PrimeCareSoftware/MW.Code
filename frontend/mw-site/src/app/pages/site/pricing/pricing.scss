@@ -1,0 +1,233 @@
+// Import Omni Care site styles
+@import '../../../../styles/omni-care-site.scss';
+
+// Component-specific styles for pricing page
+
+.pricing-header {
+  text-align: center;
+  max-width: 48rem;
+  margin: 0 auto 4rem;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 4rem 0;
+  color: hsl(var(--omni-muted-foreground));
+}
+
+.plan-card {
+  position: relative;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  
+  &.plan-highlighted {
+    background-color: hsl(var(--omni-foreground));
+    color: hsl(var(--omni-background));
+    border: 2px solid hsl(var(--omni-foreground));
+    
+    .plan-name,
+    .plan-description,
+    .feature-item {
+      color: hsl(var(--omni-background));
+    }
+    
+    .feature-icon {
+      color: hsl(var(--omni-primary));
+    }
+    
+    .omni-btn {
+      background-color: hsl(var(--omni-primary));
+      color: hsl(var(--omni-primary-foreground));
+      
+      &:hover {
+        background-color: hsl(var(--omni-primary) / 0.9);
+      }
+    }
+  }
+  
+  &:hover {
+    border-color: hsl(var(--omni-primary) / 0.3);
+    transform: translateY(-4px);
+  }
+}
+
+.plan-badge {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  color: hsl(var(--omni-primary-foreground));
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  
+  .material-icons {
+    font-size: 1rem;
+  }
+}
+
+.plan-header {
+  margin-bottom: 1.5rem;
+}
+
+.plan-name {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(var(--omni-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.plan-description {
+  color: hsl(var(--omni-muted-foreground));
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.plan-pricing {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid hsl(var(--omni-border));
+}
+
+.campaign-pricing {
+  .current-price {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    
+    .currency {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: hsl(var(--omni-foreground));
+    }
+    
+    .amount {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: hsl(var(--omni-foreground));
+      margin: 0 0.25rem;
+    }
+    
+    .period {
+      font-size: 1rem;
+      color: hsl(var(--omni-muted-foreground));
+    }
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: hsl(var(--omni-muted-foreground));
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .savings-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background-color: hsl(var(--omni-success) / 0.1);
+    color: hsl(var(--omni-success));
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.regular-pricing {
+  display: flex;
+  align-items: baseline;
+  
+  .currency {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: hsl(194.44, 59.64%, 43.73%);
+  }
+  
+  .amount {
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: hsl(194.44, 59.64%, 43.73%);
+    margin: 0 0.25rem;
+    
+    &.custom-price {
+      font-size: 2rem;
+    }
+  }
+  
+  .period {
+    font-size: 1rem;
+    color: hsl(194.44, 59.64%, 43.73%);
+  }
+}
+
+.omni-btn {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  color: hsl(var(--omni-foreground));
+  
+  &.development {
+    opacity: 0.7;
+  }
+  
+  &.benefit {
+    font-weight: 500;
+  }
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  
+  &.success {
+    color: hsl(var(--omni-success));
+  }
+}
+
+.features-development,
+.early-adopter-benefits {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid hsl(var(--omni-border) / 0.5);
+}
+
+.features-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--omni-foreground));
+  margin-bottom: 0.75rem;
+}
+
+.pricing-cta {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid hsl(var(--omni-border));
+}
+
+.cta-question {
+  color: hsl(var(--omni-muted-foreground));
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+}

@@ -1,0 +1,167 @@
+<div class="blog-article-container">
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-state">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Carregando artigo...</p>
+    </div>
+  }
+
+  <!-- Not Found State -->
+  @else if (notFound) {
+    <div class="not-found-state">
+      <mat-icon>article</mat-icon>
+      <h2>Artigo não encontrado</h2>
+      <p>O artigo que você está procurando não existe ou foi removido.</p>
+      <button mat-raised-button color="primary" (click)="onBackToBlog()">
+        <mat-icon>arrow_back</mat-icon>
+        Voltar ao Blog
+      </button>
+    </div>
+  }
+
+  <!-- Article Content -->
+  @else if (article) {
+    <div class="article-content">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a routerLink="/site">Home</a>
+        <span class="separator">/</span>
+        <a routerLink="/site/blog">Blog</a>
+        <span class="separator">/</span>
+        <span class="current">{{ article.title }}</span>
+      </nav>
+
+      <!-- Article Header -->
+      <header class="article-header">
+        <div class="category-badge">
+          <mat-chip-option [selected]="true">{{ article.category }}</mat-chip-option>
+        </div>
+        
+        <h1 class="article-title">{{ article.title }}</h1>
+        
+        <div class="article-meta">
+          <div class="author-info">
+            @if (article.author.avatar) {
+              <img [src]="article.author.avatar" [alt]="article.author.name" class="author-avatar">
+            }
+            <div class="author-details">
+              <span class="author-name">{{ article.author.name }}</span>
+              <span class="publish-date">{{ article.publishedAt | date:'dd MMM yyyy' }}</span>
+            </div>
+          </div>
+          
+          <div class="article-stats">
+            <span class="stat">
+              <mat-icon>schedule</mat-icon>
+              {{ article.readTime }} min de leitura
+            </span>
+            <span class="stat">
+              <mat-icon>visibility</mat-icon>
+              {{ article.views }} visualizações
+            </span>
+            <span class="stat">
+              <mat-icon>favorite</mat-icon>
+              {{ article.likes }} curtidas
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Featured Image -->
+      @if (article.featuredImage) {
+        <div class="featured-image">
+          <img [src]="article.featuredImage" [alt]="article.title">
+        </div>
+      }
+
+      <!-- Article Body -->
+      <article class="article-body">
+        <div [innerHTML]="article.content"></div>
+      </article>
+
+      <!-- Tags -->
+      @if (article.tags && article.tags.length > 0) {
+        <div class="article-tags">
+          <h3>Tags:</h3>
+          <mat-chip-listbox aria-label="Article tags">
+            @for (tag of article.tags; track tag) {
+              <mat-chip-option>{{ tag }}</mat-chip-option>
+            }
+          </mat-chip-listbox>
+        </div>
+      }
+
+      <!-- Action Buttons -->
+      <div class="article-actions">
+        <button mat-raised-button color="accent" (click)="onLikeArticle()">
+          <mat-icon>favorite</mat-icon>
+          Curtir ({{ article.likes }})
+        </button>
+        
+        <div class="share-buttons">
+          <span class="share-label">Compartilhar:</span>
+          <button mat-icon-button (click)="onShareArticle('twitter')" aria-label="Compartilhar no Twitter">
+            <mat-icon>share</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onShareArticle('linkedin')" aria-label="Compartilhar no LinkedIn">
+            <mat-icon>share</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onShareArticle('facebook')" aria-label="Compartilhar no Facebook">
+            <mat-icon>share</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onShareArticle('whatsapp')" aria-label="Compartilhar no WhatsApp">
+            <mat-icon>share</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Author Bio -->
+      @if (article.author.bio) {
+        <div class="author-bio">
+          @if (article.author.avatar) {
+            <img [src]="article.author.avatar" [alt]="article.author.name" class="author-avatar-large">
+          }
+          <div class="bio-content">
+            <h3>Sobre o autor</h3>
+            <h4>{{ article.author.name }}</h4>
+            <p>{{ article.author.bio }}</p>
+          </div>
+        </div>
+      }
+
+      <!-- Related Articles -->
+      @if (relatedArticles && relatedArticles.length > 0) {
+        <section class="related-articles">
+          <h2>Artigos Relacionados</h2>
+          <div class="related-grid">
+            @for (relatedArticle of relatedArticles; track relatedArticle.id) {
+              <article class="related-card" (click)="onRelatedArticleClick(relatedArticle)">
+                @if (relatedArticle.featuredImage) {
+                  <img [src]="relatedArticle.featuredImage" [alt]="relatedArticle.title" class="related-image">
+                }
+                <div class="related-content">
+                  <span class="related-category">{{ relatedArticle.category }}</span>
+                  <h3>{{ relatedArticle.title }}</h3>
+                  <p class="related-excerpt">{{ relatedArticle.excerpt }}</p>
+                  <div class="related-meta">
+                    <span><mat-icon>schedule</mat-icon> {{ relatedArticle.readTime }} min</span>
+                    <span><mat-icon>visibility</mat-icon> {{ relatedArticle.views }}</span>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Back to Blog Button -->
+      <div class="back-to-blog">
+        <button mat-raised-button color="primary" (click)="onBackToBlog()">
+          <mat-icon>arrow_back</mat-icon>
+          Voltar ao Blog
+        </button>
+      </div>
+    </div>
+  }
+</div>

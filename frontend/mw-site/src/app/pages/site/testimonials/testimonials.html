@@ -1,0 +1,49 @@
+<app-header></app-header>
+<div class="testimonials">
+  <section class="testimonials-header">
+    <div class="container">
+      <h1>O Que Nossos Clientes Dizem</h1>
+      <p>Veja os depoimentos de médicos que já utilizam o Omni Care Software</p>
+    </div>
+  </section>
+
+  <section class="testimonials-content">
+    <div class="container">
+      <div class="testimonials-grid">
+        <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <span>{{ testimonial.name.charAt(0) }}</span>
+            </div>
+            <div class="testimonial-info">
+              <h3>{{ testimonial.name }}</h3>
+              <p class="testimonial-role">{{ testimonial.role }}</p>
+              <p class="testimonial-clinic">{{ testimonial.clinicName }}</p>
+            </div>
+          </div>
+
+          <div class="testimonial-rating">
+            <span *ngFor="let star of getStars(testimonial.rating)">{{ star }}</span>
+          </div>
+
+          <p class="testimonial-comment">
+            "{{ testimonial.comment }}"
+          </p>
+
+          <p class="testimonial-date">
+            {{ testimonial.date | date:'dd/MM/yyyy' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h2>Pronto para fazer parte dessa história de sucesso?</h2>
+        <p>Junte-se a centenas de profissionais que já transformaram sua gestão com o Omni Care Software</p>
+        <a routerLink="/site/register" class="btn btn-primary btn-large">
+          Começar Agora - 15 Dias Grátis
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+<app-footer></app-footer>
