@@ -37,6 +37,9 @@ export class ThemeService {
     
     // Add current theme class
     document.body.classList.add(`theme-${theme}`);
+
+    // Set data-theme attribute for CSS custom property theming
+    document.body.setAttribute('data-theme', theme);
     
     // Store preference
     localStorage.setItem(this.THEME_KEY, theme);

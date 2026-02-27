@@ -1,0 +1,117 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// Core layout structure
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// Header
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: #{$header-height};
+  background: var(--color-surface-raised);
+  border-bottom: 1px solid var(--color-border);
+  z-index: $z-header;
+  @include flex-between;
+  padding: 0 var(--space-4);
+  @include shadow-sm;
+}
+
+// Sidebar
+.app-sidebar {
+  position: fixed;
+  top: #{$header-height};
+  left: 0;
+  bottom: 0;
+  width: #{$sidebar-width};
+  background: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-sidebar-border);
+  z-index: $z-sidebar;
+  @include transition(width, transform);
+  overflow: hidden;
+  @include custom-scrollbar;
+
+  &.collapsed {
+    width: #{$sidebar-collapsed-width};
+  }
+
+  @include max-md {
+    transform: translateX(-100%);
+
+    &.open {
+      transform: translateX(0);
+      width: #{$sidebar-width};
+    }
+  }
+}
+
+// Main content area
+.app-main {
+  flex: 1;
+  margin-top: #{$header-height};
+  margin-left: #{$sidebar-width};
+  overflow-y: auto;
+  @include transition(margin-left);
+  min-height: calc(100vh - #{$header-height});
+
+  &.sidebar-collapsed {
+    margin-left: #{$sidebar-collapsed-width};
+  }
+
+  @include max-md {
+    margin-left: 0;
+  }
+}
+
+// Page content
+.page-content {
+  padding: var(--space-6);
+  max-width: 1400px;
+
+  @include max-md {
+    padding: var(--space-4);
+  }
+}
+
+// Overlay for mobile sidebar
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: #{$z-sidebar - 1};
+  opacity: 0;
+  @include transition(opacity);
+
+  &.visible {
+    display: block;
+    opacity: 1;
+  }
+}
+
+// Page header
+.page-header {
+  @include flex-between;
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+// Section
+.section {
+  margin-bottom: var(--space-8);
+}
+
+// Container
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
