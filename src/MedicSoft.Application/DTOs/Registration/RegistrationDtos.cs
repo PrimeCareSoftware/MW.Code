@@ -163,4 +163,10 @@ namespace MedicSoft.Application.DTOs.Registration
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
     }
+
+    public class ResendConfirmationEmailDto
+    {
+        public string Username { get; set; } = string.Empty;
+        public string TenantId { get; set; } = string.Empty;
+    }
 }

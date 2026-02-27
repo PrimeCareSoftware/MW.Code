@@ -1,0 +1,60 @@
+.confirm-email {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  padding: 60px 20px;
+  background: #f5f7fa;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.loading-icon,
+.success-icon,
+.error-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: #1a1a2e;
+}
+
+.message {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
+.btn-primary {
+  background: #0066cc;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+}

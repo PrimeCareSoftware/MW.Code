@@ -56,6 +56,16 @@ namespace MedicSoft.Repository.Configurations
                 .HasConversion<string>()
                 .HasMaxLength(10);
 
+            builder.Property(o => o.IsEmailConfirmed)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+            builder.Property(o => o.EmailConfirmationToken)
+                .HasMaxLength(128);
+
+            builder.Property(o => o.EmailConfirmationTokenExpiresAt)
+                .IsRequired(false);
+
             builder.Property(o => o.TenantId)
                 .IsRequired()
                 .HasMaxLength(100);

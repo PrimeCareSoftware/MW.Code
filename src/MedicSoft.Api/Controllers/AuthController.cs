@@ -282,6 +282,17 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized(new { message = "Usuário ou senha incorretos." });
                 }
 
+                // Check if email is confirmed
+                if (!owner.IsEmailConfirmed)
+                {
+                    _logger.LogWarning("Owner login blocked - email not confirmed for owner: {OwnerId}", owner.Id);
+                    return Unauthorized(new 
+                    { 
+                        message = "Você precisa confirmar seu e-mail antes de fazer login. Verifique sua caixa de entrada e clique no link de confirmação que foi enviado.",
+                        code = "EMAIL_NOT_CONFIRMED"
+                    });
+                }
+
                 _logger.LogInformation("Owner authenticated successfully: {OwnerId}, username: {Username}", 
                     owner.Id, owner.Username);
 

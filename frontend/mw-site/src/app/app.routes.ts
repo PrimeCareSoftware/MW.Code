@@ -61,6 +61,10 @@ export const routes: Routes = [
       {
         path: 'cases',
         loadComponent: () => import('./pages/site/cases/cases').then(m => m.CasesComponent)
+      },
+      {
+        path: 'confirm-email',
+        loadComponent: () => import('./pages/site/confirm-email/confirm-email').then(m => m.ConfirmEmailComponent)
       }
     ]
   },

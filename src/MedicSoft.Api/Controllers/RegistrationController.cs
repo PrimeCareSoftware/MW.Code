@@ -23,6 +23,7 @@ namespace MedicSoft.Api.Controllers
         private readonly ISubscriptionPlanRepository _planRepository;
         private readonly ISalesFunnelService _salesFunnelService;
         private readonly IEmailService _emailService;
+        private readonly IOwnerRepository _ownerRepository;
         private readonly IConfiguration _configuration;
         private readonly ILogger<RegistrationController> _logger;
 
@@ -31,6 +32,7 @@ namespace MedicSoft.Api.Controllers
             ISubscriptionPlanRepository planRepository,
             ISalesFunnelService salesFunnelService,
             IEmailService emailService,
+            IOwnerRepository ownerRepository,
             IConfiguration configuration,
             ILogger<RegistrationController> logger)
         {
@@ -38,6 +40,7 @@ namespace MedicSoft.Api.Controllers
             _planRepository = planRepository;
             _salesFunnelService = salesFunnelService;
             _emailService = emailService;
+            _ownerRepository = ownerRepository;
             _configuration = configuration;
             _logger = logger;
         }
@@ -84,30 +87,36 @@ namespace MedicSoft.Api.Controllers
                     }
                 }
 
-                // Send welcome email to the registered owner - do not fail registration if email fails
-                if (!string.IsNullOrWhiteSpace(result.OwnerEmail))
+                // Send email confirmation to the registered owner
+                if (!string.IsNullOrWhiteSpace(result.OwnerEmail) && result.OwnerId.HasValue && !string.IsNullOrWhiteSpace(result.TenantId))
                 {
                     try
                     {
-                        var appUrl = _configuration.GetValue<string>("AppUrl") ?? DefaultAppUrl;
-                        var emailBody = EmailTemplateHelper.GenerateClinicWelcomeEmail(
-                            result.OwnerName ?? string.Empty,
-                            result.ClinicName ?? string.Empty,
-                            result.TenantId ?? string.Empty,
-                            result.Username ?? string.Empty,
-                            appUrl);
+                        var siteUrl = _configuration.GetValue<string>("SiteUrl") ?? "https://www.omnicaresoftware.com";
+                        var owner = await _ownerRepository.GetByIdAsync(result.OwnerId.Value, result.TenantId);
+                        if (owner != null)
+                        {
+                            var token = owner.GenerateEmailConfirmationToken();
+                            await _ownerRepository.UpdateAsync(owner);
 
-                        await _emailService.SendEmailAsync(
-                            result.OwnerEmail,
-                            "Bem-vindo ao Omni Care Software - Cadastro Realizado com Sucesso!",
-                            emailBody);
+                            var confirmationUrl = $"{siteUrl}/confirm-email?token={Uri.EscapeDataString(token)}&tenantId={Uri.EscapeDataString(result.TenantId)}";
+                            var emailBody = EmailTemplateHelper.GenerateEmailConfirmationEmail(
+                                result.OwnerName ?? string.Empty,
+                                result.ClinicName ?? string.Empty,
+                                confirmationUrl);
 
-                        _logger.LogInformation("Welcome email sent to {Email} for clinic {ClinicId}", result.OwnerEmail, result.ClinicId);
+                            await _emailService.SendEmailAsync(
+                                result.OwnerEmail,
+                                "Confirme seu e-mail - Omni Care Software",
+                                emailBody);
+
+                            _logger.LogInformation("Email confirmation sent to {Email} for owner {OwnerId}", result.OwnerEmail, result.OwnerId);
+                        }
                     }
                     catch (Exception ex)
                     {
                         // Log error but don't fail registration - email is informational
-                        _logger.LogError(ex, "Failed to send welcome email to {Email} for clinic {ClinicId}", result.OwnerEmail, result.ClinicId);
+                        _logger.LogError(ex, "Failed to send confirmation email to {Email} for owner {OwnerId}", result.OwnerEmail, result.OwnerId);
                     }
                 }
 
@@ -160,6 +169,76 @@ namespace MedicSoft.Api.Controllers
             // Use default tenant for registration check
             var available = await _registrationService.CheckUsernameAvailableAsync(username, "default-tenant");
             return Ok(new CheckUsernameResponseDto { Available = available });
+        }
+
+        /// <summary>
+        /// Confirm owner email using the token sent after registration
+        /// </summary>
+        [HttpGet("confirm-email")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ConfirmEmail([FromQuery] string token, [FromQuery] string tenantId)
+        {
+            if (string.IsNullOrWhiteSpace(token) || string.IsNullOrWhiteSpace(tenantId))
+                return BadRequest(new { message = "Token e tenantId são obrigatórios." });
+
+            var owner = await _ownerRepository.GetByEmailConfirmationTokenAsync(token, tenantId);
+            if (owner == null)
+                return BadRequest(new { message = "Token de confirmação inválido ou expirado." });
+
+            var confirmed = owner.ConfirmEmail(token);
+            if (!confirmed)
+                return BadRequest(new { message = "Token de confirmação inválido ou expirado." });
+
+            await _ownerRepository.UpdateAsync(owner);
+
+            _logger.LogInformation("Email confirmed for owner {OwnerId}", owner.Id);
+            return Ok(new { message = "E-mail confirmado com sucesso! Agora você pode fazer login." });
+        }
+
+        /// <summary>
+        /// Resend the email confirmation link for an owner
+        /// </summary>
+        [HttpPost("resend-confirmation-email")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request?.Username) || string.IsNullOrWhiteSpace(request.TenantId))
+                return BadRequest(new { message = "Usuário e tenantId são obrigatórios." });
+
+            var owner = await _ownerRepository.GetByUsernameAsync(request.Username, request.TenantId);
+            if (owner == null)
+                return Ok(new { message = "Se o usuário existir, um novo e-mail de confirmação será enviado." });
+
+            if (owner.IsEmailConfirmed)
+                return Ok(new { message = "E-mail já confirmado. Você pode fazer login." });
+
+            try
+            {
+                var siteUrl = _configuration.GetValue<string>("SiteUrl") ?? "https://www.omnicaresoftware.com";
+                var token = owner.GenerateEmailConfirmationToken();
+                await _ownerRepository.UpdateAsync(owner);
+
+                var confirmationUrl = $"{siteUrl}/confirm-email?token={Uri.EscapeDataString(token)}&tenantId={Uri.EscapeDataString(owner.TenantId)}";
+                var emailBody = EmailTemplateHelper.GenerateEmailConfirmationEmail(
+                    owner.FullName,
+                    owner.Clinic?.Name ?? string.Empty,
+                    confirmationUrl);
+
+                await _emailService.SendEmailAsync(
+                    owner.Email,
+                    "Confirme seu e-mail - Omni Care Software",
+                    emailBody);
+
+                _logger.LogInformation("Confirmation email resent to owner {OwnerId}", owner.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to resend confirmation email for owner {Username}", request.Username);
+            }
+
+            return Ok(new { message = "Se o usuário existir, um novo e-mail de confirmação será enviado." });
         }
 
         /// <summary>
