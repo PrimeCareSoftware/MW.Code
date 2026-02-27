@@ -6,14 +6,9 @@ export const adminGuard: CanActivateFn = () => {
   const authService = inject(Auth);
   const router = inject(Router);
 
+  const ADMIN_ROLES = ['Admin', 'SystemAdmin', 'Owner', 'ClinicOwner'];
   const user = authService.currentUser();
-  if (user && (
-    user.role === 'Admin' ||
-    user.role === 'SystemAdmin' ||
-    user.role === 'Owner' ||
-    user.role === 'ClinicOwner' ||
-    user.isSystemOwner
-  )) {
+  if (user && (ADMIN_ROLES.includes(user.role ?? '') || user.isSystemOwner)) {
     return true;
   }
 
