@@ -14,22 +14,8 @@ export * from './separator';
 export * from './skeleton';
 export * from './alert';
 
-// TODO: Add remaining components as they are migrated
-// - Select
-// - Switch
-// - Radio Group
-// - Form components
-// - Dialog
-// - Sheet
-// - Tabs
-// - Table
-// - Chart
-// - Calendar
-// - Progress
-// - Accordion
-// - Tooltip
-// - Popover
-// - Dropdown Menu
-// - Toast
-// - Sidebar
-// - Layout components
+// Table
+export * from './table/app-table';
+
+// Modal
+export * from './modal/modal';

@@ -1,0 +1,98 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans, #{$font-sans});
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  @include custom-scrollbar;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--fw-semibold);
+  line-height: 1.25;
+  color: var(--color-text);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); }
+
+// Links
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  @include focus-ring;
+
+  &:hover { text-decoration: underline; }
+}
+
+// Images
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+// Lists
+ul, ol {
+  list-style: none;
+}
+
+// Form elements
+button, input, select, textarea {
+  font: inherit;
+}
+
+// Selection
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+// Utility classes
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-sm {
+  font-size: var(--text-sm);
+}
+
+.text-xs {
+  font-size: var(--text-xs);
+}
+
+.truncate {
+  @include text-ellipsis;
+}

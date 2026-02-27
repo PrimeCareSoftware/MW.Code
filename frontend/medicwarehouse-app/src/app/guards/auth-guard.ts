@@ -10,7 +10,10 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Redirect to 401 unauthorized page with return URL
-  router.navigate(['/401'], { queryParams: { returnUrl: state.url } });
+  // Store return URL for redirect after login
+  sessionStorage.setItem('returnUrl', state.url);
+
+  // Redirect to login page
+  router.navigate(['/site/login']);
   return false;
 };

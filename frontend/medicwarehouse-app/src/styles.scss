@@ -4,6 +4,21 @@
  * Updated: February 2026 - Clinic Harmony inspired design
  */
 
+/* Design System - Variables, Themes, Mixins */
+@use 'styles/variables' as *;
+@use 'styles/themes';
+@use 'styles/mixins' as *;
+@use 'styles/base';
+@use 'styles/layout';
+
+/* Design System - Components */
+@use 'styles/components/buttons';
+@use 'styles/components/inputs';
+@use 'styles/components/cards';
+@use 'styles/components/tables';
+@use 'styles/components/modals';
+@use 'styles/components/dropdowns';
+
 /* Import shared design system tokens and components */
 @use '../../shared-styles' as *;
 
