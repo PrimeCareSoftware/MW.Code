@@ -390,7 +390,10 @@ namespace MedicSoft.Application.Services
 
         private static bool IsAttendingClinicalRole(UserRole role)
         {
-            return role == UserRole.Doctor || role == UserRole.Nutritionist || role == UserRole.Psychologist;
+            return role == UserRole.Doctor
+                || role == UserRole.Dentist
+                || role == UserRole.Nurse
+                || role == UserRole.Psychologist;
         }
     }
 }
