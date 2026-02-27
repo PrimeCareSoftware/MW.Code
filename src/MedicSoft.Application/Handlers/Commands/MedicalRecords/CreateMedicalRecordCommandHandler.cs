@@ -63,24 +63,15 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 var aggregatedNotes = request.MedicalRecordDto.Notes;
                 if (!string.IsNullOrWhiteSpace(request.MedicalRecordDto.NutritionalPlan))
                 {
-                    aggregatedNotes = $"{aggregatedNotes}
-
-[Plano Alimentar]
-{request.MedicalRecordDto.NutritionalPlan}".Trim();
+                    aggregatedNotes = $"{aggregatedNotes}\n\n[Plano Alimentar]\n{request.MedicalRecordDto.NutritionalPlan}".Trim();
                 }
                 if (!string.IsNullOrWhiteSpace(request.MedicalRecordDto.NutritionalEvolution))
                 {
-                    aggregatedNotes = $"{aggregatedNotes}
-
-[Evolução Nutricional]
-{request.MedicalRecordDto.NutritionalEvolution}".Trim();
+                    aggregatedNotes = $"{aggregatedNotes}\n\n[Evolução Nutricional]\n{request.MedicalRecordDto.NutritionalEvolution}".Trim();
                 }
                 if (!string.IsNullOrWhiteSpace(request.MedicalRecordDto.TherapeuticEvolution))
                 {
-                    aggregatedNotes = $"{aggregatedNotes}
-
-[Evolução Terapêutica]
-{request.MedicalRecordDto.TherapeuticEvolution}".Trim();
+                    aggregatedNotes = $"{aggregatedNotes}\n\n[Evolução Terapêutica]\n{request.MedicalRecordDto.TherapeuticEvolution}".Trim();
                 }
 
                 var medicalRecord = new MedicalRecord(
