@@ -71,6 +71,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   // For CPF (physical person), allow optional company/clinic fields
   enableCompanyFields = false;
   
+  // Pre-fill owner contact from company contact in Step 4
+  sameAsCompanyContact = false;
+  
   // Available clinic types for selection
   clinicTypes = [
     { value: 'Medical', label: 'Clínica Médica', description: 'Atendimento médico geral e especialidades médicas' },
@@ -534,6 +537,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
       this.model.clinicName = '';
       // Also clear owner name since it will be collected in Step 1 for PF
       this.model.ownerName = '';
+    }
+    // Reset same-as-company toggle when company fields change
+    this.sameAsCompanyContact = false;
+  }
+
+  /**
+   * Pre-fill owner phone/email from company contact data (Step 4 shortcut)
+   */
+  onSameAsCompanyContactChange(): void {
+    if (this.sameAsCompanyContact) {
+      if (this.model.clinicPhone || this.model.clinicEmail) {
+        this.model.ownerPhone = this.model.clinicPhone || '';
+        this.model.ownerEmail = this.model.clinicEmail || '';
+      }
+    } else {
+      this.model.ownerPhone = '';
+      this.model.ownerEmail = '';
     }
   }
 
