@@ -53,24 +53,15 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 var completionNotes = request.CompleteDto.Notes;
                 if (!string.IsNullOrWhiteSpace(request.CompleteDto.NutritionalPlan))
                 {
-                    completionNotes = $"{completionNotes}
-
-[Plano Alimentar]
-{request.CompleteDto.NutritionalPlan}".Trim();
+                    completionNotes = $"{completionNotes}\n\n[Plano Alimentar]\n{request.CompleteDto.NutritionalPlan}".Trim();
                 }
                 if (!string.IsNullOrWhiteSpace(request.CompleteDto.NutritionalEvolution))
                 {
-                    completionNotes = $"{completionNotes}
-
-[Evolução Nutricional]
-{request.CompleteDto.NutritionalEvolution}".Trim();
+                    completionNotes = $"{completionNotes}\n\n[Evolução Nutricional]\n{request.CompleteDto.NutritionalEvolution}".Trim();
                 }
                 if (!string.IsNullOrWhiteSpace(request.CompleteDto.TherapeuticEvolution))
                 {
-                    completionNotes = $"{completionNotes}
-
-[Evolução Terapêutica]
-{request.CompleteDto.TherapeuticEvolution}".Trim();
+                    completionNotes = $"{completionNotes}\n\n[Evolução Terapêutica]\n{request.CompleteDto.TherapeuticEvolution}".Trim();
                 }
 
                 medicalRecord.CompleteConsultation(

@@ -84,24 +84,15 @@ namespace MedicSoft.Application.Handlers.Commands.MedicalRecords
                 var notesBuilder = medicalRecord.Notes ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(request.UpdateDto.NutritionalPlan))
                 {
-                    notesBuilder = $"{notesBuilder}
-
-[Plano Alimentar]
-{request.UpdateDto.NutritionalPlan}".Trim();
+                    notesBuilder = $"{notesBuilder}\n\n[Plano Alimentar]\n{request.UpdateDto.NutritionalPlan}".Trim();
                 }
                 if (!string.IsNullOrWhiteSpace(request.UpdateDto.NutritionalEvolution))
                 {
-                    notesBuilder = $"{notesBuilder}
-
-[Evolução Nutricional]
-{request.UpdateDto.NutritionalEvolution}".Trim();
+                    notesBuilder = $"{notesBuilder}\n\n[Evolução Nutricional]\n{request.UpdateDto.NutritionalEvolution}".Trim();
                 }
                 if (!string.IsNullOrWhiteSpace(request.UpdateDto.TherapeuticEvolution))
                 {
-                    notesBuilder = $"{notesBuilder}
-
-[Evolução Terapêutica]
-{request.UpdateDto.TherapeuticEvolution}".Trim();
+                    notesBuilder = $"{notesBuilder}\n\n[Evolução Terapêutica]\n{request.UpdateDto.TherapeuticEvolution}".Trim();
                 }
 
                 medicalRecord.UpdateNotes(notesBuilder);
