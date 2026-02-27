@@ -26,6 +26,9 @@ namespace MedicSoft.Domain.Entities
         public string? Specialty { get; private set; }
         public string? Document { get; private set; } // CPF or CNPJ
         public DocumentType? DocumentType { get; private set; } // Type of document (CPF or CNPJ)
+        public bool IsEmailConfirmed { get; private set; }
+        public string? EmailConfirmationToken { get; private set; }
+        public DateTime? EmailConfirmationTokenExpiresAt { get; private set; }
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
@@ -185,6 +188,45 @@ namespace MedicSoft.Domain.Entities
                 default:
                     throw new ArgumentException("Invalid document type", nameof(documentType));
             }
+        }
+
+        /// <summary>
+        /// Generates a secure email confirmation token valid for 24 hours.
+        /// </summary>
+        public string GenerateEmailConfirmationToken()
+        {
+            var tokenBytes = new byte[32];
+            System.Security.Cryptography.RandomNumberGenerator.Fill(tokenBytes);
+            var token = Convert.ToBase64String(tokenBytes)
+                .Replace('+', '-').Replace('/', '_').Replace("=", "");
+            EmailConfirmationToken = token;
+            EmailConfirmationTokenExpiresAt = DateTime.UtcNow.AddHours(24);
+            UpdateTimestamp();
+            return token;
+        }
+
+        /// <summary>
+        /// Confirms the owner's email using the provided token.
+        /// </summary>
+        public bool ConfirmEmail(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+                return false;
+
+            if (IsEmailConfirmed)
+                return true;
+
+            if (EmailConfirmationToken != token)
+                return false;
+
+            if (EmailConfirmationTokenExpiresAt.HasValue && DateTime.UtcNow > EmailConfirmationTokenExpiresAt.Value)
+                return false;
+
+            IsEmailConfirmed = true;
+            EmailConfirmationToken = null;
+            EmailConfirmationTokenExpiresAt = null;
+            UpdateTimestamp();
+            return true;
         }
     }
 }

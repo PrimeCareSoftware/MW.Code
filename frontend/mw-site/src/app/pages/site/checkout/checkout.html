@@ -11,7 +11,8 @@
       <!-- Email confirmation notice -->
       <div class="email-notice" *ngIf="ownerEmail">
         <span class="email-icon">📧</span>
-        <p>Um e-mail de confirmação foi enviado para <strong>{{ ownerEmail }}</strong> com os dados do seu cadastro e as instruções de acesso.</p>
+        <p>Um e-mail de confirmação foi enviado para <strong>{{ ownerEmail }}</strong>.</p>
+        <p><strong>⚠️ Confirme seu e-mail antes de fazer login!</strong> Clique no link enviado para ativar seu acesso ao sistema.</p>
       </div>
 
       <!-- Registration Data Display -->
@@ -63,6 +64,13 @@
         <div class="step-card">
           <div class="step-number">1</div>
           <div class="step-content">
+            <h3>Confirme seu E-mail</h3>
+            <p>Verifique sua caixa de entrada e clique no link de confirmação enviado para <strong *ngIf="ownerEmail">{{ ownerEmail }}</strong><span *ngIf="!ownerEmail">seu e-mail</span>. O login só será possível após a confirmação.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-content">
             <h3>Acesse sua conta como Proprietário</h3>
             <p *ngIf="tenantId && username">Use o TenantID <strong>{{ tenantId }}</strong>, usuário <strong>{{ username }}</strong> e a senha que você cadastrou para fazer login</p>
             <p *ngIf="!tenantId || !username">Use o usuário e senha que você cadastrou para fazer login no sistema</p>
@@ -72,21 +80,21 @@
           </div>
         </div>
         <div class="step-card">
-          <div class="step-number">2</div>
+          <div class="step-number">3</div>
           <div class="step-content">
             <h3>Configure usuários e perfis de acesso</h3>
             <p>Como proprietário, você é responsável por criar os demais usuários (médicos, secretárias, recepcionistas) e configurar seus perfis de acesso conforme necessário</p>
           </div>
         </div>
         <div class="step-card">
-          <div class="step-number">3</div>
+          <div class="step-number">4</div>
           <div class="step-content">
             <h3>Configure sua clínica</h3>
             <p>Adicione horários de atendimento, especializações e personalize o sistema conforme suas necessidades</p>
           </div>
         </div>
         <div class="step-card">
-          <div class="step-number">4</div>
+          <div class="step-number">5</div>
           <div class="step-content">
             <h3>Comece a atender</h3>
             <p>Cadastre pacientes, agende consultas e aproveite todos os recursos</p>

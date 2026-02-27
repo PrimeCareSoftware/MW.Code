@@ -40,6 +40,12 @@ namespace MedicSoft.Repository.Repositories
                 .FirstOrDefaultAsync(o => o.ClinicId == clinicId && o.TenantId == tenantId);
         }
 
+        public async Task<Owner?> GetByEmailConfirmationTokenAsync(string token, string tenantId)
+        {
+            return await _context.Owners
+                .FirstOrDefaultAsync(o => o.EmailConfirmationToken == token && o.TenantId == tenantId);
+        }
+
         public async Task<IEnumerable<Owner>> GetAllAsync(string tenantId)
         {
             return await _context.Owners

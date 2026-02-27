@@ -11,6 +11,7 @@ namespace MedicSoft.Domain.Interfaces
         Task<Owner?> GetByUsernameAsync(string username, string tenantId);
         Task<Owner?> GetByIdAsync(Guid id, string tenantId);
         Task<Owner?> GetByClinicIdAsync(Guid clinicId, string tenantId);
+        Task<Owner?> GetByEmailConfirmationTokenAsync(string token, string tenantId);
         Task<IEnumerable<Owner>> GetAllAsync(string tenantId);
         Task AddAsync(Owner owner);
         /// <summary>

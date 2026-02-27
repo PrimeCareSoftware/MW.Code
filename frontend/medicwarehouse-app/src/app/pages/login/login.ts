@@ -142,8 +142,10 @@ export class Login implements OnInit {
           const errorCode = error.error?.code;
           const errorMsg = error.error?.message || 'Falha no login. Por favor, verifique suas credenciais.';
           
-          // Provide helpful hints based on login type and error
-          if (errorCode === 'UNAUTHORIZED' || errorMsg.toLowerCase().includes('incorretos') || errorMsg.toLowerCase().includes('incorrect')) {
+          // Show specific message for unconfirmed email
+          if (errorCode === 'EMAIL_NOT_CONFIRMED') {
+            this.errorMessage.set(errorMsg);
+          } else if (errorCode === 'UNAUTHORIZED' || errorMsg.toLowerCase().includes('incorretos') || errorMsg.toLowerCase().includes('incorrect')) {
             if (this.isOwnerLogin()) {
               this.errorMessage.set(errorMsg + ' Certifique-se de que você está usando as credenciais de proprietário da clínica.');
             } else {

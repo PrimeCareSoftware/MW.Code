@@ -1,0 +1,29 @@
+<app-header></app-header>
+<div class="confirm-email">
+  <div class="container">
+    <div class="card" *ngIf="status() === 'loading'">
+      <div class="loading-icon">⏳</div>
+      <h1>Confirmando seu e-mail...</h1>
+      <p>Aguarde um momento.</p>
+    </div>
+
+    <div class="card success-card" *ngIf="status() === 'success'">
+      <div class="success-icon">✅</div>
+      <h1>E-mail Confirmado!</h1>
+      <p class="message">{{ message() }}</p>
+      <p>Agora você pode fazer login no sistema.</p>
+      <a [href]="appUrl + '/login?isOwner=true'" class="btn btn-primary">
+        Fazer Login como Proprietário
+      </a>
+    </div>
+
+    <div class="card error-card" *ngIf="status() === 'error'">
+      <div class="error-icon">❌</div>
+      <h1>Confirmação Falhou</h1>
+      <p class="message">{{ message() }}</p>
+      <p>Se o problema persistir, você pode solicitar um novo e-mail de confirmação.</p>
+      <a routerLink="/register" class="btn btn-secondary">Voltar ao Cadastro</a>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
