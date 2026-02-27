@@ -1194,7 +1194,9 @@ namespace MedicSoft.Api.Controllers
 
         private string GeneratePasswordChangeTempToken(string entityId, string tenantId, string entityType)
         {
-            var secretKey = _configuration["JwtSettings:SecretKey"] ?? "fallback-secret-key";
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT SecretKey not configured");
             var expiryUnixTs = DateTimeOffset.UtcNow.AddMinutes(15).ToUnixTimeSeconds();
             var payload = $"{entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}";
             using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
@@ -1206,7 +1208,9 @@ namespace MedicSoft.Api.Controllers
         {
             try
             {
-                var secretKey = _configuration["JwtSettings:SecretKey"] ?? "fallback-secret-key";
+                var secretKey = _configuration["JwtSettings:SecretKey"];
+                if (string.IsNullOrWhiteSpace(secretKey))
+                    return (string.Empty, string.Empty, string.Empty, false);
                 var decodedBytes = Convert.FromBase64String(tempToken);
                 var decodedString = Encoding.UTF8.GetString(decodedBytes);
                 // Format: {entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}:{signature}
