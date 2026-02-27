@@ -1,0 +1,51 @@
+name: Delete Merged Branches
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Delete merged branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const branch = pr.head.ref;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // Skip branches from forked repositories
+            if (pr.head.repo.fork) {
+              console.log(`Branch '${branch}' is from a fork and will not be deleted.`);
+              return;
+            }
+
+            // Do not delete protected branches
+            const protectedBranches = ['main', 'master', 'develop', 'staging', 'production'];
+            if (protectedBranches.includes(branch)) {
+              console.log(`Branch '${branch}' is protected and will not be deleted.`);
+              return;
+            }
+
+            try {
+              await github.rest.git.deleteRef({
+                owner,
+                repo,
+                ref: `heads/${branch}`
+              });
+              console.log(`Deleted branch: ${branch}`);
+            } catch (error) {
+              if (error.status === 404) {
+                console.log(`Branch '${branch}' not found (may have already been deleted).`);
+              } else if (error.status === 403) {
+                console.log(`Permission denied when trying to delete branch '${branch}'.`);
+              } else {
+                console.log(`Failed to delete branch '${branch}' (status ${error.status}): ${error.message}`);
+              }
+            }
