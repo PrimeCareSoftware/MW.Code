@@ -1,4 +1,6 @@
 using System;
+using System.Text.Json.Serialization;
+using MedicSoft.Application.JsonConverters;
 
 namespace MedicSoft.Application.DTOs
 {
@@ -58,6 +60,7 @@ namespace MedicSoft.Application.DTOs
     {
         // Dados da consulta
         public Guid ClinicId { get; set; }
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime ScheduledDate { get; set; }
         public TimeSpan ScheduledTime { get; set; }
         public int DurationMinutes { get; set; } = 30;
@@ -65,6 +68,7 @@ namespace MedicSoft.Application.DTOs
         // Dados do paciente (necessários para criar o agendamento)
         public string PatientName { get; set; } = string.Empty;
         public string PatientCpf { get; set; } = string.Empty;
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public DateTime PatientBirthDate { get; set; }
         public string PatientPhone { get; set; } = string.Empty;
         public string PatientEmail { get; set; } = string.Empty;
