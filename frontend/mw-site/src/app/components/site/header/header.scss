@@ -365,6 +365,19 @@ body.theme-high-contrast .nav {
   gap: 0.5rem;
   cursor: pointer;
   transition: all var(--transition-fast);
+  background: transparent;
+  color: var(--primary-600);
+  border: 1px solid var(--primary-600);
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  margin-left: 0.5rem;
+
+  &:hover {
+    background: var(--primary-50);
+    transform: translateY(-1px);
+  }
 
   &.active {
     background: var(--primary-50);
@@ -460,6 +473,13 @@ body.theme-high-contrast .nav {
 // Dark theme styles for login dropdown
 body.theme-dark {
   .login-dropdown-trigger {
+    color: var(--primary-400);
+    border-color: var(--primary-400);
+
+    &:hover {
+      background: var(--gray-800);
+    }
+
     &.active {
       background: var(--gray-800);
     }
