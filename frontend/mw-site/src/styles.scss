@@ -11,6 +11,19 @@
 @use 'shared-styles/design-tokens';
 
 /* ============================================
+   GLOBAL TYPOGRAPHY - Applied to all site elements
+   including header, footer, and pages outside .omni-care-site
+   ============================================ */
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ============================================
    SCOPE: All omni-care styles are scoped under .omni-care-site class
    ============================================ */
 
