@@ -78,11 +78,11 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
 
             // Validate appointment time is within clinic working hours
             if (!clinic.IsWithinWorkingHours(dto.ScheduledTime))
-                throw new InvalidOperationException($"O horário {dto.ScheduledTime:HH\\:mm} está fora do horário de funcionamento da clínica ({clinic.OpeningTime:HH\\:mm} - {clinic.ClosingTime:HH\\:mm}).");
+                throw new InvalidOperationException($"O horário {dto.ScheduledTime:hh\\:mm} está fora do horário de funcionamento da clínica ({clinic.OpeningTime:hh\\:mm} - {clinic.ClosingTime:hh\\:mm}).");
             
             var endTime = dto.ScheduledTime.Add(TimeSpan.FromMinutes(dto.DurationMinutes));
             if (!clinic.IsWithinWorkingHours(endTime))
-                throw new InvalidOperationException($"O término do atendimento ({endTime:HH\\:mm}) ultrapassa o horário de fechamento da clínica ({clinic.ClosingTime:HH\\:mm}).");
+                throw new InvalidOperationException($"O término do atendimento ({endTime:hh\\:mm}) ultrapassa o horário de fechamento da clínica ({clinic.ClosingTime:hh\\:mm}).");
 
             // Verifica se existe conflito de horário
             var hasConflict = await _appointmentRepository.HasConflictingAppointmentAsync(
@@ -98,7 +98,8 @@ namespace MedicSoft.Application.Handlers.Commands.PublicAppointments
 
             // Busca ou cria o paciente
             Patient patient;
-            var existingPatient = await _patientRepository.GetByDocumentGlobalAsync(dto.PatientCpf);
+            // Check if patient exists within the clinic's own tenant to respect tenant isolation
+            var existingPatient = await _patientRepository.GetByDocumentAsync(dto.PatientCpf, clinic.TenantId);
 
             if (existingPatient != null)
             {
