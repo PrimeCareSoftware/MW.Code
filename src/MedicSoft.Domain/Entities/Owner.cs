@@ -214,6 +214,18 @@ namespace MedicSoft.Domain.Entities
         }
 
         /// <summary>
+        /// Directly confirms the owner's email access without requiring a token.
+        /// Used by system administrators to grant access locally or override the email confirmation flow.
+        /// </summary>
+        public void ConfirmEmailDirectly()
+        {
+            IsEmailConfirmed = true;
+            EmailConfirmationToken = null;
+            EmailConfirmationTokenExpiresAt = null;
+            UpdateTimestamp();
+        }
+
+        /// <summary>
         /// Confirms the owner's email using the provided token.
         /// </summary>
         public bool ConfirmEmail(string token)

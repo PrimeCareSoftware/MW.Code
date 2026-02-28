@@ -23,6 +23,7 @@
                 <th>Clínica</th>
                 <th>Último Login</th>
                 <th>Status</th>
+                <th>E-mail Confirmado</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -40,6 +41,11 @@
                     </span>
                   </td>
                   <td>
+                    <span class="status-badge" [class.active]="owner.isEmailConfirmed" [class.inactive]="!owner.isEmailConfirmed">
+                      {{ owner.isEmailConfirmed ? '✅ Confirmado' : '⏳ Pendente' }}
+                    </span>
+                  </td>
+                  <td>
                     <div class="actions">
                       <button class="btn-icon" (click)="openResetPasswordModal(owner)" title="Resetar Senha">
                         🔑
@@ -53,6 +59,22 @@
                       >
                         {{ owner.isActive ? '🚫' : '✅' }}
                       </button>
+                      @if (!owner.isEmailConfirmed) {
+                        <button 
+                          class="btn-icon btn-success" 
+                          (click)="confirmAccess(owner.id, owner.fullName)"
+                          title="Confirmar Acesso (sem e-mail)"
+                        >
+                          🔓
+                        </button>
+                        <button 
+                          class="btn-icon"
+                          (click)="resendConfirmation(owner.id)"
+                          title="Reenviar E-mail de Confirmação"
+                        >
+                          📧
+                        </button>
+                      }
                     </div>
                   </td>
                 </tr>

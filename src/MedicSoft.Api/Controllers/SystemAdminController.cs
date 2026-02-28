@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MedicSoft.Application.Services;
+using MedicSoft.Application.Services.CRM;
+using MedicSoft.Application.Services.EmailTemplates;
 using MedicSoft.CrossCutting.Authorization;
 using MedicSoft.CrossCutting.Identity;
 using MedicSoft.CrossCutting.Security;
@@ -33,6 +36,8 @@ namespace MedicSoft.Api.Controllers
         private readonly IOwnerService _ownerService;
         private readonly BusinessConfigurationService _businessConfigService;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<SystemAdminController> _logger;
 
         public SystemAdminController(
@@ -46,6 +51,8 @@ namespace MedicSoft.Api.Controllers
             IOwnerService ownerService,
             BusinessConfigurationService businessConfigService,
             ICompanyRepository companyRepository,
+            IEmailService emailService,
+            IConfiguration configuration,
             ILogger<SystemAdminController> logger) : base(tenantContext)
         {
             _clinicRepository = clinicRepository;
@@ -57,6 +64,8 @@ namespace MedicSoft.Api.Controllers
             _ownerService = ownerService;
             _businessConfigService = businessConfigService;
             _companyRepository = companyRepository;
+            _emailService = emailService;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -284,6 +293,10 @@ namespace MedicSoft.Api.Controllers
                     null, // ProfessionalId
                     null  // Specialty
                 );
+
+                // Auto-confirm email for clinics created by system admin (no email service required locally)
+                owner.ConfirmEmailDirectly();
+                await _context.SaveChangesAsync();
 
                 // Create subscription if plan was validated
                 if (plan != null)
@@ -643,6 +656,7 @@ namespace MedicSoft.Api.Controllers
                     o.FullName,
                     o.Phone,
                     o.IsActive,
+                    o.IsEmailConfirmed,
                     o.ClinicId,
                     ClinicName = o.Clinic != null ? o.Clinic.Name : null,
                     o.LastLoginAt,
@@ -698,6 +712,73 @@ namespace MedicSoft.Api.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Status do proprietário alterado com sucesso" });
+        }
+
+        /// <summary>
+        /// Directly confirm clinic owner access, bypassing email verification.
+        /// Useful for local development or when overriding the email confirmation flow.
+        /// </summary>
+        [HttpPost("clinic-owners/{id}/confirm-access")]
+        public async Task<ActionResult> ConfirmClinicOwnerAccess(Guid id)
+        {
+            var owner = await _context.Owners
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(o => o.Id == id && o.ClinicId != null);
+
+            if (owner == null)
+                return NotFound(new { message = "Proprietário não encontrado" });
+
+            owner.ConfirmEmailDirectly();
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Clinic owner {OwnerId} access confirmed directly by system admin", id);
+
+            return Ok(new { message = "Acesso da clínica confirmado com sucesso" });
+        }
+
+        /// <summary>
+        /// Resend the email confirmation link for a clinic owner.
+        /// </summary>
+        [HttpPost("clinic-owners/{id}/resend-confirmation")]
+        public async Task<ActionResult> ResendOwnerConfirmation(Guid id)
+        {
+            var owner = await _context.Owners
+                .IgnoreQueryFilters()
+                .Include(o => o.Clinic)
+                .FirstOrDefaultAsync(o => o.Id == id && o.ClinicId != null);
+
+            if (owner == null)
+                return NotFound(new { message = "Proprietário não encontrado" });
+
+            if (owner.IsEmailConfirmed)
+                return Ok(new { message = "E-mail já confirmado. O proprietário pode fazer login." });
+
+            try
+            {
+                var siteUrl = _configuration.GetValue<string>("SiteUrl") ?? "https://www.omnicaresoftware.com";
+                var token = owner.GenerateEmailConfirmationToken();
+                await _context.SaveChangesAsync();
+
+                var confirmationUrl = $"{siteUrl}/confirm-email?token={Uri.EscapeDataString(token)}&tenantId={Uri.EscapeDataString(owner.TenantId)}";
+                var emailBody = EmailTemplateHelper.GenerateEmailConfirmationEmail(
+                    owner.FullName,
+                    owner.Clinic?.Name ?? string.Empty,
+                    confirmationUrl);
+
+                await _emailService.SendEmailAsync(
+                    owner.Email,
+                    "Confirme seu e-mail - Omni Care Software",
+                    emailBody);
+
+                _logger.LogInformation("Confirmation email resent to clinic owner {OwnerId} by system admin", id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to resend confirmation email for clinic owner {OwnerId}", id);
+                return StatusCode(500, new { message = "Erro ao enviar e-mail de confirmação. Verifique as configurações de e-mail do servidor." });
+            }
+
+            return Ok(new { message = "E-mail de confirmação reenviado com sucesso" });
         }
 
         /// <summary>
