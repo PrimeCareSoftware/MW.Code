@@ -89,6 +89,10 @@ namespace MedicSoft.Domain.Services
             if (clinic == null)
                 return (false, "Clinic not found");
 
+            // Check if scheduled date is in the past
+            if (scheduledDate.Date < DateTime.UtcNow.Date)
+                return (false, "A data agendada não pode estar no passado");
+
             // Check if online booking is enabled (only for public bookings)
             // Note: businessConfigurationRepository is optional for backward compatibility
             // If not provided, the business configuration check is skipped
