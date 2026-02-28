@@ -17,7 +17,6 @@ import {
   ApexResponsive
 } from 'ng-apexcharts';
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { Loading } from '../../../shared/loading/loading';
 import { AnalyticsBIService } from '../../../services/analytics-bi.service';
 import { DashboardFinanceiro, ProjecaoReceita } from '../../../models/analytics-bi.model';
@@ -41,7 +40,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-dashboard-financeiro',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, Loading, NgApexchartsModule],
+  imports: [CommonModule, FormsModule, Loading, NgApexchartsModule],
   templateUrl: './dashboard-financeiro.component.html',
   styleUrl: './dashboard-financeiro.component.scss'
 })

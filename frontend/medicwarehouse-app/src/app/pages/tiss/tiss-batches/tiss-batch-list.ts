@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TissBatchService } from '../../../services/tiss-batch.service';
 import { TissBatch, BatchStatus } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-tiss-batch-list',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './tiss-batch-list.html',
   styleUrl: './tiss-batch-list.scss'
 })

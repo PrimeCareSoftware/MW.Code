@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TissBatchService } from '../../../services/tiss-batch.service';
 import { TissBatch, BatchStatus } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-tiss-batch-detail',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './tiss-batch-detail.html',
   styleUrl: './tiss-batch-detail.scss'
 })

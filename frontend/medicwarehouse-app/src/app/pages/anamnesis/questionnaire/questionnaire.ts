@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AnamnesisService } from '../../../services/anamnesis.service';
 import { 
   AnamnesisTemplate, 
@@ -21,7 +20,7 @@ interface FormAnswer {
 
 @Component({
   selector: 'app-questionnaire',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './questionnaire.html',
   styleUrl: './questionnaire.scss'
 })

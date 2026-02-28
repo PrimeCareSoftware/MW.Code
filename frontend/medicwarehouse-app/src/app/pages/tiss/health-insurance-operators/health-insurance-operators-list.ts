@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
 import { HealthInsuranceOperator } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-health-insurance-operators-list',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './health-insurance-operators-list.html',
   styleUrl: './health-insurance-operators-list.scss'
 })

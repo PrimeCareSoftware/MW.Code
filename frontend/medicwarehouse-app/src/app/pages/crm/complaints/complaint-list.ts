@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
 import { ComplaintService } from '../../../services/crm';
 import { Complaint } from '../../../models/crm';
 
 @Component({
   selector: 'app-complaint-list',
-  imports: [CommonModule, Navbar, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './complaint-list.html',
   styleUrl: './complaint-list.scss'
 })

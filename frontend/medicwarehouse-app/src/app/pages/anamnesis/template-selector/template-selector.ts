@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AnamnesisService } from '../../../services/anamnesis.service';
 import { AnamnesisTemplate, MedicalSpecialty, SPECIALTY_NAMES } from '../../../models/anamnesis.model';
 
 @Component({
   selector: 'app-template-selector',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './template-selector.html',
   styleUrl: './template-selector.scss'
 })

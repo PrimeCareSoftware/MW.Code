@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
 import { AccountsPayable, PayableStatus } from '../../../models/financial.model';
 
 @Component({
   selector: 'app-payables-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './payables-list.component.html',
   styleUrl: './payables-list.component.scss'
 })

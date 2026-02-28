@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
 import { ProcedurePricingConfiguration } from '../../../models/financial.model';
 
 @Component({
   selector: 'app-procedure-pricing-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './procedure-pricing-list.component.html',
   styleUrl: './procedure-pricing-list.component.scss'
 })

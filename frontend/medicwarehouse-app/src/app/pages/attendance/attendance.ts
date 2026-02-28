@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { interval, Subscription, forkJoin } from 'rxjs';
-import { Navbar } from '../../shared/navbar/navbar';
 import { HelpButtonComponent } from '../../shared/help-button/help-button';
 import { RichTextEditor } from '../../shared/rich-text-editor/rich-text-editor';
 import { InformedConsentFormComponent } from './components/informed-consent-form.component';
@@ -48,7 +47,7 @@ const ICD10_PATTERN = /^[A-Z]\d{2}(\.\d{1,2})?$/;
     CommonModule, 
     ReactiveFormsModule, 
     RouterLink, 
-    Navbar, 
+    
     RichTextEditor, 
     InformedConsentFormComponent, 
     ClinicalExaminationFormComponent, 

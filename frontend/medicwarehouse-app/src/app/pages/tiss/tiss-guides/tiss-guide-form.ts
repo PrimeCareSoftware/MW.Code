@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TissGuideService } from '../../../services/tiss-guide.service';
 import { PatientHealthInsuranceService } from '../../../services/patient-health-insurance.service';
 import { AuthorizationRequestService } from '../../../services/authorization-request.service';
@@ -13,7 +12,7 @@ import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/
 
 @Component({
   selector: 'app-tiss-guide-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, AccessibleBreadcrumbsComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, AccessibleBreadcrumbsComponent],
   templateUrl: './tiss-guide-form.html',
   styleUrl: './tiss-guide-form.scss'
 })

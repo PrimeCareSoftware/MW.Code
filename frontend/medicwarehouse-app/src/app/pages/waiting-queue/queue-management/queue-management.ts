@@ -6,7 +6,6 @@ import { switchMap } from 'rxjs/operators';
 import { WaitingQueueService } from '../../../services/waiting-queue.service';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
-import { Navbar } from '../../../shared/navbar/navbar';
 import {
   WaitingQueueSummary,
   WaitingQueueEntry,
@@ -21,7 +20,7 @@ import {
 @Component({
   selector: 'app-queue-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './queue-management.html',
   styleUrls: ['./queue-management.scss']
 })

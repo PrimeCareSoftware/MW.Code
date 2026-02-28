@@ -4,12 +4,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { OwnerClinicService, ClinicDto, CreateClinicDto, UpdateClinicDto } from '../../../services/owner-clinic.service';
 import { ClinicAdminInfoDto, SubscriptionDetailsDto } from '../../../models/clinic-admin.model';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-clinic-info',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './clinic-info.component.html',
   styleUrl: './clinic-info.component.scss'
 })

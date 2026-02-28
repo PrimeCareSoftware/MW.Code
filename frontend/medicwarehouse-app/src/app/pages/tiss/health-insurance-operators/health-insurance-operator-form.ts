@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
 import { CepService } from '../../../services/cep.service';
 import { CnpjMaskDirective } from '../../../directives/cnpj-mask.directive';
@@ -11,7 +10,7 @@ import { CepMaskDirective } from '../../../directives/cep-mask.directive';
 
 @Component({
   selector: 'app-health-insurance-operator-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, CnpjMaskDirective, PhoneMaskDirective, CepMaskDirective],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, CnpjMaskDirective, PhoneMaskDirective, CepMaskDirective],
   templateUrl: './health-insurance-operator-form.html',
   styleUrl: './health-insurance-operator-form.scss'
 })

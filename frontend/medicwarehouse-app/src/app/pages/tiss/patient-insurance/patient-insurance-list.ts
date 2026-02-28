@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientHealthInsuranceService } from '../../../services/patient-health-insurance.service';
 import { PatientHealthInsurance } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-patient-insurance-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './patient-insurance-list.html',
   styleUrl: './patient-insurance-list.scss'
 })

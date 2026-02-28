@@ -12,14 +12,12 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { ReferralService, ReferralStats, Referral, ReferralProgram, PaymentMethod } from '../../services/referral/referral.service';
 import { ReferralInvitationModalComponent } from './referral-invitation-modal.component';
-import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-referral-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    Navbar,
     MatCardModule,
     MatButtonModule,
     MatIconModule,

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   BusinessConfigurationService, 
   BusinessConfiguration,
@@ -34,7 +33,7 @@ interface FeatureInfo {
 @Component({
   selector: 'app-business-configuration',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, SetupWizardComponent],
+  imports: [CommonModule, FormsModule, SetupWizardComponent],
   templateUrl: './business-configuration.component.html',
   styleUrls: ['./business-configuration.component.scss']
 })

@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TissAnalyticsService } from '../../../services/tiss-analytics.service';
 import { Auth } from '../../../services/auth';
 import {
@@ -12,7 +11,7 @@ import {
 
 @Component({
   selector: 'app-performance-dashboard',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './performance-dashboard.html',
   styleUrl: './performance-dashboard.scss'
 })

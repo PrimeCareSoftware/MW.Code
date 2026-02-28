@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { QuillEditorComponent } from 'ngx-quill';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   DocumentTemplate,
   CreateDocumentTemplateDto,
@@ -19,7 +18,7 @@ import { DocumentTemplateService } from '../../../services/document-template.ser
 @Component({
   selector: 'app-document-template-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillEditorComponent, Navbar],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, QuillEditorComponent],
   templateUrl: './document-template-editor.component.html',
   styleUrls: ['./document-template-editor.component.scss']
 })

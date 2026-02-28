@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientHealthInsuranceService } from '../../../services/patient-health-insurance.service';
 import { PatientService } from '../../../services/patient';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
@@ -12,7 +11,7 @@ import { HealthInsuranceOperator } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-patient-insurance-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './patient-insurance-form.html',
   styleUrl: './patient-insurance-form.scss'
 })

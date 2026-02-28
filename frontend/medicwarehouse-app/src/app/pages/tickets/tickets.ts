@@ -1,6 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../shared/navbar/navbar';
 import { TicketService } from '../../services/ticket.service';
 import { NotificationService } from '../../services/notification.service';
 import { 
@@ -19,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tickets',
-  imports: [CommonModule, Navbar, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './tickets.html',
   styleUrl: './tickets.scss'
 })

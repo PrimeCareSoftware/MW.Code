@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AuthorizationRequestService } from '../../../services/authorization-request.service';
 import { AuthorizationRequest, AuthorizationStatus } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-authorization-request-list',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './authorization-request-list.html',
   styleUrl: './authorization-request-list.scss'
 })

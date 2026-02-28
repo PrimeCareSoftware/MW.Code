@@ -4,12 +4,11 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccessProfileService } from '../../../services/access-profile.service';
 import { PermissionCategory } from '../../../models/access-profile.model';
-import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-profile-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss']
 })

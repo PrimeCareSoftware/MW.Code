@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Navbar } from '../../shared/navbar/navbar';
 import { CompanyService } from '../../services/company.service';
 import { Company, DocumentType, DocumentTypeLabels } from '../../models/company.model';
 
 @Component({
   selector: 'app-company-info',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './company-info.html',
   styleUrl: './company-info.scss'
 })

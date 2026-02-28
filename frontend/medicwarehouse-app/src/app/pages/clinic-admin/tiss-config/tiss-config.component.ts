@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { environment } from '../../../../environments/environment';
 
 interface TissConfigDto {
@@ -15,7 +14,7 @@ interface TissConfigDto {
 
 @Component({
   selector: 'app-tiss-config',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './tiss-config.component.html',
   styleUrl: './tiss-config.component.scss'
 })

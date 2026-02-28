@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { PatientService } from '../../../services/patient';
 import { Patient } from '../../../models/patient.model';
@@ -15,7 +14,7 @@ import { catchError, debounceTime, distinctUntilChanged, switchMap, takeUntil } 
 
 @Component({
   selector: 'app-appointment-form',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar, AccessibleBreadcrumbsComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, AccessibleBreadcrumbsComponent],
   templateUrl: './appointment-form.html',
   styleUrl: './appointment-form.scss'
 })

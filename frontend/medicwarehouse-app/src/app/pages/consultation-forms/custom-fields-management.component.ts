@@ -2,7 +2,6 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Navbar } from '../../shared/navbar/navbar';
 import { HelpButtonComponent } from '../../shared/help-button/help-button';
 import { ConsultationFormProfileService, ConsultationFormProfileDto, CustomFieldDto, CustomFieldType } from '../../services/consultation-form-profile.service';
 import { Auth } from '../../services/auth';
@@ -17,7 +16,7 @@ interface SpecialtyOption {
 @Component({
   selector: 'app-custom-fields-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar, HelpButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, HelpButtonComponent],
   templateUrl: './custom-fields-management.component.html',
   styleUrls: ['./custom-fields-management.component.scss']
 })

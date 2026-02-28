@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { PublicDisplaySettingsDto } from '../../../models/clinic-admin.model';
-import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-public-display',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './public-display.component.html',
   styleUrl: './public-display.component.scss'
 })

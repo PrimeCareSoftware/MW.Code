@@ -9,7 +9,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Navbar } from '../../shared/navbar/navbar';
 import { CertificadoDigitalService } from '../../services/certificado-digital.service';
 import { CertificadoDigital, TipoCertificado } from '../../models/certificado-digital.model';
 import { ImportarCertificadoComponent } from './importar-certificado.component';
@@ -28,7 +27,6 @@ import { ImportarCertificadoComponent } from './importar-certificado.component';
     MatProgressSpinnerModule,
     MatCardModule,
     MatTooltipModule,
-    Navbar
   ],
   templateUrl: './gerenciar-certificados.component.html',
   styleUrls: ['./gerenciar-certificados.component.scss']

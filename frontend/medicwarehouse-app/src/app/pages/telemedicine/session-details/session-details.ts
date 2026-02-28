@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TelemedicineService } from '../../../services/telemedicine.service';
 import { TelemedicineSession, SessionStatus } from '../../../models/telemedicine.model';
 
 @Component({
   selector: 'app-session-details',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './session-details.html',
   styleUrl: './session-details.scss'
 })

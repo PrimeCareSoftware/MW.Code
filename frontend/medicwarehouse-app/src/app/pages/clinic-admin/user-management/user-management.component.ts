@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { ClinicUserDto, CreateClinicUserRequest, UpdateClinicUserRequest, DoctorFieldsConfigDto } from '../../../models/clinic-admin.model';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AccessProfileService } from '../../../services/access-profile.service';
 import { AccessProfile } from '../../../models/access-profile.model';
 import { PhoneMaskDirective } from '../../../directives/phone-mask.directive';
@@ -11,7 +10,7 @@ import { RolePermissionService } from '../../../services/role-permission.service
 
 @Component({
   selector: 'app-user-management',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, Navbar, PhoneMaskDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PhoneMaskDirective],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss'
 })

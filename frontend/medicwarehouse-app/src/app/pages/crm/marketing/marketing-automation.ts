@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
 import { MarketingAutomationService } from '../../../services/crm';
 import { MarketingAutomation as MarketingAutomationModel } from '../../../models/crm';
 
 @Component({
   selector: 'app-marketing-automation',
-  imports: [CommonModule, Navbar, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './marketing-automation.html',
   styleUrl: './marketing-automation.scss'
 })

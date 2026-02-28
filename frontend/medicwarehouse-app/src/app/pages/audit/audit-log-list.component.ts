@@ -26,7 +26,6 @@ import {
   PagedAuditLogs 
 } from '../../services/audit.service';
 import { AuditLogDetailsDialogComponent } from './audit-log-details-dialog.component';
-import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-audit-log-list',
@@ -49,7 +48,6 @@ import { Navbar } from '../../shared/navbar/navbar';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatDialogModule,
-    Navbar
   ],
   templateUrl: './audit-log-list.component.html',
   styleUrls: ['./audit-log-list.component.scss']

@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
 import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 import { ScreenReaderService } from '../../shared/accessibility/hooks/screen-reader.service';
@@ -10,7 +9,7 @@ import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../shared/acc
 
 @Component({
   selector: 'app-procedure-form',
-  imports: [CommonModule, ReactiveFormsModule, Navbar, AccessibleBreadcrumbsComponent],
+  imports: [CommonModule, ReactiveFormsModule, AccessibleBreadcrumbsComponent],
   templateUrl: './procedure-form.html',
   styleUrl: './procedure-form.scss'
 })
