@@ -104,6 +104,33 @@ export class ClinicOwnersList implements OnInit {
     });
   }
 
+  confirmAccess(id: string, ownerName: string): void {
+    if (!confirm(`Confirmar acesso da clínica para "${ownerName}" sem verificação de e-mail?`)) {
+      return;
+    }
+
+    this.systemAdminService.confirmOwnerAccess(id).subscribe({
+      next: (res) => {
+        alert(res.message);
+        this.loadOwners();
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao confirmar acesso');
+      }
+    });
+  }
+
+  resendConfirmation(id: string): void {
+    this.systemAdminService.resendOwnerConfirmation(id).subscribe({
+      next: (res) => {
+        alert(res.message);
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Erro ao reenviar confirmação');
+      }
+    });
+  }
+
   formatDate(date: string): string {
     return new Date(date).toLocaleDateString('pt-BR');
   }

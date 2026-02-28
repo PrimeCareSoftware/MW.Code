@@ -165,6 +165,7 @@ export interface ClinicOwner {
   fullName: string;
   phone: string;
   isActive: boolean;
+  isEmailConfirmed: boolean;
   clinicId?: string;
   clinicName?: string;
   lastLoginAt?: string;

@@ -257,6 +257,27 @@ export class SystemAdminService {
     );
   }
 
+  /**
+   * Directly confirm clinic owner access, bypassing email verification.
+   * Useful for local development or when overriding the email confirmation flow.
+   */
+  confirmOwnerAccess(id: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/clinic-owners/${id}/confirm-access`,
+      {}
+    );
+  }
+
+  /**
+   * Resend email confirmation link for a clinic owner
+   */
+  resendOwnerConfirmation(id: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/clinic-owners/${id}/resend-confirmation`,
+      {}
+    );
+  }
+
   // Subdomain Management
   /**
    * Get all subdomains
