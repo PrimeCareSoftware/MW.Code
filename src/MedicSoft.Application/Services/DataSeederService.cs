@@ -1748,7 +1748,7 @@ RETORNO: {{return_date}}",
         private Owner CreateSystemOwner()
         {
             var passwordHash = _passwordHasher.HashPassword("Admin@123");
-            return new Owner(
+            var systemOwner = new Owner(
                 username: "admin",
                 email: "admin@medicwarehouse.com",
                 passwordHash: passwordHash,
@@ -1757,6 +1757,8 @@ RETORNO: {{return_date}}",
                 tenantId: "system",
                 clinicId: null // System owners are not tied to any specific clinic
             );
+            systemOwner.ConfirmEmailDirectly();
+            return systemOwner;
         }
 
         private Owner CreateDemoOwner(Guid clinicId)

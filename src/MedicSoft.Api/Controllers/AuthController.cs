@@ -300,8 +300,8 @@ namespace MedicSoft.Api.Controllers
                     return Unauthorized(new { message = "Usuário ou senha incorretos." });
                 }
 
-                // Check if email is confirmed
-                if (!owner.IsEmailConfirmed)
+                // Check if email is confirmed (system owners bypass this check)
+                if (!owner.IsEmailConfirmed && !owner.IsSystemOwner)
                 {
                     _logger.LogWarning("Owner login blocked - email not confirmed for owner: {OwnerId}", owner.Id);
                     return Unauthorized(new 
