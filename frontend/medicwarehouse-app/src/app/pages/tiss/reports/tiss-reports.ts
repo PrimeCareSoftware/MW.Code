@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TissAnalyticsService } from '../../../services/tiss-analytics.service';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
 import { Auth } from '../../../services/auth';
@@ -25,7 +24,7 @@ interface ReportData {
 
 @Component({
   selector: 'app-tiss-reports',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './tiss-reports.html',
   styleUrl: './tiss-reports.scss'
 })

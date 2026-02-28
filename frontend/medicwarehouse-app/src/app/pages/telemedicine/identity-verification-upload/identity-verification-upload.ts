@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { environment } from '../../../../environments/environment';
 
 interface IdentityVerificationResponse {
@@ -20,7 +19,7 @@ interface IdentityVerificationResponse {
 
 @Component({
   selector: 'app-identity-verification-upload',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './identity-verification-upload.html',
   styleUrl: './identity-verification-upload.scss'
 })

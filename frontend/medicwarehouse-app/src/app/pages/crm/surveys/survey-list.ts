@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
 import { SurveyService } from '../../../services/crm';
 import { Survey } from '../../../models/crm';
 
 @Component({
   selector: 'app-survey-list',
-  imports: [CommonModule, Navbar, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './survey-list.html',
   styleUrl: './survey-list.scss'
 })

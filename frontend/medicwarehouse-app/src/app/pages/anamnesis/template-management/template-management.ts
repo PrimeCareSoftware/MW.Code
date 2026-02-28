@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { HelpButtonComponent } from '../../../shared/help-button/help-button';
 import { AnamnesisService } from '../../../services/anamnesis.service';
 import { AnamnesisTemplate, SPECIALTY_NAMES } from '../../../models/anamnesis.model';
@@ -10,7 +9,7 @@ import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-template-management',
-  imports: [CommonModule, FormsModule, Navbar, HelpButtonComponent],
+  imports: [CommonModule, FormsModule, HelpButtonComponent],
   templateUrl: './template-management.html',
   styleUrl: './template-management.scss'
 })

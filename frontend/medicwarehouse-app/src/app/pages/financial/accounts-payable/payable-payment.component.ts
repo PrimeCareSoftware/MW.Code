@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
 import { AccountsPayable } from '../../../models/financial.model';
 
 @Component({
   selector: 'app-payable-payment',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './payable-payment.component.html',
   styleUrl: './payable-payment.component.scss'
 })

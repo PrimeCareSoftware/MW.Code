@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TelemedicineService } from '../../../services/telemedicine.service';
 import { AppointmentService } from '../../../services/appointment';
 import { CreateSessionRequest } from '../../../models/telemedicine.model';
@@ -11,7 +10,7 @@ import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-session-form',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './session-form.html',
   styleUrl: './session-form.scss'
 })

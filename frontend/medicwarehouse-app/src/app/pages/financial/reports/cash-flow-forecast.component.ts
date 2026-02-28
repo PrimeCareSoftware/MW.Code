@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FinancialService } from '../../../services/financial.service';
 import { ClinicAdminService } from '../../../services/clinic-admin.service';
 import { CashFlowForecast } from '../../../models/financial.model';
@@ -11,7 +10,7 @@ import { MyClinicDto } from '../../../models/clinic-admin.model';
 @Component({
   selector: 'app-cash-flow-forecast',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './cash-flow-forecast.component.html',
   styleUrl: './cash-flow-forecast.component.scss'
 })

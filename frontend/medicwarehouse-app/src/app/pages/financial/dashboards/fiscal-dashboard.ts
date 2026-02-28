@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { Auth } from '../../../services/auth';
 import { environment } from '../../../../environments/environment';
 import { MOCK_FISCAL_DASHBOARD_DATA } from '../../../mocks/fiscal-dashboard.mock';
@@ -57,7 +56,7 @@ interface Alert {
 
 @Component({
   selector: 'app-fiscal-dashboard',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './fiscal-dashboard.html',
   styleUrl: './fiscal-dashboard.scss'
 })

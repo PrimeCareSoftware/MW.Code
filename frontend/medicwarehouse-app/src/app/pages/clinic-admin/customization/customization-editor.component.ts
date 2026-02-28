@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ClinicCustomizationService } from '../../../services/clinic-customization.service';
 import { ClinicCustomizationDto } from '../../../models/clinic-customization.model';
-import { Navbar } from '../../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-customization-editor',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './customization-editor.component.html',
   styleUrl: './customization-editor.component.scss'
 })

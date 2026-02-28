@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { ElectronicInvoiceService } from '../../../services/electronic-invoice.service';
 import { 
   ElectronicInvoiceListItem, 
@@ -10,7 +9,7 @@ import {
 
 @Component({
   selector: 'app-invoice-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.scss'
 })

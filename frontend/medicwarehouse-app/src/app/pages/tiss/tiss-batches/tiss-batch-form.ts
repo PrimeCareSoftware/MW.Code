@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TissBatchService } from '../../../services/tiss-batch.service';
 import { TissGuideService } from '../../../services/tiss-guide.service';
 import { HealthInsuranceOperatorService } from '../../../services/health-insurance-operator.service';
@@ -10,7 +9,7 @@ import { HealthInsuranceOperator, TissGuide } from '../../../models/tiss.model';
 
 @Component({
   selector: 'app-tiss-batch-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './tiss-batch-form.html',
   styleUrl: './tiss-batch-form.scss'
 })

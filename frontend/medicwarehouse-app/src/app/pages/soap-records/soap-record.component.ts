@@ -13,7 +13,6 @@ import { PlanFormComponent } from './components/plan-form/plan-form.component';
 import { SoapSummaryComponent } from './components/soap-summary/soap-summary.component';
 import { SoapRecordService } from './services/soap-record.service';
 import { SoapRecord } from './models/soap-record.model';
-import { Navbar } from '../../shared/navbar/navbar';
 import { HelpButtonComponent } from '../../shared/help-button/help-button';
 
 @Component({
@@ -32,11 +31,9 @@ import { HelpButtonComponent } from '../../shared/help-button/help-button';
     AssessmentFormComponent,
     PlanFormComponent,
     SoapSummaryComponent,
-    Navbar
   ],
   styleUrls: ['./soap-record.component.scss'],
   template: `
-    <app-navbar></app-navbar>
     
     <div class="soap-record-container">
       <div class="page-header">

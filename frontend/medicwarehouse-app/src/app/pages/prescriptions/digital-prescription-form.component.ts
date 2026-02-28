@@ -12,12 +12,11 @@ import {
   PrescriptionTypeInfo
 } from '../../models/prescriptions/digital-prescription.model';
 import { PrescriptionTypeSelectorComponent } from './prescription-type-selector.component';
-import { Navbar } from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-digital-prescription-form',
   standalone: true,
-  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, PrescriptionTypeSelectorComponent, Navbar],
+  imports: [HelpButtonComponent, CommonModule, ReactiveFormsModule, PrescriptionTypeSelectorComponent],
   templateUrl: './digital-prescription-form.component.html',
   styleUrl: './digital-prescription-form.component.scss'})
 export class DigitalPrescriptionFormComponent implements OnInit {

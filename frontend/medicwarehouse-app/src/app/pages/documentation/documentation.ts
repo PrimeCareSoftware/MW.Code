@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Navbar } from '../../shared/navbar/navbar';
 import { environment } from '../../../environments/environment';
 
 interface DocCategory {
@@ -21,7 +20,7 @@ interface DocItem {
 @Component({
   selector: 'app-documentation',
   standalone: true,
-  imports: [CommonModule, RouterModule, Navbar],
+  imports: [CommonModule, RouterModule],
   templateUrl: './documentation.html',
   styleUrl: './documentation.scss'
 })

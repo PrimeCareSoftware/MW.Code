@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AuthorizationRequestService } from '../../../services/authorization-request.service';
 import { PatientHealthInsuranceService } from '../../../services/patient-health-insurance.service';
 import { TussProcedureService } from '../../../services/tuss-procedure.service';
@@ -10,7 +9,7 @@ import { PatientHealthInsurance, TussProcedure } from '../../../models/tiss.mode
 
 @Component({
   selector: 'app-authorization-request-form',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, Navbar],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './authorization-request-form.html',
   styleUrl: './authorization-request-form.scss'
 })

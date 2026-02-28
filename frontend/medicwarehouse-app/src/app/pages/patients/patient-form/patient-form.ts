@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { PatientService } from '../../../services/patient';
 import { CepService } from '../../../services/cep.service';
 import { Auth } from '../../../services/auth';
@@ -17,7 +16,7 @@ import { AccessibleBreadcrumbsComponent, BreadcrumbItem } from '../../../shared/
 
 @Component({
   selector: 'app-patient-form',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, Navbar, CpfMaskDirective, PhoneMaskDirective, CepMaskDirective, AccessibleBreadcrumbsComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink, CpfMaskDirective, PhoneMaskDirective, CepMaskDirective, AccessibleBreadcrumbsComponent],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.scss'
 })

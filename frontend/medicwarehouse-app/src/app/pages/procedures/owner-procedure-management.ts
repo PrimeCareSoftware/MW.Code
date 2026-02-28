@@ -2,14 +2,13 @@ import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../shared/navbar/navbar';
 import { ProcedureService } from '../../services/procedure';
 import { Procedure, ProcedureCategory, ProcedureCategoryLabels } from '../../models/procedure.model';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-owner-procedure-management',
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './owner-procedure-management.html',
   styleUrl: './owner-procedure-management.scss'
 })

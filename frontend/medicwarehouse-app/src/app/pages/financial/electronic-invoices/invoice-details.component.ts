@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { ElectronicInvoiceService } from '../../../services/electronic-invoice.service';
 import { ElectronicInvoice } from '../../../models/electronic-invoice.model';
 
 @Component({
   selector: 'app-invoice-details',
-  imports: [CommonModule, RouterLink, Navbar, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './invoice-details.component.html',
   styleUrl: './invoice-details.component.scss'
 })

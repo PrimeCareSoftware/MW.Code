@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { 
   FiscalService, 
   ApuracaoImpostos, 
@@ -37,7 +36,7 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-tax-dashboard',
-  imports: [CommonModule, FormsModule, Navbar, NgApexchartsModule],
+  imports: [CommonModule, FormsModule, NgApexchartsModule],
   templateUrl: './tax-dashboard.html',
   styleUrl: './tax-dashboard.scss'
 })

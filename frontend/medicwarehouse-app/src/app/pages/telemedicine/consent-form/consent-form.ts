@@ -2,12 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TelemedicineComplianceService } from '../../../services/telemedicine-compliance.service';
 
 @Component({
   selector: 'app-consent-form',
-  imports: [CommonModule, ReactiveFormsModule, Navbar],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './consent-form.html',
   styleUrl: './consent-form.scss'
 })

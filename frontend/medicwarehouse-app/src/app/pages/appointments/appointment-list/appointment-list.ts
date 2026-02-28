@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { DailyAgenda } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
@@ -17,7 +16,7 @@ interface CalendarDay {
 
 @Component({
   selector: 'app-appointment-list',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './appointment-list.html',
   styleUrl: './appointment-list.scss'
 })

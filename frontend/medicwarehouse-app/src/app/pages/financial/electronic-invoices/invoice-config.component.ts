@@ -2,13 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { ElectronicInvoiceService } from '../../../services/electronic-invoice.service';
 import { InvoiceConfiguration } from '../../../models/electronic-invoice.model';
 
 @Component({
   selector: 'app-invoice-config',
-  imports: [CommonModule, RouterLink, Navbar, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule],
   templateUrl: './invoice-config.component.html',
   styleUrl: './invoice-config.component.scss'
 })

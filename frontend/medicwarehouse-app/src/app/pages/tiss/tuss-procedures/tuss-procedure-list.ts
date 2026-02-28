@@ -2,14 +2,13 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { TussProcedureService } from '../../../services/tuss-procedure.service';
 import { TussProcedure } from '../../../models/tiss.model';
 import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tuss-procedure-list',
-  imports: [CommonModule, RouterLink, FormsModule, Navbar],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './tuss-procedure-list.html',
   styleUrl: './tuss-procedure-list.scss'
 })

@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AppointmentService } from '../../../services/appointment';
 import { Appointment, Professional, BlockedTimeSlot, BlockedTimeSlotTypeLabels, RecurringDeleteScope, RecurringDeleteScopeLabels } from '../../../models/appointment.model';
 import { Auth } from '../../../services/auth';
@@ -42,7 +41,7 @@ interface CalendarSlot {
 @Component({
   selector: 'app-appointment-calendar',
   standalone: true,
-  imports: [CommonModule, RouterLink, Navbar, HelpButtonComponent],
+  imports: [CommonModule, RouterLink, HelpButtonComponent],
   templateUrl: './appointment-calendar.html',
   styleUrl: './appointment-calendar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

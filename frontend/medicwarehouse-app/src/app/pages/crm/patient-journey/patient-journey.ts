@@ -1,13 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
 import { PatientJourneyService } from '../../../services/crm';
 import { PatientJourney as PatientJourneyModel } from '../../../models/crm';
 
 @Component({
   selector: 'app-patient-journey',
-  imports: [CommonModule, Navbar, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './patient-journey.html',
   styleUrl: './patient-journey.scss'
 })

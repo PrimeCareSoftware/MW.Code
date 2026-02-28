@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { Navbar } from '../../../shared/navbar/navbar';
 import { AnamnesisService } from '../../../services/anamnesis.service';
 import { PatientService } from '../../../services/patient';
 import { AnamnesisResponse, SPECIALTY_NAMES } from '../../../models/anamnesis.model';
@@ -9,7 +8,7 @@ import { Patient } from '../../../models/patient.model';
 
 @Component({
   selector: 'app-anamnesis-history',
-  imports: [CommonModule, RouterLink, Navbar],
+  imports: [CommonModule, RouterLink],
   templateUrl: './history.html',
   styleUrl: './history.scss'
 })
