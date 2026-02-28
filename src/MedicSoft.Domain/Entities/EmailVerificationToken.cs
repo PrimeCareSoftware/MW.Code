@@ -18,9 +18,6 @@ namespace MedicSoft.Domain.Entities
         public int VerificationAttempts { get; private set; }
         public string IpAddress { get; private set; }
 
-        // Navigation property
-        public User? User { get; private set; }
-
         private EmailVerificationToken()
         {
             // EF Constructor

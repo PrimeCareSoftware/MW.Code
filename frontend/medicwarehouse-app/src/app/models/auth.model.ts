@@ -14,6 +14,13 @@ export interface AuthResponse {
   expiresAt: string;
   availableClinics?: UserClinicInfo[];
   currentClinicId?: string;
+  // Password change required
+  requiresPasswordChange?: boolean;
+  tempToken?: string;
+  // 2FA required
+  requiresTwoFactor?: boolean;
+  method?: string;
+  message?: string;
 }
 
 export interface UserClinicInfo {

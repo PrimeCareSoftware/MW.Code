@@ -29,6 +29,7 @@ namespace MedicSoft.Domain.Entities
         public bool IsEmailConfirmed { get; private set; }
         public string? EmailConfirmationToken { get; private set; }
         public DateTime? EmailConfirmationTokenExpiresAt { get; private set; }
+        public bool MustChangePassword { get; private set; } // Forces password change on next login
 
         // Navigation properties
         public Clinic? Clinic { get; private set; }
@@ -119,6 +120,13 @@ namespace MedicSoft.Domain.Entities
                 throw new ArgumentException("Password hash cannot be empty", nameof(newPasswordHash));
 
             PasswordHash = newPasswordHash;
+            MustChangePassword = false;
+            UpdateTimestamp();
+        }
+
+        public void SetMustChangePassword(bool value)
+        {
+            MustChangePassword = value;
             UpdateTimestamp();
         }
 

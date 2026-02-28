@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ namespace MedicSoft.Api.Controllers
         private readonly IClinicSelectionService _clinicSelectionService;
         private readonly ITwoFactorAuthService _twoFactorAuthService;
         private readonly IUserRepository _userRepository;
+        private readonly IOwnerRepository _ownerRepository;
         private readonly IConfiguration _configuration;
 
         public AuthController(
@@ -36,6 +38,7 @@ namespace MedicSoft.Api.Controllers
             IClinicSelectionService clinicSelectionService,
             ITwoFactorAuthService twoFactorAuthService,
             IUserRepository userRepository,
+            IOwnerRepository ownerRepository,
             IConfiguration configuration)
         {
             _authService = authService;
@@ -44,6 +47,7 @@ namespace MedicSoft.Api.Controllers
             _clinicSelectionService = clinicSelectionService;
             _twoFactorAuthService = twoFactorAuthService;
             _userRepository = userRepository;
+            _ownerRepository = ownerRepository;
             _configuration = configuration;
         }
 
@@ -101,6 +105,20 @@ namespace MedicSoft.Api.Controllers
 
                 _logger.LogInformation("User authenticated successfully: {UserId}, username: {Username}", 
                     user.Id, user.Username);
+
+                // Check if user must change their password before proceeding
+                if (user.MustChangePassword)
+                {
+                    _logger.LogInformation("User {UserId} must change password on next login", user.Id);
+                    var changePasswordTempToken = GeneratePasswordChangeTempToken(user.Id.ToString(), tenantId, "user");
+                    return Ok(new LoginResponse
+                    {
+                        RequiresPasswordChange = true,
+                        TempToken = changePasswordTempToken,
+                        Username = user.Username,
+                        TenantId = tenantId
+                    });
+                }
 
                 // Get available clinics for the user
                 var availableClinics = await _clinicSelectionService.GetUserClinicsAsync(user.Id, tenantId);
@@ -295,6 +313,61 @@ namespace MedicSoft.Api.Controllers
 
                 _logger.LogInformation("Owner authenticated successfully: {OwnerId}, username: {Username}", 
                     owner.Id, owner.Username);
+
+                // Check if owner must change their password before proceeding
+                if (owner.MustChangePassword)
+                {
+                    _logger.LogInformation("Owner {OwnerId} must change password on next login", owner.Id);
+                    var changePasswordTempToken = GeneratePasswordChangeTempToken(owner.Id.ToString(), tenantId, "owner");
+                    return Ok(new LoginResponse
+                    {
+                        RequiresPasswordChange = true,
+                        TempToken = changePasswordTempToken,
+                        Username = owner.Username,
+                        TenantId = tenantId
+                    });
+                }
+
+                // Check if owner has email 2FA enabled
+                var ownerMfaEnabled = await _twoFactorAuthService.IsTwoFactorEnabledAsync(owner.Id.ToString(), tenantId);
+                if (ownerMfaEnabled)
+                {
+                    var ownerMfaMethod = await _twoFactorAuthService.GetTwoFactorMethodAsync(owner.Id.ToString(), tenantId);
+                    if (ownerMfaMethod == MedicSoft.Domain.Enums.TwoFactorMethod.Email)
+                    {
+                        try
+                        {
+                            var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                            var tempToken = await _twoFactorAuthService.GenerateAndSendEmailCodeAsync(
+                                owner.Id.ToString(),
+                                owner.Email,
+                                ipAddress,
+                                "Login",
+                                tenantId
+                            );
+
+                            _logger.LogInformation("2FA email code sent to owner: {OwnerId}", owner.Id);
+
+                            return Ok(new TwoFactorRequiredResponse
+                            {
+                                RequiresTwoFactor = true,
+                                TempToken = tempToken,
+                                Method = "Email",
+                                Message = "Código de verificação enviado para seu e-mail"
+                            });
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            _logger.LogWarning(ex, "Rate limit exceeded for owner: {OwnerId}", owner.Id);
+                            return StatusCode(429, new { message = ex.Message });
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Failed to send 2FA code to owner: {OwnerId}", owner.Id);
+                            return StatusCode(500, new { message = "Erro ao enviar código de verificação. Por favor, tente novamente." });
+                        }
+                    }
+                }
 
                 // Record login and get session ID
                 string sessionId;
@@ -747,6 +820,302 @@ namespace MedicSoft.Api.Controllers
         }
 
         /// <summary>
+        /// Verify owner 2FA email code and complete login
+        /// </summary>
+        [HttpPost("owner-verify-2fa-email")]
+        public async Task<ActionResult<LoginResponse>> OwnerVerifyTwoFactorEmail([FromBody] VerifyTwoFactorEmailRequest request)
+        {
+            try
+            {
+                // Decode temp token to get ownerId and tokenId
+                var decodedBytes = Convert.FromBase64String(request.TempToken);
+                var decodedString = Encoding.UTF8.GetString(decodedBytes);
+                var parts = decodedString.Split(':');
+
+                if (parts.Length != 2)
+                {
+                    return BadRequest(new { message = "Token temporário inválido" });
+                }
+
+                var ownerId = parts[0];
+                var tokenId = parts[1];
+
+                // Get tenantId from context
+                var tenantId = HttpContext.Items["TenantId"] as string;
+                if (string.IsNullOrWhiteSpace(tenantId))
+                {
+                    return BadRequest(new { message = "Identificador da clínica não encontrado" });
+                }
+
+                // Verify the code
+                var isValid = await _twoFactorAuthService.VerifyEmailCodeAsync(ownerId, request.Code, tenantId);
+                if (!isValid)
+                {
+                    _logger.LogWarning("Failed 2FA email verification for owner: {OwnerId}", ownerId);
+                    return BadRequest(new { message = "Código inválido ou expirado" });
+                }
+
+                // Get owner
+                if (!Guid.TryParse(ownerId, out var ownerGuid))
+                {
+                    return BadRequest(new { message = "ID de proprietário inválido" });
+                }
+
+                var owner = await _ownerRepository.GetByIdAsync(ownerGuid, tenantId);
+                if (owner == null)
+                {
+                    return BadRequest(new { message = "Proprietário não encontrado" });
+                }
+
+                // Record login
+                var sessionId = await _authService.RecordOwnerLoginAsync(owner.Id, tenantId);
+
+                // Generate JWT token
+                var ownerRole = (owner.IsSystemOwner && !owner.ClinicId.HasValue) ? RoleNames.SystemAdmin : RoleNames.ClinicOwner;
+                var token = _jwtTokenService.GenerateToken(
+                    username: owner.Username,
+                    userId: owner.Id.ToString(),
+                    tenantId: tenantId,
+                    role: ownerRole,
+                    clinicId: owner.ClinicId?.ToString(),
+                    isSystemOwner: owner.IsSystemOwner,
+                    sessionId: sessionId,
+                    ownerId: owner.Id.ToString()
+                );
+
+                _logger.LogInformation("Owner {OwnerId} completed 2FA email verification and logged in successfully", owner.Id);
+
+                return Ok(new LoginResponse
+                {
+                    Token = token,
+                    Username = owner.Username,
+                    TenantId = tenantId,
+                    Role = ownerRole,
+                    ClinicId = owner.ClinicId,
+                    IsSystemOwner = owner.IsSystemOwner,
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(60),
+                    MfaEnabled = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error verifying owner 2FA email code");
+                return StatusCode(500, new { message = "Erro ao verificar código de verificação" });
+            }
+        }
+
+        /// <summary>
+        /// Resend owner 2FA email code
+        /// </summary>
+        [HttpPost("owner-resend-2fa-email")]
+        public async Task<ActionResult> OwnerResendTwoFactorEmail([FromBody] ResendTwoFactorEmailRequest request)
+        {
+            try
+            {
+                // Decode temp token to get ownerId
+                var decodedBytes = Convert.FromBase64String(request.TempToken);
+                var decodedString = Encoding.UTF8.GetString(decodedBytes);
+                var parts = decodedString.Split(':');
+
+                if (parts.Length != 2)
+                {
+                    return BadRequest(new { message = "Token temporário inválido" });
+                }
+
+                var ownerId = parts[0];
+
+                // Get tenantId from context
+                var tenantId = HttpContext.Items["TenantId"] as string;
+                if (string.IsNullOrWhiteSpace(tenantId))
+                {
+                    return BadRequest(new { message = "Identificador da clínica não encontrado" });
+                }
+
+                if (!Guid.TryParse(ownerId, out var ownerGuid))
+                {
+                    return BadRequest(new { message = "ID de proprietário inválido" });
+                }
+
+                var owner = await _ownerRepository.GetByIdAsync(ownerGuid, tenantId);
+                if (owner == null)
+                {
+                    return BadRequest(new { message = "Proprietário não encontrado" });
+                }
+
+                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                var newTempToken = await _twoFactorAuthService.GenerateAndSendEmailCodeAsync(
+                    ownerId,
+                    owner.Email,
+                    ipAddress,
+                    "Login",
+                    tenantId
+                );
+
+                _logger.LogInformation("2FA email code resent to owner: {OwnerId}", ownerId);
+
+                return Ok(new {
+                    message = "Código reenviado com sucesso",
+                    tempToken = newTempToken
+                });
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Rate limit exceeded when resending owner 2FA code");
+                return StatusCode(429, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resending owner 2FA email code");
+                return StatusCode(500, new { message = "Erro ao reenviar código de verificação" });
+            }
+        }
+
+        /// <summary>
+        /// Complete the required password change during first login
+        /// </summary>
+        [HttpPost("complete-password-change")]
+        public async Task<ActionResult<LoginResponse>> CompletePasswordChange([FromBody] CompletePasswordChangeRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.TempToken) ||
+                    string.IsNullOrWhiteSpace(request.NewPassword) ||
+                    string.IsNullOrWhiteSpace(request.ConfirmPassword))
+                {
+                    return BadRequest(new { message = "Todos os campos são obrigatórios." });
+                }
+
+                if (request.NewPassword != request.ConfirmPassword)
+                {
+                    return BadRequest(new { message = "As senhas não conferem." });
+                }
+
+                if (request.NewPassword.Length < 8)
+                {
+                    return BadRequest(new { message = "A senha deve ter pelo menos 8 caracteres." });
+                }
+
+                // Validate temp token using HMAC-signed token
+                var (entityId, tenantId, entityType, tokenIsValid) = ValidatePasswordChangeTempToken(request.TempToken);
+                if (!tokenIsValid)
+                {
+                    return BadRequest(new { message = "Token temporário inválido ou expirado." });
+                }
+
+                if (!Guid.TryParse(entityId, out var entityGuid))
+                {
+                    return BadRequest(new { message = "Token temporário inválido." });
+                }
+
+                if (entityType == "user")
+                {
+                    var user = await _userRepository.GetByIdAsync(entityGuid, tenantId);
+                    if (user == null || !user.MustChangePassword)
+                    {
+                        return BadRequest(new { message = "Solicitação de troca de senha inválida." });
+                    }
+
+                    var changed = await _authService.ChangeUserPasswordAsync(entityGuid, request.NewPassword, tenantId);
+                    if (!changed)
+                    {
+                        return StatusCode(500, new { message = "Erro ao alterar a senha." });
+                    }
+
+                    // Reload user after password change
+                    user = await _userRepository.GetByIdAsync(entityGuid, tenantId);
+                    if (user == null)
+                        return StatusCode(500, new { message = "Erro ao processar login." });
+
+                    // Get available clinics
+                    var availableClinics = await _clinicSelectionService.GetUserClinicsAsync(user.Id, tenantId);
+                    var clinicList = availableClinics.ToList();
+
+                    // Record login
+                    var sessionId = await _authService.RecordUserLoginAsync(user.Id, tenantId);
+
+                    var token = _jwtTokenService.GenerateToken(
+                        username: user.Username,
+                        userId: user.Id.ToString(),
+                        tenantId: tenantId,
+                        role: user.Role.ToString(),
+                        clinicId: user.ClinicId?.ToString(),
+                        sessionId: sessionId
+                    );
+
+                    _logger.LogInformation("User {UserId} completed required password change", user.Id);
+
+                    return Ok(new LoginResponse
+                    {
+                        Token = token,
+                        Username = user.Username,
+                        TenantId = tenantId,
+                        Role = user.Role.ToString(),
+                        ClinicId = user.ClinicId,
+                        CurrentClinicId = user.CurrentClinicId ?? user.ClinicId,
+                        AvailableClinics = clinicList,
+                        ExpiresAt = DateTime.UtcNow.AddMinutes(60)
+                    });
+                }
+                else if (entityType == "owner")
+                {
+                    var owner = await _ownerRepository.GetByIdAsync(entityGuid, tenantId);
+                    if (owner == null || !owner.MustChangePassword)
+                    {
+                        return BadRequest(new { message = "Solicitação de troca de senha inválida." });
+                    }
+
+                    var changed = await _authService.ChangeOwnerPasswordAsync(entityGuid, request.NewPassword, tenantId);
+                    if (!changed)
+                    {
+                        return StatusCode(500, new { message = "Erro ao alterar a senha." });
+                    }
+
+                    // Reload owner after password change
+                    owner = await _ownerRepository.GetByIdAsync(entityGuid, tenantId);
+                    if (owner == null)
+                        return StatusCode(500, new { message = "Erro ao processar login." });
+
+                    // Record login
+                    var sessionId = await _authService.RecordOwnerLoginAsync(owner.Id, tenantId);
+
+                    var ownerRole = (owner.IsSystemOwner && !owner.ClinicId.HasValue) ? RoleNames.SystemAdmin : RoleNames.ClinicOwner;
+                    var token = _jwtTokenService.GenerateToken(
+                        username: owner.Username,
+                        userId: owner.Id.ToString(),
+                        tenantId: tenantId,
+                        role: ownerRole,
+                        clinicId: owner.ClinicId?.ToString(),
+                        isSystemOwner: owner.IsSystemOwner,
+                        sessionId: sessionId,
+                        ownerId: owner.Id.ToString()
+                    );
+
+                    _logger.LogInformation("Owner {OwnerId} completed required password change", owner.Id);
+
+                    return Ok(new LoginResponse
+                    {
+                        Token = token,
+                        Username = owner.Username,
+                        TenantId = tenantId,
+                        Role = ownerRole,
+                        ClinicId = owner.ClinicId,
+                        IsSystemOwner = owner.IsSystemOwner,
+                        ExpiresAt = DateTime.UtcNow.AddMinutes(60)
+                    });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Token temporário inválido." });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error completing required password change");
+                return StatusCode(500, new { message = "Erro ao alterar a senha. Por favor, tente novamente." });
+            }
+        }
+
+        /// <summary>
         /// Register the first system owner (organization owner) - PRODUCTION ONLY
         /// This endpoint is secured with a special registration token that must be set in environment variables.
         /// Use this endpoint once to create the initial system administrator account.
@@ -822,6 +1191,64 @@ namespace MedicSoft.Api.Controllers
                 return StatusCode(500, new { message = "Erro ao criar administrador do sistema. Por favor, tente novamente." });
             }
         }
+
+        private string GeneratePasswordChangeTempToken(string entityId, string tenantId, string entityType)
+        {
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT SecretKey not configured");
+            var expiryUnixTs = DateTimeOffset.UtcNow.AddMinutes(15).ToUnixTimeSeconds();
+            var payload = $"{entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}";
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
+            var signature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(payload)));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes($"{payload}:{signature}"));
+        }
+
+        private (string entityId, string tenantId, string entityType, bool isValid) ValidatePasswordChangeTempToken(string tempToken)
+        {
+            try
+            {
+                var secretKey = _configuration["JwtSettings:SecretKey"];
+                if (string.IsNullOrWhiteSpace(secretKey))
+                    return (string.Empty, string.Empty, string.Empty, false);
+                var decodedBytes = Convert.FromBase64String(tempToken);
+                var decodedString = Encoding.UTF8.GetString(decodedBytes);
+                // Format: {entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}:{signature}
+                var lastColon = decodedString.LastIndexOf(':');
+                if (lastColon < 0) return (string.Empty, string.Empty, string.Empty, false);
+
+                var signature = decodedString[(lastColon + 1)..];
+                var payload = decodedString[..lastColon];
+
+                // Verify HMAC signature
+                using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKey));
+                var expectedSignature = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(payload)));
+                if (!CryptographicOperations.FixedTimeEquals(
+                        Encoding.UTF8.GetBytes(signature),
+                        Encoding.UTF8.GetBytes(expectedSignature)))
+                {
+                    return (string.Empty, string.Empty, string.Empty, false);
+                }
+
+                // Parse payload parts: {entityId}:{tenantId}:{entityType}:password_change:{expiryUnixTs}
+                var parts = payload.Split(':');
+                if (parts.Length != 5 || parts[3] != "password_change")
+                    return (string.Empty, string.Empty, string.Empty, false);
+
+                // Validate expiry
+                if (!long.TryParse(parts[4], out var expiryUnixTs))
+                    return (string.Empty, string.Empty, string.Empty, false);
+
+                if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() > expiryUnixTs)
+                    return (string.Empty, string.Empty, string.Empty, false);
+
+                return (parts[0], parts[1], parts[2], true);
+            }
+            catch
+            {
+                return (string.Empty, string.Empty, string.Empty, false);
+            }
+        }
     }
 
     public class LoginRequest
@@ -847,6 +1274,10 @@ namespace MedicSoft.Api.Controllers
         public bool MfaEnabled { get; set; }
         public bool RequiresMfaSetup { get; set; }
         public DateTime? MfaGracePeriodEndsAt { get; set; }
+        
+        // Password change required
+        public bool RequiresPasswordChange { get; set; }
+        public string? TempToken { get; set; }
     }
 
     public class TokenValidationRequest
@@ -901,5 +1332,12 @@ namespace MedicSoft.Api.Controllers
         public string FullName { get; set; } = string.Empty;
         public string? Phone { get; set; }
         public string TenantId { get; set; } = string.Empty;
+    }
+
+    public class CompletePasswordChangeRequest
+    {
+        public string TempToken { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+        public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

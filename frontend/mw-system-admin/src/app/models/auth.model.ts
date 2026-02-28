@@ -12,6 +12,13 @@ export interface AuthResponse {
   role?: string;
   isSystemOwner?: boolean;
   expiresAt: string;
+  // Password change required
+  requiresPasswordChange?: boolean;
+  tempToken?: string;
+  // 2FA required
+  requiresTwoFactor?: boolean;
+  method?: string;
+  message?: string;
 }
 
 export interface SessionValidationRequest {

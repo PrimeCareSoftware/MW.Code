@@ -30,6 +30,7 @@ namespace MedicSoft.Domain.Entities
         public DateTime? FirstLoginAt { get; private set; } // Track first login to calculate grace period
         public bool ShowInAppointmentScheduling { get; private set; } // Whether this user should appear in appointment scheduling dropdowns
         public string? CalendarColor { get; private set; } // Hex color for calendar display (e.g., "#4CAF50")
+        public bool MustChangePassword { get; private set; } // Forces password change on next login
 
         // Navigation properties
         public Clinic? Clinic { get; private set; } // Deprecated navigation
@@ -129,6 +130,13 @@ namespace MedicSoft.Domain.Entities
                 throw new ArgumentException("Password hash cannot be empty", nameof(newPasswordHash));
 
             PasswordHash = newPasswordHash;
+            MustChangePassword = false;
+            UpdateTimestamp();
+        }
+
+        public void SetMustChangePassword(bool value)
+        {
+            MustChangePassword = value;
             UpdateTimestamp();
         }
 

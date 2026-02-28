@@ -53,13 +53,6 @@ namespace MedicSoft.Repository.Configurations
 
             builder.HasIndex(e => new { e.TenantId, e.ExpiresAt })
                 .HasDatabaseName("IX_EmailVerificationTokens_TenantId_ExpiresAt");
-
-            // Navigation
-            builder.HasOne(e => e.User)
-                .WithMany()
-                .HasForeignKey(e => e.UserId)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

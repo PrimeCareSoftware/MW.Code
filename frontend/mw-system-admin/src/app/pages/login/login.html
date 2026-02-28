@@ -25,64 +25,176 @@
       </div>
     }
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="username">Usuário</label>
-        <input 
-          type="text" 
-          id="username" 
-          formControlName="username"
-          class="form-control"
-          placeholder="Digite seu usuário"
-          [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
-        />
-        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
-          <span class="error-message">Usuário é obrigatório</span>
-        }
-      </div>
+    <!-- Step 1: Credentials -->
+    @if (step() === 'credentials') {
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Usuário</label>
+          <input 
+            type="text" 
+            id="username" 
+            formControlName="username"
+            class="form-control"
+            placeholder="Digite seu usuário"
+            [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+          />
+          @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+            <span class="error-message">Usuário é obrigatório</span>
+          }
+        </div>
 
-      <div class="form-group">
-        <label for="tenantId">Tenant ID</label>
-        <input 
-          type="text" 
-          id="tenantId" 
-          formControlName="tenantId"
-          class="form-control"
-          placeholder="Tenant ID (padrão: system)"
-          [class.error]="loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched"
-        />
-        @if (loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched) {
-          <span class="error-message">Tenant ID é obrigatório</span>
-        }
-      </div>
+        <div class="form-group">
+          <label for="tenantId">Tenant ID</label>
+          <input 
+            type="text" 
+            id="tenantId" 
+            formControlName="tenantId"
+            class="form-control"
+            placeholder="Tenant ID (padrão: system)"
+            [class.error]="loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched"
+          />
+          @if (loginForm.get('tenantId')?.invalid && loginForm.get('tenantId')?.touched) {
+            <span class="error-message">Tenant ID é obrigatório</span>
+          }
+        </div>
 
-      <div class="form-group">
-        <label for="password">Senha</label>
-        <input 
-          type="password" 
-          id="password" 
-          formControlName="password"
-          class="form-control"
-          placeholder="Digite sua senha"
-          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        />
-        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-          <span class="error-message">Senha é obrigatória</span>
-        }
-      </div>
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password"
+            class="form-control"
+            placeholder="Digite sua senha"
+            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          />
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <span class="error-message">Senha é obrigatória</span>
+          }
+        </div>
 
-      <button 
-        type="submit" 
-        class="btn btn-primary"
-        [disabled]="loginForm.invalid || loading()"
-      >
-        @if (loading()) {
-          <span>Entrando...</span>
-        } @else {
-          <span>Entrar</span>
-        }
-      </button>
-    </form>
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="loginForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span>Entrando...</span>
+          } @else {
+            <span>Entrar</span>
+          }
+        </button>
+      </form>
+    }
+
+    <!-- Step 2: 2FA Verification -->
+    @if (step() === 'twoFactor') {
+      <form [formGroup]="twoFactorForm" (ngSubmit)="onVerify2fa()">
+        <div class="step-info">
+          <p>Um código de verificação foi enviado para seu e-mail. Digite o código abaixo para continuar.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="code">Código de Verificação</label>
+          <input 
+            type="text" 
+            id="code" 
+            formControlName="code"
+            class="form-control"
+            placeholder="Digite o código de 6 dígitos"
+            maxlength="6"
+            autocomplete="one-time-code"
+            [class.error]="twoFactorForm.get('code')?.invalid && twoFactorForm.get('code')?.touched"
+          />
+          @if (twoFactorForm.get('code')?.invalid && twoFactorForm.get('code')?.touched) {
+            <span class="error-message">Código inválido</span>
+          }
+        </div>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="twoFactorForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span>Verificando...</span>
+          } @else {
+            <span>Verificar</span>
+          }
+        </button>
+
+        <div class="secondary-actions">
+          <button type="button" class="btn btn-link" (click)="onResend2fa()" [disabled]="loading()">
+            Reenviar código
+          </button>
+          <button type="button" class="btn btn-link" (click)="backToLogin()">
+            Voltar ao login
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- Step 3: Change Password -->
+    @if (step() === 'changePassword') {
+      <form [formGroup]="changePasswordForm" (ngSubmit)="onChangePassword()">
+        <div class="step-info">
+          <p>Por segurança, você precisa definir uma nova senha antes de continuar.</p>
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">Nova Senha</label>
+          <input 
+            type="password" 
+            id="newPassword" 
+            formControlName="newPassword"
+            class="form-control"
+            placeholder="Mínimo 8 caracteres"
+            autocomplete="new-password"
+            [class.error]="changePasswordForm.get('newPassword')?.invalid && changePasswordForm.get('newPassword')?.touched"
+          />
+          @if (changePasswordForm.get('newPassword')?.errors?.['minlength'] && changePasswordForm.get('newPassword')?.touched) {
+            <span class="error-message">A senha deve ter pelo menos 8 caracteres</span>
+          }
+          @if (changePasswordForm.get('newPassword')?.errors?.['required'] && changePasswordForm.get('newPassword')?.touched) {
+            <span class="error-message">Nova senha é obrigatória</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Nova Senha</label>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            formControlName="confirmPassword"
+            class="form-control"
+            placeholder="Repita a nova senha"
+            autocomplete="new-password"
+            [class.error]="changePasswordForm.get('confirmPassword')?.invalid && changePasswordForm.get('confirmPassword')?.touched"
+          />
+          @if (changePasswordForm.get('confirmPassword')?.invalid && changePasswordForm.get('confirmPassword')?.touched) {
+            <span class="error-message">Confirmação de senha é obrigatória</span>
+          }
+        </div>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="changePasswordForm.invalid || loading()"
+        >
+          @if (loading()) {
+            <span>Alterando senha...</span>
+          } @else {
+            <span>Alterar Senha e Entrar</span>
+          }
+        </button>
+
+        <div class="secondary-actions">
+          <button type="button" class="btn btn-link" (click)="backToLogin()">
+            Voltar ao login
+          </button>
+        </div>
+      </form>
+    }
 
     <div class="login-footer">
       <p>Área restrita para administradores do sistema</p>
