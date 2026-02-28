@@ -135,8 +135,8 @@ namespace MedicSoft.Domain.Entities
             if (Status == AppointmentStatus.Completed || Status == AppointmentStatus.Cancelled)
                 throw new InvalidOperationException("Não é possível reagendar consultas concluídas ou canceladas");
 
-            if (newDate < DateTime.Today)
-                throw new ArgumentException("A nova data não pode estar no passado", nameof(newDate));
+            if (newDate < DateTime.UtcNow.Date)
+                throw new InvalidOperationException("A nova data não pode estar no passado");
 
             ScheduledDate = newDate;
             ScheduledTime = newTime;
