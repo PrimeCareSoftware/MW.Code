@@ -13,5 +13,8 @@ namespace MedicSoft.Domain.Entities
         public DateTime GrantedAt { get; set; }
         public Guid GrantedBy { get; set; }
         public virtual User GrantedByUser { get; set; }
+        
+        public string TenantId { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

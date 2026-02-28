@@ -263,6 +263,7 @@ namespace MedicSoft.Repository.Context
             modelBuilder.ApplyConfiguration(new NotificationRoutineConfiguration());
             modelBuilder.ApplyConfiguration(new SubscriptionPlanConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicSubscriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new SubscriptionCreditConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new UserClinicLinkConfiguration());
             modelBuilder.ApplyConfiguration(new OwnerConfiguration());

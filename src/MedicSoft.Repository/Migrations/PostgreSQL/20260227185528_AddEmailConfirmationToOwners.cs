@@ -1052,13 +1052,25 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp with time zone",
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GrantedAt",
-                table: "SubscriptionCredits",
-                type: "timestamp without time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp with time zone");
+            // Use conditional SQL to alter SubscriptionCredits columns since table may not exist in all databases
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SubscriptionCredits' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionCredits' 
+                        AND column_name = 'GrantedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp with time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp without time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
@@ -5778,13 +5790,25 @@ namespace MedicSoft.Repository.Migrations.PostgreSQL
                 oldType: "timestamp without time zone",
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "GrantedAt",
-                table: "SubscriptionCredits",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "timestamp without time zone");
+            // Use conditional SQL to alter SubscriptionCredits columns since table may not exist in all databases
+            migrationBuilder.Sql(@"
+                DO $$
+                BEGIN
+                    IF EXISTS (
+                        SELECT 1 FROM information_schema.tables 
+                        WHERE table_name = 'SubscriptionCredits' 
+                        AND table_schema = 'public'
+                    ) AND EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name = 'SubscriptionCredits' 
+                        AND column_name = 'GrantedAt'
+                        AND table_schema = 'public'
+                        AND data_type = 'timestamp without time zone'
+                    ) THEN
+                        ALTER TABLE ""SubscriptionCredits"" ALTER COLUMN ""GrantedAt"" TYPE timestamp with time zone;
+                    END IF;
+                END $$;
+            ");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",

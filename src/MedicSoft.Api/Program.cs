@@ -144,9 +144,9 @@ builder.Services.AddSwaggerGen(c =>
 
     // Include XML comments with error handling (optional - can be disabled in development for faster startup)
     // XML comments add ~355KB but improve documentation. Disable with setting "SwaggerSettings:IncludeXmlComments": false
-    var includeXmlComments = builder.Configuration.GetValue<bool?>("SwaggerSettings:IncludeXmlComments") 
+    var includeXmlComments = builder.Configuration.GetValue<bool?>("SwaggerSettings:IncludeXmlComments")
         ?? builder.Environment.IsProduction(); // Default: include in Production, skip in Development for speed
-    
+
     if (includeXmlComments)
     {
         try
@@ -248,13 +248,13 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
                     errorCodesToAdd: null);
                 npgsqlOptions.CommandTimeout(60);
             });
-            
+
             // Enable sensitive data logging and detailed errors in development
             if (builder.Environment.IsDevelopment())
             {
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
-                
+
                 // Log SQL queries with execution time
                 options.LogTo(
                     message => Log.Debug("Database: {Message}", message),
@@ -273,12 +273,12 @@ builder.Services.AddDbContext<MedicSoftDbContext>((serviceProvider, options) =>
                     errorNumbersToAdd: null);
                 sqlOptions.CommandTimeout(60);
             });
-            
+
             if (builder.Environment.IsDevelopment())
             {
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
-                
+
                 // Log SQL queries with execution time
                 options.LogTo(
                     message => Log.Debug("Database: {Message}", message),
@@ -314,7 +314,7 @@ builder.Services.AddAuthentication(options =>
         RequireExpirationTime = true,
         ClockSkew = TimeSpan.FromMinutes(5) // Allow 5 minutes tolerance for time sync issues
     };
-    
+
     // Configure JWT for SignalR
     options.Events = new JwtBearerEvents
     {
@@ -322,12 +322,12 @@ builder.Services.AddAuthentication(options =>
         {
             var accessToken = context.Request.Query["access_token"];
             var path = context.HttpContext.Request.Path;
-            
+
             if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
             {
                 context.Token = accessToken;
             }
-            
+
             return Task.CompletedTask;
         }
     };
@@ -381,7 +381,7 @@ if (string.IsNullOrEmpty(encryptionKey))
 }
 else
 {
-    builder.Services.AddSingleton<IDataEncryptionService>(sp => 
+    builder.Services.AddSingleton<IDataEncryptionService>(sp =>
         new DataEncryptionService(encryptionKey));
     Log.Information("Data encryption service configured for medical data protection (LGPD)");
 }
@@ -765,7 +765,7 @@ builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UsePostgreSqlStorage(options => 
+    .UsePostgreSqlStorage(options =>
         options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
 // Add Hangfire server
@@ -779,7 +779,7 @@ builder.Services.AddHangfireServer(options =>
 builder.Services.AddMedicSoftCrossCutting();
 
 // Configure CORS with secure settings
-var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? new[] { "http://localhost:4200" };
 
 builder.Services.AddCors(options =>
@@ -807,7 +807,7 @@ _ = Task.Run(async () =>
     try
     {
         await Task.Delay(100); // Brief delay to allow app to be fully initialized
-        
+
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
         var dbConnectionString = app.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
@@ -865,6 +865,30 @@ _ = Task.Run(async () =>
                 "CONSTRAINT \"PK_DashboardWidgets\" PRIMARY KEY (\"Id\"), " +
                 "CONSTRAINT \"FK_DashboardWidgets_CustomDashboards_DashboardId\" FOREIGN KEY (\"DashboardId\") REFERENCES \"CustomDashboards\" (\"Id\") ON DELETE CASCADE" +
                 ");");
+
+            // Defensive: ensure SubscriptionCredits exists BEFORE running migrations to avoid ALTER failures
+            try
+            {
+                dbContext.Database.ExecuteSqlRaw(
+                    "CREATE TABLE IF NOT EXISTS \"SubscriptionCredits\" (" +
+                    "\"Id\" serial PRIMARY KEY, " +
+                    "\"SubscriptionId\" uuid NOT NULL, " +
+                    "\"Days\" integer NOT NULL, " +
+                    "\"Reason\" text NULL, " +
+                    "\"GrantedAt\" timestamp with time zone NOT NULL, " +
+                    "\"GrantedBy\" uuid NOT NULL, " +
+                    "\"TenantId\" text NOT NULL DEFAULT '', " +
+                    "\"CreatedAt\" timestamp with time zone NOT NULL DEFAULT now()" +
+                    ");");
+
+                dbContext.Database.ExecuteSqlRaw(
+                    "CREATE INDEX IF NOT EXISTS \"IX_SubscriptionCredits_SubscriptionId\" ON \"SubscriptionCredits\" (\"SubscriptionId\");");
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Defensive attempt to create SubscriptionCredits table failed (pre-migrate): {Message}", ex.Message);
+            }
+
         }
         dbContext.Database.Migrate();
 
@@ -890,49 +914,37 @@ _ = Task.Run(async () =>
                 "CONSTRAINT \"PK_SystemNotifications\" PRIMARY KEY (\"Id\")" +
                 ");");
 
-            dbContext.Database.ExecuteSqlRaw(
-                "CREATE TABLE IF NOT EXISTS \"NotificationRules\" (" +
-                "\"Id\" uuid NOT NULL, " +
-                "\"Trigger\" text NOT NULL, " +
-                "\"IsEnabled\" boolean NOT NULL DEFAULT true, " +
-                "\"Conditions\" text NULL, " +
-                "\"Actions\" text NULL, " +
-                "\"TenantId\" text NOT NULL DEFAULT '', " +
-                "\"CreatedAt\" timestamp without time zone NOT NULL, " +
-                "\"UpdatedAt\" timestamp without time zone NULL, " +
-                "CONSTRAINT \"PK_NotificationRules\" PRIMARY KEY (\"Id\")" +
-                ");");
+            // Defensive: ensure SubscriptionCredits exists (some environments may have partial migrations)
+            try
+            {
+                dbContext.Database.ExecuteSqlRaw(
+                    "CREATE TABLE IF NOT EXISTS \"SubscriptionCredits\" (" +
+                    "\"Id\" serial PRIMARY KEY, " +
+                    "\"SubscriptionId\" uuid NOT NULL, " +
+                    "\"Days\" integer NOT NULL, " +
+                    "\"Reason\" text NULL, " +
+                    "\"GrantedAt\" timestamp with time zone NOT NULL, " +
+                    "\"GrantedBy\" uuid NOT NULL, " +
+                    "\"TenantId\" text NOT NULL DEFAULT '', " +
+                    "\"CreatedAt\" timestamp with time zone NOT NULL DEFAULT now()" +
+                    ");");
 
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"Users\" ADD COLUMN IF NOT EXISTS \"ProfessionalSpecialty\" integer NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "CREATE INDEX IF NOT EXISTS \"IX_Users_ProfessionalSpecialty\" ON \"Users\" (\"ProfessionalSpecialty\");");
+                dbContext.Database.ExecuteSqlRaw(
+                    "CREATE INDEX IF NOT EXISTS \"IX_SubscriptionCredits_SubscriptionId\" ON \"SubscriptionCredits\" (\"SubscriptionId\");");
+            }
+            catch (Exception ex)
+            {
+                // Log and continue; this is a best-effort defensive change and should not block startup
+                Log.Warning(ex, "Defensive attempt to create SubscriptionCredits table failed: {Message}", ex.Message);
+            }
 
+            // Defensive: ensure HealthInsurancePlans.PatientId is nullable to allow insertion of operator-level plans
             dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "CREATE INDEX IF NOT EXISTS \"ix_documenttemplates_globaltemplateid\" ON \"DocumentTemplates\" (\"GlobalTemplateId\");");
-
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"EffectiveEndDate\" timestamp with time zone NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"ParentPatternId\" uuid NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"RecurringAppointmentPatterns\" ADD COLUMN IF NOT EXISTS \"IsActive\" boolean NOT NULL DEFAULT true;");
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"RecurringAppointmentPatterns\" ALTER COLUMN \"IsActive\" SET DEFAULT true;");
-            dbContext.Database.ExecuteSqlRaw(
-                "UPDATE \"RecurringAppointmentPatterns\" SET \"IsActive\" = true WHERE \"IsActive\" IS NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"RecurringSeriesId\" uuid NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"OriginalOccurrenceDate\" timestamp with time zone NULL;");
-            dbContext.Database.ExecuteSqlRaw(
-                "ALTER TABLE \"BlockedTimeSlots\" ADD COLUMN IF NOT EXISTS \"IsException\" boolean NOT NULL DEFAULT false;");
+                "ALTER TABLE \"HealthInsurancePlans\" ALTER COLUMN \"PatientId\" DROP NOT NULL;");
         }
 
         Log.Information("Database migrations applied successfully");
-        
+
         // Defensive repair for partial migrations (runs after migrations if they were applied)
         if (enableDefensiveRepair && applyMigrations)
         {
@@ -944,7 +956,7 @@ _ = Task.Run(async () =>
         Log.Fatal(ex, "Failed to apply database migrations");
         // Don't throw - let the app start anyway, defensive repair may fix it
     }
-    
+
     // If migrations were not applied but defensive repair is enabled, apply it
     if (!applyMigrations && enableDefensiveRepair)
     {
@@ -1009,7 +1021,7 @@ async Task ApplyDefensiveRepairAsync(MedicSoftDbContext dbContext, string dbConn
             "ALTER TABLE \"DocumentTemplates\" ADD COLUMN IF NOT EXISTS \"GlobalTemplateId\" uuid NULL;");
         dbContext.Database.ExecuteSqlRaw(
             "CREATE INDEX IF NOT EXISTS \"ix_documenttemplates_globaltemplateid\" ON \"DocumentTemplates\" (\"GlobalTemplateId\");");
-            
+
         Log.Information("Defensive database repair completed");
     }
 }
@@ -1018,7 +1030,7 @@ async Task ApplyDefensiveRepairAsync(MedicSoftDbContext dbContext, string dbConn
 // Enable Swagger - configurable via SwaggerSettings:Enabled (default: true in Development, false in Production)
 // Swagger is placed early in the pipeline to bypass authentication/authorization
 // This ensures the swagger.json endpoint is accessible without authentication
-var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled") 
+var enableSwagger = builder.Configuration.GetValue<bool?>("SwaggerSettings:Enabled")
     ?? app.Environment.IsDevelopment(); // Default to true in Development, false otherwise
 
 if (enableSwagger)
@@ -1148,17 +1160,32 @@ using (var scope = app.Services.CreateScope())
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<MedicSoftDbContext>();
-    
+    var migrationLockAcquired = false;
+    var migrationConnectionOpened = false;
+    const int migrationLockKeyPart1 = 19770321;
+    const int migrationLockKeyPart2 = 20260227;
+
     try
     {
+        // Prevent concurrent migrations across multiple application instances
+        if (context.Database.ProviderName?.Contains("Npgsql", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            await context.Database.OpenConnectionAsync();
+            migrationConnectionOpened = true;
+            Log.Information("Adquirindo lock de migração PostgreSQL para evitar execução concorrente...");
+            context.Database.ExecuteSqlRaw($"SELECT pg_advisory_lock({migrationLockKeyPart1}, {migrationLockKeyPart2});");
+            migrationLockAcquired = true;
+            Log.Information("Lock de migração PostgreSQL adquirido com sucesso");
+        }
+
         // Check for pending migrations before applying
         var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
         if (pendingMigrations.Any())
         {
-            Log.Warning("Existem {Count} migrações pendentes que serão aplicadas: {Migrations}", 
-                pendingMigrations.Count(), 
+            Log.Warning("Existem {Count} migrações pendentes que serão aplicadas: {Migrations}",
+                pendingMigrations.Count(),
                 string.Join(", ", pendingMigrations));
-            
+
             Log.Information("Aplicando {Count} migrações pendentes...", pendingMigrations.Count());
             context.Database.Migrate();
             Log.Information("Migrações do banco de dados aplicadas com sucesso");
@@ -1168,7 +1195,7 @@ using (var scope = app.Services.CreateScope())
             Log.Information("Nenhuma migração pendente encontrada. Verificando estado do banco...");
             context.Database.Migrate(); // Ensure we're at the latest version
         }
-        
+
         // Verify critical CRM tables exist to prevent runtime errors
         Log.Information("Verificando existência de tabelas críticas do CRM...");
         var canConnect = await context.Database.CanConnectAsync();
@@ -1186,7 +1213,7 @@ using (var scope = app.Services.CreateScope())
         var tableName = pgEx.TableName ?? "desconhecida";
         Log.Fatal(pgEx, "ERRO CRÍTICO: Tabela '{TableName}' não existe no banco de dados. " +
             "Isso indica que as migrações não foram aplicadas corretamente.", tableName);
-        
+
         Console.WriteLine("════════════════════════════════════════════════════════════");
         Console.WriteLine($"❌ ERRO: Tabela '{tableName}' não encontrada no banco de dados");
         Console.WriteLine("════════════════════════════════════════════════════════════");
@@ -1209,7 +1236,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine();
         Console.WriteLine("Para mais informações, consulte: TROUBLESHOOTING_MIGRATIONS.md");
         Console.WriteLine();
-        
+
         throw; // Halt application startup
     }
     catch (Npgsql.PostgresException pgEx)
@@ -1238,13 +1265,40 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("4. Execute: dotnet ef database update --project src/MedicSoft.Api");
         throw; // Halt application startup if migrations fail
     }
+    finally
+    {
+        if (migrationLockAcquired)
+        {
+            try
+            {
+                context.Database.ExecuteSqlRaw($"SELECT pg_advisory_unlock({migrationLockKeyPart1}, {migrationLockKeyPart2});");
+                Log.Information("Lock de migração PostgreSQL liberado");
+            }
+            catch (Exception unlockEx)
+            {
+                Log.Warning(unlockEx, "Falha ao liberar lock de migração PostgreSQL: {Message}", unlockEx.Message);
+            }
+        }
+
+        if (migrationConnectionOpened)
+        {
+            try
+            {
+                await context.Database.CloseConnectionAsync();
+            }
+            catch (Exception closeEx)
+            {
+                Log.Warning(closeEx, "Falha ao fechar conexão de migração PostgreSQL: {Message}", closeEx.Message);
+            }
+        }
+    }
 }
 
 // Configure Hangfire recurring jobs
 try
 {
     Log.Information("Configurando jobs recorrentes do Hangfire...");
-    
+
     // Schedule daily data consolidation job at 00:00 UTC
     RecurringJob.AddOrUpdate<MedicSoft.Analytics.Jobs.ConsolidacaoDiariaJob>(
         "consolidacao-diaria",
@@ -1254,7 +1308,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // CRM Jobs - Marketing Automation
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.AutomationExecutorJob>(
         "crm-automation-executor",
@@ -1264,7 +1318,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.AutomationExecutorJob>(
         "crm-automation-metrics",
         job => job.UpdateMetricsAsync(),
@@ -1273,7 +1327,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // CRM Jobs - Survey Triggers
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SurveyTriggerJob>(
         "crm-survey-trigger",
@@ -1283,7 +1337,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SurveyTriggerJob>(
         "crm-survey-process-responses",
         job => job.ProcessSurveyResponsesAsync(),
@@ -1292,7 +1346,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // CRM Jobs - Churn Prediction
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
         "crm-churn-prediction",
@@ -1302,7 +1356,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
         "crm-churn-high-risk-notification",
         job => job.NotifyHighRiskPatientsAsync(),
@@ -1311,7 +1365,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
         "crm-churn-recalculate-old",
         job => job.RecalculateOldPredictionsAsync(),
@@ -1320,7 +1374,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.ChurnPredictionJob>(
         "crm-churn-retention-analysis",
         job => job.AnalyzeRetentionEffectivenessAsync(),
@@ -1329,7 +1383,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // Workflow Automation Jobs (Phase 4)
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>(
         "workflow-check-subscriptions",
@@ -1339,7 +1393,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>(
         "workflow-check-trials",
         job => job.CheckTrialExpiringAsync(),
@@ -1348,7 +1402,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.Workflows.WorkflowJobs>(
         "workflow-check-inactive",
         job => job.CheckInactiveClientsAsync(),
@@ -1357,7 +1411,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // CRM Jobs - Sentiment Analysis
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
         "crm-sentiment-survey-comments",
@@ -1367,7 +1421,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
         "crm-sentiment-complaints",
         job => job.AnalyzeComplaintsAsync(),
@@ -1376,7 +1430,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
         "crm-sentiment-interactions",
         job => job.AnalyzeComplaintInteractionsAsync(),
@@ -1385,7 +1439,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
         "crm-sentiment-alerts",
         job => job.GenerateNegativeSentimentAlertsAsync(),
@@ -1394,7 +1448,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.CRM.SentimentAnalysisJob>(
         "crm-sentiment-trends",
         job => job.AnalyzeSentimentTrendsAsync(),
@@ -1403,7 +1457,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // System Admin Jobs - Notification monitoring
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
         "sysadmin-check-subscription-expirations",
@@ -1413,7 +1467,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
         "sysadmin-check-trial-expiring",
         job => job.CheckTrialExpiringAsync(),
@@ -1422,7 +1476,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
         "sysadmin-check-inactive-clinics",
         job => job.CheckInactiveClinicsAsync(),
@@ -1431,7 +1485,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.SystemAdmin.NotificationJobs>(
         "sysadmin-check-unresponded-tickets",
         job => job.CheckUnrespondedTicketsAsync(),
@@ -1440,7 +1494,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // Alert Processing Jobs - Automated alert generation
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
         "alert-mark-expired",
@@ -1450,7 +1504,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
         "alert-cleanup-old",
         job => job.CleanupOldAlertsAsync(),
@@ -1459,7 +1513,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
         "alert-check-overdue-appointments",
         job => job.CheckOverdueAppointmentsAsync(),
@@ -1468,7 +1522,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
         "alert-check-overdue-payments",
         job => job.CheckOverduePaymentsAsync(),
@@ -1477,7 +1531,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
         "alert-check-low-stock",
         job => job.CheckLowStockAsync(),
@@ -1486,7 +1540,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AlertProcessingJob>(
         "alert-check-expiring-subscriptions",
         job => job.CheckExpiringSubscriptionsAsync(),
@@ -1495,7 +1549,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     // LGPD Audit Retention Job - Clean up old audit logs (7 years retention)
     RecurringJob.AddOrUpdate<MedicSoft.Api.Jobs.AuditRetentionJob>(
         "audit-retention-policy",
@@ -1505,7 +1559,7 @@ try
         {
             TimeZone = TimeZoneInfo.Utc
         });
-    
+
     Log.Information("Jobs recorrentes do Hangfire configurados com sucesso");
 }
 catch (Exception ex)
